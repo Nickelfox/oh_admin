@@ -39,6 +39,7 @@
     "@angular/platform-browser": "^12.1.0",
     "@angular/platform-browser-dynamic": "^12.1.0",
     "@angular/router": "^12.1.0",
+    "@ngx-pwa/local-storage": "^12.1.0",
     "@nrwl/angular": "12.6.5",
     "bootstrap": "^5.1.0",
     "rxjs": "~6.6.0",

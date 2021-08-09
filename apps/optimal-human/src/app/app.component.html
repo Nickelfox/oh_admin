@@ -1,7 +1,7 @@
-<div class="m-2">
-  <mat-button-toggle-group appearance="standard">
-    <mat-button-toggle>Bold</mat-button-toggle>
-    <mat-button-toggle>Italic</mat-button-toggle>
-    <mat-button-toggle>Underline</mat-button-toggle>
-  </mat-button-toggle-group>
+<h1>Storage Service Example (IndexedDB)</h1>
+
+<div *ngIf="user$ | async; let user">
+  <p>{{user.userData}}</p>
 </div>
+
+<button (click)='updateUserData()'>Set New Data</button>
