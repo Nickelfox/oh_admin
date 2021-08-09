@@ -14,7 +14,14 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@hidden-innovation/settings/data-access": [
+        "libs/settings/data-access/src/index.ts"
+      ],
+      "@hidden-innovation/shared/app-config": [
+        "libs/shared/app-config/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

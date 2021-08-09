@@ -1,0 +1,37 @@
+{
+  "root": "apps/optimal-human-e2e",
+  "sourceRoot": "apps/optimal-human-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/optimal-human-e2e/cypress.json",
+        "tsConfig": "apps/optimal-human-e2e/tsconfig.e2e.json",
+        "devServerTarget": "optimal-human:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "optimal-human:serve:production"
+        },
+        "staging": {
+          "devServerTarget": "optimal-human:serve:staging"
+        },
+        "qa": {
+          "devServerTarget": "optimal-human:serve:qa"
+        },
+        "development": {
+          "devServerTarget": "optimal-human:serve:development"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/optimal-human-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["optimal-human"]
+}

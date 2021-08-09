@@ -1,0 +1,148 @@
+{
+  "projectType": "application",
+  "root": "apps/optimal-human",
+  "sourceRoot": "apps/optimal-human/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/optimal-human",
+        "index": "apps/optimal-human/src/index.html",
+        "main": "apps/optimal-human/src/main.ts",
+        "polyfills": "apps/optimal-human/src/polyfills.ts",
+        "tsConfig": "apps/optimal-human/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/optimal-human/src/favicon.ico",
+          "apps/optimal-human/src/assets"
+        ],
+        "styles": ["apps/optimal-human/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/optimal-human/src/environments/environment.ts",
+              "with": "apps/optimal-human/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "staging": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/optimal-human/src/environments/environment.ts",
+              "with": "apps/optimal-human/src/environments/environment.stag.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "qa": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/optimal-human/src/environments/environment.ts",
+              "with": "apps/optimal-human/src/environments/environment.qa.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "fileReplacements": [
+            {
+              "replace": "apps/optimal-human/src/environments/environment.ts",
+              "with": "apps/optimal-human/src/environments/environment.dev.ts"
+            }
+          ],
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "optimal-human:build:production"
+        },
+        "staging": {
+          "browserTarget": "optimal-human:build:staging"
+        },
+        "qa": {
+          "browserTarget": "optimal-human:build:qa"
+        },
+        "development": {
+          "browserTarget": "optimal-human:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "optimal-human:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/optimal-human/src/**/*.ts",
+          "apps/optimal-human/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/optimal-human"],
+      "options": {
+        "jestConfig": "apps/optimal-human/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
