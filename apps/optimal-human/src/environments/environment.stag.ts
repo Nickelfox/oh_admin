@@ -1,4 +1,6 @@
-export const environment = {
+import {AppConfig} from "@hidden-innovation/shared/app-config";
+
+export const environment: AppConfig = {
   production: true,
-  api: 'https://stag.localhost:3000'
+  baseURL: 'https://dev.localhost:3000'
 };
