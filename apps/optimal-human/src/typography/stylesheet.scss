@@ -1,0 +1,126 @@
+@use '~@angular/material' as mat;
+
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('Calibri.woff2') format('woff2'),
+  url('Calibri.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('Calibri-Bold.woff2') format('woff2'),
+  url('Calibri-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('Calibri-BoldItalic.woff2') format('woff2'),
+  url('Calibri-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Calibri';
+  src: url('Calibri-Italic.woff2') format('woff2'),
+  url('Calibri-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SFProDisplay';
+  src: url('SFProDisplay-Regular.woff2') format('woff2'),
+  url('SFProDisplay-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SFProDisplay';
+  src: url('SFProDisplay-Medium.woff2') format('woff2'),
+  url('SFProDisplay-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SFProDisplay';
+  src: url('SFProDisplay-Bold.woff2') format('woff2'),
+  url('SFProDisplay-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-calibri {
+}
+
+.font-calibri--bold {
+  font-family: 'Calibri', sans-serif !important;
+  font-weight: bold !important;
+}
+
+.font-calibri--italic {
+  font-family: 'Calibri', sans-serif !important;
+  font-style: italic !important;
+}
+
+.font-sf-pro {
+  font-family: 'SFProDisplay', sans-serif !important;
+}
+
+.font-sf-pro--bold {
+  font-family: 'SFProDisplay', sans-serif !important;
+  font-weight: bold !important;
+}
+
+.font-sf-pro--italic {
+  font-family: 'SFProDisplay', sans-serif !important;
+  font-style: italic !important;
+}
+
+$calibri-typography-config: mat.define-typography-config(
+  $font-family: "Calibri, sans-serif",
+  $display-4: mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  $display-3: mat.define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+  $display-2: mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  $display-1: mat.define-typography-level(34px, 40px, 400),
+  $headline: mat.define-typography-level(24px, 32px, 400),
+  $title: mat.define-typography-level(20px, 32px, 500),
+  $subheading-2: mat.define-typography-level(16px, 24px, 600),
+  $subheading-1: mat.define-typography-level(14px, 18px, 600),
+  $body-2: mat.define-typography-level(12px, 14px, 400),
+  $body-1: mat.define-typography-level(14px, 20px, 500),
+  $caption: mat.define-typography-level(12px, 20px, 400),
+  $button: mat.define-typography-level(14px, 16px, 500),
+  $input: mat.define-typography-level(inherit, 1.125, 500),
+);
+
+$sf-typography-config: mat.define-typography-config(
+  $font-family: "SFProDisplay, sans-serif",
+  $display-4: mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  $display-3: mat.define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+  $display-2: mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  $display-1: mat.define-typography-level(34px, 40px, 400),
+  $headline: mat.define-typography-level(24px, 32px, 400),
+  $title: mat.define-typography-level(20px, 32px, 500),
+  $subheading-2: mat.define-typography-level(16px, 24px, 600),
+  $subheading-1: mat.define-typography-level(14px, 18px, 600),
+  $body-2: mat.define-typography-level(12px, 14px, 400),
+  $body-1: mat.define-typography-level(14px, 20px, 500),
+  $caption: mat.define-typography-level(12px, 20px, 400),
+  $button: mat.define-typography-level(14px, 16px, 500),
+  $input: mat.define-typography-level(inherit, 1.125, 500),
+);
