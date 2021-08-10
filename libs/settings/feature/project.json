@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/settings/feature",
+  "sourceRoot": "libs/settings/feature/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/settings/feature"],
+      "options": {
+        "jestConfig": "libs/settings/feature/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/settings/feature/src/**/*.ts",
+          "libs/settings/feature/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

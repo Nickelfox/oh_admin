@@ -64,27 +64,6 @@
           ],
           "outputHashing": "all"
         },
-        "qa": {
-          "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
-            },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
-            }
-          ],
-          "fileReplacements": [
-            {
-              "replace": "apps/optimal-human/src/environments/environment.ts",
-              "with": "apps/optimal-human/src/environments/environment.qa.ts"
-            }
-          ],
-          "outputHashing": "all"
-        },
         "development": {
           "fileReplacements": [
             {
@@ -110,9 +89,6 @@
         },
         "staging": {
           "browserTarget": "optimal-human:build:staging"
-        },
-        "qa": {
-          "browserTarget": "optimal-human:build:qa"
         },
         "development": {
           "browserTarget": "optimal-human:build:development"

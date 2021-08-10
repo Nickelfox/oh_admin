@@ -17,9 +17,6 @@
         "staging": {
           "devServerTarget": "optimal-human:serve:staging"
         },
-        "qa": {
-          "devServerTarget": "optimal-human:serve:qa"
-        },
         "development": {
           "devServerTarget": "optimal-human:serve:development"
         }
