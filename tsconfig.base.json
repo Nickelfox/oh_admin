@@ -20,7 +20,8 @@
       ],
       "@hidden-innovation/shared/app-config": [
         "libs/shared/app-config/src/index.ts"
-      ]
+      ],
+      "@hidden-innovation/shell/feature": ["libs/shell/feature/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

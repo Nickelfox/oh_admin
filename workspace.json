@@ -4,7 +4,8 @@
     "optimal-human": "apps/optimal-human",
     "optimal-human-e2e": "apps/optimal-human-e2e",
     "settings-data-access": "libs/settings/data-access",
-    "shared-app-config": "libs/shared/app-config"
+    "shared-app-config": "libs/shared/app-config",
+    "shell-feature": "libs/shell/feature"
   },
   "cli": {
     "analytics": false,
