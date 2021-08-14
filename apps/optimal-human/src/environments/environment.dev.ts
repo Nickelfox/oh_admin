@@ -1,6 +1,4 @@
-import {AppConfig} from "@hidden-innovation/shared/app-config";
-
-export const environment: AppConfig = {
+export const environment = {
   production: false,
   baseURL: 'https://dev.localhost:3000'
 };

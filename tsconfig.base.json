@@ -15,19 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hidden-innovation/settings/data-access": [
-        "libs/settings/data-access/src/index.ts"
+      "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
+      "@hidden-innovation/libs/ui/login/login": [
+        "libs/libs/ui/login/login/src/index.ts"
       ],
-      "@hidden-innovation/settings/feature": [
-        "libs/settings/feature/src/index.ts"
-      ],
-      "@hidden-innovation/shared/app-config": [
-        "libs/shared/app-config/src/index.ts"
-      ],
-      "@hidden-innovation/shell/feature": ["libs/shell/feature/src/index.ts"],
-      "@hidden-innovation/shell/ui/layout": [
-        "libs/shell/ui/layout/src/index.ts"
-      ]
+      "@hidden-innovation/web-shell": ["libs/web-shell/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

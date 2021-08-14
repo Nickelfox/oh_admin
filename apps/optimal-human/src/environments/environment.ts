@@ -1,10 +1,7 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `workspace.json`.
-
-import {AppConfig} from "@hidden-innovation/shared/app-config";
-
-export const environment: AppConfig = {
+export const environment = {
   production: false,
   baseURL: 'https://dev.localhost:3000'
 };
