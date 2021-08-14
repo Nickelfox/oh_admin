@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { select, Store, Action } from '@ngrx/store';
-
-import * as AuthActions from './auth.actions';
-import * as AuthFeature from './auth.reducer';
+import { select, Store } from '@ngrx/store';
 import * as AuthSelectors from './auth.selectors';
+import * as AuthActions from './auth.actions';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Injectable()
 export class AuthFacade {
@@ -11,17 +10,19 @@ export class AuthFacade {
    * Combine pieces of state using createSelector,
    * and expose them as observables through the facade.
    */
-  loaded$ = this.store.pipe(select(AuthSelectors.getAuthLoaded));
-  allAuth$ = this.store.pipe(select(AuthSelectors.getAllAuth));
-  selectedAuth$ = this.store.pipe(select(AuthSelectors.getSelected));
+  loggedIn$ = this.store.pipe(select(AuthSelectors.getLoggedIn));
+  allAuth$ = this.store.pipe(select(AuthSelectors.getAuthState));
+  token$ = this.store.pipe(select(AuthSelectors.getToken));
+  isLoading$ = this.store.pipe(select(AuthSelectors.getLoadingState));
 
-  constructor(private readonly store: Store) {}
+  constructor(private readonly store: Store,
+              private toast: HotToastService) {
+  }
 
-  /**
-   * Use the initialization action to perform one
-   * or more tasks in your Effects.
-   */
-  init() {
-    this.store.dispatch(AuthActions.init());
+  login(email: string, password: string) {
+    this.toast.loading('Loading..', {
+      role: 'status'
+    });
+    this.store.dispatch(AuthActions.login({ email, password }));
   }
 }

@@ -18,8 +18,7 @@
       "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
       "@hidden-innovation/libs/ui/login/login": [
         "libs/libs/ui/login/login/src/index.ts"
-      ],
-      "@hidden-innovation/web-shell": ["libs/web-shell/src/index.ts"]
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -7,9 +7,4 @@ export const getAuthState = createFeatureSelector<Auth>(AUTH_FEATURE_KEY);
 
 export const getLoggedIn = createSelector(getAuthState, (auth: Auth) => auth.loggedIn);
 export const getToken = createSelector(getAuthState, (auth: Auth) => auth.token);
-
-export const authQuery = {
-  getAuthState,
-  getLoggedIn,
-  getToken
-}
+export const getLoadingState = createSelector(getAuthState, (auth: Auth) => !!auth.isLoading);

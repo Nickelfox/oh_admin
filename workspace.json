@@ -3,8 +3,7 @@
   "projects": {
     "auth": "libs/auth",
     "optimal-human": "apps/optimal-human",
-    "optimal-human-e2e": "apps/optimal-human-e2e",
-    "web-shell": "libs/web-shell"
+    "optimal-human-e2e": "apps/optimal-human-e2e"
   },
   "cli": {
     "analytics": false,
