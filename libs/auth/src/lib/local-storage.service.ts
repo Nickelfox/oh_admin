@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { AUTH_FEATURE_KEY } from './+state/auth.reducer';
 
 const APP_PREFIX = 'OH-';
@@ -7,18 +7,20 @@ const APP_PREFIX = 'OH-';
 @Injectable()
 export class LocalStorageService {
 
-  getAuthToken(): Observable<string | null> {
-    const data = localStorage.getItem(`${APP_PREFIX}${AUTH_FEATURE_KEY}-JWT-TOKEN`);
+  private readonly authStorageKey = `${APP_PREFIX}${AUTH_FEATURE_KEY}-JWT-TOKEN`;
+
+  getAuthToken(): Observable<string> {
+    const data = localStorage.getItem(this.authStorageKey);
     if (data) {
       return of(data);
     }
-    return of(null);
+    return throwError(null);
   }
 
   setAuthToken(tokenString: string): Observable<string | null> {
     try {
-      localStorage.setItem(`${APP_PREFIX}${AUTH_FEATURE_KEY}-JWT-TOKEN`, tokenString);
-      const data = localStorage.getItem(`${APP_PREFIX}${AUTH_FEATURE_KEY}-JWT-TOKEN`);
+      localStorage.setItem(this.authStorageKey, tokenString);
+      const data = localStorage.getItem(this.authStorageKey);
       if (data) {
         return of(data);
       }
@@ -36,6 +38,10 @@ export class LocalStorageService {
     } catch (e) {
       return of(null);
     }
+  }
+
+  clearStorage(): void {
+    localStorage.removeItem(this.authStorageKey);
   }
 
 }

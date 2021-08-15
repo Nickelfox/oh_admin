@@ -34,10 +34,36 @@ export class AuthEffects {
           }),
           catchError((error) => {
             this.toast.close();
-            return of(AuthActions.loginFail({ errorMessage: error.error.error.message[0], isLoading: false }));
+            this.toast.error(error.error.error.message[0], {
+              autoClose: true,
+              role: 'alert',
+              dismissible: true
+            });
+            return of(AuthActions.loginFail({ isLoading: false }));
           })
         )
       )
+    )
+  );
+
+  isLoggedIn$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.checkLogin),
+      exhaustMap((_) => this.storage.getAuthToken().pipe(
+        map((response) => AuthActions.checkLoginSuccess({
+          session_id: response,
+          token: response,
+          loggedIn: true
+        })),
+        catchError((_) => {
+          this.storage.clearStorage();
+          return of(AuthActions.checkLoginFail({
+            loggedIn: false,
+            session_id: '',
+            token: ''
+          }));
+        })
+      ))
     )
   );
 

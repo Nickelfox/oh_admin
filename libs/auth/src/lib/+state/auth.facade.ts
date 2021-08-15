@@ -11,12 +11,16 @@ export class AuthFacade {
    * and expose them as observables through the facade.
    */
   loggedIn$ = this.store.pipe(select(AuthSelectors.getLoggedIn));
-  allAuth$ = this.store.pipe(select(AuthSelectors.getAuthState));
   token$ = this.store.pipe(select(AuthSelectors.getToken));
   isLoading$ = this.store.pipe(select(AuthSelectors.getLoadingState));
 
   constructor(private readonly store: Store,
               private toast: HotToastService) {
+    this.init();
+  }
+
+  init() {
+    this.store.dispatch(AuthActions.checkLogin());
   }
 
   login(email: string, password: string) {
