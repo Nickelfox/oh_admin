@@ -26,7 +26,7 @@ import { MatButtonModule } from '@angular/material/button';
     RouterModule.forRoot([
       {
         path: '',
-        component: AppComponent
+        component: AppComponent,
       }
     ]),
     StoreModule.forRoot({}),
