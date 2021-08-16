@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AuthFacade } from '@hidden-innovation/auth';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {AuthFacade} from "@hidden-innovation/auth";
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'hidden-innovation-root',
@@ -7,15 +8,28 @@ import { AuthFacade } from '@hidden-innovation/auth';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-  constructor(public authFacade: AuthFacade) {
+  sideBarOpen = true;
+  isLoading = false;
+  isTablet = false;
+  isSliding = false;
+
+  constructor(
+    public breakpointObserver: BreakpointObserver,
+    public authFacade: AuthFacade) {
+    breakpointObserver.observe([
+      Breakpoints.Tablet,
+      Breakpoints.Handset
+    ]).subscribe(result => {
+      this.sideBarOpen = !result.matches;
+      this.isTablet = result.matches;
+    });
   }
 
-  ngOnInit(): void {
-  }
-
-  login(): void {
-    this.authFacade.login('deepak@nickelfox.com', 'Test@1234');
+  sideBarToggle(): void {
+    if (!this.isSliding) {
+      this.sideBarOpen = !this.sideBarOpen;
+    }
   }
 }

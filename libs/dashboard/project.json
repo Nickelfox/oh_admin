@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/dashboard",
+  "sourceRoot": "libs/dashboard/src",
+  "prefix": "oh",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/dashboard"],
+      "options": {
+        "project": "libs/dashboard/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/dashboard/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/dashboard/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/dashboard"],
+      "options": {
+        "jestConfig": "libs/dashboard/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/dashboard/src/**/*.ts",
+          "libs/dashboard/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

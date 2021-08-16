@@ -1,8 +1,50 @@
-<p>App works</p>
+<mat-sidenav-container autosize>
+  <mat-sidenav *ngIf="authFacade.loggedIn$ | async" [mode]="isTablet ? 'over' : 'side'" (closed)="isSliding = false"
+               (opened)="isSliding = false"
+               [fixedInViewport]="true" [opened]="sideBarOpen">
+    <div class="d-flex flex-column justify-content-between h-100">
+      <div class="text-center mt-5 mb-5 d-flex flex-column align-items-center">
+        <img src="assets/white_logo.svg" alt="" class="oh-logo img-fluid">
+        <h4 class="font-calibri--bold mat-h4 mb-0 mt-2 oh-logo__text">Optimal Humans</h4>
+      </div>
+      <mat-nav-list role="navigation">
+        <a mat-list-item class="font-weight-normal text-dark">Manage User</a>
+        <a mat-list-item class="font-weight-normal text-dark">Manage Dummy</a>
+        <a mat-list-item class="font-weight-normal text-dark">Manage CMS</a>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar *ngIf="authFacade.loggedIn$ | async">
+      <div class="d-flex align-items-center">
+        <button mat-icon-button class="primary-color" color="primary" (click)="sideBarToggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h2 class="mat-h2 m-0 mx-3 text-dark font-sf-pro">Dashboard</h2>
+      </div>
+      <span class="spacer"></span>
+      <div class="d-flex align-items-center">
+        <button mat-button color="primary" class="mini mx-3">
+          <mat-icon class="mr-1">admin_panel_settings</mat-icon>
+          Dummy User
+        </button>
+        <button mat-flat-button color="accent" class="mini" (click)="authFacade">Logout</button>
+      </div>
+    </mat-toolbar>
+    <mat-progress-bar *ngIf="authFacade.isLoading$ | async" mode="indeterminate"></mat-progress-bar>
+    <main>
+      <router-outlet></router-outlet>
+      <button mat-flat-button color="primary" class="loginStatus">
+        <ng-template [ngIf]="authFacade.loggedIn$ | async" [ngIfElse]="authStatusElse">
+          <mat-icon color="accent" class="mx-2">blur_on</mat-icon>
+          AUTH STATUS
+        </ng-template>
+        <ng-template #authStatusElse>
+          <mat-icon color="warn" class="mx-2">blur_on</mat-icon>
+          AUTH STATUS
+        </ng-template>
+      </button>
 
-Loading: {{authFacade.isLoading$ | async}}<br>
-LoggedIn: {{authFacade.loggedIn$ | async}}<br>
-
-<br>
-<button mat-flat-button color='accent' (click)='login()'>Click To Login</button>
-
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

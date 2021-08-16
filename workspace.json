@@ -2,6 +2,8 @@
   "version": 2,
   "projects": {
     "auth": "libs/auth",
+    "dashboard": "libs/dashboard",
+    "login": "libs/login",
     "optimal-human": "apps/optimal-human",
     "optimal-human-e2e": "apps/optimal-human-e2e"
   },

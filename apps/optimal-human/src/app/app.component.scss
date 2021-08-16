@@ -1,0 +1,62 @@
+mat-sidenav {
+  min-width: 300px;
+  box-shadow: 3px 0 50px rgba(0, 0, 0, 0.05);
+  border: 0 !important;
+}
+
+.spacer {
+  flex: 1 0 auto;
+}
+
+.toolbar {
+  &__user-icon {
+    overflow: hidden;
+    border-radius: 10px;
+  }
+}
+
+.oh-logo {
+  &__text{
+    color: white;
+
+  }
+
+  &__con {
+    max-width: 60%;
+    margin: 80px + 20px auto;
+  }
+}
+
+
+mat-sidenav {
+  background: #394155;
+  border: 0 !important;
+}
+
+mat-nav-list {
+  a {
+    color: #ffffff !important;
+
+    &.active {
+      font-weight: 700 !important;
+      background-color: white;
+      color: #394155 !important;
+    }
+  }
+}
+
+mat-toolbar {
+  background-color: white !important;
+  height: 80px;
+  box-shadow: 0 -15px 60px rgba(0, 0, 0, 0.05);
+}
+
+mat-sidenav-container {
+  background-color: white;
+}
+
+.loginStatus {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}

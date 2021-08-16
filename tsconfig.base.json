@@ -16,9 +16,11 @@
     "baseUrl": ".",
     "paths": {
       "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
+      "@hidden-innovation/dashboard": ["libs/dashboard/src/index.ts"],
       "@hidden-innovation/libs/ui/login/login": [
         "libs/libs/ui/login/login/src/index.ts"
-      ]
+      ],
+      "@hidden-innovation/login": ["libs/login/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
