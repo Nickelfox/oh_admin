@@ -31,7 +31,6 @@
         <button mat-flat-button color="accent" class="mini" (click)="authFacade">Logout</button>
       </div>
     </mat-toolbar>
-    <mat-progress-bar *ngIf="authFacade.isLoading$ | async" mode="indeterminate"></mat-progress-bar>
     <main>
       <router-outlet></router-outlet>
       <button mat-flat-button color="primary" class="loginStatus">

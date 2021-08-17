@@ -5,3 +5,13 @@ export interface Auth {
   errorMessage?: string;
   isLoading?: boolean;
 }
+
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface LoginResponse {
+
+}

@@ -1,10 +1,13 @@
 <div class="auth__con">
   <div class="auth__left-pane" [ngStyle]="{'backgroundImage': 'url(assets/auth_image.png)'}">
-
+    <div class="text-center mt-5 mb-5 d-flex flex-column align-items-center">
+      <img src="assets/white_logo.svg" alt="" class="oh-logo img-fluid">
+      <h3 class="font-calibri--bold mat-h3 mb-0 mt-2 oh-logo__text">Optimal Humans</h3>
+    </div>
   </div>
   <div class="auth__right-pane p-4">
     <p class="font-sf-pro--italic">Login Works</p>
-    
+
     <button mat-flat-button color='accent' (click)='login()'>Click To Login</button>
   </div>
 </div>

@@ -4,13 +4,24 @@
     height: 100vh;
     width: 100vw;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 2fr 4fr;
   }
 
   &__left-pane {
+    position: relative;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: top center;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(179.96deg, rgba(37, 39, 60, 0) 45.61%, #25273cd6 81.09%);
+    }
   }
 
   &__right-pane {

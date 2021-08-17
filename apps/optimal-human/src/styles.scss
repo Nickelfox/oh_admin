@@ -276,3 +276,28 @@ body { margin: 0;  font-family: 'Calibri', sans-serif;}
 * {
   box-sizing: border-box;
 }
+
+.oh-logo {
+  animation: logoAni 0.3s ease-in forwards;
+
+
+  &__text{
+    color: white;
+  }
+
+  &__con {
+    max-width: 60%;
+    margin: 80px + 20px auto;
+  }
+
+  @keyframes logoAni {
+    0% {
+      transform: translate(0, 5px) skewY(2deg) scale(0.95);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(0, 0) skewY(0deg) scale(1);
+      opacity: 1;
+    }
+  }
+}

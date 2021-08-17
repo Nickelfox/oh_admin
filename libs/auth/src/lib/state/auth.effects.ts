@@ -1,12 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, exhaustMap, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
 import {HotToastService} from "@ngneat/hot-toast";
 
 import * as AuthActions from './auth.actions';
 import {of} from 'rxjs';
 import {AuthService, AuthStorageService} from "../services";
 import {Router} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
-      exhaustMap((authReq) => this.authService.login(authReq.email, authReq.password).pipe(
+      exhaustMap((authReq) => this.authService.login(authReq).pipe(
           map(response => AuthActions.loginSuccess({
             loggedIn: response.data.loggedIn,
             token: response.data.session_id,
@@ -32,13 +33,9 @@ export class AuthEffects {
             this.storage.setAuthToken(res.session_id);
             this.router.navigate(['/']);
           }),
-          catchError((error) => {
+          catchError((error: HttpErrorResponse) => {
             this.toast.close();
-            this.toast.error(error.error.error.message[0], {
-              autoClose: true,
-              role: 'alert',
-              dismissible: true
-            });
+            this.showToasts(error.error.errors);
             return of(AuthActions.loginFail({isLoading: false}));
           })
         )
@@ -74,5 +71,21 @@ export class AuthEffects {
     private authService: AuthService,
     private storage: AuthStorageService,
     private toast: HotToastService) {
+  }
+
+  private showToasts(errors: string[]) {
+    if(errors && errors.length) {
+      errors.forEach((err, i) => {
+        setTimeout(() => {
+          this.toast.error(err, {
+            autoClose: true,
+            role: 'alert',
+            dismissible: true
+          });
+        }, i * 250);
+      });
+    } else {
+      this.toast.show('Unknown Error');
+    }
   }
 }

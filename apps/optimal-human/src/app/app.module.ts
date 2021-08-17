@@ -16,6 +16,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
+import {getAppConfigProvider} from "@hidden-innovation/shared/app-config";
 
 @NgModule({
   imports: [
@@ -48,7 +49,7 @@ import {MatIconModule} from "@angular/material/icon";
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HotToastModule.forRoot({
       theme: 'snackbar',
-      autoClose: false
+      autoClose: false,
     }),
     AuthModule,
     MatButtonModule,
@@ -60,7 +61,9 @@ import {MatIconModule} from "@angular/material/icon";
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: []
+  providers: [
+    getAppConfigProvider(environment),
+  ]
 })
 export class AppModule {
 }

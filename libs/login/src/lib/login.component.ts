@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    this.authFacade.login('deepak@nickelfox.com', 'Test@12345');
+    this.authFacade.login('admin2@gmail.com', 'User@123');
   }
 
 }
