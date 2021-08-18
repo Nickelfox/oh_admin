@@ -1,37 +1,40 @@
 {
   "projectType": "library",
-  "root": "libs/auth",
-  "sourceRoot": "libs/auth/src",
+  "root": "libs/material",
+  "sourceRoot": "libs/material/src",
   "prefix": "hidden-innovation",
   "targets": {
     "build": {
       "executor": "@nrwl/angular:ng-packagr-lite",
-      "outputs": ["dist/libs/auth"],
+      "outputs": ["dist/libs/material"],
       "options": {
-        "project": "libs/auth/ng-package.json"
+        "project": "libs/material/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/auth/tsconfig.lib.prod.json"
+          "tsConfig": "libs/material/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/auth/tsconfig.lib.json"
+          "tsConfig": "libs/material/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/auth"],
+      "outputs": ["coverage/libs/material"],
       "options": {
-        "jestConfig": "libs/auth/jest.config.js",
+        "jestConfig": "libs/material/jest.config.js",
         "passWithNoTests": true
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/auth/src/**/*.ts", "libs/auth/src/**/*.html"]
+        "lintFilePatterns": [
+          "libs/material/src/**/*.ts",
+          "libs/material/src/**/*.html"
+        ]
       }
     }
   },

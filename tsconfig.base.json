@@ -21,9 +21,12 @@
         "libs/libs/ui/login/login/src/index.ts"
       ],
       "@hidden-innovation/login": ["libs/login/src/index.ts"],
+      "@hidden-innovation/material": ["libs/material/src/index.ts"],
       "@hidden-innovation/shared/app-config": [
         "libs/shared/app-config/src/index.ts"
-      ]
+      ],
+      "@hidden-innovation/shared/models": ["libs/shared/models/src/index.ts"],
+      "@hidden-innovation/shared/store": ["libs/shared/store/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

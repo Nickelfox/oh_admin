@@ -35,12 +35,12 @@
       <router-outlet></router-outlet>
       <button mat-flat-button color="primary" class="loginStatus">
         <ng-template [ngIf]="authFacade.loggedIn$ | async" [ngIfElse]="authStatusElse">
-          <mat-icon color="accent" class="mx-2">blur_on</mat-icon>
-          AUTH STATUS
+          <mat-icon color="accent">blur_on</mat-icon>
+          &nbsp;&nbsp;&nbsp;AUTH STATUS
         </ng-template>
         <ng-template #authStatusElse>
-          <mat-icon color="warn" class="mx-2">blur_on</mat-icon>
-          AUTH STATUS
+          <mat-icon color="warn">blur_on</mat-icon>
+          &nbsp;&nbsp;&nbsp;AUTH STATUS
         </ng-template>
       </button>
 

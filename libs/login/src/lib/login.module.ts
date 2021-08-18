@@ -2,8 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {LoginComponent} from "./login.component";
 import {RouterModule} from "@angular/router";
-import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {MatButtonModule} from "@angular/material/button";
+import {MaterialModule} from "@hidden-innovation/material";
 
 @NgModule({
   imports: [
@@ -14,8 +13,7 @@ import {MatButtonModule} from "@angular/material/button";
         component: LoginComponent
       }
     ]),
-    MatProgressSpinnerModule,
-    MatButtonModule
+    MaterialModule,
   ],
   declarations: [
     LoginComponent
