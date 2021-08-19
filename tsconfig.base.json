@@ -25,6 +25,9 @@
       "@hidden-innovation/shared/app-config": [
         "libs/shared/app-config/src/index.ts"
       ],
+      "@hidden-innovation/shared/form-config": [
+        "libs/shared/form-config/src/index.ts"
+      ],
       "@hidden-innovation/shared/models": ["libs/shared/models/src/index.ts"],
       "@hidden-innovation/shared/store": ["libs/shared/store/src/index.ts"]
     }

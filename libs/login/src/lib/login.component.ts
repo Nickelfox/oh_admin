@@ -1,5 +1,9 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {AuthFacade} from "@hidden-innovation/auth";
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AuthFacade, LoginRequest } from '@hidden-innovation/auth';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { Validators } from '@angular/forms';
+import { FormValidationService } from '@hidden-innovation/shared/form-config';
 
 @Component({
   selector: 'hidden-innovation-login',
@@ -7,16 +11,32 @@ import {AuthFacade} from "@hidden-innovation/auth";
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
-  constructor(public authFacade: AuthFacade) {
+  loginForm: FormGroup<LoginRequest> = new FormGroup<LoginRequest>({
+    email: new FormControl<string>('', [
+      RxwebValidators.email(),
+      RxwebValidators.required(),
+      Validators.required
+    ]),
+    password: new FormControl<string>('', [
+      RxwebValidators.required()
+    ])
+  });
+
+  passwordHidden = true;
+
+  constructor(
+    public authFacade: AuthFacade,
+    public formValidationService: FormValidationService
+  ) {
   }
 
-  ngOnInit(): void {
-  }
-
-  login(): void {
-    this.authFacade.login('deepak@nickelfox.com', 'Test@1234');
+  submit(): void {
+    if (this.loginForm.invalid) {
+      return;
+    }
+    this.authFacade.login(this.loginForm.value);
   }
 
 }

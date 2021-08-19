@@ -4,6 +4,7 @@ import {HotToastService} from '@ngneat/hot-toast';
 
 import * as AuthSelectors from './auth.selectors';
 import * as AuthActions from './auth.actions';
+import { LoginRequest } from '../models';
 
 @Injectable()
 export class AuthFacade {
@@ -24,10 +25,10 @@ export class AuthFacade {
     this.store.dispatch(AuthActions.checkLogin());
   }
 
-  login(email: string, password: string) {
+  login(loginObj: LoginRequest) {
     this.toast.loading('Loading..', {
       role: 'status'
     });
-    this.store.dispatch(AuthActions.login({email, password}));
+    this.store.dispatch(AuthActions.login(loginObj));
   }
 }

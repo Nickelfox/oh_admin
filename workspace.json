@@ -8,6 +8,7 @@
     "optimal-human": "apps/optimal-human",
     "optimal-human-e2e": "apps/optimal-human-e2e",
     "shared-app-config": "libs/shared/app-config",
+    "shared-form-config": "libs/shared/form-config",
     "shared-models": "libs/shared/models",
     "shared-store": "libs/shared/store"
   },
