@@ -32,6 +32,13 @@ const reducer = createReducer(
       isLoading: false,
       loggedIn: false,
     })),
+    on(AuthActions.logout, (state, _) => ({
+      ...state,
+      message: '',
+      isLoading: false,
+      loggedIn: false,
+      token: ''
+    })),
     on(AuthActions.checkLogin, (state, _) => ({
       ...state,
     })),
@@ -40,7 +47,7 @@ const reducer = createReducer(
       loggedIn: true,
       token,
       message
-     })),
+    })),
     on(AuthActions.checkLoginFail, (state, {message}) => ({
       ...state,
       loggedIn: false,

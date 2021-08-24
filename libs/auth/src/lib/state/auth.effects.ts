@@ -63,7 +63,7 @@ export class AuthEffects {
             token: token || '',
           })),
           catchError((_) => {
-            this.storage.clearStorage();
+            this.storage.clearAuthStorage();
             return of(AuthActions.checkLoginFail({
               loggedIn: false,
               token: ''
@@ -72,6 +72,23 @@ export class AuthEffects {
         ),
       ),
     )
+  );
+
+  logout$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.logout),
+      tap((res) => {
+        this.toast.close();
+        this.toast.show('Success! You are logged out.', {
+          autoClose: true,
+          role: 'alert',
+          dismissible: true
+        });
+        this.storage.clearAuthStorage();
+        this.router.navigate(['/login']);
+        console.log('asdf')
+      }),
+    ), {dispatch: false}
   );
 
   constructor(

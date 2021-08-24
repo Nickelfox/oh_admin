@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `workspace.json`.
 export const environment = {
   production: false,
-  baseURL: 'http://40.88.223.51'
+  baseURL: 'https://api-dev.optimalhumans.io'
 };
 
 /*
