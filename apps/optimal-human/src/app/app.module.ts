@@ -16,6 +16,7 @@ import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
 import {environment} from "../environments/environment";
 import {AuthGuard, AuthModule} from "@hidden-innovation/auth";
+import {ENVIRONMENT} from "@hidden-innovation/environment";
 
 @NgModule({
   imports: [
@@ -53,6 +54,9 @@ import {AuthGuard, AuthModule} from "@hidden-innovation/auth";
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
+  providers: [
+    {provide: ENVIRONMENT, useValue: environment}
+  ]
 })
 export class AppModule {
 }

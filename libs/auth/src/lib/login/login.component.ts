@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {AuthFacade, LoginRequest} from "@hidden-innovation/auth";
+import {AuthFacade} from "../state/auth.facade";
 import {Validators} from "@angular/forms";
 import {FormValidationService} from "@hidden-innovation/shared/form-config";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {FormControl, FormGroup} from "@ngneat/reactive-forms";
+import {LoginRequest} from "../models/auth.interfaces";
 
 @Component({
   selector: 'hidden-innovation-login',

@@ -3,6 +3,7 @@
   "projects": {
     "auth": "libs/auth",
     "dashboard": "libs/dashboard",
+    "environment": "libs/environment",
     "material": "libs/material",
     "optimal-human": "apps/optimal-human",
     "optimal-human-e2e": "apps/optimal-human-e2e",
