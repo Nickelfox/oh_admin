@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/form-config",
+  "sourceRoot": "libs/shared/form-config/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/form-config"],
+      "options": {
+        "project": "libs/shared/form-config/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/form-config/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/form-config/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/form-config"],
+      "options": {
+        "jestConfig": "libs/shared/form-config/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/form-config/src/**/*.ts",
+          "libs/shared/form-config/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

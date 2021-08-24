@@ -1,3 +1,5 @@
 export {AuthModule} from './lib/auth.module';
-export {AuthGuard, LoggedInGuard} from './lib/guards';
-export {AuthFacade} from './lib/state';
+export * from './lib/state/auth.facade';
+export * from './lib/guards/auth.guard';
+export * from './lib/guards/logged-in-guard.service';
+export * from './lib/models/auth.interfaces';

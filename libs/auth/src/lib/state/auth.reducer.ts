@@ -1,7 +1,7 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import {Action, createReducer, on} from '@ngrx/store';
 
 import * as AuthActions from './auth.actions';
-import {Auth} from "../models";
+import {Auth} from "../models/auth.interfaces";
 
 export const AUTH_FEATURE_KEY = 'auth';
 
@@ -13,37 +13,38 @@ export const authInitialState: Auth = {
   // set initial required properties
   loggedIn: false,
   token: '',
-  session_id: ''
+  isLoading: false,
 };
 
 const reducer = createReducer(
     authInitialState,
-    on(AuthActions.login, (state, _) => ({ ...state, isLoading: true })),
-    on(AuthActions.loginSuccess, (state, action) => ({
+    on(AuthActions.login, (state, _) => ({...state, isLoading: true})),
+    on(AuthActions.loginSuccess, (state, {message, token}) => ({
       ...state,
+      token,
+      isLoading: false,
       loggedIn: true,
-      token: action.token,
-      isLoading: false
+      message,
     })),
-    on(AuthActions.loginFail, (state, action) => ({
+    on(AuthActions.loginFail, (state, {message}) => ({
       ...state,
-      errorMessage: action.errorMessage,
-      isLoading: false
+      message,
+      isLoading: false,
+      loggedIn: false,
     })),
     on(AuthActions.checkLogin, (state, _) => ({
-      ...state
+      ...state,
     })),
-    on(AuthActions.checkLoginSuccess, (state, action) => ({
+    on(AuthActions.checkLoginSuccess, (state, {token, message}) => ({
       ...state,
       loggedIn: true,
-      token: action.token,
-      session_id: action.token
-    })),
-    on(AuthActions.checkLoginFail, (state, action) => ({
+      token,
+      message
+     })),
+    on(AuthActions.checkLoginFail, (state, {message}) => ({
       ...state,
       loggedIn: false,
-      token: '',
-      session_id: ''
+      message,
     }))
   )
 ;

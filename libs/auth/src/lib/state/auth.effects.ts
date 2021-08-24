@@ -1,12 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, exhaustMap, map, switchMap, tap} from 'rxjs/operators';
+import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
 import {HotToastService} from "@ngneat/hot-toast";
 
 import * as AuthActions from './auth.actions';
 import {of} from 'rxjs';
-import {AuthService, AuthStorageService} from "../services";
 import {Router} from "@angular/router";
+import {HttpErrorResponse} from "@angular/common/http";
+import {CustomApiResponse} from "@hidden-innovation/shared/models";
+import {AuthService} from "../services/auth.service";
+import {AuthStorageService} from "../services/auth-storage.service";
 
 
 @Injectable()
@@ -15,31 +18,36 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
-      exhaustMap((authReq) => this.authService.login(authReq.email, authReq.password).pipe(
-          map(response => AuthActions.loginSuccess({
-            loggedIn: response.data.loggedIn,
-            token: response.data.session_id,
-            session_id: response.data.session_id,
+      exhaustMap((authReq) => this.authService.login(authReq).pipe(
+          map(({message, data}) => AuthActions.loginSuccess({
+            loggedIn: true,
+            token: data,
+            message,
             isLoading: false
           })),
           tap((res) => {
             this.toast.close();
-            this.toast.success('Logged In', {
-              autoClose: true,
-              role: 'status',
-              dismissible: true
-            });
-            this.storage.setAuthToken(res.session_id);
-            this.router.navigate(['/']);
-          }),
-          catchError((error) => {
-            this.toast.close();
-            this.toast.error(error.error.error.message[0], {
+            this.toast.show(res.message ?? 'Success!!', {
               autoClose: true,
               role: 'alert',
               dismissible: true
             });
-            return of(AuthActions.loginFail({isLoading: false}));
+            this.storage.setAuthToken(res.token);
+            this.router.navigate(['/']);
+          }),
+          catchError((err: HttpErrorResponse) => {
+            this.toast.close();
+            const apiError: CustomApiResponse = err.error;
+            this.toast.show(apiError.message ?? 'Unknown Error!', {
+              autoClose: true,
+              role: 'alert',
+              dismissible: true
+            });
+            return of(AuthActions.loginFail({
+              isLoading: false,
+              loggedIn: false,
+              message: apiError.message,
+            }));
           })
         )
       )
@@ -50,16 +58,14 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.checkLogin),
       exhaustMap((_) => this.storage.getAuthToken().pipe(
-          map((response) => AuthActions.checkLoginSuccess({
+          map((token) => AuthActions.checkLoginSuccess({
             loggedIn: false,
-            session_id: response || '',
-            token: response || '',
+            token: token || '',
           })),
           catchError((_) => {
             this.storage.clearStorage();
             return of(AuthActions.checkLoginFail({
               loggedIn: false,
-              session_id: '',
               token: ''
             }));
           })
