@@ -2,25 +2,43 @@ import {NgModule} from '@angular/core';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AUTH_FEATURE_KEY, authReducer} from "./state/auth.reducer";
+import {ErrorInterceptor} from "./interceptors/error.interceptor";
+import {LoggedInGuard} from "./guards/logged-in-guard.service";
+import {AuthFacade} from "./state/auth.facade";
+import {AuthService} from "./services/auth.service";
+import {AuthEffects} from "./state/auth.effects";
+import {TokenInterceptor} from "./interceptors/token.interceptor";
+import {AuthGuard} from "./guards/auth.guard";
+import {AuthStorageService} from "./services/auth-storage.service";
 import {CommonModule} from "@angular/common";
-import {MatButtonModule} from "@angular/material/button";
-import {AUTH_FEATURE_KEY, AuthEffects, AuthFacade, authReducer} from "./state";
-import {ErrorInterceptor, TokenInterceptor} from "./interceptors";
-import {AuthGuard, LoggedInGuard} from "./guards";
-import {AuthService, AuthStorageService} from "./services";
+import {RouterModule} from "@angular/router";
+import {LoginComponent} from "./login/login.component";
+import {MaterialModule} from "@hidden-innovation/material";
 
 @NgModule({
+
   imports: [
     CommonModule,
     HttpClientModule,
+    MaterialModule,
+    RouterModule.forChild([
+      {
+        path: 'login',
+        canActivate: [LoggedInGuard],
+        component: LoginComponent
+      }
+    ]),
     StoreModule.forFeature(AUTH_FEATURE_KEY, authReducer),
     EffectsModule.forFeature([AuthEffects]),
-    MatButtonModule,
   ],
   providers: [
     AuthFacade,
+    AuthEffects,
     AuthStorageService,
     AuthService,
+    TokenInterceptor,
+    ErrorInterceptor,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
@@ -34,7 +52,7 @@ import {AuthService, AuthStorageService} from "./services";
     AuthGuard,
     LoggedInGuard,
   ],
-  declarations: []
+  declarations: [LoginComponent]
 })
 export class AuthModule {
 }

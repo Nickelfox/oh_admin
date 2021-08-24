@@ -5,10 +5,11 @@ import {HotToastService} from "@ngneat/hot-toast";
 
 import * as AuthActions from './auth.actions';
 import {of} from 'rxjs';
-import {AuthService, AuthStorageService} from "../services";
 import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {CustomApiResponse} from "@hidden-innovation/shared/models";
+import {AuthService} from "../services/auth.service";
+import {AuthStorageService} from "../services/auth-storage.service";
 
 
 @Injectable()

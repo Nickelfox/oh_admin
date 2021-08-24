@@ -4,7 +4,7 @@ import {HotToastService} from '@ngneat/hot-toast';
 
 import * as AuthSelectors from './auth.selectors';
 import * as AuthActions from './auth.actions';
-import { LoginRequest } from '../models';
+import { LoginRequest } from '../models/auth.interfaces';
 
 @Injectable()
 export class AuthFacade {

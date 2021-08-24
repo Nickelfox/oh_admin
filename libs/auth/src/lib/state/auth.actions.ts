@@ -1,5 +1,5 @@
-import {Action, createAction, props} from '@ngrx/store';
-import {Auth, LoginRequest} from "../models";
+import {Auth, LoginRequest} from '../models/auth.interfaces';
+import {createAction, props} from '@ngrx/store';
 
 // TODO Implement proper user data handling
 
