@@ -7,14 +7,17 @@ import {DashboardEffects} from './data-access/state/dashboard.effects';
 import {DashboardFacade} from './data-access/state/dashboard.facade';
 import {RouterModule} from "@angular/router";
 import {DashboardComponent} from './dashboard.component';
+// import {AuthGuard} from "@hidden-innovation/auth";
 
 @NgModule({
+  declarations: [DashboardComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
         path: '',
         pathMatch: 'full',
+        // canActivate: [AuthGuard],
         component: DashboardComponent,
       }
     ]),
@@ -24,7 +27,7 @@ import {DashboardComponent} from './dashboard.component';
     ),
     EffectsModule.forFeature([DashboardEffects]),
   ],
-  providers: [DashboardFacade],
+  providers: [DashboardFacade, DashboardEffects],
 })
 export class DashboardModule {
 }

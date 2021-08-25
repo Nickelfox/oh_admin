@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {CanActivate, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {map, take} from "rxjs/operators";
-import {AuthFacade} from "../state";
+import {AuthFacade} from "../state/auth.facade";
 
 @Injectable()
 export class LoggedInGuard implements CanActivate {

@@ -17,7 +17,8 @@ export class AppComponent {
 
   constructor(
     public breakpointObserver: BreakpointObserver,
-    public authFacade: AuthFacade) {
+    public authFacade: AuthFacade
+  ) {
     breakpointObserver.observe([
       Breakpoints.Tablet,
       Breakpoints.Handset

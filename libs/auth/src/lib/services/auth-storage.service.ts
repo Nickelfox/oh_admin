@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import {AUTH_FEATURE_KEY} from "../state";
+import {Injectable} from '@angular/core';
+import {Observable, of, throwError} from 'rxjs';
+import {AUTH_FEATURE_KEY} from '../state/auth.reducer';
 
 const APP_PREFIX = 'OH-';
 
@@ -40,7 +40,7 @@ export class AuthStorageService {
     }
   }
 
-  clearStorage(): void {
+  clearAuthStorage() {
     localStorage.removeItem(this.authStorageKey);
   }
 
