@@ -15,7 +15,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
 import {environment} from "../environments/environment";
-import {AuthGuard, AuthModule} from "@hidden-innovation/auth";
+import {AuthGuard, AuthModule, LoggedInGuard} from "@hidden-innovation/auth";
 import {ENVIRONMENT} from "@hidden-innovation/environment";
 
 @NgModule({
@@ -36,14 +36,20 @@ import {ENVIRONMENT} from "@hidden-innovation/environment";
         loadChildren: () =>
           import('@hidden-innovation/dashboard').then((m) => m.DashboardModule),
       },
-      {path: '**', redirectTo: '/'}
+      {
+        path: 'reset-password',
+        canActivate: [LoggedInGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/reset-password').then((m) => m.ResetPasswordModule),
+      },
+      {path: '**', redirectTo: '/dashboard'}
     ]),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HotToastModule.forRoot({
       theme: 'snackbar',
-      autoClose: false,
+      autoClose: true,
     }),
     MatButtonModule,
     MatSidenavModule,

@@ -18,6 +18,12 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
+      tap(() => {
+        this.toast.loading('Loading...', {
+          role: 'status',
+          id: 'login-loading-state'
+        });
+      }),
       exhaustMap((authReq) => this.authService.login(authReq).pipe(
           map(({message, data}) => AuthActions.loginSuccess({
             loggedIn: true,
@@ -26,8 +32,8 @@ export class AuthEffects {
             isLoading: false
           })),
           tap((res) => {
-            this.toast.close();
-            this.toast.show(res.message ?? 'Success!!', {
+            this.toast.close('login-loading-state');
+            this.toast.success(res.message ?? 'Success!!', {
               autoClose: true,
               role: 'alert',
               dismissible: true
@@ -36,13 +42,8 @@ export class AuthEffects {
             this.router.navigate(['/']);
           }),
           catchError((err: HttpErrorResponse) => {
-            this.toast.close();
+            this.toast.close('login-loading-state');
             const apiError: CustomApiResponse = err.error;
-            this.toast.show(apiError.message ?? 'Unknown Error!', {
-              autoClose: true,
-              role: 'alert',
-              dismissible: true
-            });
             return of(AuthActions.loginFail({
               isLoading: false,
               loggedIn: false,
@@ -76,7 +77,7 @@ export class AuthEffects {
 
   logout$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.logout),
+      ofType(AuthActions.logoutLocal),
       tap((res) => {
         this.toast.close();
         this.toast.show('Success! You are logged out.', {
@@ -86,7 +87,6 @@ export class AuthEffects {
         });
         this.storage.clearAuthStorage();
         this.router.navigate(['/login']);
-        console.log('asdf')
       }),
     ), {dispatch: false}
   );

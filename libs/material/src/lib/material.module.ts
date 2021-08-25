@@ -21,11 +21,11 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule
   ],
   exports: [
-    CommonModule,
     FormsModule,
+    ReactiveTypedFormsModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
     MatInputModule,
+    MatFormFieldModule,
     MatButtonModule,
     MatProgressSpinnerModule,
     MatIconModule

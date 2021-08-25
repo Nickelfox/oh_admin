@@ -32,7 +32,7 @@ const reducer = createReducer(
       isLoading: false,
       loggedIn: false,
     })),
-    on(AuthActions.logout, (state, _) => ({
+    on(AuthActions.logoutLocal, (state, _) => ({
       ...state,
       message: '',
       isLoading: false,
@@ -52,7 +52,7 @@ const reducer = createReducer(
       ...state,
       loggedIn: false,
       message,
-    }))
+    })),
   )
 ;
 
