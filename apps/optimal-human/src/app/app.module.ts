@@ -2,12 +2,10 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AuthGuard, AuthModule, LoggedInGuard} from '@hidden-innovation/auth';
 import {NxModule} from '@nrwl/angular';
 import {RouterModule} from '@angular/router';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
-import {environment} from '../environments/environment';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {HotToastModule} from '@ngneat/hot-toast';
 import {MatButtonModule} from '@angular/material/button';
@@ -16,11 +14,15 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
+import {environment} from "../environments/environment";
+import {AuthGuard, AuthModule} from "@hidden-innovation/auth";
+import {ENVIRONMENT} from "@hidden-innovation/environment";
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    AuthModule,
     NxModule.forRoot(),
     RouterModule.forRoot([
       {
@@ -34,13 +36,6 @@ import {MatIconModule} from "@angular/material/icon";
         loadChildren: () =>
           import('@hidden-innovation/dashboard').then((m) => m.DashboardModule),
       },
-      {
-        path: 'login',
-        data: {showHeader: false, showSidebar: false},
-        canActivate: [LoggedInGuard],
-        loadChildren: () =>
-          import('@hidden-innovation/login').then((m) => m.LoginModule),
-      },
       {path: '**', redirectTo: '/'}
     ]),
     StoreModule.forRoot({}),
@@ -48,9 +43,8 @@ import {MatIconModule} from "@angular/material/icon";
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HotToastModule.forRoot({
       theme: 'snackbar',
-      autoClose: false
+      autoClose: false,
     }),
-    AuthModule,
     MatButtonModule,
     MatSidenavModule,
     MatToolbarModule,
@@ -60,7 +54,9 @@ import {MatIconModule} from "@angular/material/icon";
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: []
+  providers: [
+    {provide: ENVIRONMENT, useValue: environment}
+  ]
 })
 export class AppModule {
 }

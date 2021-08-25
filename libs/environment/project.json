@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/environment",
+  "sourceRoot": "libs/environment/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/environment"],
+      "options": {
+        "project": "libs/environment/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/environment/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/environment/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/environment"],
+      "options": {
+        "jestConfig": "libs/environment/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/environment/src/**/*.ts",
+          "libs/environment/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
