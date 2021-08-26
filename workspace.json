@@ -7,9 +7,11 @@
     "material": "libs/material",
     "optimal-human": "apps/optimal-human",
     "optimal-human-e2e": "apps/optimal-human-e2e",
+    "reset-password": "libs/reset-password",
     "shared-form-config": "libs/shared/form-config",
     "shared-models": "libs/shared/models",
-    "shared-store": "libs/shared/store"
+    "shared-store": "libs/shared/store",
+    "shared-ui-auth-layout": "libs/shared/ui/auth-layout"
   },
   "cli": {
     "analytics": false,

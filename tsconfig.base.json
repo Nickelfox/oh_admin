@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-//      "@env/*": ["apps/optimal-human/src/environments/*"],
       "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
       "@hidden-innovation/dashboard": ["libs/dashboard/src/index.ts"],
       "@hidden-innovation/environment": ["libs/environment/src/index.ts"],
@@ -23,11 +22,15 @@
         "libs/libs/ui/login/login/src/index.ts"
       ],
       "@hidden-innovation/material": ["libs/material/src/index.ts"],
+      "@hidden-innovation/reset-password": ["libs/reset-password/src/index.ts"],
       "@hidden-innovation/shared/form-config": [
         "libs/shared/form-config/src/index.ts"
       ],
       "@hidden-innovation/shared/models": ["libs/shared/models/src/index.ts"],
-      "@hidden-innovation/shared/store": ["libs/shared/store/src/index.ts"]
+      "@hidden-innovation/shared/store": ["libs/shared/store/src/index.ts"],
+      "@hidden-innovation/shared/ui/auth-layout": [
+        "libs/shared/ui/auth-layout/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
