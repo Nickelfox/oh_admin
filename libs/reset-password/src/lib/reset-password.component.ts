@@ -4,7 +4,7 @@ import {FormBuilder, FormControl, FormGroup} from "@ngneat/reactive-forms";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {Validators} from "@angular/forms";
 import {FormValidationService} from "@hidden-innovation/shared/form-config";
-import {ResetPasswordRequest} from "@hidden-innovation/reset-password";
+import {ResetPasswordRequest} from "./models/reset-password.interface";
 
 @Component({
   selector: 'hidden-innovation-reset-password',
@@ -54,7 +54,6 @@ export class ResetPasswordComponent {
 
   submit(): void {
     if (this.resetPassForm.invalid) {
-      console.log(this.resetPassForm.controls.confirmPassword)
       return;
     }
     const {email, password, code} = this.resetPassForm.value;

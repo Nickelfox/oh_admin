@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {ResetPasswordState} from "../reset-password.store";
-import {ResetPasswordResponse} from '@hidden-innovation/reset-password';
+import {ResetPasswordResponse} from '../models/reset-password.interface';
 import {Environment, ENVIRONMENT} from "@hidden-innovation/environment";
 import {Observable, throwError} from "rxjs";
 import {catchError} from "rxjs/operators";
@@ -13,7 +13,7 @@ export class ResetPasswordService {
   }
 
   resetPassword(resetObj: ResetPasswordState): Observable<ResetPasswordResponse> {
-    return this.http.post<ResetPasswordResponse>(`${this.env.baseURL}/v1/admin/verifyOtp`, resetObj).pipe(
+    return this.http.post<ResetPasswordResponse>(`${this.env.baseURL}/v1/admin/verifyOtp`, {...resetObj, code: resetObj.code?.toString()}).pipe(
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }

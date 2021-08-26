@@ -3,7 +3,7 @@ import {ComponentStore, tapResponse} from '@ngrx/component-store';
 import {switchMap, tap} from "rxjs/operators";
 import {ResetPasswordService} from "./services/reset-password.service";
 import {HotToastService} from "@ngneat/hot-toast";
-import {ResetPasswordRequest} from "@hidden-innovation/reset-password";
+import {ResetPasswordRequest} from "./models/reset-password.interface";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 
