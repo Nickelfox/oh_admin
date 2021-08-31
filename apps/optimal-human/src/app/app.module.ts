@@ -42,6 +42,12 @@ import {ENVIRONMENT} from "@hidden-innovation/environment";
         loadChildren: () =>
           import('@hidden-innovation/reset-password').then((m) => m.ResetPasswordModule),
       },
+      {
+        path: 'forgot-password',
+        // canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/forgot-password').then((m) => m.ForgotPasswordModule),
+      },
       {path: '**', redirectTo: '/dashboard'}
     ]),
     StoreModule.forRoot({}),
