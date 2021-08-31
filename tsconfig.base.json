@@ -33,6 +33,9 @@
       "@hidden-innovation/shared/store": ["libs/shared/store/src/index.ts"],
       "@hidden-innovation/shared/ui/auth-layout": [
         "libs/shared/ui/auth-layout/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/prompt-dialog": [
+        "libs/shared/ui/prompt-dialog/src/index.ts"
       ]
     }
   },

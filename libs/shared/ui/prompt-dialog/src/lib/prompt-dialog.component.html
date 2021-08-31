@@ -1,0 +1,10 @@
+<div>
+  <h2 mat-dialog-title class="font-calibri--bold">{{data.title}}</h2>
+</div>
+<mat-dialog-content>
+  <p class="text-muted font-sf-pro">{{data.desc}}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button (click)="emitEvent(false)">{{data.action.negTitle}}</button>
+  <button mat-flat-button [class]="data.action.type" (click)="emitEvent(true)">{{data.action.posTitle}}</button>
+</mat-dialog-actions>

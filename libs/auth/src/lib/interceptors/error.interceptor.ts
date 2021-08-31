@@ -40,7 +40,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   getServerErrorMessage(error: HttpErrorResponse): string {
     return navigator.onLine ?
-      error.error.error?.message ? error.error.error.message : `${error.status}: ${error.statusText ? error.statusText : error.message}` :
+      error.error?.message ? error.error.message : `${error.status}: ${error.statusText ? error.statusText : error.message}` :
       'No Internet Connection';
   }
 }

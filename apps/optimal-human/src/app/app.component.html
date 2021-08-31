@@ -8,9 +8,7 @@
         <h4 class="font-calibri--bold mat-h4 mb-0 mt-2 oh-logo__text">Optimal Humans</h4>
       </div>
       <mat-nav-list role="navigation">
-        <a mat-list-item class="font-weight-normal text-dark">Manage User</a>
-        <a mat-list-item class="font-weight-normal text-dark">Manage Dummy</a>
-        <a mat-list-item class="font-weight-normal text-dark">Manage CMS</a>
+        <a [routerLink]="[nav.path]" *ngFor="let nav of uiStore.navItems$ | async" mat-list-item class="font-weight-normal text-dark">{{nav.label}}</a>
       </mat-nav-list>
     </div>
   </mat-sidenav>
@@ -28,7 +26,7 @@
           <mat-icon class="mr-1">admin_panel_settings</mat-icon>
           Dummy User
         </button>
-        <button mat-flat-button color="accent" class="mini" (click)="authFacade.logoutLocal()">Logout</button>
+        <button mat-flat-button color="accent" class="mini" (click)="logoutPrompt()">Logout</button>
       </div>
     </mat-toolbar>
     <main>
