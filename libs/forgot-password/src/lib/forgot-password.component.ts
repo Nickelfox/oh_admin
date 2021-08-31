@@ -23,6 +23,13 @@ export class ForgotPasswordComponent implements OnInit {
     ]),
   });
 
+  successLinkSubmit = false;
+
+  mailSendMessage()
+  {
+    this.successLinkSubmit = true;
+  }
+
 
   constructor(
     public authFacade: AuthFacade,
