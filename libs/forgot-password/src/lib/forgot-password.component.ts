@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
 // import {AuthFacade} from "../state/auth.facade";
 import {Validators} from "@angular/forms";
 import {FormValidationService} from "@hidden-innovation/shared/form-config";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
-import {FormControl, FormGroup} from "@ngneat/reactive-forms";
-import { AuthFacade } from '@hidden-innovation/auth';
+import {FormControl} from "@ngneat/reactive-forms";
+import {AuthFacade} from '@hidden-innovation/auth';
+import {ForgotPasswordStore} from "./forgot-password.store";
 
 @Component({
   selector: 'hidden-innovation-forgot-password',
@@ -13,31 +14,26 @@ import { AuthFacade } from '@hidden-innovation/auth';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ForgotPasswordComponent implements OnInit {
+export class ForgotPasswordComponent {
 
-  forgotForm: FormGroup = new FormGroup({
-    email: new FormControl<string>('', [
-      RxwebValidators.email(),
-      RxwebValidators.required(),
-      Validators.required
-    ]),
-  });
-
-  successLinkSubmit = false;
-
-  mailSendMessage()
-  {
-    this.successLinkSubmit = true;
-  }
-
+  email: FormControl = new FormControl<string>('', [
+    RxwebValidators.email(),
+    RxwebValidators.required(),
+    Validators.required
+  ]);
 
   constructor(
+    public store: ForgotPasswordStore,
     public authFacade: AuthFacade,
     public formValidationService: FormValidationService
-  ) { }
-
-  ngOnInit(): void {
-    console.log("hello password")
+  ) {
   }
 
+  submit(): void {
+    if (this.email.invalid) {
+      return;
+    }
+    const email = this.email.value;
+    this.store.forgotPassword({email});
+  }
 }

@@ -8,7 +8,11 @@ export interface UiState {
 
 const initialState: UiState = {
   navItems: [
-    {label: 'Dashboard', path: ''},
+    {label: 'Dashboard', path: '/dashboard'},
+    {label: 'Admin', path: '/admin'},
+    {label: 'Content', path: '/content'},
+    {label: 'Reports', path: '/report'},
+    {label: 'App Release', path: '/app-release'},
   ],
 };
 
