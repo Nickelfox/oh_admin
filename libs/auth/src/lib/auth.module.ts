@@ -27,6 +27,7 @@ import {AuthLayoutModule} from "@hidden-innovation/shared/ui/auth-layout";
     RouterModule.forChild([
       {
         path: 'login',
+        canActivate: [LoggedInGuard],
         component: LoginComponent,
       }
     ]),

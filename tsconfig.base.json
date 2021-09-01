@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
+      "@hidden-innovation/change-password": [
+        "libs/change-password/src/index.ts"
+      ],
       "@hidden-innovation/dashboard": ["libs/dashboard/src/index.ts"],
       "@hidden-innovation/environment": ["libs/environment/src/index.ts"],
       "@hidden-innovation/forgot-password": [

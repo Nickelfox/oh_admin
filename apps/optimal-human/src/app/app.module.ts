@@ -44,9 +44,15 @@ import {ENVIRONMENT} from "@hidden-innovation/environment";
       },
       {
         path: 'forgot-password',
-        // canActivate: [AuthGuard],
+        canActivate: [LoggedInGuard],
         loadChildren: () =>
           import('@hidden-innovation/forgot-password').then((m) => m.ForgotPasswordModule),
+      },
+      {
+        path: 'change-password',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/change-password').then((m) => m.ChangePasswordModule),
       },
       {path: '**', redirectTo: '/dashboard'}
     ]),

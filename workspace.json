@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "auth": "libs/auth",
+    "change-password": "libs/change-password",
     "dashboard": "libs/dashboard",
     "environment": "libs/environment",
     "forgot-password": "libs/forgot-password",
