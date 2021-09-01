@@ -19,6 +19,7 @@ import {AuthGuard, AuthModule, LoggedInGuard} from "@hidden-innovation/auth";
 import {ENVIRONMENT} from "@hidden-innovation/environment";
 import {MatMenuModule} from '@angular/material/menu';
 import {BreadcrumbModule} from "xng-breadcrumb";
+import {MatRippleModule} from "@angular/material/core";
 
 @NgModule({
   imports: [
@@ -77,6 +78,7 @@ import {BreadcrumbModule} from "xng-breadcrumb";
     MatListModule,
     MatIconModule,
     MatMenuModule,
+    MatRippleModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

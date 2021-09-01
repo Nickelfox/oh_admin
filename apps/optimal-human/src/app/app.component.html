@@ -7,10 +7,18 @@
         <img src="assets/white_logo.svg" alt="" class="oh-logo img-fluid">
         <h4 class="font-calibri--bold mat-h4 mb-0 mt-2 oh-logo__text">Optimal Humans</h4>
       </div>
-      <mat-nav-list role="navigation">
-        <a [routerLink]="[nav.path]" *ngFor="let nav of uiStore.navItems$ | async" mat-list-item
-           class="font-weight-normal text-dark">{{nav.label}}</a>
-      </mat-nav-list>
+      <mat-list>
+        <ng-template ngFor [ngForOf]="uiStore.navItems$ | async" let-navData>
+          <ng-template [ngIf]="navData.navItems.length > 1">
+            <div mat-subheader class="text-muted">{{navData.name}}</div>
+          </ng-template>
+          <mat-list-item matRipple [disableRipple]="false" [routerLink]="item.path" [ngStyle]="{cursor: 'pointer'}"
+                         *ngFor="let item of navData.navItems">
+            <div mat-line class="text-white">{{item.label}}</div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </ng-template>
+      </mat-list>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -21,9 +29,6 @@
         </button>
         <ng-container *ngIf="(breadcrumbService.breadcrumbs$ | async) as br">
           <h2 class="mat-h2 m-0 mx-3 text-dark font-sf-pro">{{(br[0]?.label)}}</h2>
-        </ng-container>
-        <ng-container *ngIf="!(breadcrumbService.breadcrumbs$ | async)">
-          --
         </ng-container>
       </div>
       <span class="spacer"></span>
