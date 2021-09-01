@@ -4,7 +4,7 @@ import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {Validators} from "@angular/forms";
 import {FormValidationService} from "@hidden-innovation/shared/form-config";
 import {ChangePassword} from './models/change-password.interface';
-import { ResetPasswordRequest } from '@hidden-innovation/reset-password';
+
 
 @Component({
   selector: 'hidden-innovation-change-password',
@@ -31,7 +31,8 @@ export class ChangePasswordComponent implements OnInit {
     this.changePassForm = this.fb.group<ChangePassword>({
       oldPassword: new FormControl<string>('', [
         RxwebValidators.required(),
-        Validators.required
+        Validators.required,
+        this.formValidationService.validPassword
       ]),
       newPassword: new FormControl<string>('', [
         RxwebValidators.required(),
@@ -40,7 +41,8 @@ export class ChangePasswordComponent implements OnInit {
       ]),
       confirmPassword: new FormControl<string>('', [
         RxwebValidators.required(),
-        Validators.required
+        Validators.required,
+        this.formValidationService.validPassword
       ]),
     }, {
       validator: this.formValidationService.checkPasswords,
