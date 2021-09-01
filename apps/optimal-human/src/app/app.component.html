@@ -8,7 +8,8 @@
         <h4 class="font-calibri--bold mat-h4 mb-0 mt-2 oh-logo__text">Optimal Humans</h4>
       </div>
       <mat-nav-list role="navigation">
-        <a [routerLink]="[nav.path]" *ngFor="let nav of uiStore.navItems$ | async" mat-list-item class="font-weight-normal text-dark">{{nav.label}}</a>
+        <a [routerLink]="[nav.path]" *ngFor="let nav of uiStore.navItems$ | async" mat-list-item
+           class="font-weight-normal text-dark">{{nav.label}}</a>
       </mat-nav-list>
     </div>
   </mat-sidenav>
@@ -18,20 +19,31 @@
         <button mat-icon-button class="primary-color" color="primary" (click)="sideBarToggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <h2 class="mat-h2 m-0 mx-3 text-dark font-sf-pro">Dashboard</h2>
+        <ng-container *ngIf="(breadcrumbService.breadcrumbs$ | async) as br">
+          <h2 class="mat-h2 m-0 mx-3 text-dark font-sf-pro">{{(br[0]?.label)}}</h2>
+        </ng-container>
+        <ng-container *ngIf="!(breadcrumbService.breadcrumbs$ | async)">
+          --
+        </ng-container>
       </div>
       <span class="spacer"></span>
       <div class="d-flex align-items-center">
-<!--        <button mat-button color="primary" class="mini mx-1">-->
-<!--          <mat-icon class="mr-1">admin_panel_settings</mat-icon>-->
-<!--          Dummy User-->
-<!--        </button>-->
-<!--        <button mat-flat-button color="accent" class="mini" (click)="logoutPrompt()">Logout</button>-->
-        <div class="toolbar__user-icon d-flex align-items-center justify-content-center pointer-event" mat-ripple [routerLink]="['/profile']" [ngStyle]="{'cursor': 'pointer'}">
-          <img src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80' [ngStyle]="{'width':'50px'}" alt="User Image" class="img-fluid avatar-image">
-        </div>
-        <button mat-button color="primary" class="ml-1 mr-1 mat-subheading-2 mb-0 font-weight-bolder">Dummy User</button>
-        <button  mat-icon-button [matMenuTriggerFor]="userBarmenu" >
+        <!--        <button mat-button color="primary" class="mini mx-1">-->
+        <!--          <mat-icon class="mr-1">admin_panel_settings</mat-icon>-->
+        <!--          Dummy User-->
+        <!--        </button>-->
+        <!--        <button mat-flat-button color="accent" class="mini" (click)="logoutPrompt()">Logout</button>-->
+        <button mat-stroked-button class="pl-0 ml-1 mr-1 mat-subheading-2 mb-0 font-weight-bolder">
+          <div class="d-flex align-items-center">
+            <div class="toolbar__user-icon d-flex align-items-center justify-content-center pointer-event mr-3 ml-1">
+              <img
+                src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'
+                alt="User Image" class="img-fluid avatar-image">
+            </div>
+            <span>Dummy User</span>
+          </div>
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="userBarmenu">
           <mat-icon>expand_more</mat-icon>
         </button>
         <mat-menu #userBarmenu="matMenu">
@@ -53,7 +65,6 @@
           &nbsp;&nbsp;&nbsp;AUTH STATUS
         </ng-template>
       </button>
-
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

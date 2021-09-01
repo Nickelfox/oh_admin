@@ -40,17 +40,17 @@ export class FormValidationService {
 
   // Return FormGroup validator function to match both password fields
 
-  get checkPasswords(): ValidatorFn {
+  checkPasswords(pasName = 'password', conPasName = 'confirmPassword'): ValidatorFn {
     return (group: AbstractControl) => {
       if (!group) {
         return null;
       }
-      const pass = group.get('password')?.value;
-      const confirmPass = group.get('confirmPassword')?.value;
+      const pass = group.get(pasName)?.value;
+      const confirmPass = group.get(conPasName)?.value;
       if (pass === confirmPass) {
         return null;
       } else {
-        group.get('confirmPassword')?.setErrors({notSame: true});
+        group.get(conPasName)?.setErrors({notSame: true});
       }
       return null;
     }

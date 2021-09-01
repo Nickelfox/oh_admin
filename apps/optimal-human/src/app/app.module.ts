@@ -18,11 +18,13 @@ import {environment} from "../environments/environment";
 import {AuthGuard, AuthModule, LoggedInGuard} from "@hidden-innovation/auth";
 import {ENVIRONMENT} from "@hidden-innovation/environment";
 import {MatMenuModule} from '@angular/material/menu';
+import {BreadcrumbModule} from "xng-breadcrumb";
 
 @NgModule({
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    BreadcrumbModule,
     AuthModule,
     NxModule.forRoot(),
     RouterModule.forRoot([
@@ -36,24 +38,28 @@ import {MatMenuModule} from '@angular/material/menu';
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/dashboard').then((m) => m.DashboardModule),
+        data: { breadcrumb: 'Dashboard' }
       },
       {
         path: 'reset-password',
         canActivate: [LoggedInGuard],
         loadChildren: () =>
           import('@hidden-innovation/reset-password').then((m) => m.ResetPasswordModule),
+        data: { breadcrumb: 'Reset Password' }
       },
       {
         path: 'forgot-password',
         canActivate: [LoggedInGuard],
         loadChildren: () =>
           import('@hidden-innovation/forgot-password').then((m) => m.ForgotPasswordModule),
+        data: { breadcrumb: 'Forgot Password' }
       },
       {
         path: 'change-password',
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/change-password').then((m) => m.ChangePasswordModule),
+        data: {breadcrumb: 'Change Password'}
       },
       {path: '**', redirectTo: '/dashboard'}
     ]),

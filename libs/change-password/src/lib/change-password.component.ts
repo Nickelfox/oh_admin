@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@ngneat/reactive-forms";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {Validators} from "@angular/forms";
@@ -15,12 +15,11 @@ import {ChangePassword} from './models/change-password.interface';
 })
 export class ChangePasswordComponent implements OnInit {
 
-
-  changePassForm: FormGroup<ChangePassword> ;
+  changePassForm: FormGroup<ChangePassword>;
 
   passwordHidden = {
     oldPass: true,
-    newPass:true,
+    newPass: true,
     confPass: true
   }
 
@@ -44,14 +43,14 @@ export class ChangePasswordComponent implements OnInit {
         Validators.required
       ]),
     }, {
-      validator: this.formValidationService.checkPasswords,
+      validator: this.formValidationService.checkPasswords('newPassword', 'confirmPassword'),
     });
   }
 
-  submitChangePass()
-  {
+  submitChangePass() {
     console.log("password changed")
   }
+
   ngOnInit(): void {
     console.log("change password")
   }

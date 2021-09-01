@@ -48,7 +48,7 @@ export class ResetPasswordComponent {
         RxwebValidators.numeric()
       ])
     }, {
-      validator: this.formValidationService.checkPasswords,
+      validator: this.formValidationService.checkPasswords('password', 'confirmPassword'),
     });
   }
 
