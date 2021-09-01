@@ -1,4 +1,10 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from "@ngneat/reactive-forms";
+import {RxwebValidators} from "@rxweb/reactive-form-validators";
+import {Validators} from "@angular/forms";
+import {FormValidationService} from "@hidden-innovation/shared/form-config";
+import {ChangePassword} from './models/change-password.interface';
+import { ResetPasswordRequest } from '@hidden-innovation/reset-password';
 
 @Component({
   selector: 'hidden-innovation-change-password',
@@ -9,9 +15,44 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@
 })
 export class ChangePasswordComponent implements OnInit {
 
-  constructor() { }
 
+  changePassForm: FormGroup<ChangePassword> ;
+
+  passwordHidden = {
+    oldPass: true,
+    newPass:true,
+    confPass: true
+  }
+
+  constructor(
+    public formValidationService: FormValidationService,
+    private fb: FormBuilder
+  ) {
+    this.changePassForm = this.fb.group<ChangePassword>({
+      oldPassword: new FormControl<string>('', [
+        RxwebValidators.required(),
+        Validators.required
+      ]),
+      newPassword: new FormControl<string>('', [
+        RxwebValidators.required(),
+        Validators.required,
+        this.formValidationService.validPassword
+      ]),
+      confirmPassword: new FormControl<string>('', [
+        RxwebValidators.required(),
+        Validators.required
+      ]),
+    }, {
+      validator: this.formValidationService.checkPasswords,
+    });
+  }
+
+  submitChangePass()
+  {
+    console.log("password changed")
+  }
   ngOnInit(): void {
+    console.log("change password")
   }
 
 }
