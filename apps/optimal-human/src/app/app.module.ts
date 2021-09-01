@@ -17,6 +17,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {environment} from "../environments/environment";
 import {AuthGuard, AuthModule, LoggedInGuard} from "@hidden-innovation/auth";
 import {ENVIRONMENT} from "@hidden-innovation/environment";
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   imports: [
@@ -69,6 +70,7 @@ import {ENVIRONMENT} from "@hidden-innovation/environment";
     MatProgressBarModule,
     MatListModule,
     MatIconModule,
+    MatMenuModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

@@ -22,11 +22,23 @@
       </div>
       <span class="spacer"></span>
       <div class="d-flex align-items-center">
-        <button mat-button color="primary" class="mini mx-3">
-          <mat-icon class="mr-1">admin_panel_settings</mat-icon>
-          Dummy User
+<!--        <button mat-button color="primary" class="mini mx-1">-->
+<!--          <mat-icon class="mr-1">admin_panel_settings</mat-icon>-->
+<!--          Dummy User-->
+<!--        </button>-->
+<!--        <button mat-flat-button color="accent" class="mini" (click)="logoutPrompt()">Logout</button>-->
+        <div class="toolbar__user-icon d-flex align-items-center justify-content-center pointer-event" mat-ripple [routerLink]="['/profile']" [ngStyle]="{'cursor': 'pointer'}">
+          <img src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80' [ngStyle]="{'width':'50px'}" alt="User Image" class="img-fluid avatar-image">
+        </div>
+        <button mat-button color="primary" class="mini mx-1">Dummy User</button>
+        <button  mat-icon-button [matMenuTriggerFor]="userBarmenu" >
+          <mat-icon>expand_more</mat-icon>
         </button>
-        <button mat-flat-button color="accent" class="mini" (click)="logoutPrompt()">Logout</button>
+        <mat-menu #userBarmenu="matMenu">
+          <button mat-menu-item [routerLink]="['/profile']">Profile</button>
+          <button mat-menu-item [routerLink]="['/change-password']">Change Password</button>
+          <button mat-menu-item (click)="logoutPrompt()">Logout</button>
+        </mat-menu>
       </div>
     </mat-toolbar>
     <main>
