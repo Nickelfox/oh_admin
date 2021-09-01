@@ -41,8 +41,7 @@ export class ChangePasswordComponent implements OnInit {
       ]),
       confirmPassword: new FormControl<string>('', [
         RxwebValidators.required(),
-        Validators.required,
-        this.formValidationService.validPassword
+        Validators.required
       ]),
     }, {
       validator: this.formValidationService.checkPasswords,
