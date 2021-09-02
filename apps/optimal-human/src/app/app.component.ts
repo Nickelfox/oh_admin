@@ -7,6 +7,7 @@ import {GenericDialogPrompt} from "@hidden-innovation/shared/models";
 import {Subject} from "rxjs";
 import {takeUntil} from 'rxjs/operators';
 import {UiStore} from "@hidden-innovation/shared/store";
+import {BreadcrumbService} from "xng-breadcrumb";
 
 @Component({
   selector: 'hidden-innovation-root',
@@ -26,7 +27,8 @@ export class AppComponent implements OnDestroy {
     public breakpointObserver: BreakpointObserver,
     public authFacade: AuthFacade,
     private matDialog: MatDialog,
-    public uiStore: UiStore
+    public uiStore: UiStore,
+    public breadcrumbService: BreadcrumbService
   ) {
     breakpointObserver.observe([
       Breakpoints.Tablet,
@@ -65,6 +67,7 @@ export class AppComponent implements OnDestroy {
       }
     });
   }
+
 
   ngOnDestroy() {
     this.destroy$.next();
