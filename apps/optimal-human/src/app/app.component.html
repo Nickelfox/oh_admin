@@ -58,7 +58,7 @@
         </mat-menu>
       </div>
     </mat-toolbar>
-    <main>
+    <main [ngClass]="{'internal_over-flow' : (authFacade.loggedIn$ | async)}">
       <router-outlet></router-outlet>
       <button mat-flat-button color="primary" class="loginStatus">
         <ng-template [ngIf]="authFacade.loggedIn$ | async" [ngIfElse]="authStatusElse">

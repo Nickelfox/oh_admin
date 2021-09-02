@@ -1,9 +1,10 @@
-import {ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup} from "@ngneat/reactive-forms";
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {Validators} from "@angular/forms";
 import {FormValidationService} from "@hidden-innovation/shared/form-config";
-import {ChangePassword} from './models/change-password.interface';
+import {ChangePasswordRequest} from './models/change-password.interface';
+import {ChangePasswordStore} from "./change-password.store";
 
 
 @Component({
@@ -13,9 +14,9 @@ import {ChangePassword} from './models/change-password.interface';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent {
 
-  changePassForm: FormGroup<ChangePassword>;
+  changePassForm: FormGroup<ChangePasswordRequest>;
 
   passwordHidden = {
     oldPass: true,
@@ -25,34 +26,34 @@ export class ChangePasswordComponent implements OnInit {
 
   constructor(
     public formValidationService: FormValidationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public store: ChangePasswordStore,
   ) {
-    this.changePassForm = this.fb.group<ChangePassword>({
-      oldPassword: new FormControl<string>('', [
+    this.changePassForm = this.fb.group<ChangePasswordRequest>({
+      password: new FormControl<string>('', [
         RxwebValidators.required(),
         Validators.required,
         this.formValidationService.validPassword
       ]),
-      newPassword: new FormControl<string>('', [
+      passwordNew: new FormControl<string>('', [
         RxwebValidators.required(),
         Validators.required,
         this.formValidationService.validPassword
       ]),
-      confirmPassword: new FormControl<string>('', [
+      passwordConfirm: new FormControl<string>('', [
         RxwebValidators.required(),
         Validators.required
       ]),
     }, {
-      validator: this.formValidationService.checkPasswords('newPassword', 'confirmPassword'),
+      validator: this.formValidationService.checkPasswords('passwordNew', 'passwordConfirm'),
     });
   }
 
-  submitChangePass() {
-    console.log("password changed")
-  }
-
-  ngOnInit(): void {
-    console.log("change password")
+  submit(): void {
+    if (this.changePassForm.invalid) {
+      return;
+    }
+    this.store.changePassword(this.changePassForm.value);
   }
 
 }

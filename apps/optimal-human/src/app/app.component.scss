@@ -80,6 +80,9 @@ mat-list-item {
 main {
   position: relative;
   z-index: 0;
-  height: calc(100vh - 80px);
-  overflow-y: auto;
+
+  &.internal_over-flow {
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
 }
