@@ -48,6 +48,12 @@ import {ENVIRONMENT} from "@hidden-innovation/environment";
         loadChildren: () =>
           import('@hidden-innovation/forgot-password').then((m) => m.ForgotPasswordModule),
       },
+      {
+        path: 'edit-profile',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/edit-admin-profile').then((m) => m.EditAdminProfileModule),
+      },
       {path: '**', redirectTo: '/dashboard'}
     ]),
     StoreModule.forRoot({}),
