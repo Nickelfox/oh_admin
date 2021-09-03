@@ -2,7 +2,7 @@
 
   <form   class="container align-self-start w-50  ml-0 pl-0" >
 
-    <form [formGroup]="editProfileForm" class='row' >
+    <form [formGroup]="editProfileForm" class='row'  >
       <div class='col-12'>
         <div class='container-fluid p-0'>
           <div class='row'>
@@ -13,7 +13,7 @@
                 <mat-error
                   *ngIf='editProfileForm.controls.name.errors?.required'>{{formValidationService.fieldValidationMessage.required}}</mat-error>
                 <mat-error
-                  *ngIf='editProfileForm.controls.name.errors?.onlyAlpha'>{{formValidationService.fieldValidationMessage.invalid}}</mat-error>
+                  *ngIf='editProfileForm.controls.name.errors?.alpha'>{{formValidationService.fieldValidationMessage.invalid}}</mat-error>
                 <mat-error
                   *ngIf='editProfileForm.controls.name.errors?.maxLength'>{{formValidationService.fieldValidationMessage.maxLength}}</mat-error>
               </mat-form-field>

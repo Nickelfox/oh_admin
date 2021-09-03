@@ -4,6 +4,7 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import {Validators} from "@angular/forms";
 import {FormValidationService} from "@hidden-innovation/shared/form-config";
 import { EditAdminProfile } from './models/edit-admin-profile.interface';
+import { alphaWithWhitespace } from '@rxweb/reactive-form-validators/util/alphabet-regex.locale';
 
 @Component({
   selector: 'hidden-innovation-edit-admin-profile',
@@ -16,7 +17,10 @@ export class EditAdminProfileComponent implements OnInit {
   editProfileForm:  FormGroup<EditAdminProfile> = new FormGroup<EditAdminProfile>(
     {
       name: new FormControl<string>('', [
-        RxwebValidators.pattern({expression:{'onlyAlpha': /^[A-Za-z]+$/} }),
+        // RxwebValidators.pattern({expression: this.formValidationService.nameRegex }),
+        RxwebValidators.alpha({
+          allowWhiteSpace:true
+        }),
         RxwebValidators.maxLength({value:150}),
         RxwebValidators.required(),
         Validators.required,
@@ -26,7 +30,6 @@ export class EditAdminProfileComponent implements OnInit {
         RxwebValidators.required(),
         Validators.required
       ]),
-
     }
   )
 
