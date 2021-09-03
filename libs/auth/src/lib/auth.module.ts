@@ -16,6 +16,7 @@ import {RouterModule} from "@angular/router";
 import {LoginComponent} from "./login/login.component";
 import {MaterialModule} from "@hidden-innovation/material";
 import {AuthLayoutModule} from "@hidden-innovation/shared/ui/auth-layout";
+import {UtilsModule} from "@hidden-innovation/shared/utils";
 
 @NgModule({
 
@@ -24,9 +25,11 @@ import {AuthLayoutModule} from "@hidden-innovation/shared/ui/auth-layout";
     HttpClientModule,
     MaterialModule,
     AuthLayoutModule,
+    UtilsModule,
     RouterModule.forChild([
       {
         path: 'login',
+        canActivate: [LoggedInGuard],
         component: LoginComponent,
       }
     ]),

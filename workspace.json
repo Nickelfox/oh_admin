@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "auth": "libs/auth",
+    "change-password": "libs/change-password",
     "dashboard": "libs/dashboard",
     "edit-admin-profile": "libs/edit-admin-profile",
     "environment": "libs/environment",
@@ -14,7 +15,8 @@
     "shared-models": "libs/shared/models",
     "shared-store": "libs/shared/store",
     "shared-ui-auth-layout": "libs/shared/ui/auth-layout",
-    "shared-ui-prompt-dialog": "libs/shared/ui/prompt-dialog"
+    "shared-ui-prompt-dialog": "libs/shared/ui/prompt-dialog",
+    "shared-utils": "libs/shared/utils"
   },
   "cli": {
     "analytics": false,

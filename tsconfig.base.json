@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
+      "@hidden-innovation/change-password": [
+        "libs/change-password/src/index.ts"
+      ],
       "@hidden-innovation/dashboard": ["libs/dashboard/src/index.ts"],
       "@hidden-innovation/edit-admin-profile": [
         "libs/edit-admin-profile/src/index.ts"
@@ -39,7 +42,8 @@
       ],
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
-      ]
+      ],
+      "@hidden-innovation/shared/utils": ["libs/shared/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

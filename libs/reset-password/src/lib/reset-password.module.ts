@@ -6,6 +6,7 @@ import {ResetPasswordStore} from './reset-password.store';
 import {ResetPasswordService} from "./services/reset-password.service";
 import {MaterialModule} from "@hidden-innovation/material";
 import {AuthLayoutModule} from "@hidden-innovation/shared/ui/auth-layout";
+import {UtilsModule} from "@hidden-innovation/shared/utils";
 
 export const resetPasswordRoutes: Route[] = [{
   path: '',
@@ -18,7 +19,8 @@ export const resetPasswordRoutes: Route[] = [{
     CommonModule,
     RouterModule.forChild(resetPasswordRoutes),
     MaterialModule,
-    AuthLayoutModule
+    AuthLayoutModule,
+    UtilsModule
   ],
   declarations: [ResetPasswordComponent],
   providers: [ResetPasswordStore, ResetPasswordService],

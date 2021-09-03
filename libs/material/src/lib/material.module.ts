@@ -34,7 +34,7 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatDialogModule
   ],
   providers: [
-    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'standard'}}
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}}
   ]
 })
 export class MaterialModule {
