@@ -25,6 +25,8 @@ export class FormValidationService {
     mismatch: 'Passwords does not match'
   };
 
+  // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
+
   private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
 
   get validPassword(): ValidatorFn {
