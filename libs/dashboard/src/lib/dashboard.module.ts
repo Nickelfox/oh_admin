@@ -7,6 +7,9 @@ import {DashboardEffects} from './data-access/state/dashboard.effects';
 import {DashboardFacade} from './data-access/state/dashboard.facade';
 import {RouterModule} from "@angular/router";
 import {DashboardComponent} from './dashboard.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+
 // import {AuthGuard} from "@hidden-innovation/auth";
 
 @NgModule({
@@ -18,7 +21,7 @@ import {DashboardComponent} from './dashboard.component';
         path: '',
         pathMatch: 'full',
         // canActivate: [AuthGuard],
-        component: DashboardComponent,
+        component: DashboardComponent
       }
     ]),
     StoreModule.forFeature(
@@ -26,6 +29,8 @@ import {DashboardComponent} from './dashboard.component';
       fromDashboard.reducer
     ),
     EffectsModule.forFeature([DashboardEffects]),
+    MatCardModule,
+    MatIconModule
   ],
   providers: [DashboardFacade, DashboardEffects],
 })

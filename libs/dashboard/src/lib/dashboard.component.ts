@@ -1,5 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
+import { Chart, DefaultDataPoint } from 'chart.js';
+
 @Component({
   selector: 'oh-dashboard',
   templateUrl: './dashboard.component.html',
@@ -7,10 +9,11 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
+
   //
   // constructor() { }
-  //
+
+  // //
   // ngOnInit(): void {
   // }
-
 }
