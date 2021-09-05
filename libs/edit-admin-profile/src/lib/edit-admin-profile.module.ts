@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { EditAdminProfileComponent } from './edit-admin-profile.component';
 import {RouterModule} from "@angular/router";
 import {MaterialModule} from "@hidden-innovation/material";
+import { EditAdminProfileService } from './services/edit-admin-profile.service';
+import { EditAdminProfileStore } from './edit-admin-profile.store';
 
 @NgModule({
   imports: [CommonModule, MaterialModule, RouterModule.forChild([{
@@ -13,5 +15,9 @@ import {MaterialModule} from "@hidden-innovation/material";
   declarations: [
     EditAdminProfileComponent
   ],
+  providers: [
+    EditAdminProfileService,
+    EditAdminProfileStore
+  ]
 })
 export class EditAdminProfileModule {}

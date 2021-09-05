@@ -67,6 +67,7 @@ import {MatRippleModule} from "@angular/material/core";
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/edit-admin-profile').then((m) => m.EditAdminProfileModule),
+        data: {breadcrumb: 'Edit Profile'}
       },
       {path: '**', redirectTo: '/dashboard'}
     ]),

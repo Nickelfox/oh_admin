@@ -1,7 +1,13 @@
 /**
  * Interface for the 'Edit admin Profile' data
  */
-export interface EditAdminProfile {
+import { CustomApiResponse } from '@hidden-innovation/shared/models';
+
+export interface EditAdminProfileRequest {
   name: string;
   email: string;
+}
+
+export interface EditAdminProfileResponse extends CustomApiResponse {
+  data: null;
 }

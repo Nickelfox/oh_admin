@@ -8,6 +8,7 @@ import {MatInputModule} from '@angular/material/input';
 import {ReactiveTypedFormsModule} from '@rxweb/reactive-form-validators';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from "@angular/material/dialog";
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatButtonModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule
   ],
   exports: [
     FormsModule,
@@ -31,7 +33,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatButtonModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatCardModule
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'fill'}}
