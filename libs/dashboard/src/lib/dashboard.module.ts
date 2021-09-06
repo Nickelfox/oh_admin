@@ -7,8 +7,9 @@ import {DashboardEffects} from './data-access/state/dashboard.effects';
 import {DashboardFacade} from './data-access/state/dashboard.facade';
 import {RouterModule} from "@angular/router";
 import {DashboardComponent} from './dashboard.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { MaterialModule } from '@hidden-innovation/material';
+
+
 
 // import {AuthGuard} from "@hidden-innovation/auth";
 
@@ -29,8 +30,7 @@ import { MatIconModule } from '@angular/material/icon';
       fromDashboard.reducer
     ),
     EffectsModule.forFeature([DashboardEffects]),
-    MatCardModule,
-    MatIconModule
+    MaterialModule
   ],
   providers: [DashboardFacade, DashboardEffects],
 })

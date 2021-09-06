@@ -1,17 +1,22 @@
-.mat-card
+//.mat-card
+//{
+//  border-radius: 4px;
+//  border: 1px solid #e5e5e5;
+//  box-shadow: none;
+//  margin-bottom: 36px;
+//  padding: 26px;
+//
+//}
+mat-card-content
 {
-  border-radius: 4px;
-  border: 1px solid #e5e5e5;
-  box-shadow: none;
-  margin-bottom: 36px;
-  padding: 26px;
-
+  color: #c2c2c2;
 }
 .card-icon
 {
   font-size: 56px;
   width: auto;
   margin-top: 1px;
+  color: #c2c2c2;
 }
 .card-text
 {
