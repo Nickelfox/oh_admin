@@ -30,7 +30,13 @@ export class DashboardComponent {
   ];
   chartOptions: ChartOptions & { annotation: any } = {
     responsive: true,
-    maintainAspectRatio: false,
+    layout: {
+      padding: 0,
+    },
+    tooltips: {
+      enabled: false
+    },
+    // maintainAspectRatio: false,
     scales: {
       xAxes: [{}],
       yAxes: [
