@@ -1,15 +1,13 @@
-import {Injectable} from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
-import {HotToastService} from "@ngneat/hot-toast";
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+import { HotToastService } from '@ngneat/hot-toast';
 
 import * as AuthActions from './auth.actions';
-import {of} from 'rxjs';
-import {Router} from "@angular/router";
-import {HttpErrorResponse} from "@angular/common/http";
-import {CustomApiResponse} from "@hidden-innovation/shared/models";
-import {AuthService} from "../services/auth.service";
-import {AuthStorageService} from "../services/auth-storage.service";
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { AuthStorageService } from '../services/auth-storage.service';
 
 
 @Injectable()
@@ -25,12 +23,6 @@ export class AuthEffects {
         });
       }),
       exhaustMap((authReq) => this.authService.login(authReq).pipe(
-          map(({message, data}) => AuthActions.loginSuccess({
-            loggedIn: true,
-            token: data,
-            message,
-            isLoading: false
-          })),
           tap((res) => {
             this.toast.close('login-loading-state');
             this.toast.success(res.message ?? 'Success!!', {
@@ -38,40 +30,40 @@ export class AuthEffects {
               role: 'alert',
               dismissible: true
             });
-            this.storage.setAuthToken(res.token);
-            this.router.navigate(['/']);
+            this.storage.setAuthAdmin(res.data);
+            this.router.navigate(['/dashboard']);
           }),
-          catchError((err: HttpErrorResponse) => {
+          map(({ message, data }) => AuthActions.loginSuccess({
+            token: data.token,
+            admin: data.admin
+          })),
+          catchError((_) => {
             this.toast.close('login-loading-state');
-            const apiError: CustomApiResponse = err.error;
-            return of(AuthActions.loginFail({
-              isLoading: false,
-              loggedIn: false,
-              message: apiError.message,
-            }));
+            return of(AuthActions.loginFail);
           })
         )
       )
     )
   );
 
-  isLoggedIn$ = createEffect(() =>
+  checkLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.checkLogin),
-      exhaustMap((_) => this.storage.getAuthToken().pipe(
-          map((token) => AuthActions.checkLoginSuccess({
-            loggedIn: false,
-            token: token || '',
+      exhaustMap((_) => this.storage.getAuthAdmin().pipe(
+        tap((res) => console.log(res)),
+          map(({ token, admin }) => AuthActions.checkLoginSuccess({
+            token,
+            admin
           })),
           catchError((_) => {
             this.storage.clearAuthStorage();
             return of(AuthActions.checkLoginFail({
-              loggedIn: false,
-              token: ''
+              token: '',
+              admin: undefined,
             }));
           })
-        ),
-      ),
+        )
+      )
     )
   );
 
@@ -87,8 +79,8 @@ export class AuthEffects {
         });
         this.storage.clearAuthStorage();
         this.router.navigate(['/login']);
-      }),
-    ), {dispatch: false}
+      })
+    ), { dispatch: false }
   );
 
   constructor(
