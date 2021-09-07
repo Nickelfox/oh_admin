@@ -36,7 +36,7 @@ export class ResetPasswordComponent {
       password: new FormControl<string>('', [
         RxwebValidators.required(),
         Validators.required,
-        this.formValidationService.validPassword
+        this.formValidationService.validPassword,
       ]),
       confirmPassword: new FormControl<string>('', [
         RxwebValidators.required(),
