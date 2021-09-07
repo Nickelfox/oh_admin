@@ -24,13 +24,14 @@ export class AuthEffects {
       }),
       exhaustMap((authReq) => this.authService.login(authReq).pipe(
           tap((res) => {
-            this.toast.close('login-loading-state');
-            this.toast.success(res.message ?? 'Success!!', {
+            this.toast.close();
+            this.toast.success('LoggedIn Successfully!', {
               autoClose: true,
               role: 'alert',
               dismissible: true
             });
-            this.storage.setAuthAdmin(res.data);
+            this.storage.setAuthAdmin(res.data.admin);
+            this.storage.setAuthToken(res.data.token);
             this.router.navigate(['/dashboard']);
           }),
           map(({ message, data }) => AuthActions.loginSuccess({
@@ -39,7 +40,9 @@ export class AuthEffects {
           })),
           catchError((_) => {
             this.toast.close('login-loading-state');
-            return of(AuthActions.loginFail);
+            return of(AuthActions.loginFail({
+              token: '',
+            }));
           })
         )
       )
@@ -50,7 +53,6 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.checkLogin),
       exhaustMap((_) => this.storage.getAuthAdmin().pipe(
-        tap((res) => console.log(res)),
           map(({ token, admin }) => AuthActions.checkLoginSuccess({
             token,
             admin
@@ -59,12 +61,22 @@ export class AuthEffects {
             this.storage.clearAuthStorage();
             return of(AuthActions.checkLoginFail({
               token: '',
-              admin: undefined,
+              admin: undefined
             }));
           })
         )
       )
     )
+  );
+
+  updateAuthAdmin$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(AuthActions.adminUpdate),
+        tap((res) => this.storage.setAuthAdmin(res))
+      ),
+    {
+      dispatch: false
+    }
   );
 
   logout$ = createEffect(() =>

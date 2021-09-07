@@ -3,7 +3,7 @@ import { select, Store } from '@ngrx/store';
 
 import * as AuthSelectors from './auth.selectors';
 import * as AuthActions from './auth.actions';
-import { LoginRequest } from '../models/auth.interfaces';
+import { AdminAuthDetails, LoginRequest } from '../models/auth.interfaces';
 
 @Injectable()
 export class AuthFacade {
@@ -30,5 +30,9 @@ export class AuthFacade {
 
   logoutLocal() {
     this.store.dispatch(AuthActions.logoutLocal());
+  }
+
+  updateAdminAuth(adminObj: AdminAuthDetails) {
+    this.store.dispatch(AuthActions.adminUpdate(adminObj));
   }
 }

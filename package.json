@@ -41,6 +41,7 @@
     "@angular/router": "^12.1.0",
     "@ngneat/overview": "^2.0.4",
     "@ngneat/reactive-forms": "^1.7.5",
+    "@ngneat/until-destroy": "^8.1.4",
     "@ngrx/component-store": "~12.2.0",
     "@ngrx/effects": "~12.2.0",
     "@ngrx/entity": "~12.2.0",

@@ -32,7 +32,7 @@ const reducer = createReducer(
     on(AuthActions.login, (state, _) => ({
       ...state,
       loggedIn: false,
-      isLoading: true,
+      isLoading: true
     })),
     on(AuthActions.loginSuccess, (state, { token, admin }) => ({
       ...state,
@@ -66,7 +66,7 @@ const reducer = createReducer(
     on(AuthActions.checkLogin, (state, _) => ({
       ...state,
       loggedIn: false,
-      isLoading: true,
+      isLoading: true
     })),
     on(AuthActions.checkLoginSuccess, (state, { token, admin }) => ({
       ...state,
@@ -79,6 +79,10 @@ const reducer = createReducer(
       ...state,
       loggedIn: false,
       isLoading: false
+    })),
+    on(AuthActions.adminUpdate, (state, admin) => ({
+      ...state,
+      admin
     }))
   )
 ;

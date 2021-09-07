@@ -8,16 +8,16 @@ const APP_PREFIX = 'OH-';
 @Injectable()
 export class AuthStorageService {
 
-  private readonly authStorageKey = `${APP_PREFIX}${AUTH_FEATURE_KEY}-JWT-TOKEN`;
   private readonly adminStorageKey = `${APP_PREFIX}${AUTH_FEATURE_KEY}-ADMIN`;
+  private readonly authStorageKey = `${APP_PREFIX}${AUTH_FEATURE_KEY}-AUTH-TOKEN`;
 
   //User State Method
-  setAuthAdmin(admin: Partial<LoginResponseData>): Observable<LoginResponseData | null> {
+  setAuthAdmin(admin: Partial<AdminAuthDetails>): Observable<AdminAuthDetails | null> {
     try {
       localStorage.setItem(this.adminStorageKey, JSON.stringify(admin));
       const data = localStorage.getItem(this.adminStorageKey);
       if (data) {
-        return of(JSON.parse(data) as LoginResponseData);
+        return of(JSON.parse(data) as AdminAuthDetails);
       }
       return of(null);
     } catch {
@@ -26,25 +26,21 @@ export class AuthStorageService {
   }
 
   getAuthAdmin(): Observable<LoginResponseData> {
-    const data = localStorage.getItem(this.adminStorageKey);
-    if (data) {
-      return of(JSON.parse(data) as LoginResponseData);
+    const adminData = localStorage.getItem(this.adminStorageKey);
+    const token = localStorage.getItem(this.authStorageKey);
+    if (adminData && token) {
+      return of({
+        admin: JSON.parse(adminData),
+        token
+      });
     }
     return throwError(null);
   }
 
-  // Token Method
-  getAuthToken(): Observable<string | null> {
-    const data = localStorage.getItem(this.authStorageKey);
-    if (data) {
-      return of(data);
-    }
-    return throwError(null);
-  }
-
-  setAuthToken(tokenString: string): Observable<string | null> {
+  //Token Method
+  setAuthToken(token: string): Observable<string | null> {
     try {
-      localStorage.setItem(this.authStorageKey, tokenString);
+      localStorage.setItem(this.authStorageKey, token);
       const data = localStorage.getItem(this.authStorageKey);
       if (data) {
         return of(data);
@@ -53,6 +49,14 @@ export class AuthStorageService {
     } catch {
       return of(null);
     }
+  }
+
+  getAuthToken(): Observable<string> {
+    const data = localStorage.getItem(this.authStorageKey);
+    if (data) {
+      return of(data);
+    }
+    return throwError(null);
   }
 
   setItem(key: string, data: never): Observable<never | string | null> {
@@ -66,7 +70,7 @@ export class AuthStorageService {
   }
 
   clearAuthStorage() {
-    localStorage.removeItem(this.authStorageKey);
+    localStorage.removeItem(this.adminStorageKey);
   }
 
 }

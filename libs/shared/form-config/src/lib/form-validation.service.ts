@@ -1,25 +1,30 @@
-import {Injectable} from '@angular/core';
-import {GenericErrorMessage} from './models/form-error-message.interface';
-import {AbstractControl, ValidatorFn} from "@angular/forms";
-import {FormGroup} from "@ngneat/reactive-forms";
+import { Injectable } from '@angular/core';
+import { GenericErrorMessage } from './models/form-error-message.interface';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup } from '@ngneat/reactive-forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormValidationService {
 
-  fieldValidationMessage: GenericErrorMessage = {
-    required: 'field is required',
-    invalid: 'Must not contain any special character or number',
-    maxLength: 'Must not exceed 150 character limit',
+  public readonly FIELD_VALIDATION_VALUES = {
+    NAME_LENGTH: 45,
+    USERNAME_LENGTH: 30
   };
 
-  emailValidationMessage: GenericErrorMessage = {
+  fieldValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'field is required',
+    invalid: 'Must not contain any special character or number',
+    maxLength: `Must not exceed 150 character limit`,
+  };
+
+  emailValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Email is required',
     invalid: 'Invalid Email! Enter a valid Email Address'
   };
 
-  passwordValidationMessage: GenericErrorMessage = {
+  passwordValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Password is required',
     invalid: 'Invalid Password! Must contain a uppercase, lowercase, number and min length of 8',
     mismatch: 'Passwords does not match'
@@ -36,7 +41,7 @@ export class FormValidationService {
       }
       const regex = new RegExp(this.passwordRegex);
       const valid = regex.test(control.value);
-      return valid ? null : {invalid: true};
+      return valid ? null : { invalid: true };
     };
   }
 
@@ -52,10 +57,10 @@ export class FormValidationService {
       if (pass === confirmPass) {
         return null;
       } else {
-        group.get(conPasName)?.setErrors({notSame: true});
+        group.get(conPasName)?.setErrors({ notSame: true });
       }
       return null;
-    }
+    };
   }
 
   // tslint:disable-next-line:typedef
@@ -73,7 +78,7 @@ export class FormValidationService {
       }
 
       if (passwordControl.value !== confirmPasswordControl.value) {
-        confirmPasswordControl.setErrors({passwordMismatch: true});
+        confirmPasswordControl.setErrors({ passwordMismatch: true });
       } else {
         confirmPasswordControl.setErrors(null);
       }
