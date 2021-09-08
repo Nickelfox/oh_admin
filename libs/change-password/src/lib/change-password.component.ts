@@ -33,16 +33,19 @@ export class ChangePasswordComponent {
       password: new FormControl<string>('', [
         RxwebValidators.required(),
         Validators.required,
-        this.formValidationService.validPassword
+        this.formValidationService.validPassword,
+        RxwebValidators.notEmpty()
       ]),
       passwordNew: new FormControl<string>('', [
         RxwebValidators.required(),
         Validators.required,
-        this.formValidationService.validPassword
+        this.formValidationService.validPassword,
+        RxwebValidators.notEmpty()
       ]),
       passwordConfirm: new FormControl<string>('', [
         RxwebValidators.required(),
-        Validators.required
+        Validators.required,
+        RxwebValidators.notEmpty()
       ]),
     }, {
       validator: this.formValidationService.checkPasswords('passwordNew', 'passwordConfirm'),

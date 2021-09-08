@@ -45,14 +45,16 @@
                 src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8dXNlcnxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80'
                 alt="User Image" class="img-fluid avatar-image">
             </div>
-            <span>Dummy User</span>
+            <ng-container *ngIf='(authFacade.authAdmin$ | async) as admin'>
+              <span>{{admin.name || '--'}}</span>
+            </ng-container>
           </div>
         </button>
         <button mat-icon-button [matMenuTriggerFor]="userBarmenu">
           <mat-icon>expand_more</mat-icon>
         </button>
         <mat-menu #userBarmenu="matMenu">
-          <button mat-menu-item [routerLink]="['/profile']">Profile</button>
+          <button mat-menu-item [routerLink]="['/edit-profile']">Edit Profile</button>
           <button mat-menu-item [routerLink]="['/change-password']">Change Password</button>
           <button mat-menu-item (click)="logoutPrompt()">Logout</button>
         </mat-menu>

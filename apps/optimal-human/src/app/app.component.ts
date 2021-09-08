@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnDestroy} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import {AuthFacade} from "@hidden-innovation/auth";
 import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 import {MatDialog} from "@angular/material/dialog";
@@ -28,7 +28,8 @@ export class AppComponent implements OnDestroy {
     public authFacade: AuthFacade,
     private matDialog: MatDialog,
     public uiStore: UiStore,
-    public breadcrumbService: BreadcrumbService
+    public breadcrumbService: BreadcrumbService,
+    private cdr: ChangeDetectorRef
   ) {
     breakpointObserver.observe([
       Breakpoints.Tablet,
@@ -36,6 +37,7 @@ export class AppComponent implements OnDestroy {
     ]).subscribe(result => {
       this.sideBarOpen = !result.matches;
       this.isTablet = result.matches;
+      this.cdr.markForCheck();
     });
   }
 

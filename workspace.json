@@ -4,6 +4,7 @@
     "auth": "libs/auth",
     "change-password": "libs/change-password",
     "dashboard": "libs/dashboard",
+    "edit-admin-profile": "libs/edit-admin-profile",
     "environment": "libs/environment",
     "forgot-password": "libs/forgot-password",
     "material": "libs/material",

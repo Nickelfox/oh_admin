@@ -8,4 +8,6 @@ export const getAuthState = createFeatureSelector<Auth>(AUTH_FEATURE_KEY);
 export const getLoggedIn = createSelector(getAuthState, (auth: Auth) => auth.loggedIn);
 export const getToken = createSelector(getAuthState, (auth: Auth) => auth.token);
 
+export const getAuthAdmin = createSelector(getAuthState, (auth: Auth) => auth.admin);
+
 export const getLoginLoadingState = createSelector(getAuthState, (auth: Auth) => !!auth.isLoading);

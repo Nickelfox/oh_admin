@@ -62,6 +62,13 @@ import {MatRippleModule} from "@angular/material/core";
           import('@hidden-innovation/change-password').then((m) => m.ChangePasswordModule),
         data: {breadcrumb: 'Change Password'}
       },
+      {
+        path: 'edit-profile',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/edit-admin-profile').then((m) => m.EditAdminProfileModule),
+        data: {breadcrumb: 'Edit Profile'}
+      },
       {path: '**', redirectTo: '/dashboard'}
     ]),
     StoreModule.forRoot({}),

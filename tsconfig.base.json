@@ -20,6 +20,9 @@
         "libs/change-password/src/index.ts"
       ],
       "@hidden-innovation/dashboard": ["libs/dashboard/src/index.ts"],
+      "@hidden-innovation/edit-admin-profile": [
+        "libs/edit-admin-profile/src/index.ts"
+      ],
       "@hidden-innovation/environment": ["libs/environment/src/index.ts"],
       "@hidden-innovation/forgot-password": [
         "libs/forgot-password/src/index.ts"
