@@ -1,25 +1,14 @@
 import { CustomApiResponse } from '@hidden-innovation/shared/models';
+import { UserDetails } from '@hidden-innovation/shared/models';
 
 export interface Auth extends Partial<LoginResponseData> {
   loggedIn?: boolean;
   isLoading?: boolean;
 }
 
-export interface AdminAuthDetails {
-  id: number;
-  email: string;
-  password: string;
-  username: string;
-  name: string;
-  role: string;
-  language: string;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface LoginResponseData {
   token: string;
-  admin: AdminAuthDetails;
+  admin: UserDetails;
 }
 
 export interface LoginRequest {

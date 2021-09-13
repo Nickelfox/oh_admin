@@ -20,7 +20,7 @@ const initialState: UiState = {
     {
       name: 'Admin',
       navItems: [
-        {label: 'Users', path: '/users'},
+        {label: 'Users', path: '/users/listing'},
       ]
     },
     {
