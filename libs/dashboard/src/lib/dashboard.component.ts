@@ -6,13 +6,11 @@ import {
   ChartOptions,
 } from "@rinminase/ng-charts";
 
-
-
 @Component({
   selector: 'oh-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent {
   chartData: ChartDatasets = [
@@ -90,11 +88,11 @@ export class DashboardComponent {
   ];
   chartLegend = true;
 
+  constructor(
+
+  ) { }
 
   //
-  // constructor() { }
-
-  // //
-  // ngOnInit(): void {
-  // }
+  ngOnInit(): void {
+  }
 }

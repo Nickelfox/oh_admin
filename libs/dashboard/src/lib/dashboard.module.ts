@@ -1,14 +1,10 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {StoreModule} from '@ngrx/store';
-import {EffectsModule} from '@ngrx/effects';
-import * as fromDashboard from './data-access/state/dashboard.reducer';
-import {DashboardEffects} from './data-access/state/dashboard.effects';
-import {DashboardFacade} from './data-access/state/dashboard.facade';
-import {RouterModule} from "@angular/router";
-import {DashboardComponent} from './dashboard.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { DashboardComponent } from './dashboard.component';
 import { MaterialModule } from '@hidden-innovation/material';
-
+import { DashboardStore } from './dashboard.store';
+import { DashboardService } from './services/dashboard.service';
 
 
 // import {AuthGuard} from "@hidden-innovation/auth";
@@ -17,6 +13,7 @@ import { MaterialModule } from '@hidden-innovation/material';
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
+    MaterialModule,
     RouterModule.forChild([
       {
         path: '',
@@ -24,15 +21,12 @@ import { MaterialModule } from '@hidden-innovation/material';
         // canActivate: [AuthGuard],
         component: DashboardComponent
       }
-    ]),
-    StoreModule.forFeature(
-      fromDashboard.DASHBOARD_FEATURE_KEY,
-      fromDashboard.reducer
-    ),
-    EffectsModule.forFeature([DashboardEffects]),
-    MaterialModule
+    ])
   ],
-  providers: [DashboardFacade, DashboardEffects],
+  providers: [
+    DashboardService,
+    DashboardStore
+  ]
 })
 export class DashboardModule {
 }
