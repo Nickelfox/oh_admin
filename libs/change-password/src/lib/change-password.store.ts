@@ -1,12 +1,12 @@
-import {Injectable} from '@angular/core';
-import {ComponentStore, tapResponse} from '@ngrx/component-store';
-import {ChangePasswordRequest} from "./models/change-password.interface";
-import {Observable} from "rxjs";
-import {switchMap, tap} from "rxjs/operators";
-import {HotToastService} from "@ngneat/hot-toast";
-import {Router} from "@angular/router";
-import {ChangePasswordService} from "./services/change-password.service";
-import {AuthFacade} from "@hidden-innovation/auth";
+import { Injectable } from '@angular/core';
+import { ComponentStore } from '@ngrx/component-store';
+import { ChangePasswordRequest } from './models/change-password.interface';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
+import { HotToastService } from '@ngneat/hot-toast';
+import { Router } from '@angular/router';
+import { ChangePasswordService } from './services/change-password.service';
+import { AuthFacade } from '@hidden-innovation/auth';
 
 export interface ChangePasswordState extends Partial<ChangePasswordRequest> {
   isLoading?: boolean;
@@ -27,39 +27,39 @@ export class ChangePasswordStore extends ComponentStore<ChangePasswordState> {
     params$.pipe(
       tap(() => {
         this.patchState({
-          isLoading: true,
+          isLoading: true
         });
         this.hotToastService.loading('Loading...', {
           dismissible: false,
-          role: "status",
+          role: 'status',
           id: this.toastStateName
-        })
+        });
       }),
       switchMap((changePassObj) =>
         this.changePasswordService.changePassword(changePassObj).pipe(
-          tapResponse(
+          tap(
             (res) => {
               this.patchState({
-                isLoading: false,
+                isLoading: false
               });
-              this.hotToastService.close(this.toastStateName);
-              this.hotToastService.success(res.message, {
-                dismissible: true,
-                role: "status"
-              })
               this.authFacade.logoutLocal();
+              this.hotToastService.close();
+              this.hotToastService.success('Password changed successfully.', {
+                dismissible: true,
+                role: 'status'
+              });
             },
             (err) => {
               this.patchState({
-                isLoading: false,
+                isLoading: false
               });
               this.hotToastService.close(this.toastStateName);
-            },
-          )
-        )
-      ),
+            }
+          ),
+          catchError(() => EMPTY))
+      )
     )
-  )
+  );
 
   constructor(
     private hotToastService: HotToastService,

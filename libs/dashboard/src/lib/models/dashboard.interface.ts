@@ -1,1 +1,3 @@
-// interfaceexport interface
+export interface DashboardData {
+  total: number;
+}

@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {select, Store} from '@ngrx/store';
+import { Injectable } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 
 import * as AuthSelectors from './auth.selectors';
 import * as AuthActions from './auth.actions';
-import {LoginRequest} from '../models/auth.interfaces';
+import { AdminAuthDetails, LoginRequest } from '../models/auth.interfaces';
 
 @Injectable()
 export class AuthFacade {
@@ -13,6 +13,7 @@ export class AuthFacade {
    */
   loggedIn$ = this.store.pipe(select(AuthSelectors.getLoggedIn));
   token$ = this.store.pipe(select(AuthSelectors.getToken));
+  authAdmin$ = this.store.pipe(select(AuthSelectors.getAuthAdmin));
   isLoginLoading$ = this.store.pipe(select(AuthSelectors.getLoginLoadingState));
 
   constructor(private readonly store: Store) {
@@ -29,5 +30,9 @@ export class AuthFacade {
 
   logoutLocal() {
     this.store.dispatch(AuthActions.logoutLocal());
+  }
+
+  updateAdminAuth(adminObj: AdminAuthDetails) {
+    this.store.dispatch(AuthActions.adminUpdate(adminObj));
   }
 }

@@ -8,7 +8,7 @@ export class DashboardService {
   constructor(private http: HttpClient, @Inject(ENVIRONMENT) private env: Environment) {
   }
 
-  // getStatistics(): void {
-  //   return this.
-  // }
+  getStatistics(): void {
+    // return this.
+  }
 }

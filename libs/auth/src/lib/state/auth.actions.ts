@@ -1,4 +1,4 @@
-import {Auth, LoginRequest} from '../models/auth.interfaces';
+import { AdminAuthDetails, Auth, LoginRequest } from '../models/auth.interfaces';
 import {createAction, props} from '@ngrx/store';
 
 // TODO Implement proper user data handling
@@ -6,6 +6,8 @@ import {createAction, props} from '@ngrx/store';
 export const login = createAction('[auth/API] LOGIN', props<LoginRequest>());
 export const loginSuccess = createAction('[auth] LOGIN_SUCCESS', props<Auth>());
 export const loginFail = createAction('[auth] LOGIN_FAIL', props<Partial<Auth>>());
+
+export const adminUpdate = createAction('[auth] ADMIN_UPDATE', props<AdminAuthDetails>());
 
 export const logoutLocal = createAction('[auth] LOGOUT');
 
