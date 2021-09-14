@@ -89,9 +89,4 @@ export class DashboardComponent {
     public store: DashboardStore
   ) {
   }
-
-  //
-  ngOnInit(): void {
-
-  }
 }
