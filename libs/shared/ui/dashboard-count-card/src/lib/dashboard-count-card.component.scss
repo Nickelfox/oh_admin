@@ -1,0 +1,19 @@
+mat-card-content {
+  color: #c2c2c2;
+}
+
+.card-icon {
+  font-size: 56px;
+  width: auto;
+  margin-top: 1px;
+  //color: #c2c2c2;
+}
+
+.card-text {
+  font-size: 26px;
+
+  &--secondary {
+    font-size: 14px;
+    letter-spacing: .4px;
+  }
+}

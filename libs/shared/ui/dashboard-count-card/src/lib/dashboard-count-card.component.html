@@ -1,0 +1,14 @@
+<mat-card>
+  <mat-card-content class='text-center'>
+    <mat-icon class='card-icon' color='primary'>{{icon}}</mat-icon>
+    <ng-template [ngIf]='isLoading' [ngIfElse]='statsLoadingElse'>
+      <div class='d-flex justify-content-center mb-2'>
+        <mat-spinner color='accent' diameter='24'></mat-spinner>
+      </div>
+    </ng-template>
+    <ng-template #statsLoadingElse>
+      <h2 class='mat-h2 font-calibri m-0'>{{count}}</h2>
+    </ng-template>
+    <p class='mat-subtitle'>{{cardTitle}}</p>
+  </mat-card-content>
+</mat-card>
