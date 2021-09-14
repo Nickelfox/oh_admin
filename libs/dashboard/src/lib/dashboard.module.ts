@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { DashboardStore } from './dashboard.store';
 import { DashboardService } from './services/dashboard.service';
+import { DashboardCountCardModule } from '@hidden-innovation/shared/ui/dashboard-count-card';
 
 
 // import {AuthGuard} from "@hidden-innovation/auth";
@@ -14,6 +15,7 @@ import { DashboardService } from './services/dashboard.service';
   imports: [
     CommonModule,
     MaterialModule,
+    DashboardCountCardModule,
     RouterModule.forChild([
       {
         path: '',
@@ -25,8 +27,7 @@ import { DashboardService } from './services/dashboard.service';
   ],
   providers: [
     DashboardService,
-    DashboardStore
-  ]
+    DashboardStore]
 })
 export class DashboardModule {
 }

@@ -5,22 +5,20 @@
         <div class='container-fluid p-0'>
           <div class='row mb-4'>
             <div class='col-6 col-lg-3'>
-              <mat-card>
-                <mat-card-content class='text-center'>
-                  <mat-icon class='card-icon'>people</mat-icon>
-                  <h2 class='mat-h2 font-calibri m-0'>200</h2>
-                  <p class='mat-subtitle'>Total Users</p>
-                </mat-card-content>
-              </mat-card>
+              <hidden-innovation-dashboard-count-card
+                [count]='store.totalUsers$ | async'
+                [isLoading]='store.isChangeLoading$ | async'
+                cardTitle='Total Users'
+                icon='people'
+              ></hidden-innovation-dashboard-count-card>
             </div>
             <div class='col-6 col-lg-3'>
-              <mat-card>
-                <mat-card-content class='text-center'>
-                  <mat-icon class='card-icon'>task</mat-icon>
-                  <h2 class='mat-h2 font-calibri m-0'>100</h2>
-                  <p class='mat-subtitle'>Total Tests</p>
-                </mat-card-content>
-              </mat-card>
+              <hidden-innovation-dashboard-count-card
+                [count]='0'
+                [isLoading]='false'
+                cardTitle='Total Tests'
+                icon='task'
+              ></hidden-innovation-dashboard-count-card>
             </div>
           </div>
           <div class='row' *ngIf='false'>

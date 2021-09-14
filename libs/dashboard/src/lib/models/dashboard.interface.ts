@@ -1,3 +1,9 @@
+import { CustomApiResponse } from '@hidden-innovation/shared/models';
+
 export interface DashboardData {
-  total: number;
+  totalUser: number;
+}
+
+export interface DashboardResponse extends CustomApiResponse {
+  data: DashboardData;
 }
