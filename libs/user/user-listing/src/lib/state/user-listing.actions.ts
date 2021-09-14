@@ -1,14 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { UserListingEntity } from '../models/user-listing.interface';
+import { UserListing, UserListingRequest } from '../models/user-listing.interface';
 
-export const init = createAction('[UserListing Page] Init');
-
-export const loadUserListingSuccess = createAction(
-  '[UserListing/API] Load UserListing Success',
-  props<{ userListing: UserListingEntity[] }>()
-);
-
-export const loadUserListingFailure = createAction(
-  '[UserListing/API] Load UserListing Failure',
-  props<{ error: any }>()
-);
+export const getList = createAction('[UserListing/API] USER_LISTING', props<UserListingRequest>());
+export const getListSuccess = createAction('[UserListing] USER_LISTING_SUCCESS', props<UserListing>());
+export const getListFail = createAction('[UserListing] USER_LISTING_FAIL', props<Partial<UserListing>>());

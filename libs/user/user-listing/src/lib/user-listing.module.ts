@@ -8,6 +8,7 @@ import { UserListingEffects } from './state/user-listing.effects';
 import { UserListingFacade } from './state/user-listing.facade';
 import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
+import { UserListingService } from './services/user-listing.service';
 
 
 export const userListingComponent: Route[] = [{
@@ -28,6 +29,9 @@ export const userListingComponent: Route[] = [{
     EffectsModule.forFeature([UserListingEffects]),
   ],
   declarations: [UserListingComponent],
-  providers: [UserListingFacade],
+  providers: [
+    UserListingService,
+    UserListingFacade,
+  ],
 })
 export class UserListingModule {}

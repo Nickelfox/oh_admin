@@ -1,31 +1,21 @@
 import { Injectable } from '@angular/core';
-import { select, Store, Action } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 
-import * as UserListingActions from './user-listing.actions';
-import * as UserListingFeature from './user-listing.reducer';
-import * as UserListingSelectors from './user-listing.selectors';
+import * as UserListActions from './user-listing.actions';
+import * as UserListSelectors from './user-listing.selectors';
+import { UserListingRequest } from '../models/user-listing.interface';
 
 @Injectable()
 export class UserListingFacade {
-  /**
-   * Combine pieces of state using createSelector,
-   * and expose them as observables through the facade.
-   */
-  loaded$ = this.store.pipe(select(UserListingSelectors.getUserListingLoaded));
-  allUserListing$ = this.store.pipe(
-    select(UserListingSelectors.getAllUserListing)
-  );
-  selectedUserListing$ = this.store.pipe(
-    select(UserListingSelectors.getSelected)
-  );
 
-  constructor(private readonly store: Store) {}
+  isListLoading$ = this.store.pipe(select(UserListSelectors.isLoading));
+  users$ = this.store.pipe(select(UserListSelectors.getUsersList));
+  count$ = this.store.pipe(select(UserListSelectors.getUsersCount));
 
-  /**
-   * Use the initialization action to perform one
-   * or more tasks in your Effects.
-   */
-  init() {
-    this.store.dispatch(UserListingActions.init());
+  constructor(private readonly store: Store) {
+  }
+
+  init(reqObj: UserListingRequest) {
+    this.store.dispatch(UserListActions.getList(reqObj));
   }
 }

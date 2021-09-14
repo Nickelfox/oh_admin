@@ -1,27 +1,51 @@
 import { Injectable } from '@angular/core';
-import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { fetch } from '@nrwl/angular';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import * as UserListingActions from './user-listing.actions';
-import * as UserListingFeature from './user-listing.reducer';
+import * as UserListActions from './user-listing.actions';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
+import { UserListingService } from '../services/user-listing.service';
+import { of } from 'rxjs';
 
 @Injectable()
 export class UserListingEffects {
-  init$ = createEffect(() =>
+
+  private userToast?: CreateHotToastRef<unknown>;
+
+  getList$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(UserListingActions.init),
-      fetch({
-        run: (action) => {
-          // Your custom service 'load' logic goes here. For now just return a success action...
-          return UserListingActions.loadUserListingSuccess({ userListing: [] });
-        },
-        onError: (action, error) => {
-          console.error('Error', error);
-          return UserListingActions.loadUserListingFailure({ error });
-        },
-      })
+      ofType(UserListActions.getList),
+      tap(() => {
+        this.userToast = this.toast.loading('Fetching Users...', {
+          role: 'status',
+          dismissible: false
+        });
+      }),
+      switchMap(({ limit, page }) =>
+        this.userListingService.getUsers({ limit, page }).pipe(
+          tap(() => {
+            this.userToast?.close();
+          }),
+          map(({ users, total }) => UserListActions.getListSuccess({
+            users,
+            total
+          })),
+          catchError(() => {
+            this.userToast?.close();
+            return of(UserListActions.getListFail({
+              total: 0,
+              users: []
+            }));
+          })
+        )
+      )
     )
   );
 
-  constructor(private readonly actions$: Actions) {}
+  constructor(
+    private readonly actions$: Actions,
+    private toast: HotToastService,
+    private userListingService: UserListingService
+  ) {
+  }
 }
