@@ -16,7 +16,7 @@ export class FormValidationService {
   fieldValidationMessage: Partial<GenericErrorMessage> = {
     required: 'field is required',
     invalid: 'Must not contain any special character or number',
-    maxLength: `Must not exceed 150 character limit`,
+    maxLength: `Must not exceed 150 character limit`
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {
@@ -32,7 +32,10 @@ export class FormValidationService {
 
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
 
-  private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
+  // private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
+  // Updated regex not allowing white space now
+  // Reference: https://regex101.com/r/0bH043/1
+  private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
 
   get validPassword(): ValidatorFn {
     return (control: AbstractControl) => {
@@ -52,13 +55,13 @@ export class FormValidationService {
       if (!group) {
         return null;
       }
-      const pass = group.get(pasName)?.value;
-      const confirmPass = group.get(conPasName)?.value;
-      if (pass === confirmPass) {
-        return null;
-      } else {
+      const pass: string = group.get(pasName)?.value;
+      const confirmPass: string = group.get(conPasName)?.value;
+      if (pass !== confirmPass) {
         group.get(conPasName)?.setErrors({ notSame: true });
+        return null;
       }
+      group.get(conPasName)?.setErrors(null);
       return null;
     };
   }
