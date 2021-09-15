@@ -20,7 +20,7 @@ export class UserListingComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'country', 'date_of_joining', 'status', 'action'];
 
   users: MatTableDataSource<UserDetails> = new MatTableDataSource<UserDetails>();
-  resultsLength = 10;
+  resultsLength = 0;
 
   // Paginator options
   pageIndex = 0;
