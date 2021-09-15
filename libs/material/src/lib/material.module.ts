@@ -14,6 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ChartsModule } from '@rinminase/ng-charts';
 import { MatNativeDateModule, NativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatCardModule,
     NativeDateModule,
     MatNativeDateModule,
-    ChartsModule
+    ChartsModule,
+    MatPaginatorModule
   ],
   exports: [
     FormsModule,
@@ -53,7 +55,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatCardModule,
     NativeDateModule,
     MatNativeDateModule,
-    ChartsModule
+    ChartsModule,
+    MatPaginatorModule
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } }
