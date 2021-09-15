@@ -30,7 +30,11 @@ const userListingReducer = createReducer(
   on(UserListActions.getListFail, (state, { users, total }) => ({
     ...state,
     isLoading: false
-  }))
+  })),
+  on(UserListActions.setListPage, (state) => ({
+    ...state,
+    isLoading: true
+  })),
 );
 
 export function reducer(state: UserListing | undefined, action: Action) {

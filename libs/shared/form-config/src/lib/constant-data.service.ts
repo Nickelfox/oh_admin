@@ -16,6 +16,10 @@ export class ConstantDataService {
   };
 
   BUTTON_NAME = {
-
   };
+
+  CONST_NUMS = {
+    TABLE_TEXT_LIMIT: 20
+  };
+
 }

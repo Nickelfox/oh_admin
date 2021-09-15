@@ -12,6 +12,13 @@ export class UserListingEffects {
 
   private userToast?: CreateHotToastRef<unknown>;
 
+  setList$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UserListActions.setListPage),
+      map(({ limit, page }) => UserListActions.getList({ limit, page }))
+    )
+  );
+
   getList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserListActions.getList),
@@ -28,7 +35,7 @@ export class UserListingEffects {
           }),
           map(({ users, total }) => UserListActions.getListSuccess({
             users,
-            total
+            total,
           })),
           catchError(() => {
             this.userToast?.close();

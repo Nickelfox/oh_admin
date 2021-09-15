@@ -1,18 +1,18 @@
-<div class='container-fluid  mt-3'>
-  <div class='row'>
-    <div class='col-12'>
-      <mat-card class='p-0'>
-        <mat-card-content>
-          <table mat-table [dataSource]='users' class='w-100'>
+<div class='p-4'>
+  <mat-card class='p-0'>
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='col-12'>
+          <table mat-table [dataSource]='users' class='w-100' [fixedLayout]='true'>
 
             <ng-container matColumnDef='name'>
               <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.NAME}}</th>
-              <td mat-cell *matCellDef='let element'> {{element.name ?? '--'}} </td>
+              <td mat-cell *matCellDef='let element'> {{(element.name | maxStringLimit) ?? '--'}} </td>
             </ng-container>
 
             <ng-container matColumnDef='email'>
               <th mat-header-cell *matHeaderCellDef> {{constantDataService.FIELD_NAME.EMAIL_ID | titlecase}} </th>
-              <td mat-cell *matCellDef='let element'> {{element.email ?? '--'}} </td>
+              <td mat-cell *matCellDef='let element'> {{(element.email | maxStringLimit) ?? '--'}} </td>
             </ng-container>
 
             <ng-container matColumnDef='country'>
@@ -21,11 +21,10 @@
               <td mat-cell *matCellDef='let element'>U/Dev</td>
             </ng-container>
 
-
             <ng-container matColumnDef='date_of_joining'>
               <th mat-header-cell
                   *matHeaderCellDef> {{constantDataService.FIELD_NAME.DATE_OF_JOINING | titlecase}} </th>
-              <td mat-cell *matCellDef='let element'> {{(element.created_at | date)  ?? '--'}} </td>
+              <td mat-cell *matCellDef='let element'> {{(element.created_at | date) ?? '--'}} </td>
             </ng-container>
 
             <ng-container matColumnDef='status'>
@@ -51,23 +50,20 @@
               </td>
             </ng-container>
 
-
             <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
             <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
           </table>
-
-          <div class="row flex-row-reverse  m-0 mb-5">
-
-            <div class="my-2">
-              <mat-paginator [pageSize]="pageSize" [length]="resultsLength" [pageIndex]="pageIndex"
-                             [pageSizeOptions]="pageSizeOptions"
-                             (page)="pageEvent = $event; onPaginateChange($event)"></mat-paginator>
-            </div>
-          </div>
-
-        </mat-card-content>
-      </mat-card>
-
+        </div>
+      </div>
+      <div class='row mt-2'>
+        <div class='col-12'>
+          <mat-paginator
+            [disabled]='facade.isListLoading$ | async'
+            [pageSize]='pageSize' [length]='facade.count$ | async' [pageIndex]='pageIndex'
+            [pageSizeOptions]='pageSizeOptions'
+            (page)='pageEvent = $event; onPaginateChange($event)'></mat-paginator>
+        </div>
+      </div>
     </div>
-  </div>
+  </mat-card>
 </div>

@@ -9,6 +9,7 @@ import { UserListingFacade } from './state/user-listing.facade';
 import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
 import { UserListingService } from './services/user-listing.service';
+import { UtilsModule } from '@hidden-innovation/shared/utils';
 
 
 export const userListingComponent: Route[] = [{
@@ -21,6 +22,7 @@ export const userListingComponent: Route[] = [{
   imports: [
     CommonModule,
     MaterialModule,
+    UtilsModule,
     RouterModule.forChild(userListingComponent),
     StoreModule.forFeature(
       fromUserListing.USER_LISTING_FEATURE_KEY,
