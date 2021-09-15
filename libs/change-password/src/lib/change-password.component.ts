@@ -31,7 +31,6 @@ export class ChangePasswordComponent {
   ) {
     this.changePassForm = this.fb.group<ChangePasswordRequest>({
       password: new FormControl<string>('', [
-
         RxwebValidators.required(),
         Validators.required,
         this.formValidationService.validPassword,
