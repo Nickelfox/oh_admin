@@ -56,9 +56,9 @@
             <tr mat-row *matRowDef='let row; columns: displayedColumns;'></tr>
           </table>
 
-          <div class="row  m-0">
+          <div class="row flex-row-reverse  m-0 mb-5">
 
-            <div class="mt-2 ">
+            <div class="my-2">
               <mat-paginator [pageSize]="pageSize" [length]="resultsLength" [pageIndex]="pageIndex"
                              [pageSizeOptions]="pageSizeOptions"
                              (page)="pageEvent = $event; onPaginateChange($event)"></mat-paginator>
