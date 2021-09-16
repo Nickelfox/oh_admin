@@ -61,6 +61,9 @@
       </div>
     </mat-toolbar>
     <main [ngClass]="{'internal_over-flow' : (authFacade.loggedIn$ | async)}">
+      <div class='global-progress-bar' *ngIf='(uiStore.isLoading$ | async)'>
+          <mat-progress-bar color='accent' mode='indeterminate'></mat-progress-bar>
+      </div>
       <router-outlet></router-outlet>
     </main>
   </mat-sidenav-content>

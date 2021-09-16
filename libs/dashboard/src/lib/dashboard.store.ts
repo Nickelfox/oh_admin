@@ -4,6 +4,7 @@ import { DashboardData } from './models/dashboard.interface';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { DashboardService } from './services/dashboard.service';
+import { UiStore } from '@hidden-innovation/shared/store';
 
 export interface DashboardState extends Partial<DashboardData> {
   isLoading?: boolean;
@@ -26,6 +27,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
+        this.uiStore.toggleGlobalLoading(true);
       }),
       switchMap(() =>
         this.dashboardService.getStatistics().pipe(
@@ -35,11 +37,14 @@ export class DashboardStore extends ComponentStore<DashboardState> {
                 isLoading: false,
                 totalUser: apiRes.totalUser
               });
+              this.uiStore.toggleGlobalLoading(false);
             },
             err => {
               this.patchState({
                 isLoading: false
               });
+              this.uiStore.toggleGlobalLoading(false);
+
             }
           ),
           catchError(() => EMPTY))
@@ -48,11 +53,12 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   );
 
   constructor(
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private uiStore: UiStore
   ) {
     super(initialState);
     this.getStats({
-      totalUser: 0,
+      totalUser: 0
     });
   }
 }

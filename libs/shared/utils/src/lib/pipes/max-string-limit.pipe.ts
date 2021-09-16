@@ -17,8 +17,8 @@ export class MaxStringLimitPipe implements PipeTransform {
       this.numberLimit = limit;
     }
     let rtrnStrng = '';
-    rtrnStrng = value ?? '';
-    if (value.length > this.numberLimit) {
+    rtrnStrng = value ?? '--';
+    if (rtrnStrng.length > this.numberLimit) {
       const temp = rtrnStrng;
       rtrnStrng = temp.slice(0, this.numberLimit).concat('...');
     }
