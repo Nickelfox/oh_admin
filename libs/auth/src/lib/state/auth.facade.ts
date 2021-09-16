@@ -3,7 +3,8 @@ import { select, Store } from '@ngrx/store';
 
 import * as AuthSelectors from './auth.selectors';
 import * as AuthActions from './auth.actions';
-import { AdminAuthDetails, LoginRequest } from '../models/auth.interfaces';
+import { LoginRequest } from '../models/auth.interfaces';
+import { UserDetails } from '@hidden-innovation/shared/models';
 
 @Injectable()
 export class AuthFacade {
@@ -32,7 +33,7 @@ export class AuthFacade {
     this.store.dispatch(AuthActions.logoutLocal());
   }
 
-  updateAdminAuth(adminObj: AdminAuthDetails) {
+  updateAdminAuth(adminObj: UserDetails) {
     this.store.dispatch(AuthActions.adminUpdate(adminObj));
   }
 }

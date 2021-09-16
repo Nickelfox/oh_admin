@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { AUTH_FEATURE_KEY } from '../state/auth.reducer';
-import { AdminAuthDetails, LoginResponseData } from '../models/auth.interfaces';
+import { LoginResponseData } from '../models/auth.interfaces';
+import { UserDetails } from '@hidden-innovation/shared/models';
 
 const APP_PREFIX = 'OH-';
 
@@ -12,12 +13,12 @@ export class AuthStorageService {
   private readonly authStorageKey = `${APP_PREFIX}${AUTH_FEATURE_KEY}-AUTH-TOKEN`;
 
   //User State Method
-  setAuthAdmin(admin: Partial<AdminAuthDetails>): Observable<AdminAuthDetails | null> {
+  setAuthAdmin(admin: Partial<UserDetails>): Observable<UserDetails | null> {
     try {
       localStorage.setItem(this.adminStorageKey, JSON.stringify(admin));
       const data = localStorage.getItem(this.adminStorageKey);
       if (data) {
-        return of(JSON.parse(data) as AdminAuthDetails);
+        return of(JSON.parse(data) as UserDetails);
       }
       return of(null);
     } catch {

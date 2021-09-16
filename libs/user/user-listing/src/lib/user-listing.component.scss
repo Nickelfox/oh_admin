@@ -1,0 +1,19 @@
+.mat-chip
+{
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 21px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: 0.25px;
+
+  &--success{
+    background: #ECF9F3;
+    color: #00C853;
+  }
+  &--danger
+  {
+    background: #FCE7E7;
+    color: #E53935;
+  }
+}
