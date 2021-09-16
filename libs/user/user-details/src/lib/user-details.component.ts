@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
   selector: 'hidden-innovation-user-details',
@@ -9,7 +9,24 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@
 })
 export class UserDetailsComponent implements OnInit {
 
-  constructor() { }
+  @Input() imageSize: number;
+
+  // form action text
+  actionBtnText = {
+    edit: 'Edit',
+    userBlockState: {
+      blocked: 'Unblock',
+      unblocked: 'Block'
+    },
+    delete: 'Delete'
+  };
+
+
+
+
+  constructor() {
+    this.imageSize = 150;
+  }
 
   ngOnInit(): void {
   }
