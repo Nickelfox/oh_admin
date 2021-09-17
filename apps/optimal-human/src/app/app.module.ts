@@ -71,9 +71,17 @@ import { MatRippleModule } from '@angular/material/core';
       },
       {
         path: 'users/listing',
+        canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/user/user-listing').then((m) => m.UserListingModule),
         data: { breadcrumb: 'Users' }
+      },
+      {
+        path: 'users/details/:id',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/user/user-details').then((m) => m.UserDetailsModule),
+        data: { breadcrumb: 'User Details' }
       },
       { path: '**', redirectTo: '/dashboard' }
     ]),

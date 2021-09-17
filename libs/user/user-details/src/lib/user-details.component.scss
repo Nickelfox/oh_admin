@@ -1,0 +1,15 @@
+
+.app__thumbnail {
+  overflow: hidden;
+  background-color: #F3F7FC;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
