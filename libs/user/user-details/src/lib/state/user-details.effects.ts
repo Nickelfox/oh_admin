@@ -6,7 +6,7 @@ import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { UserDetailsService } from '../services/user-details.service';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { userDetailsInitialState } from '@hidden-innovation/user/user-details';
+import { userDetailsInitialState } from './user-details.reducer';
 
 @Injectable()
 export class UserDetailsEffects {

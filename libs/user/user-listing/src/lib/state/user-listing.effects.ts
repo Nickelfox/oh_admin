@@ -5,7 +5,7 @@ import * as UserListActions from './user-listing.actions';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { UserListingService } from '../services/user-listing.service';
 import { of } from 'rxjs';
-import { userListingInitialState } from '@hidden-innovation/user/user-listing';
+import { userListingInitialState } from './user-listing.reducer';
 
 @Injectable()
 export class UserListingEffects {
