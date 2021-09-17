@@ -70,7 +70,7 @@ import { MatRippleModule } from '@angular/material/core';
         data: { breadcrumb: 'Edit Profile' }
       },
       {
-        path: 'users/listing',
+        path: 'users/listing/:index',
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/user/user-listing').then((m) => m.UserListingModule),

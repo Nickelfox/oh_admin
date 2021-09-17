@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { UserDetailsFacade } from './state/user-details.facade';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'hidden-innovation-user-details',
@@ -7,9 +9,9 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Input } 
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserDetailsComponent implements OnInit {
+export class UserDetailsComponent {
 
-  @Input() imageSize: number;
+  imageSize: number;
 
   // form action text
   actionBtnText = {
@@ -21,14 +23,13 @@ export class UserDetailsComponent implements OnInit {
     delete: 'Delete'
   };
 
-
-
-
-  constructor() {
+  constructor(
+    public facade: UserDetailsFacade,
+    private route: ActivatedRoute
+  ) {
+    const userID = this.route.snapshot.params.id as number;
+    this.facade.init(userID);
     this.imageSize = 150;
-  }
-
-  ngOnInit(): void {
   }
 
 }

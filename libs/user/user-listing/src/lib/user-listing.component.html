@@ -47,7 +47,7 @@
                     <mat-icon>create</mat-icon>
                     <span>Edit</span>
                   </button>
-                  <button mat-menu-item [routerLink]='["../details", row?.id]'>
+                  <button mat-menu-item [routerLink]='["/users", "details", row?.id]'>
                     <mat-icon>visibility</mat-icon>
                     <span>View</span>
                   </button>
@@ -61,10 +61,13 @@
         </div>
       </div>
       <div class='row mt-2'>
-        <div class='col-12'>
+        <div class='col-6 d-flex align-items-center'>
+          <mat-spinner [diameter]='18' *ngIf='facade.isListLoading$ | async'></mat-spinner>
+        </div>
+        <div class='col-6'>
           <mat-paginator
             [disabled]='facade.isListLoading$ | async'
-            [pageSize]='pageSize' [length]='facade.count$ | async' [pageIndex]='pageIndex'
+            [pageSize]='pageSize' [length]='facade.count$ | async' [pageIndex]='paginatorIndex'
             [pageSizeOptions]='pageSizeOptions'
             (page)='pageEvent = $event; onPaginateChange($event)'></mat-paginator>
         </div>

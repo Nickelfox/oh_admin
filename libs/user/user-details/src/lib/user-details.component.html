@@ -1,75 +1,75 @@
-<div class='container-fluid p-4'>
-  <div class="row mb-4 ">
-    <div class="col-12 d-flex align-items-center justify-content-end">
-      <button mat-flat-button color='primary' class="ml-3" type="button">{{actionBtnText.edit}}</button>
-      <button mat-flat-button color='primary' class="ml-3" type="button">{{actionBtnText.userBlockState.unblocked}}</button>
-      <button mat-flat-button color='primary' class="ml-3" type="button">{{actionBtnText.delete}}</button>
-      </div>
-    </div>
-  <div class="row mb-4">
-    <div class='col-4'>
-      <div class="app__thumbnail rounded-circle overflow-hidden"
-           [ngStyle]="{height: imageSize + 'px', width: imageSize + 'px'}">
-        <img [src]="'https://dummyimage.com/'+imageSize+'x'+imageSize+'/F3F7FC/0F0532&text=++No+Image++'">
-      </div>
-
-    </div>
-  </div>
-  <div class="row mb-4">
-    <div class='col-4'>
-      <div class="form-group">
-        <div class="font-calibri--bold">
-          <label class="mat-subheading-2">Name</label>
-        </div>
-        <div class="font-sf-pro--bold mt-2">
-          <h4 class='mat-body-2 font-weight-light'>Deepak Kumar</h4>
-        </div>
-        </div>
-      </div>
-    <div class='col-4'>
-      <div class="form-group">
-        <div class="font-calibri--bold">
-          <label class="mat-subheading-2">USER NAME</label>
-        </div>
-        <div class="font-sf-pro--bold mt-2">
-          <h4 class='mat-body-2 font-weight-light'>deepakkumar1234</h4>
-        </div>
-      </div>
-    </div>
-    <div class='col-4'>
-      <div class="form-group">
-        <div class="font-calibri--bold">
-          <label class="mat-subheading-2">EMAIL ID</label>
-        </div>
-        <div class="font-sf-pro--bold mt-2">
-          <h4 class='mat-body-2 font-weight-light'>deepak@nickelfox.com</h4>
-        </div>
+<div class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4 '>
+      <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button [disabled]='facade.isDetailsLoading$ | async' mat-flat-button color='accent' class='ml-3' type='button'>{{actionBtnText.edit}}</button>
+        <button [disabled]='facade.isDetailsLoading$ | async' mat-flat-button color='primary' class='ml-3'
+                type='button'>{{actionBtnText.userBlockState.unblocked}}</button>
+        <button [disabled]='facade.isDetailsLoading$ | async' mat-flat-button color='primary' class='ml-3' type='button'>{{actionBtnText.delete}}</button>
       </div>
     </div>
   </div>
-  <div class="row mb-4">
+  <ng-template [ngIf]='facade.userDetails$ | async' let-user>
+    <mat-card class='p-0'>
+      <div class='container-fluid p-4'>
+        <div class='row mb-4'>
+          <div class='col-4'>
+            <div class='form-group'>
+              <div class='font-calibri--bold'>
+                <label class='mat-subheading-1'>Name</label>
+              </div>
+              <div class='font-sf-pro--bold mt-2'>
+                <h4 class='mat-body-2 font-weight-light'>{{user.name ?? '--'}}</h4>
+              </div>
+            </div>
+          </div>
+          <div class='col-4'>
+            <div class='form-group'>
+              <div class='font-calibri--bold'>
+                <label class='mat-subheading-1'>USER NAME</label>
+              </div>
+              <div class='font-sf-pro--bold mt-2'>
+                <h4 class='mat-body-2 font-weight-light'>{{user.username ?? '--'}}</h4>
+              </div>
+            </div>
+          </div>
+          <div class='col-4'>
+            <div class='form-group'>
+              <div class='font-calibri--bold'>
+                <label class='mat-subheading-1'>EMAIL ID</label>
+              </div>
+              <div class='font-sf-pro--bold mt-2'>
+                <h4 class='mat-body-2 font-weight-light'>{{user.email ?? '--'}}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='row mb-4'>
 
-    <div class='col-4'>
-      <div class="form-group">
-        <div class="font-calibri--bold">
-          <label class="mat-subheading-2">LANGUAGE DETAIL</label>
-        </div>
-        <div class="font-sf-pro--bold mt-2">
-          <h4 class='mat-body-2 font-weight-light'>English
-          </h4>
+          <div class='col-4'>
+            <div class='form-group'>
+              <div class='font-calibri--bold'>
+                <label class='mat-subheading-1'>LANGUAGE DETAIL</label>
+              </div>
+              <div class='font-sf-pro--bold mt-2'>
+                <h4 class='mat-body-2 font-weight-light'>{{user.language ?? '--'}}</h4>
+              </div>
+            </div>
+          </div>
+          <div class='col-4'>
+            <div class='form-group'>
+              <div class='font-calibri--bold'>
+                <label class='mat-subheading-1'>ROLE</label>
+              </div>
+              <div class='font-sf-pro--bold mt-2'>
+                <h4 class='mat-body-2 font-weight-light'>{{user.role ?? '--'}}
+                </h4>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class='col-4'>
-      <div class="form-group">
-        <div class="font-calibri--bold">
-          <label class="mat-subheading-2">ROLE</label>
-        </div>
-        <div class="font-sf-pro--bold mt-2">
-          <h4 class='mat-body-2 font-weight-light'>Standard
-          </h4>
-        </div>
-      </div>
-    </div>
-    </div>
+    </mat-card>
+  </ng-template>
+
 </div>
