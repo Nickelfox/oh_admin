@@ -47,6 +47,7 @@
         "libs/shared/ui/prompt-dialog/src/index.ts"
       ],
       "@hidden-innovation/shared/utils": ["libs/shared/utils/src/index.ts"],
+      "@hidden-innovation/user/user-edit": ["libs/user/user-edit/src/index.ts"],
       "@hidden-innovation/user/user-listing": [
         "libs/user/user-listing/src/index.ts"
       ]
