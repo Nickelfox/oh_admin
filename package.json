@@ -39,6 +39,7 @@
     "@angular/platform-browser": "^12.1.0",
     "@angular/platform-browser-dynamic": "^12.1.0",
     "@angular/router": "^12.1.0",
+    "@ngneat/content-loader": "^6.1.0",
     "@ngneat/overview": "^2.0.4",
     "@ngneat/reactive-forms": "^1.7.5",
     "@ngneat/until-destroy": "^8.1.4",
