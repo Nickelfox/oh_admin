@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
-import { UserDetailsResponse } from '@hidden-innovation/user/user-details';
+import { UserDetailsResponse } from '../models/user-details.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { UserDetails } from '@hidden-innovation/shared/models';
