@@ -10,7 +10,7 @@ export interface UserDetailsState {
 }
 
 export const userDetailsInitialState: UserDetailsStateModel = {
-  id: 0,
+  id: undefined,
   email: '',
   username: '',
   name: '',

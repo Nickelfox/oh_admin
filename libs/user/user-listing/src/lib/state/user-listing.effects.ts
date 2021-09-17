@@ -3,9 +3,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import * as UserListActions from './user-listing.actions';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { HotToastService } from '@ngneat/hot-toast';
 import { UserListingService } from '../services/user-listing.service';
 import { of } from 'rxjs';
+import { userListingInitialState } from '@hidden-innovation/user/user-listing';
 
 @Injectable()
 export class UserListingEffects {
@@ -27,10 +27,7 @@ export class UserListingEffects {
             total
           })),
           catchError(() => {
-            return of(UserListActions.getListFail({
-              total: 0,
-              users: []
-            }));
+            return of(UserListActions.getListFail(userListingInitialState));
           })
         )
       )

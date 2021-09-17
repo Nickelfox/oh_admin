@@ -6,6 +6,7 @@ import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { UserDetailsService } from '../services/user-details.service';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { userDetailsInitialState } from '@hidden-innovation/user/user-details';
 
 @Injectable()
 export class UserDetailsEffects {
@@ -38,7 +39,7 @@ export class UserDetailsEffects {
           })),
           catchError(() => {
             this.userToast?.close();
-            return of(UserDetailsActions.getUserDetailsFail);
+            return of(UserDetailsActions.getUserDetailsFail(userDetailsInitialState));
           })
         )
       )
