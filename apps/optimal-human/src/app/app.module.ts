@@ -20,6 +20,7 @@ import { ENVIRONMENT } from '@hidden-innovation/environment';
 import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
+import { UserEditModule } from '@hidden-innovation/user/user-edit';
 
 @NgModule({
   imports: [
@@ -73,6 +74,12 @@ import { MatRippleModule } from '@angular/material/core';
         path: 'users/listing',
         loadChildren: () =>
           import('@hidden-innovation/user/user-listing').then((m) => m.UserListingModule),
+        data: { breadcrumb: 'Users' }
+      },
+      {
+        path: 'users/user-edit',
+        loadChildren: () =>
+          import('@hidden-innovation/user/user-edit').then((m) => m.UserEditModule),
         data: { breadcrumb: 'Users' }
       },
       { path: '**', redirectTo: '/dashboard' }
