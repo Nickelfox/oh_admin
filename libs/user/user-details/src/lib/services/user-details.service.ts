@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { UserDetailsResponse } from '../models/user-details.interface';
 import { catchError, map } from 'rxjs/operators';
@@ -15,9 +15,7 @@ export class UserDetailsService {
   }
 
   getUserDetails(userID: number): Observable<UserDetails> {
-    let params = new HttpParams();
-    params = params.append('id', userID);
-    return this.http.get<UserDetailsResponse>(`${this.env.baseURL}/v1/admin/getSingleUser`, { params }).pipe(
+    return this.http.get<UserDetailsResponse>(`${this.env.baseURL}/v1/admin/getSingleUser/${userID}`).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
