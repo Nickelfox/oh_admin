@@ -16,7 +16,7 @@
             *ngIf='editProfileForm.controls.name.errors?.required'>
             Name {{formValidationService.fieldValidationMessage.required}}</mat-error>
           <mat-error
-            *ngIf='editProfileForm.controls.name.errors?.alpha'>{{formValidationService.fieldValidationMessage.invalid}}</mat-error>
+            *ngIf='editProfileForm.controls.name.errors?.alpha || editProfileForm.controls.name.errors?.pattern'>{{formValidationService.fieldValidationMessage.invalid}}</mat-error>
           <mat-error
             *ngIf='editProfileForm.controls.name.errors?.maxLength'>Must not
             exceed {{formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH}} character limit
