@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GenericErrorMessage } from './models/form-error-message.interface';
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 import { FormGroup } from '@ngneat/reactive-forms';
+import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +38,8 @@ export class FormValidationService {
   // Reference: https://regex101.com/r/0bH043/1
   private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
 
+  readonly fieldRegex: RegExp = /^[^\s]+(\s+[^\s]+)*$/;
+
   get validPassword(): ValidatorFn {
     return (control: AbstractControl) => {
       if (!control.value) {
@@ -48,8 +51,16 @@ export class FormValidationService {
     };
   }
 
-  // Return FormGroup validator function to match both password fields
+  noWhiteSpace(): ValidatorFn {
+    return (control: AbstractControl) : ValidationErrors | null => {
+      if ((control.value as string).indexOf('  ') >= 0) {
+        return { noWhiteSpace: true }
+      }
+      return null;
+    }
+  }
 
+  // Return FormGroup validator function to match both password fields
   checkPasswords(pasName = 'password', conPasName = 'confirmPassword'): ValidatorFn {
     return (group: AbstractControl) => {
       if (!group) {
