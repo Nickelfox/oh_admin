@@ -33,63 +33,86 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard'
+        redirectTo: 'dashboard',
       },
       {
         path: 'reset-password',
         canActivate: [LoggedInGuard],
         loadChildren: () =>
-          import('@hidden-innovation/reset-password').then((m) => m.ResetPasswordModule),
-        data: { breadcrumb: 'Reset Password' }
+          import('@hidden-innovation/reset-password').then(
+            (m) => m.ResetPasswordModule
+          ),
+        data: { breadcrumb: 'Reset Password' },
       },
       {
         path: 'forgot-password',
         canActivate: [LoggedInGuard],
         loadChildren: () =>
-          import('@hidden-innovation/forgot-password').then((m) => m.ForgotPasswordModule),
-        data: { breadcrumb: 'Forgot Password' }
+          import('@hidden-innovation/forgot-password').then(
+            (m) => m.ForgotPasswordModule
+          ),
+        data: { breadcrumb: 'Forgot Password' },
       },
       {
         path: 'dashboard',
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/dashboard').then((m) => m.DashboardModule),
-        data: { breadcrumb: 'Dashboard' }
+        data: { breadcrumb: 'Dashboard' },
       },
       {
         path: 'change-password',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/change-password').then((m) => m.ChangePasswordModule),
-        data: { breadcrumb: 'Change Password' }
+          import('@hidden-innovation/change-password').then(
+            (m) => m.ChangePasswordModule
+          ),
+        data: { breadcrumb: 'Change Password' },
       },
       {
         path: 'edit-profile',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/edit-admin-profile').then((m) => m.EditAdminProfileModule),
-        data: { breadcrumb: 'Edit Profile' }
+          import('@hidden-innovation/edit-admin-profile').then(
+            (m) => m.EditAdminProfileModule
+          ),
+        data: { breadcrumb: 'Edit Profile' },
       },
       {
-        path: 'users/listing',
+        path: 'users/listing/:index',
+        canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/user/user-listing').then((m) => m.UserListingModule),
-        data: { breadcrumb: 'Users' }
+          import('@hidden-innovation/user/user-listing').then(
+            (m) => m.UserListingModule
+          ),
+        data: { breadcrumb: 'Users' },
       },
       {
-        path: 'users/user-edit',
+        path: 'users/user-edit/:id',
+        canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/user/user-edit').then((m) => m.UserEditModule),
-        data: { breadcrumb: 'Users' }
+          import('@hidden-innovation/user/user-edit').then(
+            (m) => m.UserEditModule
+          ),
+        data: { breadcrumb: 'User Edit' },
       },
-      { path: '**', redirectTo: '/dashboard' }
+      {
+        path: 'users/details/:id',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/user/user-details').then(
+            (m) => m.UserDetailsModule
+          ),
+        data: { breadcrumb: 'User Details' },
+      },
+      { path: '**', redirectTo: '/dashboard' },
     ]),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HotToastModule.forRoot({
       theme: 'snackbar',
-      autoClose: true
+      autoClose: true,
     }),
     MatButtonModule,
     MatSidenavModule,
@@ -98,13 +121,10 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
     MatListModule,
     MatIconModule,
     MatMenuModule,
-    MatRippleModule
+    MatRippleModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [
-    { provide: ENVIRONMENT, useValue: environment }
-  ]
+  providers: [{ provide: ENVIRONMENT, useValue: environment }],
 })
-export class AppModule {
-}
+export class AppModule {}

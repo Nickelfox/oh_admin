@@ -19,6 +19,7 @@
     "shared-ui-prompt-dialog": "libs/shared/ui/prompt-dialog",
     "shared-utils": "libs/shared/utils",
     "user-user-edit": "libs/user/user-edit",
+    "user-user-details": "libs/user/user-details",
     "user-user-listing": "libs/user/user-listing"
   },
   "cli": {

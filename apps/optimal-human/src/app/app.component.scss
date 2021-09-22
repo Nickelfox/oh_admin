@@ -85,4 +85,12 @@ main {
     height: calc(100vh - 80px);
     overflow-y: auto;
   }
+
+  .global-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    filter: blur(2px);
+  }
 }

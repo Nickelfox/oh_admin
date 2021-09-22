@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UserDetails } from '@hidden-innovation/shared/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -22,7 +23,7 @@ export class UserListingComponent implements OnInit {
   users: MatTableDataSource<UserDetails> = new MatTableDataSource<UserDetails>();
 
   // Paginator options
-  pageIndex = 0;
+  pageIndex = 1;
   pageSizeOptions = [5, 10, 25, 100];
   pageSize = this.pageSizeOptions[1];
   pageEvent: PageEvent | undefined;
@@ -30,12 +31,21 @@ export class UserListingComponent implements OnInit {
   constructor(
     public constantDataService: ConstantDataService,
     public facade: UserListingFacade,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
-    this.facade.init({
-      page: this.pageIndex + 1,
-      limit: this.pageSize
+    this.route.params.subscribe((params) => {
+      this.pageIndex = params['index'];
+      this.facade.setListData({
+        page: this.pageIndex,
+        limit: this.pageSize
+      });
     });
+  }
+
+  get paginatorIndex() {
+    return this.pageIndex - 1;
   }
 
   ngOnInit(): void {
@@ -48,9 +58,10 @@ export class UserListingComponent implements OnInit {
   }
 
   onPaginateChange($event: PageEvent): void {
-    this.facade.setListData({
-      page: $event.pageIndex + 1,
-      limit: $event.pageSize
+    this.router.navigate([
+      '/users/listing/', $event.pageIndex + 1
+    ], {
+      relativeTo: this.route,
     });
   }
 

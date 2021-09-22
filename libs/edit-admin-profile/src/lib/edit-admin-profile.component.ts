@@ -29,7 +29,8 @@ export class EditAdminProfileComponent implements OnInit {
           value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
         }),
         RxwebValidators.required(),
-        Validators.required
+        Validators.required,
+        Validators.pattern(this.formValidationService.fieldRegex)
       ]),
       username: new FormControl<string>('', [
         RxwebValidators.alphaNumeric({
