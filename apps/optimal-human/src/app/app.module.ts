@@ -20,7 +20,6 @@ import { ENVIRONMENT } from '@hidden-innovation/environment';
 import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
-import { UserEditModule } from '@hidden-innovation/user/user-edit';
 
 @NgModule({
   imports: [
@@ -33,7 +32,7 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'dashboard',
+        redirectTo: 'dashboard'
       },
       {
         path: 'reset-password',
@@ -42,7 +41,7 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
           import('@hidden-innovation/reset-password').then(
             (m) => m.ResetPasswordModule
           ),
-        data: { breadcrumb: 'Reset Password' },
+        data: { breadcrumb: 'Reset Password' }
       },
       {
         path: 'forgot-password',
@@ -51,14 +50,14 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
           import('@hidden-innovation/forgot-password').then(
             (m) => m.ForgotPasswordModule
           ),
-        data: { breadcrumb: 'Forgot Password' },
+        data: { breadcrumb: 'Forgot Password' }
       },
       {
         path: 'dashboard',
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/dashboard').then((m) => m.DashboardModule),
-        data: { breadcrumb: 'Dashboard' },
+        data: { breadcrumb: 'Dashboard' }
       },
       {
         path: 'change-password',
@@ -67,7 +66,7 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
           import('@hidden-innovation/change-password').then(
             (m) => m.ChangePasswordModule
           ),
-        data: { breadcrumb: 'Change Password' },
+        data: { breadcrumb: 'Change Password' }
       },
       {
         path: 'edit-profile',
@@ -76,7 +75,7 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
           import('@hidden-innovation/edit-admin-profile').then(
             (m) => m.EditAdminProfileModule
           ),
-        data: { breadcrumb: 'Edit Profile' },
+        data: { breadcrumb: 'Edit Profile' }
       },
       {
         path: 'users/listing/:index',
@@ -85,7 +84,7 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
           import('@hidden-innovation/user/user-listing').then(
             (m) => m.UserListingModule
           ),
-        data: { breadcrumb: 'Users' },
+        data: { breadcrumb: 'Users' }
       },
       {
         path: 'users/user-edit/:id',
@@ -94,7 +93,7 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
           import('@hidden-innovation/user/user-edit').then(
             (m) => m.UserEditModule
           ),
-        data: { breadcrumb: 'User Edit' },
+        data: { breadcrumb: 'User Edit' }
       },
       {
         path: 'users/details/:id',
@@ -103,16 +102,16 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
           import('@hidden-innovation/user/user-details').then(
             (m) => m.UserDetailsModule
           ),
-        data: { breadcrumb: 'User Details' },
+        data: { breadcrumb: 'User Details' }
       },
-      { path: '**', redirectTo: '/dashboard' },
+      { path: '**', redirectTo: '/dashboard' }
     ]),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HotToastModule.forRoot({
       theme: 'snackbar',
-      autoClose: true,
+      autoClose: true
     }),
     MatButtonModule,
     MatSidenavModule,
@@ -121,10 +120,11 @@ import { UserEditModule } from '@hidden-innovation/user/user-edit';
     MatListModule,
     MatIconModule,
     MatMenuModule,
-    MatRippleModule,
+    MatRippleModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [{ provide: ENVIRONMENT, useValue: environment }],
+  providers: [{ provide: ENVIRONMENT, useValue: environment }]
 })
-export class AppModule {}
+export class AppModule {
+}
