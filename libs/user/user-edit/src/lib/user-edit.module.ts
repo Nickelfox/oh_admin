@@ -3,23 +3,27 @@ import { CommonModule } from '@angular/common';
 import { UserEditComponent } from './user-edit.component';
 import { Route, RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
-
-
+import { UserDetailsService, UserDetailsStore } from '@hidden-innovation/user/user-details';
 
 
 export const userEditComponent: Route[] = [{
   path: '',
   pathMatch: 'full',
-  component: UserEditComponent,
+  component: UserEditComponent
 }];
 
 @NgModule({
   imports: [CommonModule,
     MaterialModule,
-    RouterModule.forChild(userEditComponent),
+    RouterModule.forChild(userEditComponent)
   ],
   declarations: [
     UserEditComponent
   ],
+  providers: [
+    UserDetailsStore,
+    UserDetailsService
+  ]
 })
-export class UserEditModule {}
+export class UserEditModule {
+}

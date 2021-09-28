@@ -87,7 +87,7 @@ import { MatRippleModule } from '@angular/material/core';
         data: { breadcrumb: 'Users' }
       },
       {
-        path: 'users/user-edit/:id',
+        path: 'users/edit/:id',
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/user/user-edit').then(

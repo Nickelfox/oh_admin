@@ -2,99 +2,253 @@
   <div class='container-fluid p-0'>
     <div class='row mb-4 '>
       <div class='col-12 d-flex align-items-center justify-content-end'>
-        <button [disabled]='facade.isDetailsLoading$ | async' mat-flat-button color='accent' class='ml-3'
+        <button [disabled]='store.isLoading$ | async'
+                [routerLink]='["/users/edit", userID]'
+                mat-flat-button color='accent' class='ml-3'
                 type='button'>{{actionBtnText.edit}}</button>
-        <button [disabled]='facade.isDetailsLoading$ | async' mat-flat-button color='primary' class='ml-3'
+        <button [disabled]='store.isLoading$ | async' mat-flat-button color='primary' class='ml-3'
                 type='button'>{{actionBtnText.userBlockState.unblocked}}</button>
-        <button [disabled]='facade.isDetailsLoading$ | async' mat-flat-button color='primary' class='ml-3'
+        <button [disabled]='store.isLoading$ | async' mat-flat-button color='primary' class='ml-3'
                 type='button'>{{actionBtnText.delete}}</button>
       </div>
     </div>
   </div>
-  <ng-template [ngIf]='facade.userDetails$ | async' let-user>
+  <ng-template [ngIf]='store.state$ | async' let-user>
     <mat-card class='p-0'>
+
       <div class='container-fluid p-4'>
-        <div class='row mb-4'>
+        <div class='row'>
+          <div class='col-2'>
+            <hidden-innovation-common-data-field-status
+              [chipType]='(store.isLoading$ | async) ? null : statusChipType.SUCCESS'>
+            </hidden-innovation-common-data-field-status>
+          </div>
+          <div class='col'></div>
+          <div class='col-6 d-flex align-items-center justify-content-end'>
+            <p class='mb-0'>
+              <b>Last Seen:</b>
+              <ng-template [ngIf]='store.isLoading$ | async' [ngIfElse]='lastSeenElse'>
+                --
+              </ng-template>
+              <ng-template #lastSeenElse>
+                {{(user.updated_at | date) || '--'}}
+              </ng-template>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class='container-fluid p-4'>
+        <div class='row mb-2'>
           <div class='col-4'>
-            <div class='form-group'>
-              <div class='font-calibri--bold'>
-                <label class='mat-subheading-1'>Name</label>
-              </div>
-              <div class='font-sf-pro--bold mt-2'>
-                <h4 class='mat-body-2 font-weight-light'>{{user.name || '--'}}</h4>
-              </div>
-            </div>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.ID'
+              [value]='user.id'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.NAME'
+              [value]='user.name'
+            ></hidden-innovation-common-data-field>
           </div>
         </div>
 
-        <div class='row mb-4'>
+        <div class='row mb-2'>
           <div class='col-4'>
-            <div class='form-group'>
-              <div class='font-calibri--bold'>
-                <label class='mat-subheading-1'>USER NAME</label>
-              </div>
-              <div class='font-sf-pro--bold mt-2'>
-                <h4 class='mat-body-2 font-weight-light'>{{user.username || '--'}}</h4>
-              </div>
-            </div>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.USER_NAME'
+              [value]='user.username'
+            ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
-            <div class='form-group'>
-              <div class='font-calibri--bold'>
-                <label class='mat-subheading-1'>EMAIL ID</label>
-              </div>
-              <div class='font-sf-pro--bold mt-2'>
-                <h4 class='mat-body-2 font-weight-light'>{{user.email || '--'}}</h4>
-              </div>
-            </div>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.EMAIL_ID'
+              [value]='user.email'
+            ></hidden-innovation-common-data-field>
           </div>
 
           <div class='col-4'>
-            <div class='form-group'>
-              <div class='font-calibri--bold'>
-                <label class='mat-subheading-1'>LANGUAGE DETAIL</label>
-              </div>
-              <div class='font-sf-pro--bold mt-2'>
-                <h4 class='mat-body-2 font-weight-light'>{{user.language || '--'}}</h4>
-              </div>
-            </div>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.LANGUAGE_DETAIL'
+              [value]='user.language'
+            ></hidden-innovation-common-data-field>
           </div>
         </div>
 
         <div class='row'>
           <div class='col-4'>
-            <div class='form-group'>
-              <div class='font-calibri--bold'>
-                <label class='mat-subheading-1'>ROLE</label>
-              </div>
-              <div class='font-sf-pro--bold mt-2'>
-                <h4 class='mat-body-2 font-weight-light'>{{user.role || '--'}}
-                </h4>
-              </div>
-            </div>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.ROLE'
+              [value]='user.role'
+            ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
-            <div class='form-group'>
-              <div class='font-calibri--bold'>
-                <label class='mat-subheading-1'>CREATED AT</label>
-              </div>
-              <div class='font-sf-pro--bold mt-2'>
-                <h4 class='mat-body-2 font-weight-light'>{{(user.created_at | date: 'short') ?? '--'}}</h4>
-              </div>
-            </div>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.DATE_OF_JOINING'
+              [value]='(user.created_at | date: "short")'
+            ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
-            <div class='form-group'>
-              <div class='font-calibri--bold'>
-                <label class='mat-subheading-1'>UPDATED AT</label>
-              </div>
-              <div class='font-sf-pro--bold mt-2'>
-                <h4 class='mat-body-2 font-weight-light'>{{(user.updated_at | date: 'short') ?? '--'}}</h4>
-              </div>
-            </div>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.COUNTRY + "/" + constantDataService.FIELD_NAME.LOCATION'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
           </div>
         </div>
       </div>
+
+      <mat-divider></mat-divider>
+
+      <div class='container-fluid p-4'>
+        <div class='row mb-2'>
+          <div class='col-12'>
+            <h4 class='mat-h4 font-sf-pro--bold text-uppercase text-muted'>User Profile inputs</h4>
+          </div>
+        </div>
+
+        <div class='row mb-2'>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.HEIGHT'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.WEIGHT'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.SEX'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+        </div>
+
+        <div class='row mb-2'>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.SKIN_COLOUR'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class='container-fluid p-4'>
+        <div class='row mb-2'>
+          <div class='col-12'>
+            <h4 class='mat-h4 font-sf-pro--bold text-uppercase text-muted'>User Engagement</h4>
+          </div>
+        </div>
+
+        <div class='row'>
+          <div class='col-12'>
+            <h5 class='mat-h5 font-sf-pro--bold text-uppercase'>User Test History</h5>
+          </div>
+        </div>
+
+        <div class='row mb-2'>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.WATCHED'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.COMPLETED'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.INPUTS'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+        </div>
+
+        <div class='row'>
+          <div class='col-12'>
+            <h5 class='mat-h5 font-sf-pro--bold text-uppercase text-color__primary'>User Assessment History</h5>
+          </div>
+        </div>
+
+        <div class='row mb-2'>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.STARTED'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.COMPLETED'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.RESULTS'
+              [value]='null'
+            ></hidden-innovation-common-data-field>
+          </div>
+        </div>
+
+        <div class='row mb-2'>
+          <div class='col-2'>
+            <hidden-innovation-common-data-field-skeleton
+              [label]='constantDataService.FIELD_NAME.OCS'>
+              <hidden-innovation-spinner-text
+                [value]='55'
+                [size]='70'
+                text='55%'
+                spinnerMode='determinate'
+              ></hidden-innovation-spinner-text>
+            </hidden-innovation-common-data-field-skeleton>
+          </div>
+          <div class='col-2'>
+            <hidden-innovation-common-data-field-skeleton
+              [label]='constantDataService.FIELD_NAME.OOS'>
+              <hidden-innovation-spinner-text
+                [value]='80'
+                [size]='70'
+                text='80%'
+                spinnerMode='determinate'
+              ></hidden-innovation-spinner-text>
+            </hidden-innovation-common-data-field-skeleton>
+          </div>
+        </div>
+      </div>
+
     </mat-card>
   </ng-template>
 </div>

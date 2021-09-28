@@ -12,7 +12,24 @@ export class ConstantDataService {
     LOCATION: 'location',
     DATE_OF_JOINING: 'date of joining',
     STATUS: 'status',
-    ACTION: 'action'
+    ACTION: 'action',
+    ID: 'id',
+    USER_NAME: 'user name',
+    LANGUAGE_DETAIL: 'language detail',
+    ROLE: 'role',
+    CREATED_AT: 'created at',
+    UPDATED_AT: 'updated at',
+    HEIGHT: 'height',
+    WEIGHT: 'weight',
+    SEX: 'sex',
+    SKIN_COLOUR: 'skin colour',
+    WATCHED: 'watched',
+    COMPLETED: 'completed',
+    INPUTS: 'inputs',
+    STARTED: 'started',
+    RESULTS: 'results',
+    OCS: 'ocs',
+    OOS: 'oos',
   };
 
   BUTTON_NAME = {

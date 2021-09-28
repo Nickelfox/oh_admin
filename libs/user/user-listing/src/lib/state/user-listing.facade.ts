@@ -15,10 +15,6 @@ export class UserListingFacade {
   constructor(private readonly store: Store) {
   }
 
-  init(reqObj: UserListingRequest) {
-    this.store.dispatch(UserListActions.getList(reqObj));
-  }
-
   setListData(pageData: UserListingRequest) {
     this.store.dispatch(UserListActions.setListPage(pageData));
   }

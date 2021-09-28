@@ -334,6 +334,12 @@ body {
   box-sizing: border-box;
 }
 
+.text-color {
+  &__primary {
+    color: $dark-primary-text;
+  }
+}
+
 .oh-logo {
   animation: fadeFromBottom 0.3s ease-in forwards;
 
@@ -351,6 +357,25 @@ body {
     max-width: 60%;
     margin: 80px + 20px auto;
   }
-
-
 }
+
+.mat-chip
+{
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 21px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: 0.25px;
+
+  &--success{
+    background: #ECF9F3 !important;
+    color: #00C853 !important;
+  }
+  &--error
+  {
+    background: #FCE7E7 !important;
+    color: #ec795f !important;
+  }
+}
+

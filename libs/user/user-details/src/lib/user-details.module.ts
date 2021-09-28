@@ -3,32 +3,36 @@ import { CommonModule } from '@angular/common';
 import { UserDetailsComponent } from './user-details.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import * as fromUserDetails from './state/user-details.reducer';
-import { UserDetailsEffects } from './state/user-details.effects';
-import { UserDetailsFacade } from './state/user-details.facade';
+import { UserDetailsService } from './services/user-details.service';
+import { UserDetailsStore } from './user-details.store';
+import { SpinnerTextModule } from '@hidden-innovation/shared/ui/spinner-text';
+import { CommonDataFieldModule } from '@hidden-innovation/shared/ui/common-data-field';
+import { CommonDataFieldSkeletonModule } from '@hidden-innovation/shared/ui/common-data-field-skeleton';
+import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
 
 export const userDetailComponent: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    component: UserDetailsComponent,
-  },
+    component: UserDetailsComponent
+  }
 ];
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule.forChild(userDetailComponent),
-    StoreModule.forFeature(
-      fromUserDetails.USER_DETAILS_FEATURE_KEY,
-      fromUserDetails.reducer
-    ),
-    EffectsModule.forFeature([UserDetailsEffects]),
+    SpinnerTextModule,
+    CommonDataFieldModule,
+    CommonDataFieldSkeletonModule,
+    CommonDataFieldStatusModule,
+    RouterModule.forChild(userDetailComponent)
   ],
   declarations: [UserDetailsComponent],
-  providers: [UserDetailsFacade],
+  providers: [
+    UserDetailsService,
+    UserDetailsStore
+  ]
 })
-export class UserDetailsModule {}
+export class UserDetailsModule {
+}

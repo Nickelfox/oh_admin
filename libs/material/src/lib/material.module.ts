@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { ContentLoaderModule } from '@ngneat/content-loader';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { ContentLoaderModule } from '@ngneat/content-loader';
     ChartsModule,
     MatPaginatorModule,
     MatMenuModule,
+    MatDividerModule,
 
     // Non-Material Imports
     ContentLoaderModule
@@ -64,6 +66,7 @@ import { ContentLoaderModule } from '@ngneat/content-loader';
     ChartsModule,
     MatPaginatorModule,
     MatMenuModule,
+    MatDividerModule,
 
     // Non-Material Exports
     ContentLoaderModule
