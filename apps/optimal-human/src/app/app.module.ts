@@ -38,14 +38,18 @@ import { MatRippleModule } from '@angular/material/core';
         path: 'reset-password',
         canActivate: [LoggedInGuard],
         loadChildren: () =>
-          import('@hidden-innovation/reset-password').then((m) => m.ResetPasswordModule),
+          import('@hidden-innovation/reset-password').then(
+            (m) => m.ResetPasswordModule
+          ),
         data: { breadcrumb: 'Reset Password' }
       },
       {
         path: 'forgot-password',
         canActivate: [LoggedInGuard],
         loadChildren: () =>
-          import('@hidden-innovation/forgot-password').then((m) => m.ForgotPasswordModule),
+          import('@hidden-innovation/forgot-password').then(
+            (m) => m.ForgotPasswordModule
+          ),
         data: { breadcrumb: 'Forgot Password' }
       },
       {
@@ -59,28 +63,45 @@ import { MatRippleModule } from '@angular/material/core';
         path: 'change-password',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/change-password').then((m) => m.ChangePasswordModule),
+          import('@hidden-innovation/change-password').then(
+            (m) => m.ChangePasswordModule
+          ),
         data: { breadcrumb: 'Change Password' }
       },
       {
         path: 'edit-profile',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/edit-admin-profile').then((m) => m.EditAdminProfileModule),
+          import('@hidden-innovation/edit-admin-profile').then(
+            (m) => m.EditAdminProfileModule
+          ),
         data: { breadcrumb: 'Edit Profile' }
       },
       {
         path: 'users/listing/:index',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/user/user-listing').then((m) => m.UserListingModule),
+          import('@hidden-innovation/user/user-listing').then(
+            (m) => m.UserListingModule
+          ),
         data: { breadcrumb: 'Users' }
+      },
+      {
+        path: 'users/edit/:id',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/user/user-edit').then(
+            (m) => m.UserEditModule
+          ),
+        data: { breadcrumb: 'User Edit' }
       },
       {
         path: 'users/details/:id',
         canActivate: [AuthGuard],
         loadChildren: () =>
-          import('@hidden-innovation/user/user-details').then((m) => m.UserDetailsModule),
+          import('@hidden-innovation/user/user-details').then(
+            (m) => m.UserDetailsModule
+          ),
         data: { breadcrumb: 'User Details' }
       },
       { path: '**', redirectTo: '/dashboard' }
@@ -103,9 +124,7 @@ import { MatRippleModule } from '@angular/material/core';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [
-    { provide: ENVIRONMENT, useValue: environment }
-  ]
+  providers: [{ provide: ENVIRONMENT, useValue: environment }]
 })
 export class AppModule {
 }

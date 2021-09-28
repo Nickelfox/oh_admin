@@ -16,4 +16,11 @@ export interface UserListingResponse extends CustomApiResponse {
 
 export interface UserListing extends Partial<UserListingResponseData> {
   isLoading?: boolean;
+  loaded?: boolean;
+}
+
+export const PaginatorData = {
+  pageIndex: 1,
+  pageSizeOptions: [5, 10, 25, 100],
+  pageSize: 10
 }

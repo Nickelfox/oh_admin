@@ -3,9 +3,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 
 import * as UserListActions from './user-listing.actions';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { UserListingService } from '../services/user-listing.service';
 import { of } from 'rxjs';
 import { userListingInitialState } from './user-listing.reducer';
+import { UserListingService } from '../services/user-listing.service';
 
 @Injectable()
 export class UserListingEffects {

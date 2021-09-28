@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEnca
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { UserListingFacade } from './state/user-listing.facade';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserDetails } from '@hidden-innovation/shared/models';
+import { StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PaginatorData } from './models/user-listing.interface';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -23,10 +24,14 @@ export class UserListingComponent implements OnInit {
   users: MatTableDataSource<UserDetails> = new MatTableDataSource<UserDetails>();
 
   // Paginator options
-  pageIndex = 1;
-  pageSizeOptions = [5, 10, 25, 100];
-  pageSize = this.pageSizeOptions[1];
+  pageIndex = PaginatorData.pageIndex;
+  pageSizeOptions = PaginatorData.pageSizeOptions;
+  pageSize = PaginatorData.pageSize;
   pageEvent: PageEvent | undefined;
+
+  userStatusEnum = UserStatusEnum;
+
+  statusChipType = StatusChipType;
 
   constructor(
     public constantDataService: ConstantDataService,
@@ -61,7 +66,7 @@ export class UserListingComponent implements OnInit {
     this.router.navigate([
       '/users/listing/', $event.pageIndex + 1
     ], {
-      relativeTo: this.route,
+      relativeTo: this.route
     });
   }
 

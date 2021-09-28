@@ -75,6 +75,13 @@ mat-list-item {
     }
   }
 
+  &.active {
+    &:after {
+      opacity: .08;
+      //background: #eef9be;
+    }
+  }
+
 }
 
 main {

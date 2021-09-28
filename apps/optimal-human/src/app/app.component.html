@@ -10,13 +10,14 @@
       <mat-list>
         <ng-template ngFor [ngForOf]="uiStore.navItems$ | async" let-navData>
           <ng-template [ngIf]="navData.navItems.length > 1">
+            <mat-divider></mat-divider>
             <div mat-subheader class="text-muted">{{navData.name}}</div>
           </ng-template>
-          <mat-list-item matRipple [disableRipple]="false" [routerLink]="item.path" [ngStyle]="{cursor: 'pointer'}"
+          <mat-list-item matRipple [disableRipple]="false" routerLinkActive='active' [routerLink]="item.path" [ngStyle]="{cursor: 'pointer'}"
                          *ngFor="let item of navData.navItems">
+            <mat-icon class="text-white" mat-list-icon>{{item.icon}}</mat-icon>
             <div mat-line class="text-white">{{item.label}}</div>
           </mat-list-item>
-          <mat-divider></mat-divider>
         </ng-template>
       </mat-list>
     </div>

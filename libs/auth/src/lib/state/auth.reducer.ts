@@ -14,17 +14,7 @@ export const authInitialState: Auth = {
   loggedIn: false,
   token: '',
   isLoading: false,
-  admin: {
-    email: '',
-    language: '',
-    name: '',
-    role: '',
-    username: '',
-    updated_at: '',
-    id: 0,
-    password: '',
-    created_at: ''
-  }
+  admin: undefined
 };
 
 const reducer = createReducer(
@@ -51,17 +41,7 @@ const reducer = createReducer(
       loggedIn: false,
       isLoading: false,
       token: '',
-      admin: {
-        email: '',
-        language: '',
-        name: '',
-        role: '',
-        username: '',
-        updated_at: '',
-        id: 0,
-        password: '',
-        created_at: ''
-      }
+      admin: undefined
     })),
     on(AuthActions.checkLogin, (state, _) => ({
       ...state,

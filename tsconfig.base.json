@@ -40,16 +40,29 @@
       "@hidden-innovation/shared/ui/auth-layout": [
         "libs/shared/ui/auth-layout/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/common-data-field": [
+        "libs/shared/ui/common-data-field/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-data-field-skeleton": [
+        "libs/shared/ui/common-data-field-skeleton/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-data-field-status": [
+        "libs/shared/ui/common-data-field-status/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/dashboard-count-card": [
         "libs/shared/ui/dashboard-count-card/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/spinner-text": [
+        "libs/shared/ui/spinner-text/src/index.ts"
+      ],
       "@hidden-innovation/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@hidden-innovation/user/user-details": [
         "libs/user/user-details/src/index.ts"
       ],
+      "@hidden-innovation/user/user-edit": ["libs/user/user-edit/src/index.ts"],
       "@hidden-innovation/user/user-listing": [
         "libs/user/user-listing/src/index.ts"
       ]
