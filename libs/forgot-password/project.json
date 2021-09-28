@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/forgot-password",
+  "sourceRoot": "libs/forgot-password/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/forgot-password"],
+      "options": {
+        "project": "libs/forgot-password/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/forgot-password/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/forgot-password/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/forgot-password"],
+      "options": {
+        "jestConfig": "libs/forgot-password/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/forgot-password/src/**/*.ts",
+          "libs/forgot-password/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

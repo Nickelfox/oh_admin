@@ -15,19 +15,44 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-//      "@env/*": ["apps/optimal-human/src/environments/*"],
       "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
+      "@hidden-innovation/change-password": [
+        "libs/change-password/src/index.ts"
+      ],
       "@hidden-innovation/dashboard": ["libs/dashboard/src/index.ts"],
+      "@hidden-innovation/edit-admin-profile": [
+        "libs/edit-admin-profile/src/index.ts"
+      ],
       "@hidden-innovation/environment": ["libs/environment/src/index.ts"],
+      "@hidden-innovation/forgot-password": [
+        "libs/forgot-password/src/index.ts"
+      ],
       "@hidden-innovation/libs/ui/login/login": [
         "libs/libs/ui/login/login/src/index.ts"
       ],
       "@hidden-innovation/material": ["libs/material/src/index.ts"],
+      "@hidden-innovation/reset-password": ["libs/reset-password/src/index.ts"],
       "@hidden-innovation/shared/form-config": [
         "libs/shared/form-config/src/index.ts"
       ],
       "@hidden-innovation/shared/models": ["libs/shared/models/src/index.ts"],
-      "@hidden-innovation/shared/store": ["libs/shared/store/src/index.ts"]
+      "@hidden-innovation/shared/store": ["libs/shared/store/src/index.ts"],
+      "@hidden-innovation/shared/ui/auth-layout": [
+        "libs/shared/ui/auth-layout/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/dashboard-count-card": [
+        "libs/shared/ui/dashboard-count-card/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/prompt-dialog": [
+        "libs/shared/ui/prompt-dialog/src/index.ts"
+      ],
+      "@hidden-innovation/shared/utils": ["libs/shared/utils/src/index.ts"],
+      "@hidden-innovation/user/user-details": [
+        "libs/user/user-details/src/index.ts"
+      ],
+      "@hidden-innovation/user/user-listing": [
+        "libs/user/user-listing/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

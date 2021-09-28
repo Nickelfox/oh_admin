@@ -2,14 +2,24 @@
   "version": 2,
   "projects": {
     "auth": "libs/auth",
+    "change-password": "libs/change-password",
     "dashboard": "libs/dashboard",
+    "edit-admin-profile": "libs/edit-admin-profile",
     "environment": "libs/environment",
+    "forgot-password": "libs/forgot-password",
     "material": "libs/material",
     "optimal-human": "apps/optimal-human",
     "optimal-human-e2e": "apps/optimal-human-e2e",
+    "reset-password": "libs/reset-password",
     "shared-form-config": "libs/shared/form-config",
     "shared-models": "libs/shared/models",
-    "shared-store": "libs/shared/store"
+    "shared-store": "libs/shared/store",
+    "shared-ui-auth-layout": "libs/shared/ui/auth-layout",
+    "shared-ui-dashboard-count-card": "libs/shared/ui/dashboard-count-card",
+    "shared-ui-prompt-dialog": "libs/shared/ui/prompt-dialog",
+    "shared-utils": "libs/shared/utils",
+    "user-user-details": "libs/user/user-details",
+    "user-user-listing": "libs/user/user-listing"
   },
   "cli": {
     "analytics": false,

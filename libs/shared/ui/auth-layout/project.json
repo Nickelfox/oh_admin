@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/auth-layout",
+  "sourceRoot": "libs/shared/ui/auth-layout/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/auth-layout"],
+      "options": {
+        "project": "libs/shared/ui/auth-layout/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/auth-layout/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/auth-layout/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/auth-layout"],
+      "options": {
+        "jestConfig": "libs/shared/ui/auth-layout/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/auth-layout/src/**/*.ts",
+          "libs/shared/ui/auth-layout/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

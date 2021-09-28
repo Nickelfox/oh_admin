@@ -1,12 +1,15 @@
-import {CustomApiResponse} from "@hidden-innovation/shared/models";
+import { CustomApiResponse } from '@hidden-innovation/shared/models';
+import { UserDetails } from '@hidden-innovation/shared/models';
 
-export interface Auth {
-  loggedIn: boolean;
-  token: string;
-  message?: string;
+export interface Auth extends Partial<LoginResponseData> {
+  loggedIn?: boolean;
   isLoading?: boolean;
 }
 
+export interface LoginResponseData {
+  token: string;
+  admin: UserDetails;
+}
 
 export interface LoginRequest {
   email: string;
@@ -17,5 +20,5 @@ export interface LoginResponse extends CustomApiResponse {
   /**
    * Bearer token
    */
-  data: string;
+  data: LoginResponseData;
 }

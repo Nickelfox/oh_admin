@@ -1,0 +1,16 @@
+<div class='container-fluid min-vh-100'>
+  <div class='row'>
+    <div class='col-4 min-vh-100 auth__left-pane d-flex align-items-center justify-content-center'
+         [ngStyle]="{'backgroundImage': 'url(assets/auth_image.png)'}">
+      <div class='text-center d-flex flex-column align-items-center'>
+        <img src='assets/white_logo.svg' alt='' class='oh-logo img-fluid'>
+        <h3 class='font-calibri--bold mat-h3 mb-0 mt-2 oh-logo__text'>Optimal Humans</h3>
+      </div>
+    </div>
+    <div class='col-8 d-flex align-items-center justify-content-center auth__right-pane'>
+      <div class='auth__right-con mx-3'>
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</div>
