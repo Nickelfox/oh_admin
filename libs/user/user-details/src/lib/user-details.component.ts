@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { ActivatedRoute } from '@angular/router';
 import { UserDetailsStore } from './user-details.store';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { StatusChipType } from '@hidden-innovation/shared/models';
+import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
 
 @Component({
   selector: 'hidden-innovation-user-details',
@@ -48,6 +48,8 @@ export class UserDetailsComponent {
 
   chartData = [67];
   chartLegend = true;
+
+  userStatusEnum = UserStatusEnum;
 
   constructor(
     private route: ActivatedRoute,

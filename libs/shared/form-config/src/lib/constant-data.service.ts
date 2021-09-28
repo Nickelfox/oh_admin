@@ -7,10 +7,12 @@ export class ConstantDataService {
 
   FIELD_NAME = {
     NAME: 'name',
+    FIRST_NAME: 'first name',
     EMAIL_ID: 'email id',
     COUNTRY: 'country',
     LOCATION: 'location',
     DATE_OF_JOINING: 'date of joining',
+    ONBOARD_DATE: 'onboard date',
     STATUS: 'status',
     ACTION: 'action',
     ID: 'id',
@@ -30,9 +32,15 @@ export class ConstantDataService {
     RESULTS: 'results',
     OCS: 'ocs',
     OOS: 'oos',
+    AGE: 'age',
   };
 
   BUTTON_NAME = {
+    VIEW: 'view',
+    DELETE: 'delete',
+    UPDATE: 'update',
+    EDIT: 'edit',
+    CREATE: 'create',
   };
 
   CONST_NUMS = {

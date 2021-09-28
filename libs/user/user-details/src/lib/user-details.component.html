@@ -1,13 +1,11 @@
+<!--[routerLink]='["/users/edit", userID]'-->
 <div class='p-4'>
   <div class='container-fluid p-0'>
     <div class='row mb-4 '>
       <div class='col-12 d-flex align-items-center justify-content-end'>
         <button [disabled]='store.isLoading$ | async'
-                [routerLink]='["/users/edit", userID]'
                 mat-flat-button color='accent' class='ml-3'
                 type='button'>{{actionBtnText.edit}}</button>
-        <button [disabled]='store.isLoading$ | async' mat-flat-button color='primary' class='ml-3'
-                type='button'>{{actionBtnText.userBlockState.unblocked}}</button>
         <button [disabled]='store.isLoading$ | async' mat-flat-button color='primary' class='ml-3'
                 type='button'>{{actionBtnText.delete}}</button>
       </div>
@@ -19,9 +17,18 @@
       <div class='container-fluid p-4'>
         <div class='row'>
           <div class='col-2'>
-            <hidden-innovation-common-data-field-status
-              [chipType]='(store.isLoading$ | async) ? null : statusChipType.SUCCESS'>
-            </hidden-innovation-common-data-field-status>
+            <ng-template [ngIf]='store.isLoading$ | async' [ngIfElse]='statusElse'>
+              <hidden-innovation-common-data-field-status
+                [showDot]='true'
+              ></hidden-innovation-common-data-field-status>
+            </ng-template>
+            <ng-template #statusElse>
+              <hidden-innovation-common-data-field-status
+                [showDot]='true'
+                [text]='(user.status ? userStatusEnum.ACTIVE : userStatusEnum.INACTIVE) | titlecase'
+                [chipType]='user.status ? statusChipType.SUCCESS : statusChipType.ERROR'
+              ></hidden-innovation-common-data-field-status>
+            </ng-template>
           </div>
           <div class='col'></div>
           <div class='col-6 d-flex align-items-center justify-content-end'>
@@ -52,7 +59,7 @@
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
-              [label]='constantDataService.FIELD_NAME.NAME'
+              [label]='constantDataService.FIELD_NAME.FIRST_NAME'
               [value]='user.name'
             ></hidden-innovation-common-data-field>
           </div>
@@ -94,8 +101,8 @@
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
-              [label]='constantDataService.FIELD_NAME.DATE_OF_JOINING'
-              [value]='(user.created_at | date: "short")'
+              [label]='constantDataService.FIELD_NAME.ONBOARD_DATE'
+              [value]='(user.created_at | date: "shortDate")'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
@@ -121,23 +128,22 @@
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.AGE'
+              [value]='user.age'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.HEIGHT'
-              [value]='null'
+              [value]='user.height ? (user.height + "\"") : null'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.WEIGHT'
-              [value]='null'
-            ></hidden-innovation-common-data-field>
-          </div>
-
-          <div class='col-4'>
-            <hidden-innovation-common-data-field
-              [isLoading]='store.isLoading$ | async'
-              [label]='constantDataService.FIELD_NAME.SEX'
-              [value]='null'
+              [value]='user.weight'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
@@ -146,8 +152,15 @@
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
+              [label]='constantDataService.FIELD_NAME.SEX'
+              [value]='user.gender'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.SKIN_COLOUR'
-              [value]='null'
+              [value]='user.skinColor'
             ></hidden-innovation-common-data-field>
           </div>
         </div>

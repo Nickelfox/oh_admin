@@ -10,6 +10,7 @@ import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { UserListingService } from './services/user-listing.service';
+import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
 
 
 export const userListingComponent: Route[] = [{
@@ -23,6 +24,7 @@ export const userListingComponent: Route[] = [{
     CommonModule,
     MaterialModule,
     UtilsModule,
+    CommonDataFieldStatusModule,
     RouterModule.forChild(userListingComponent),
     StoreModule.forFeature(
       fromUserListing.USER_LISTING_FEATURE_KEY,

@@ -17,35 +17,51 @@ const initialState: UiState = {
     {
       name: 'DashBoard',
       navItems: [
-        { label: 'Dashboard', path: '/dashboard' }
+        { label: 'Dashboard', path: '/dashboard', icon: 'dashboard' }
+      ]
+    },
+    {
+      name: 'Tests',
+      navItems: [
+        { label: 'Tests', path: '/tests', icon: 'timer' }
+      ]
+    },
+    {
+      name: 'Assessments',
+      navItems: [
+        { label: 'Assessments', path: '/assessments', icon: 'timeline' }
+      ]
+    },
+    {
+      name: 'Questionnaires',
+      navItems: [
+        { label: 'Questionnaires', path: '/questionnaires', icon: 'comment' }
+      ]
+    },
+    {
+      name: 'Packs',
+      navItems: [
+        { label: 'Packs', path: '/packs', icon: 'collections' }
+      ]
+    },
+    {
+      name: 'Exercises',
+      navItems: [
+        { label: 'Exercises', path: '/exercises', icon: 'flash_on' }
+      ]
+    },
+    {
+      name: 'Featured',
+      navItems: [
+        { label: 'Featured', path: '/featured', icon: 'star' }
       ]
     },
     {
       name: 'Admin',
       navItems: [
-        { label: 'Users', path: '/users/listing/1' }
-      ]
-    },
-    {
-      name: 'Content',
-      navItems: [
-        { label: 'Tests', path: '/tests' },
-        { label: 'Test Groups', path: '/test-group' },
-        { label: 'Packs', path: '/packs' },
-        { label: 'Categories', path: '/categories' },
-        { label: 'Assessments', path: '/assessments' }
-      ]
-    },
-    {
-      name: 'Reports',
-      navItems: [
-        { label: 'Reports', path: '/users' }
-      ]
-    },
-    {
-      name: 'App Releases',
-      navItems: [
-        { label: 'App Releases', path: '/app-release' }
+        { label: 'Users', path: '/users/listing/1', icon: 'supervisor_account' },
+        { label: 'Reports', path: '/reports', icon: 'show_chart' },
+        { label: 'App Releases', path: '/app-release', icon: 'file_download' }
       ]
     }
   ]

@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AuthStorageService } from '../services/auth-storage.service';
+import { authInitialState } from './auth.reducer';
 
 
 @Injectable()
@@ -40,9 +41,7 @@ export class AuthEffects {
           })),
           catchError((_) => {
             this.toast.close('login-loading-state');
-            return of(AuthActions.loginFail({
-              token: '',
-            }));
+            return of(AuthActions.loginFail(authInitialState));
           })
         )
       )
@@ -59,10 +58,7 @@ export class AuthEffects {
           })),
           catchError((_) => {
             this.storage.clearAuthStorage();
-            return of(AuthActions.checkLoginFail({
-              token: '',
-              admin: undefined
-            }));
+            return of(AuthActions.checkLoginFail(authInitialState));
           })
         )
       )

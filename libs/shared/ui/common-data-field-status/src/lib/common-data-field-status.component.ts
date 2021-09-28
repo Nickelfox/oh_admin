@@ -7,7 +7,7 @@ import { StatusChipType } from '@hidden-innovation/shared/models';
     <mat-chip-list>
       <mat-chip class='{{chipClass}}'>
         <span>{{chipText}}</span>
-        <mat-icon matChipTrailingIcon>fiber_manual_record</mat-icon>
+        <mat-icon *ngIf='showDot' matChipTrailingIcon>fiber_manual_record</mat-icon>
       </mat-chip>
     </mat-chip-list>
   `,
@@ -18,6 +18,7 @@ import { StatusChipType } from '@hidden-innovation/shared/models';
 export class CommonDataFieldStatusComponent {
   @Input() chipType!: StatusChipType | null;
   @Input() text?: string;
+  @Input() showDot? = false;
 
   get chipClass(): string {
     return (this.chipType === StatusChipType.SUCCESS) ?
