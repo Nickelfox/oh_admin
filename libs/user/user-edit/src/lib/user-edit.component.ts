@@ -1,14 +1,25 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { UserDetailsStore } from '@hidden-innovation/user/user-details';
 import { ActivatedRoute } from '@angular/router';
-import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
+import {
+  ConstantDataService,
+  FormValidationService,
+} from '@hidden-innovation/shared/form-config';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { UserUpdateRequest } from './models/user-update.interface';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { HotToastService } from '@ngneat/hot-toast';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { Validators } from '@angular/forms';
-import { UserGenderEnum, UserStatusEnum } from '@hidden-innovation/shared/models';
+import {
+  UserGenderEnum,
+  UserStatusEnum,
+} from '@hidden-innovation/shared/models';
 import { UserEditStore } from './user-edit.store';
 
 @UntilDestroy({ checkProperties: true })
@@ -17,58 +28,58 @@ import { UserEditStore } from './user-edit.store';
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserEditComponent implements OnInit {
-
   userForm: FormGroup<UserUpdateRequest> = new FormGroup<UserUpdateRequest>({
     username: new FormControl('', [
       RxwebValidators.alphaNumeric({
-        allowWhiteSpace: false
+        allowWhiteSpace: false,
       }),
       RxwebValidators.maxLength({
-        value: this.formValidationService.FIELD_VALIDATION_VALUES.USERNAME_LENGTH
-      })
+        value:
+          this.formValidationService.FIELD_VALIDATION_VALUES.USERNAME_LENGTH,
+      }),
     ]),
     name: new FormControl('', [
       RxwebValidators.alpha({
-        allowWhiteSpace: true
+        allowWhiteSpace: true,
       }),
       RxwebValidators.maxLength({
-        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH,
       }),
-      Validators.pattern(this.formValidationService.fieldRegex)
+      Validators.pattern(this.formValidationService.fieldRegex),
     ]),
     age: new FormControl(0, [
       RxwebValidators.numeric({
-        allowDecimal: false
+        allowDecimal: false,
       }),
-      Validators.min(1)
+      Validators.min(1),
     ]),
     email: new FormControl('', [
       RxwebValidators.email(),
       RxwebValidators.required(),
-      Validators.required
+      Validators.required,
     ]),
     gender: new FormControl(''),
     height: new FormControl(0, [
       RxwebValidators.numeric({
-        allowDecimal: false
+        allowDecimal: false,
       }),
-      Validators.min(1)
+      Validators.min(1),
     ]),
     weight: new FormControl(0, [
       RxwebValidators.numeric({
-        allowDecimal: false
+        allowDecimal: false,
       }),
-      Validators.min(1)
+      Validators.min(1),
     ]),
     skinColor: new FormControl('', [
       RxwebValidators.hexColor({
-        isStrict: true
-      })
+        isStrict: true,
+      }),
     ]),
-    status: new FormControl(false)
+    status: new FormControl(false),
   });
 
   public userID: number;
@@ -93,7 +104,7 @@ export class UserEditComponent implements OnInit {
         this.userForm.disable();
         this.toastService.loading('Populating user details', {
           id: this.userDetailsToast,
-          dismissible: false
+          dismissible: false,
         });
       } else {
         this.userForm.patchValue({
@@ -105,7 +116,7 @@ export class UserEditComponent implements OnInit {
           age: state.age,
           username: state.username,
           weight: state.weight,
-          skinColor: state.skinColor
+          skinColor: state.skinColor,
         });
         this.userForm.enable();
         this.toastService.close(this.userDetailsToast);
@@ -115,7 +126,7 @@ export class UserEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.userDetailsStore.getUserDetails({
-      id: this.userID
+      id: this.userID,
     });
   }
 
@@ -126,7 +137,7 @@ export class UserEditComponent implements OnInit {
     }
     this.store.updateUser({
       id: this.userID,
-      obj: this.userForm.value
+      obj: this.userForm.value,
     });
   }
 }
