@@ -41,6 +41,7 @@ export class ConstantDataService {
     UPDATE: 'update',
     EDIT: 'edit',
     CREATE: 'create',
+    CANCEL: 'cancel'
   };
 
   CONST_NUMS = {

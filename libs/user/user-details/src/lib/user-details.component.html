@@ -1,13 +1,13 @@
-<!--[routerLink]='["/users/edit", userID]'-->
 <div class='p-4'>
   <div class='container-fluid p-0'>
     <div class='row mb-4 '>
       <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button [disabled]='store.isLoading$ | async' mat-flat-button color='primary' class='ml-3'
+                type='button'>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</button>
         <button [disabled]='store.isLoading$ | async'
                 mat-flat-button color='accent' class='ml-3'
-                type='button'>{{actionBtnText.edit}}</button>
-        <button [disabled]='store.isLoading$ | async' mat-flat-button color='primary' class='ml-3'
-                type='button'>{{actionBtnText.delete}}</button>
+                [routerLink]='["/users/edit", userID]'
+                type='button'>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</button>
       </div>
     </div>
   </div>

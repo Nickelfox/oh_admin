@@ -18,6 +18,7 @@
     "shared-ui-common-data-field": "libs/shared/ui/common-data-field",
     "shared-ui-common-data-field-skeleton": "libs/shared/ui/common-data-field-skeleton",
     "shared-ui-common-data-field-status": "libs/shared/ui/common-data-field-status",
+    "shared-ui-common-form-field": "libs/shared/ui/common-form-field",
     "shared-ui-dashboard-count-card": "libs/shared/ui/dashboard-count-card",
     "shared-ui-prompt-dialog": "libs/shared/ui/prompt-dialog",
     "shared-ui-spinner-text": "libs/shared/ui/spinner-text",

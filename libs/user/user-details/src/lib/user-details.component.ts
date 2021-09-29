@@ -15,15 +15,6 @@ export class UserDetailsComponent {
 
   imageSize: number;
 
-  // form action text
-  actionBtnText = {
-    edit: 'Edit',
-    userBlockState: {
-      blocked: 'Unblock',
-      unblocked: 'Block'
-    },
-    delete: 'Delete'
-  };
   public userID: number;
 
   chartOptions = {

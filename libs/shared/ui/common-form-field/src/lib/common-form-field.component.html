@@ -1,0 +1,27 @@
+<mat-form-field class='w-100'>
+  <mat-label>{{label}}</mat-label>
+  <input matInput autocomplete='no' [readonly]='readonly' type='text' [placeholder]='placeholder || label'
+         [formControl]='control'>
+  <mat-error
+    *ngIf='control.errors?.required || control.errors?.notEmpty'>
+    {{label}} {{errorMessage.required}}</mat-error>
+  <mat-error
+    *ngIf='control.errors?.invalid'>{{errorMessage.invalid}}</mat-error>
+  <mat-error
+    *ngIf='(control.errors?.alpha || control.errors?.pattern)'>{{errorMessage.invalid}}</mat-error>
+  <mat-error
+    *ngIf='control.errors?.maxlength'>Must not exceed {{control.errors?.maxlength.requiredLength}} character limit,
+    Current length is {{control.errors?.maxlength.actualLength}}</mat-error>
+  <mat-error
+    *ngIf='control.errors?.minlength'>Must be greater than {{control.errors?.minlength.requiredLength}} characters
+  </mat-error>
+  <mat-error
+    *ngIf='control.errors?.upperCase && !control.errors?.invalid'>{{label}} must be is uppercase only
+  </mat-error>
+  <mat-error
+    *ngIf='control.errors?.email'>{{errorMessage.invalid}}</mat-error>
+  <mat-error
+    *ngIf='control.errors?.alphaNumeric'>Must not contain any special character or
+    white spaces.
+  </mat-error>
+</mat-form-field>
