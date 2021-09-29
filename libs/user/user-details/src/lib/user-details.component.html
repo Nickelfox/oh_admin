@@ -25,7 +25,7 @@
             <ng-template #statusElse>
               <hidden-innovation-common-data-field-status
                 [showDot]='true'
-                [text]='(user.status ? userStatusEnum.ACTIVE : userStatusEnum.INACTIVE) | titlecase'
+                [text]='((user.status) ? userStatusEnum.ACTIVE : userStatusEnum.INACTIVE) | titlecase'
                 [chipType]='user.status ? statusChipType.SUCCESS : statusChipType.ERROR'
               ></hidden-innovation-common-data-field-status>
             </ng-template>
@@ -136,7 +136,7 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.HEIGHT'
-              [value]='user.height ? (user.height + "\"") : null'
+              [value]='user.height'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>

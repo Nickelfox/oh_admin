@@ -12,7 +12,7 @@ export interface UserDetailsState extends Partial<UserDetails> {
 }
 
 const initialState: UserDetailsState = {
-  isLoading: false
+  isLoading: false,
 };
 
 @Injectable()
@@ -40,7 +40,14 @@ export class UserDetailsStore extends ComponentStore<UserDetailsState> {
                 name: user.name,
                 updated_at: user.updated_at,
                 created_at: user.created_at,
-                language: user.language
+                language: user.language,
+                skinColor: user.skinColor,
+                height: user.height,
+                age: user.age,
+                gender: user.gender,
+                video: user.video,
+                status: user.status,
+                weight: user.weight,
               });
             },
             (_) => {

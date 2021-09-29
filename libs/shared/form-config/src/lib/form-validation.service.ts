@@ -21,7 +21,7 @@ export class FormValidationService {
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {
-    required: 'Email is required',
+    required: 'field is required',
     invalid: 'Invalid Email! Enter a valid Email Address'
   };
 
@@ -31,14 +31,23 @@ export class FormValidationService {
     mismatch: 'Passwords does not match'
   };
 
+  numericValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'field is required',
+    invalid: 'Invalid! Must be a number without any special character'
+  };
+
+  hexValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'field is required',
+    invalid: 'Invalid! Must be a HEX color code'
+  };
+
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
 
   // private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
   // Updated regex not allowing white space now
+  readonly fieldRegex: RegExp = /^[^\s]+(\s+[^\s]+)*$/;
   // Reference: https://regex101.com/r/0bH043/1
   private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
-
-  readonly fieldRegex: RegExp = /^[^\s]+(\s+[^\s]+)*$/;
 
   get validPassword(): ValidatorFn {
     return (control: AbstractControl) => {
@@ -52,12 +61,12 @@ export class FormValidationService {
   }
 
   noWhiteSpace(): ValidatorFn {
-    return (control: AbstractControl) : ValidationErrors | null => {
+    return (control: AbstractControl): ValidationErrors | null => {
       if ((control.value as string).indexOf('  ') >= 0) {
-        return { noWhiteSpace: true }
+        return { noWhiteSpace: true };
       }
       return null;
-    }
+    };
   }
 
   // Return FormGroup validator function to match both password fields

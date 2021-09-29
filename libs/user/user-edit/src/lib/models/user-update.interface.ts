@@ -1,3 +1,5 @@
+import { CustomApiResponse, UserDetails } from '@hidden-innovation/shared/models';
+
 export interface UserUpdateRequest {
   username: string;
   name: string;
@@ -8,4 +10,10 @@ export interface UserUpdateRequest {
   gender: string;
   skinColor: string;
   status: boolean;
+}
+
+export interface UserUpdateResponse extends CustomApiResponse {
+  data: {
+    user: UserDetails;
+  };
 }

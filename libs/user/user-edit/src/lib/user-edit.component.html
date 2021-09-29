@@ -1,14 +1,14 @@
-<form [formGroup]='userForm'>
-
+<form [formGroup]='userForm' (ngSubmit)='submit()'>
   <div class='p-4'>
     <div class='container-fluid p-0'>
       <div class='row mb-4 '>
         <div class='col-12 d-flex align-items-center justify-content-end'>
-          <button [disabled]='store.isLoading$ | async' mat-button color='primary' class='ml-3'
+          <button [disabled]='(userDetailsStore.isLoading$ | async) || (store.isLoading$ | async)' mat-stroked-button color='primary' class='ml-3'
+                  [routerLink]='["/users", "details", userID]'
                   type='button'>{{constantDataService.BUTTON_NAME.CANCEL | titlecase}}</button>
-          <button [disabled]='(store.isLoading$ | async) || !!!(userForm.dirty$ | async)'
+          <button [disabled]='(userDetailsStore.isLoading$ | async) || !!!(userForm.dirty$ | async) || (store.isLoading$ | async)'
                   mat-flat-button color='primary' class='ml-3'
-                  type='button'>{{constantDataService.BUTTON_NAME.UPDATE | titlecase}}</button>
+                  type='submit'>{{constantDataService.BUTTON_NAME.UPDATE | titlecase}}</button>
         </div>
       </div>
     </div>
@@ -24,11 +24,81 @@
       <mat-divider></mat-divider>
       <div class='container-fluid p-4'>
         <div class='row mb-4'>
-          <div class='col-4'>
+          <div class='col-3'>
+            <hidden-innovation-common-form-field
+              controlPath='username'
+              [label]='constantDataService.FIELD_NAME.USER_NAME | titlecase'
+              placeholder='Enter username'
+            ></hidden-innovation-common-form-field>
+          </div>
+          <div class='col-3'>
             <hidden-innovation-common-form-field
               controlPath='name'
-              label='Name'
+              [label]='constantDataService.FIELD_NAME.NAME | titlecase'
+              placeholder='Enter name'
             ></hidden-innovation-common-form-field>
+          </div>
+          <div class='col-3'>
+            <hidden-innovation-common-form-field
+              controlPath='age'
+              placeholder='Enter age'
+              [label]='constantDataService.FIELD_NAME.AGE | titlecase'
+              [errorMessage]='formValidationService.numericValidationMessage'
+            ></hidden-innovation-common-form-field>
+          </div>
+          <div class='col-3'>
+            <hidden-innovation-common-form-field
+              controlPath='email'
+              placeholder='Enter email id'
+              [label]='constantDataService.FIELD_NAME.EMAIL_ID | titlecase'
+              [errorMessage]='formValidationService.emailValidationMessage'
+            ></hidden-innovation-common-form-field>
+          </div>
+        </div>
+
+        <div class='row mb-4'>
+          <div class='col-3'>
+            <mat-form-field class='w-100'>
+              <mat-label>{{constantDataService.FIELD_NAME.GENDER | titlecase}}</mat-label>
+              <mat-select formControlName='gender'>
+                <mat-option *ngFor='let op of userGenders' value='{{op | lowercase}}'>{{op | titlecase}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class='col-3'>
+            <hidden-innovation-common-form-field
+              controlPath='height'
+              placeholder='Enter height'
+              [label]='constantDataService.FIELD_NAME.HEIGHT | titlecase'
+              [errorMessage]='formValidationService.numericValidationMessage'
+            ></hidden-innovation-common-form-field>
+          </div>
+          <div class='col-3'>
+            <hidden-innovation-common-form-field
+              controlPath='weight'
+              placeholder='Enter weight'
+              [label]='constantDataService.FIELD_NAME.WEIGHT | titlecase'
+              [errorMessage]='formValidationService.numericValidationMessage'
+            ></hidden-innovation-common-form-field>
+          </div>
+          <div class='col-3'>
+            <hidden-innovation-common-form-field
+              controlPath='skinColor'
+              [label]='constantDataService.FIELD_NAME.SKIN_COLOUR | titlecase'
+              placeholder='Input skinColor'
+              [errorMessage]='formValidationService.hexValidationMessage'
+            ></hidden-innovation-common-form-field>
+          </div>
+        </div>
+        <div class='row mb-4'>
+          <div class='col-3'>
+            <mat-form-field class='w-100'>
+              <mat-label>{{constantDataService.FIELD_NAME.STATUS | titlecase}}</mat-label>
+              <mat-select formControlName='status'>
+                <mat-option class='text-success' [value]='true'>{{userStatusEnum.ACTIVE | titlecase}}</mat-option>
+                <mat-option class='text-danger' [value]='false'>{{userStatusEnum.INACTIVE | titlecase}}</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
         </div>
       </div>
