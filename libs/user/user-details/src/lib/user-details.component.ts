@@ -48,7 +48,7 @@ export class UserDetailsComponent {
     public constantDataService: ConstantDataService
   ) {
     this.userID = this.route.snapshot.params.id as number;
-    this.store.getUserDetails({
+    this.store.getUserDetails$({
       id: this.userID
     });
     this.imageSize = 150;

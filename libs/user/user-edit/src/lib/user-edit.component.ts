@@ -125,7 +125,7 @@ export class UserEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userDetailsStore.getUserDetails({
+    this.userDetailsStore.getUserDetails$({
       id: this.userID,
     });
   }
