@@ -4,7 +4,10 @@ import { UserEditComponent } from './user-edit.component';
 import { Route, RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
 import { UserDetailsService, UserDetailsStore } from '@hidden-innovation/user/user-details';
-
+import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
+import { SpinnerTextModule } from '@hidden-innovation/shared/ui/spinner-text';
+import { UserEditStore } from './user-edit.store';
+import { UserEditService } from './services/user-edit.service';
 
 export const userEditComponent: Route[] = [{
   path: '',
@@ -13,8 +16,11 @@ export const userEditComponent: Route[] = [{
 }];
 
 @NgModule({
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     MaterialModule,
+    CommonFormFieldModule,
+    SpinnerTextModule,
     RouterModule.forChild(userEditComponent)
   ],
   declarations: [
@@ -22,7 +28,9 @@ export const userEditComponent: Route[] = [{
   ],
   providers: [
     UserDetailsStore,
-    UserDetailsService
+    UserDetailsService,
+    UserEditStore,
+    UserEditService,
   ]
 })
 export class UserEditModule {

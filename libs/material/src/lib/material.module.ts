@@ -12,13 +12,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { ChartsModule } from '@rinminase/ng-charts';
-import { MatNativeDateModule, NativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule, NativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { ContentLoaderModule } from '@ngneat/content-loader';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   imports: [
@@ -44,6 +45,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatDividerModule,
     MatTooltipModule,
+    MatOptionModule,
+    MatSelectModule,
 
     // Non-Material Imports
     ContentLoaderModule
@@ -70,6 +73,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatMenuModule,
     MatDividerModule,
     MatTooltipModule,
+    MatOptionModule,
+    MatSelectModule,
 
     // Non-Material Exports
     ContentLoaderModule

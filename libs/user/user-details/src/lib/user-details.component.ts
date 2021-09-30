@@ -15,15 +15,6 @@ export class UserDetailsComponent {
 
   imageSize: number;
 
-  // form action text
-  actionBtnText = {
-    edit: 'Edit',
-    userBlockState: {
-      blocked: 'Unblock',
-      unblocked: 'Block'
-    },
-    delete: 'Delete'
-  };
   public userID: number;
 
   chartOptions = {
@@ -57,7 +48,7 @@ export class UserDetailsComponent {
     public constantDataService: ConstantDataService
   ) {
     this.userID = this.route.snapshot.params.id as number;
-    this.store.getUserDetails({
+    this.store.getUserDetails$({
       id: this.userID
     });
     this.imageSize = 150;

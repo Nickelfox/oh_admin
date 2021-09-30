@@ -49,6 +49,12 @@
       "@hidden-innovation/shared/ui/common-data-field-status": [
         "libs/shared/ui/common-data-field-status/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/common-form-field": [
+        "libs/shared/ui/common-form-field/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-form-select-field": [
+        "libs/shared/ui/common-form-select-field/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/dashboard-count-card": [
         "libs/shared/ui/dashboard-count-card/src/index.ts"
       ],
