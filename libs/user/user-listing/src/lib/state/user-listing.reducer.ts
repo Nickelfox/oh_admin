@@ -20,10 +20,9 @@ const userListingReducer = createReducer(
   on(UserListActions.getList, (state) => ({
     ...state,
     isLoading: true,
-    loaded: false,
+    loaded: false
   })),
   on(UserListActions.getListSuccess, (state, { users, total }) => ({
-    ...state,
     isLoading: false,
     loaded: true,
     users,
@@ -32,11 +31,7 @@ const userListingReducer = createReducer(
   on(UserListActions.getListFail, (state) => ({
     ...state,
     isLoading: false,
-    loaded: false,
-  })),
-  on(UserListActions.setListPage, (state) => ({
-    ...state,
-    isLoading: true
+    loaded: false
   }))
 );
 

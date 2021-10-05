@@ -10,13 +10,6 @@ import { UserListingService } from '../services/user-listing.service';
 @Injectable()
 export class UserListingEffects {
 
-  setList$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(UserListActions.setListPage),
-      map(({ limit, page }) => UserListActions.getList({ limit, page }))
-    )
-  );
-
   getList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserListActions.getList),

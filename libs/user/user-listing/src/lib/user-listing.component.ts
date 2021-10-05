@@ -42,7 +42,7 @@ export class UserListingComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.pageIndex = params['index'];
       this.pageSize = params['size'];
-      this.facade.setListData({
+      this.facade.getList({
         page: this.pageIndex,
         limit: this.pageSize
       });
@@ -65,7 +65,7 @@ export class UserListingComponent implements OnInit {
   onPaginateChange($event: PageEvent): void {
     console.log($event);
     this.router.navigate([
-      '/users/listing/', $event.pageSize , $event.pageIndex + 1,
+      '/users/listing/', $event.pageSize, $event.pageIndex + 1
     ], {
       relativeTo: this.route
     });

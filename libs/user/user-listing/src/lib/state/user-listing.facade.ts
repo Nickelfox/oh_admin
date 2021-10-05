@@ -8,6 +8,7 @@ import { UserListingRequest } from '../models/user-listing.interface';
 @Injectable()
 export class UserListingFacade {
 
+  isListLoaded$ = this.store.pipe(select(UserListSelectors.isLoaded));
   isListLoading$ = this.store.pipe(select(UserListSelectors.isLoading));
   users$ = this.store.pipe(select(UserListSelectors.getUsersList));
   count$ = this.store.pipe(select(UserListSelectors.getUsersCount));
@@ -15,7 +16,10 @@ export class UserListingFacade {
   constructor(private readonly store: Store) {
   }
 
-  setListData(pageData: UserListingRequest) {
-    this.store.dispatch(UserListActions.setListPage(pageData));
-  }
+  getList(pageData: UserListingRequest) {
+    this.store.dispatch(UserListActions.getList({
+      limit: pageData.limit,
+      page: pageData.page
+    }));
+  };
 }
