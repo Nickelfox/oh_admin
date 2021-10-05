@@ -24,6 +24,10 @@ export class AppComponent implements OnInit, OnDestroy {
   isSliding = false;
   private readonly destroy$ = new Subject();
 
+  routerActiveLinkOptions = {
+    exact: true,
+  }
+
   constructor(
     public breakpointObserver: BreakpointObserver,
     public authFacade: AuthFacade,

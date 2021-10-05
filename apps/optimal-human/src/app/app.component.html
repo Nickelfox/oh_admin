@@ -13,7 +13,7 @@
             <mat-divider></mat-divider>
             <div mat-subheader class="text-muted">{{navData.name}}</div>
           </ng-template>
-          <mat-list-item matRipple [disableRipple]="false" routerLinkActive='active' [routerLink]="item.path" [ngStyle]="{cursor: 'pointer'}"
+          <mat-list-item routerLinkActive='active' [routerLink]='item.path' matRipple [disableRipple]="false" [ngStyle]="{cursor: 'pointer'}"
                          *ngFor="let item of navData.navItems">
             <mat-icon class="text-white" mat-list-icon>{{item.icon}}</mat-icon>
             <div mat-line class="text-white">{{item.label}}</div>

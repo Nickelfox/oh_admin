@@ -80,7 +80,7 @@ export class UiStore extends ComponentStore<UiState> {
           navItems: [
             {
               label: 'Users',
-              path: `/users/listing/${constantDataService.PaginatorData.pageSize}/${constantDataService.PaginatorData.pageIndex}`,
+              path: `/users`,
               icon: 'supervisor_account'
             },
             { label: 'Reports', path: '/reports', icon: 'show_chart' },
