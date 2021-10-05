@@ -96,7 +96,7 @@
               <mat-label>{{constantDataService.FIELD_NAME.STATUS | titlecase}}</mat-label>
               <mat-select formControlName='status'>
                 <mat-option class='text-success' [value]='true'>{{userStatusEnum.ACTIVE | titlecase}}</mat-option>
-                <mat-option class='text-danger' [value]='false'>{{userStatusEnum.INACTIVE | titlecase}}</mat-option>
+                <mat-option class='text-danger' [value]='false'>{{userStatusEnum.BLOCKED | titlecase}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>

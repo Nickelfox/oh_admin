@@ -28,29 +28,30 @@ export class DashboardComponent {
   //   layout: {
   //     padding: 0
   //   },
-  //   tooltips: {
-  //     enabled: false
-  //   },
+  //   // tooltips: {
+  //   //   enabled: false
+  //   // },
   //   // maintainAspectRatio: false,
-  //   scales: {
-  //     xAxes: [{}],
-  //     yAxes: [
-  //       {
-  //         id: 'y-axis-0',
-  //         position: 'right'
-  //       }
-  //       // {
-  //       //   id: "y-axis-1",
-  //       //   position: "right",
-  //       //   gridLines: {
-  //       //     color: "rgba(255,0,0,0.3)",
-  //       //   },
-  //       //   ticks: {
-  //       //     fontColor: "rgba(255,0,0,0.3)",
-  //       //   },
-  //       // },
-  //     ]
-  //   },
+  //   // scales: {
+  //   //
+  //   //   xAxes: [{}],
+  //   //   yAxes: [
+  //   //     {
+  //   //       id: 'y-axis-0',
+  //   //       position: 'right'
+  //   //     }
+  //   //     // {
+  //   //     //   id: "y-axis-1",
+  //   //     //   position: "right",
+  //   //     //   gridLines: {
+  //   //     //     color: "rgba(255,0,0,0.3)",
+  //   //     //   },
+  //   //     //   ticks: {
+  //   //     //     fontColor: "rgba(255,0,0,0.3)",
+  //   //     //   },
+  //   //     // },
+  //   //   ]
+  //   // },
   //   annotation: {
   //     annotations: [
   //       {

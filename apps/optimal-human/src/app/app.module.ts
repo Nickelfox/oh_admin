@@ -78,7 +78,7 @@ import { MatRippleModule } from '@angular/material/core';
         data: { breadcrumb: 'Edit Profile' }
       },
       {
-        path: 'users/listing/:index',
+        path: 'users/listing/:size/:index',
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/user/user-listing').then(
@@ -86,15 +86,15 @@ import { MatRippleModule } from '@angular/material/core';
           ),
         data: { breadcrumb: 'Users' }
       },
-      {
-        path: 'users/edit/:id',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('@hidden-innovation/user/user-edit').then(
-            (m) => m.UserEditModule
-          ),
-        data: { breadcrumb: 'User Edit' }
-      },
+      // {
+      //   path: 'users/edit/:id',
+      //   canActivate: [AuthGuard],
+      //   loadChildren: () =>
+      //     import('@hidden-innovation/user/user-edit').then(
+      //       (m) => m.UserEditModule
+      //     ),
+      //   data: { breadcrumb: 'User Edit' }
+      // },
       {
         path: 'users/details/:id',
         canActivate: [AuthGuard],

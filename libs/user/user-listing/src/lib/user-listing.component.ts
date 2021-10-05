@@ -6,7 +6,6 @@ import { StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaginatorData } from './models/user-listing.interface';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -24,9 +23,9 @@ export class UserListingComponent implements OnInit {
   users: MatTableDataSource<UserDetails> = new MatTableDataSource<UserDetails>();
 
   // Paginator options
-  pageIndex = PaginatorData.pageIndex;
-  pageSizeOptions = PaginatorData.pageSizeOptions;
-  pageSize = PaginatorData.pageSize;
+  pageIndex = this.constantDataService.PaginatorData.pageIndex;
+  pageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
+  pageSize = this.constantDataService.PaginatorData.pageSize;
   pageEvent: PageEvent | undefined;
 
   userStatusEnum = UserStatusEnum;
@@ -42,6 +41,7 @@ export class UserListingComponent implements OnInit {
   ) {
     this.route.params.subscribe((params) => {
       this.pageIndex = params['index'];
+      this.pageSize = params['size'];
       this.facade.setListData({
         page: this.pageIndex,
         limit: this.pageSize
@@ -63,8 +63,9 @@ export class UserListingComponent implements OnInit {
   }
 
   onPaginateChange($event: PageEvent): void {
+    console.log($event);
     this.router.navigate([
-      '/users/listing/', $event.pageIndex + 1
+      '/users/listing/', $event.pageSize , $event.pageIndex + 1,
     ], {
       relativeTo: this.route
     });
