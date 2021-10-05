@@ -20,6 +20,7 @@ import { ENVIRONMENT } from '@hidden-innovation/environment';
 import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
+import { PaginatorData } from '@hidden-innovation/user/user-listing';
 
 @NgModule({
   imports: [
@@ -78,32 +79,42 @@ import { MatRippleModule } from '@angular/material/core';
         data: { breadcrumb: 'Edit Profile' }
       },
       {
-        path: 'users/listing/:index',
+        path: 'users',
         canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('@hidden-innovation/user/user-listing').then(
-            (m) => m.UserListingModule
-          ),
-        data: { breadcrumb: 'Users' }
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${PaginatorData.pageSize}/${PaginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/user/user-listing').then(
+                (m) => m.UserListingModule
+              ),
+            data: { breadcrumb: 'Users' }
+          },
+          {
+            path: 'details/:id',
+            loadChildren: () =>
+              import('@hidden-innovation/user/user-details').then(
+                (m) => m.UserDetailsModule
+              ),
+            data: { breadcrumb: 'User Details' }
+          }
+        ]
       },
-      {
-        path: 'users/edit/:id',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('@hidden-innovation/user/user-edit').then(
-            (m) => m.UserEditModule
-          ),
-        data: { breadcrumb: 'User Edit' }
-      },
-      {
-        path: 'users/details/:id',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('@hidden-innovation/user/user-details').then(
-            (m) => m.UserDetailsModule
-          ),
-        data: { breadcrumb: 'User Details' }
-      },
+      // {
+      //   path: 'users/edit/:id',
+      //   canActivate: [AuthGuard],
+      //   loadChildren: () =>
+      //     import('@hidden-innovation/user/user-edit').then(
+      //       (m) => m.UserEditModule
+      //     ),
+      //   data: { breadcrumb: 'User Edit' }
+      // },
+
       { path: '**', redirectTo: '/dashboard' }
     ]),
     StoreModule.forRoot({}),

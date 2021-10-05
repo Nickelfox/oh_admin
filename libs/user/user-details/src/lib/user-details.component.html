@@ -3,12 +3,11 @@
   <div class='container-fluid p-0'>
     <div class='row mb-4 '>
       <div class='col-12 d-flex align-items-center justify-content-end'>
-        <button [disabled]='store.isLoading$ | async' mat-flat-button color='primary' class='ml-3'
+        <button [disabled]='store.isLoading$ | async' mat-flat-button color='warn' class='ml-3'
                 type='button'>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</button>
         <button [disabled]='store.isLoading$ | async'
-                mat-flat-button color='accent' class='ml-3'
-                [routerLink]='["/users/edit", userID]'
-                type='button'>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</button>
+                mat-flat-button color='primary' class='ml-3'
+                type='button'>{{constantDataService.BUTTON_NAME.BLOCK | titlecase}}</button>
       </div>
     </div>
   </div>
@@ -26,7 +25,7 @@
             <ng-template #statusElse>
               <hidden-innovation-common-data-field-status
                 [showDot]='true'
-                [text]='((user.status) ? userStatusEnum.ACTIVE : userStatusEnum.INACTIVE) | titlecase'
+                [text]='(user.status === null || user.status === undefined) ? "--" : (((user.status) ? userStatusEnum.ACTIVE : userStatusEnum.BLOCKED) | titlecase)'
                 [chipType]='user.status ? statusChipType.SUCCESS : statusChipType.ERROR'
               ></hidden-innovation-common-data-field-status>
             </ng-template>

@@ -42,11 +42,20 @@ export class ConstantDataService {
     UPDATE: 'update',
     EDIT: 'edit',
     CREATE: 'create',
-    CANCEL: 'cancel'
+    CANCEL: 'cancel',
+    BLOCK: 'block',
+    UN_BLOCK: 'unblock'
   };
 
   CONST_NUMS = {
     TABLE_TEXT_LIMIT: 20
   };
+
+  PaginatorData = {
+    pageIndex: 1,
+    pageSizeOptions: [10, 25, 50, 100],
+    pageSize: 10
+  };
+
 
 }

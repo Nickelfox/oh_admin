@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { Validators } from '@angular/forms';
-import { FormValidationService } from '@hidden-innovation/shared/form-config';
+import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { EditAdminProfileRequest } from './models/edit-admin-profile.interface';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { tap } from 'rxjs/operators';
@@ -32,13 +32,8 @@ export class EditAdminProfileComponent implements OnInit {
         Validators.required,
         Validators.pattern(this.formValidationService.fieldRegex)
       ]),
-      username: new FormControl<string>('', [
-        RxwebValidators.alphaNumeric({
-          allowWhiteSpace: false
-        }),
-        RxwebValidators.maxLength({
-          value: this.formValidationService.FIELD_VALIDATION_VALUES.USERNAME_LENGTH
-        }),
+      email: new FormControl<string>('', [
+        RxwebValidators.email(),
         RxwebValidators.required(),
         Validators.required
       ])
@@ -48,31 +43,30 @@ export class EditAdminProfileComponent implements OnInit {
   constructor(
     public formValidationService: FormValidationService,
     private authFacade: AuthFacade,
-    public store: EditAdminProfileStore
+    public store: EditAdminProfileStore,
+    public constantDataService: ConstantDataService
   ) {
   }
 
   ngOnInit(): void {
     this.authFacade.authAdmin$.pipe(
       tap((admin) => {
-        if (admin) {
-          this.editProfileForm.setValue({
-            name: admin.name,
-            username: admin.username
-          });
-        }
+        this.editProfileForm.setValue({
+          name: admin?.name ?? '',
+          email: admin?.email ?? ''
+        });
       })
     ).subscribe();
   }
 
   submit(): void {
-    if(this.editProfileForm.invalid) {
+    if (this.editProfileForm.invalid) {
       return;
     }
-    const {name, username} = this.editProfileForm.value;
+    const { name, email } = this.editProfileForm.value;
     this.store.editAdminProfile({
       name,
-      username
+      email
     });
   }
 

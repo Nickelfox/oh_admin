@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { UserListingComponent } from './user-listing.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -36,6 +36,7 @@ export const userListingComponent: Route[] = [{
   providers: [
     UserListingService,
     UserListingFacade,
+    TitleCasePipe
   ],
 })
 export class UserListingModule {}

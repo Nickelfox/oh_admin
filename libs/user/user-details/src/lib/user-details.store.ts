@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { UserDetails } from '@hidden-innovation/shared/models';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
 import { UserDetailsService } from './services/user-details.service';
@@ -24,7 +24,8 @@ export class UserDetailsStore extends ComponentStore<UserDetailsState> {
 
   getUserDetails$ = this.effect<{ id: number }>(params$ =>
     params$.pipe(
-      tap(() => {
+      distinctUntilChanged((x, y) => x.id === y.id),
+      tap((res) => {
         this.patchState({
           isLoading: true
         });

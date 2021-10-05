@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { UserDetailsComponent } from './user-details.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
@@ -31,7 +31,8 @@ export const userDetailComponent: Route[] = [
   declarations: [UserDetailsComponent],
   providers: [
     UserDetailsService,
-    UserDetailsStore
+    UserDetailsStore,
+    TitleCasePipe
   ]
 })
 export class UserDetailsModule {

@@ -26,7 +26,6 @@ export class EditAdminProfileStore extends ComponentStore<EditAdminProfileState>
   editAdminProfile = this.effect<EditAdminProfileState>(params$ =>
     params$.pipe(
       tap(() => {
-        console.log('Called');
         this.patchState({
           isLoading: true
         });
@@ -37,10 +36,10 @@ export class EditAdminProfileStore extends ComponentStore<EditAdminProfileState>
         });
       }),
       withLatestFrom(this.authFacade.authAdmin$),
-      switchMap(([requestObj, adminAuth]) =>
+      switchMap(([{ name, email }, adminAuth]) =>
         this.editAdminProfileService.editAdminProfile({
-          name: requestObj.name,
-          username: requestObj.username
+          name,
+          email
         }, adminAuth?.id).pipe(
           tap(
             (res) => {
@@ -53,7 +52,7 @@ export class EditAdminProfileStore extends ComponentStore<EditAdminProfileState>
                 isLoading: false
               });
               this.authFacade.updateAdminAuth(res.data);
-
+              this.router.navigate(['/']);
             },
             (_) => {
               this.patchState({

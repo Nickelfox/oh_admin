@@ -5,7 +5,7 @@ import { CustomApiResponse, UserDetails } from '@hidden-innovation/shared/models
 
 export interface EditAdminProfileRequest {
   name: string;
-  username: string;
+  email: string;
 }
 
 export interface EditAdminProfileResponse extends CustomApiResponse {
