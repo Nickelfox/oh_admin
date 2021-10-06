@@ -345,7 +345,18 @@ table.mat-table {
 
 .text-color {
   &__primary {
-    color: $dark-primary-text;
+    color: var(--primary-color);
+    &--light {
+      color: var(--primary-lighter-color);
+    }
+  }
+
+  &__error {
+    color: #ec795f;
+  }
+
+  &__success {
+    color: #00C853;
   }
 }
 

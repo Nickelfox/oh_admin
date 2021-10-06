@@ -1,11 +1,14 @@
+mat-card {
+  padding: 10px !important;
+  height: 6rem;
+}
 mat-card-content {
   color: #c2c2c2;
 }
 
 .card-icon {
-  font-size: 56px;
-  width: auto;
-  margin-top: 1px;
+  font-size: 20px !important;
+  width: auto !important;
   //color: #c2c2c2;
 }
 
