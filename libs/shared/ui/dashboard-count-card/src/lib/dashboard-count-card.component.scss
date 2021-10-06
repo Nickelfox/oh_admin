@@ -1,6 +1,18 @@
 mat-card {
   padding: 10px !important;
   height: 6rem;
+  position: relative;
+  user-select: none;
+
+  &:before {
+    content: 'o';
+    position: absolute;
+    font-size: 7rem;
+    right: -1rem;
+    bottom: -1rem;
+    color: #ffffff;
+    z-index: -1;
+  }
 }
 mat-card-content {
   color: #c2c2c2;

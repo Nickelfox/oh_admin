@@ -1,18 +1,18 @@
-<mat-card class='bg-light'>
+<mat-card class='bg-light' matRipple>
   <mat-card-content class='text-center'>
     <div class='d-flex align-items-center'>
       <mat-icon color='primary' class='mr-1 card-icon'>{{icon}}</mat-icon>
       <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>{{cardTitle ? (cardTitle | titlecase | maxStringLimit) : '--'}}</h4>
     </div>
     <ng-template [ngIf]='isLoading' [ngIfElse]='statsLoadingElse'>
-      <div class='d-flex mb-2' style='height: 23px'>
-        <content-loader viewBox='0 0 250 46' class='w-100 h-100' backgroundColor='#eeeeee'>
-          <svg:rect x='0' y='0' rx='3' ry='3' width='250' height='46' />
+      <div class='d-flex overflow-hidden'>
+        <content-loader viewBox='0 0 250 40' class='w-100 h-100' backgroundColor='#eeeeee'>
+          <svg:rect x='0' y='0' rx='3' ry='3' width='250' height='40' />
         </content-loader>
       </div>
-      <div class='d-flex align-items-center'>
-        <content-loader viewBox='0 0 250 26' class='w-100 h-100' backgroundColor='#eeeeee'>
-          <svg:rect x='0' y='0' rx='3' ry='3' width='250' height='26' />
+      <div class='d-flex align-items-center overflow-hidden'>
+        <content-loader viewBox='0 0 250 18' class='w-100 h-100' backgroundColor='#eeeeee'>
+          <svg:rect x='0' y='0' rx='3' ry='3' width='250' height='18' />
         </content-loader>
       </div>
     </ng-template>
