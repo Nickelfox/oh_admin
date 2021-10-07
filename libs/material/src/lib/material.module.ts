@@ -16,7 +16,6 @@ import { MatNativeDateModule, MatOptionModule, MatRippleModule, NativeDateModule
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
-import { ContentLoaderModule } from '@ngneat/content-loader';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
@@ -50,7 +49,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatRippleModule,
 
     // Non-Material Imports
-    ContentLoaderModule
   ],
   exports: [
     FormsModule,
@@ -79,7 +77,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatRippleModule,
 
     // Non-Material Exports
-    ContentLoaderModule
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } }

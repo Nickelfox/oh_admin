@@ -61,6 +61,9 @@
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/shimmer": [
+        "libs/shared/ui/shimmer/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/spinner-text": [
         "libs/shared/ui/spinner-text/src/index.ts"
       ],
