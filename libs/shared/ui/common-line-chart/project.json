@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/common-line-chart",
+  "sourceRoot": "libs/shared/ui/common-line-chart/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/common-line-chart"],
+      "options": {
+        "project": "libs/shared/ui/common-line-chart/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/common-line-chart/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/common-line-chart/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/common-line-chart"],
+      "options": {
+        "jestConfig": "libs/shared/ui/common-line-chart/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/common-line-chart/src/**/*.ts",
+          "libs/shared/ui/common-line-chart/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

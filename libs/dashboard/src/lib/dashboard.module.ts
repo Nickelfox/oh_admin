@@ -6,8 +6,11 @@ import { MaterialModule } from '@hidden-innovation/material';
 import { DashboardStore } from './dashboard.store';
 import { DashboardService } from './services/dashboard.service';
 import { DashboardCountCardModule } from '@hidden-innovation/shared/ui/dashboard-count-card';
-
-
+import { CommonLineChartModule } from '@hidden-innovation/shared/ui/common-line-chart';
+import { CommonFormFieldDateRangeModule } from '@hidden-innovation/shared/ui/common-form-field-date-range';
+import { CommonFormFieldWeekModule } from '@hidden-innovation/shared/ui/common-form-field-week';
+import { CommonFormFieldDateModule } from '@hidden-innovation/shared/ui/common-form-field-date';
+import { CommonFormFieldMonthModule } from '@hidden-innovation/shared/ui/common-form-field-month';
 // import {AuthGuard} from "@hidden-innovation/auth";
 
 @NgModule({
@@ -16,6 +19,11 @@ import { DashboardCountCardModule } from '@hidden-innovation/shared/ui/dashboard
     CommonModule,
     MaterialModule,
     DashboardCountCardModule,
+    CommonLineChartModule,
+    CommonFormFieldDateRangeModule,
+    CommonFormFieldWeekModule,
+    CommonFormFieldDateModule,
+    CommonFormFieldMonthModule,
     RouterModule.forChild([
       {
         path: '',

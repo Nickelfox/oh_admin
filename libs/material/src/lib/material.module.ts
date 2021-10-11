@@ -11,14 +11,36 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import { ChartsModule } from '@rinminase/ng-charts';
-import { MatNativeDateModule, MatOptionModule, MatRippleModule, NativeDateModule } from '@angular/material/core';
+import {
+  DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE,
+  MatNativeDateModule,
+  MatOptionModule,
+  MatRippleModule,
+  NativeDateModule
+} from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
+import {
+  LuxonDateAdapter,
+  MAT_LUXON_DATE_ADAPTER_OPTIONS,
+  MAT_LUXON_DATE_FORMATS
+} from '@angular/material-luxon-adapter';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL/y'
+  },
+  display: {
+    dateInput: 'LL/y',
+    monthYearLabel: 'LL y',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'LLLL y'
+  }
+};
 
 @NgModule({
   imports: [
@@ -39,7 +61,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     NativeDateModule,
     MatNativeDateModule,
-    ChartsModule,
     MatPaginatorModule,
     MatMenuModule,
     MatDividerModule,
@@ -67,7 +88,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     NativeDateModule,
     MatNativeDateModule,
-    ChartsModule,
     MatPaginatorModule,
     MatMenuModule,
     MatDividerModule,
@@ -79,9 +99,12 @@ import { MatSelectModule } from '@angular/material/select';
     // Non-Material Exports
   ],
   providers: [
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } }
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     // {provide: MAT_DATE_FORMATS, useValue: MY_NATIVE_DATE_FORMATS},
-
+    {
+      provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE, MAT_LUXON_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MAT_LUXON_DATE_FORMATS},
   ]
 })
 export class MaterialModule {

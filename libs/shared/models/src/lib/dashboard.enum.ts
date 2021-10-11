@@ -1,5 +1,5 @@
 export enum DashboardRangeFilterEnum {
-  MONTHLY,
-  WEEKLY,
-  DAILY,
+  MONTHLY = 'MONTHLY',
+  WEEKLY = 'WEEKLY',
+  DAILY = 'DAILY',
 }

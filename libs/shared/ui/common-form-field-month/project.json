@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/common-form-field-month",
+  "sourceRoot": "libs/shared/ui/common-form-field-month/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/common-form-field-month"],
+      "options": {
+        "project": "libs/shared/ui/common-form-field-month/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/common-form-field-month/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/common-form-field-month/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/common-form-field-month"],
+      "options": {
+        "jestConfig": "libs/shared/ui/common-form-field-month/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/common-form-field-month/src/**/*.ts",
+          "libs/shared/ui/common-form-field-month/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

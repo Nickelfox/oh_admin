@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'shared-ui-common-form-select-field',
+  displayName: 'shared-ui-common-form-field-month',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   coverageDirectory:
-    '../../../../coverage/libs/shared/ui/common-form-select-field',
+    '../../../../coverage/libs/shared/ui/common-form-field-month',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

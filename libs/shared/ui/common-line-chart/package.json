@@ -1,5 +1,5 @@
 {
-  "name": "@hidden-innovation/shared/ui/common-form-select-field",
+  "name": "@hidden-innovation/shared/ui/common-line-chart",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^12.1.0",
