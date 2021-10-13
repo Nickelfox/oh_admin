@@ -64,11 +64,14 @@
       "@hidden-innovation/shared/ui/common-form-field-week": [
         "libs/shared/ui/common-form-field-week/src/index.ts"
       ],
-      "@hidden-innovation/shared/ui/common-line-chart": [
-        "libs/shared/ui/common-line-chart/src/index.ts"
-      ],
       "@hidden-innovation/shared/ui/dashboard-count-card": [
         "libs/shared/ui/dashboard-count-card/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/dashboard-user-demographic": [
+        "libs/shared/ui/dashboard-user-demographic/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/line-chart": [
+        "libs/shared/ui/line-chart/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"

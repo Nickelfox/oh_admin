@@ -21,8 +21,19 @@ export class DashboardComponent {
 
   chartData: ChartDatasets = [
     { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series A' }
-
   ];
+
+  femaleData: ChartDatasets = [
+    { data: [25, 59, 13, 3], label: 'Female' }
+  ];
+  maleData: ChartDatasets = [
+    { data: [12, 53, 26, 8, 0], label: 'Male' }
+  ];
+
+  ageRatioData: ChartDatasets = [
+    [60, 40],
+  ];
+
   chartLabels: ChartLabel[] = [
     'January',
     'February',
@@ -54,11 +65,12 @@ export class DashboardComponent {
     this.rangeFilterGroup.controls.type.valueChanges.pipe(
       tap((res) => {
         switch (res) {
-          case DashboardRangeFilterEnum.WEEKLY: this.rangeFilterGroup.patchValue({
-            end: '',
-            start: ''
-          });
-          break;
+          case DashboardRangeFilterEnum.WEEKLY:
+            this.rangeFilterGroup.patchValue({
+              end: '',
+              start: ''
+            });
+            break;
         }
         this.rangeFilterGroup.patchValue({
           end: '',

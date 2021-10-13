@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/line-chart",
+  "sourceRoot": "libs/shared/ui/line-chart/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/line-chart"],
+      "options": {
+        "project": "libs/shared/ui/line-chart/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/line-chart/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/line-chart/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/line-chart"],
+      "options": {
+        "jestConfig": "libs/shared/ui/line-chart/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/line-chart/src/**/*.ts",
+          "libs/shared/ui/line-chart/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}
