@@ -35,7 +35,8 @@
           "libs/shared/ui/dashboard-count-card/src/**/*.ts",
           "libs/shared/ui/dashboard-count-card/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

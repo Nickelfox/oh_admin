@@ -35,7 +35,8 @@
           "libs/shared/ui/shimmer/src/**/*.ts",
           "libs/shared/ui/shimmer/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

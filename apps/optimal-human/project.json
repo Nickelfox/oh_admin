@@ -109,7 +109,8 @@
           "apps/optimal-human/src/**/*.ts",
           "apps/optimal-human/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nrwl/jest:jest",

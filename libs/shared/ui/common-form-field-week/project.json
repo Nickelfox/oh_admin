@@ -35,7 +35,8 @@
           "libs/shared/ui/common-form-field-week/src/**/*.ts",
           "libs/shared/ui/common-form-field-week/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

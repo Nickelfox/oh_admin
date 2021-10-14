@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 
 @Component({
   selector: 'hidden-innovation-dashboard-user-demographic',
@@ -8,7 +8,7 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardUserDemographicComponent implements OnInit {
+export class DashboardUserDemographicComponent {
 
   colors = {
     male: '#367AEC',
@@ -17,7 +17,7 @@ export class DashboardUserDemographicComponent implements OnInit {
 
   @Input() maleBarData: ChartDatasets = [];
   @Input() femaleBarData: ChartDatasets = [];
-  @Input() ratioChartData: ChartDatasets = [];
+  @Input() ratioChartData: SingleOrMultiDataSet = [];
 
   femaleAgeBarColor: ChartColor = [
     {
@@ -50,10 +50,8 @@ export class DashboardUserDemographicComponent implements OnInit {
   ];
 
   doughnutPlugins = [this.doughnutChartLabel];
-  chartPlugins = [this.ageLabels];
 
   chartOptions: ChartOptions = {
-    resizeDelay: 300,
     layout: {
       padding: 0
     },
@@ -68,11 +66,4 @@ export class DashboardUserDemographicComponent implements OnInit {
   };
 
   chartLegend = false;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
 }

@@ -35,7 +35,8 @@
           "libs/shared/ui/common-data-field-status/src/**/*.ts",
           "libs/shared/ui/common-data-field-status/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

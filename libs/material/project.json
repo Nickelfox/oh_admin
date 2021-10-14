@@ -35,7 +35,8 @@
           "libs/material/src/**/*.ts",
           "libs/material/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

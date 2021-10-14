@@ -35,7 +35,8 @@
           "libs/shared/ui/line-chart/src/**/*.ts",
           "libs/shared/ui/line-chart/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

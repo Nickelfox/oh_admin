@@ -35,7 +35,8 @@
           "libs/shared/ui/spinner-text/src/**/*.ts",
           "libs/shared/ui/spinner-text/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []
