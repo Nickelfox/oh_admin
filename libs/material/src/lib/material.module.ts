@@ -12,7 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { ChartsModule } from '@rinminase/ng-charts';
-import { MatNativeDateModule, MatOptionModule, NativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule, MatRippleModule, NativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
@@ -47,6 +47,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatTooltipModule,
     MatOptionModule,
     MatSelectModule,
+    MatRippleModule,
 
     // Non-Material Imports
     ContentLoaderModule
@@ -75,6 +76,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatTooltipModule,
     MatOptionModule,
     MatSelectModule,
+    MatRippleModule,
 
     // Non-Material Exports
     ContentLoaderModule
