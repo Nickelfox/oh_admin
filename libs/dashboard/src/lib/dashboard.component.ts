@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartDatasets, ChartLabel } from '@rinminase/ng-charts';
+import { ChartDatasets, ChartLabel, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
 import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
@@ -30,7 +30,7 @@ export class DashboardComponent {
     { data: [12, 53, 26, 8, 0], label: 'Male' }
   ];
 
-  ageRatioData: ChartDatasets = [
+  ageRatioData: SingleOrMultiDataSet = [
     [60, 40],
   ];
 

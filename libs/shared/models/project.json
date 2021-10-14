@@ -35,7 +35,8 @@
           "libs/shared/models/src/**/*.ts",
           "libs/shared/models/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

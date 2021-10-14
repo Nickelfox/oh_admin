@@ -35,7 +35,8 @@
           "libs/user/user-details/src/**/*.ts",
           "libs/user/user-details/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

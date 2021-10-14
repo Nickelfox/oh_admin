@@ -35,7 +35,8 @@
           "libs/shared/ui/common-data-field-skeleton/src/**/*.ts",
           "libs/shared/ui/common-data-field-skeleton/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

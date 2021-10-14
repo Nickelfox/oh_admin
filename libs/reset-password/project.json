@@ -35,7 +35,8 @@
           "libs/reset-password/src/**/*.ts",
           "libs/reset-password/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

@@ -27,7 +27,6 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
 })
 export class LineChartComponent {
   chartOptions: ChartOptions = {
-    resizeDelay: 300,
     layout: {
       padding: 0
     },

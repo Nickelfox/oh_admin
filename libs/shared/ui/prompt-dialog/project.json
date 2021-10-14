@@ -35,7 +35,8 @@
           "libs/shared/ui/prompt-dialog/src/**/*.ts",
           "libs/shared/ui/prompt-dialog/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

@@ -35,7 +35,8 @@
           "libs/edit-admin-profile/src/**/*.ts",
           "libs/edit-admin-profile/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

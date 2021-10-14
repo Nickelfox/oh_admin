@@ -35,7 +35,8 @@
           "libs/user/user-edit/src/**/*.ts",
           "libs/user/user-edit/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []
