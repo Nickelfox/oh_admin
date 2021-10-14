@@ -1,9 +1,9 @@
 <div class='p-4'>
   <div class='container-fluid p-0'>
     <div class='row'>
-      <div class='col-10'>
+      <div class='col-12'>
         <div class='container-fluid p-0'>
-          <div class='row mb-4'>
+          <form class='row mb-4' [formGroup]='rangeFilterGroup' (ngSubmit)='submit()'>
             <div class='col-6 col-lg-3'>
               <hidden-innovation-dashboard-count-card
                 [count]='store.totalUsers$ | async'
@@ -20,22 +20,58 @@
                 icon='file_download'
               ></hidden-innovation-dashboard-count-card>
             </div>
-          </div>
-          <div class='row'>
-            <div class='col-12'>
-<!--              <mat-card>-->
-<!--                <h1 class='card-header'>Statistics</h1>-->
-<!--                <mat-card-content>-->
-<!--                  <canvas baseChart-->
-<!--                          chartType='line'-->
-<!--                          [colors]='chartColors'-->
-<!--                          [datasets]='chartData'-->
-<!--                          [labels]='chartLabels'-->
-<!--                          [legend]='chartLegend'-->
-<!--                          [options]='chartOptions'>-->
-<!--                  </canvas>-->
-<!--                </mat-card-content>-->
-<!--              </mat-card>-->
+            <div class='col-6'>
+              <mat-card class='bg-light h-100' style='padding: 10px'>
+                <div class='container-fluid p-0'>
+                  <div class='row'>
+                    <div class='col-6'>
+                      <hidden-innovation-common-form-field-date
+                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.DAILY'
+                        controlPath='start'
+                        [maxDate]='maxDate'
+                      ></hidden-innovation-common-form-field-date>
+                      <hidden-innovation-common-form-field-month
+                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.MONTHLY'
+                        controlPath='start'
+                        [maxDate]='maxDate'
+                      ></hidden-innovation-common-form-field-month>
+                      <hidden-innovation-common-form-field-week
+                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.WEEKLY'
+                        startControlPath='start'
+                        endControlPath='end'
+                        [maxDate]='maxDate'
+                      ></hidden-innovation-common-form-field-week>
+                    </div>
+                    <div class='col-6'>
+                      <mat-form-field class='w-100'>
+                        <mat-label>Range Filter</mat-label>
+                        <mat-select formControlName='type'>
+                          <mat-option *ngFor='let op of dashboardRangeTypes'
+                                      [value]='op'>{{op | titlecase}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </mat-card>
+            </div>
+          </form>
+          <div class='row mb-4'>
+            <div class='col-6'>
+              <hidden-innovation-common-line-chart
+                [chartData]='chartData'
+                [chartLabels]='chartLabels'
+                label='Registered Users'
+                icon='how_to_reg'
+              ></hidden-innovation-common-line-chart>
+            </div>
+            <div class='col-6'>
+              <hidden-innovation-common-line-chart
+                [chartData]='chartData'
+                [chartLabels]='chartLabels'
+                label='Active Users'
+                icon='sports_martial_arts'
+              ></hidden-innovation-common-line-chart>
             </div>
           </div>
         </div>
@@ -44,25 +80,25 @@
         <div class='container-fluid p-0'>
           <div class='row mb-4'>
             <div class='col-12'>
-<!--              <mat-card>-->
-<!--                <mat-calendar></mat-calendar>-->
-<!--              </mat-card>-->
+              <!--              <mat-card>-->
+              <!--                <mat-calendar></mat-calendar>-->
+              <!--              </mat-card>-->
             </div>
           </div>
           <div class='row'>
             <div class='col-12'>
-<!--              <mat-card>-->
-<!--                <mat-card-content>-->
-<!--                  <canvas baseChart-->
-<!--                          chartType='bar'-->
-<!--                          [datasets]='chartData'-->
-<!--                          [labels]='chartLabels'-->
-<!--                          [legend]='chartLegend'-->
-<!--                          [options]='chartOptions'>-->
-<!--                  </canvas>-->
-<!--                </mat-card-content>-->
+              <!--              <mat-card>-->
+              <!--                <mat-card-content>-->
+              <!--                  <canvas baseChart-->
+              <!--                          chartType='bar'-->
+              <!--                          [datasets]='chartData'-->
+              <!--                          [labels]='chartLabels'-->
+              <!--                          [legend]='chartLegend'-->
+              <!--                          [options]='chartOptions'>-->
+              <!--                  </canvas>-->
+              <!--                </mat-card-content>-->
 
-<!--              </mat-card>-->
+              <!--              </mat-card>-->
             </div>
           </div>
         </div>

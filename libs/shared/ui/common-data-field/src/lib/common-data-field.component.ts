@@ -4,9 +4,11 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
   selector: 'hidden-innovation-common-data-field',
   template: `
     <hidden-innovation-common-data-field-skeleton [label]='label'>
-      <content-loader viewBox='0 0 250 21' *ngIf='isLoading'>
-        <svg:rect x="0" y="0" rx="3" ry="3" width="250" height="21" />
-      </content-loader>
+      <hidden-innovation-shimmer
+        *ngIf='isLoading'
+        [rounded]='true'
+        height='28px'
+      ></hidden-innovation-shimmer>
       <h4 *ngIf='!isLoading' class='mat-body-2 font-weight-light'>{{value || '--'}}</h4>
     </hidden-innovation-common-data-field-skeleton>
   `,

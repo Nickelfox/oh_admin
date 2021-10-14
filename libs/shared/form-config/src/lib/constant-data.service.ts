@@ -56,6 +56,4 @@ export class ConstantDataService {
     pageSizeOptions: [10, 25, 50, 100],
     pageSize: 10
   };
-
-
 }

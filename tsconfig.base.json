@@ -52,14 +52,29 @@
       "@hidden-innovation/shared/ui/common-form-field": [
         "libs/shared/ui/common-form-field/src/index.ts"
       ],
-      "@hidden-innovation/shared/ui/common-form-select-field": [
-        "libs/shared/ui/common-form-select-field/src/index.ts"
+      "@hidden-innovation/shared/ui/common-form-field-date": [
+        "libs/shared/ui/common-form-field-date/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-form-field-date-range": [
+        "libs/shared/ui/common-form-field-date-range/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-form-field-month": [
+        "libs/shared/ui/common-form-field-month/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-form-field-week": [
+        "libs/shared/ui/common-form-field-week/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-line-chart": [
+        "libs/shared/ui/common-line-chart/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/dashboard-count-card": [
         "libs/shared/ui/dashboard-count-card/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/shimmer": [
+        "libs/shared/ui/shimmer/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/spinner-text": [
         "libs/shared/ui/spinner-text/src/index.ts"

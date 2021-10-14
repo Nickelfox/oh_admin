@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/shimmer",
+  "sourceRoot": "libs/shared/ui/shimmer/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/shimmer"],
+      "options": {
+        "project": "libs/shared/ui/shimmer/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/shimmer/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/shimmer/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/shimmer"],
+      "options": {
+        "jestConfig": "libs/shared/ui/shimmer/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/shimmer/src/**/*.ts",
+          "libs/shared/ui/shimmer/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

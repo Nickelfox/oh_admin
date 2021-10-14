@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/common-form-field-date-range",
+  "sourceRoot": "libs/shared/ui/common-form-field-date-range/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/common-form-field-date-range"],
+      "options": {
+        "project": "libs/shared/ui/common-form-field-date-range/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/common-form-field-date-range/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/common-form-field-date-range/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/common-form-field-date-range"],
+      "options": {
+        "jestConfig": "libs/shared/ui/common-form-field-date-range/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/common-form-field-date-range/src/**/*.ts",
+          "libs/shared/ui/common-form-field-date-range/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

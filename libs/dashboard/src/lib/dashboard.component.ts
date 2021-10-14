@@ -1,7 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
+import { ChartDatasets, ChartLabel } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
+import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { DashboardRequest } from './models/dashboard.interface';
+import { Validators } from '@angular/forms';
+import { DateTime } from 'luxon';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { tap } from 'rxjs/operators';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'oh-dashboard',
   templateUrl: './dashboard.component.html',
@@ -10,84 +18,65 @@ import { DashboardStore } from './dashboard.store';
 })
 
 export class DashboardComponent {
-  // chartData: ChartDatasets = [
-  //   { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series A' }
-  //
-  // ];
-  // chartLabels: ChartLabel[] = [
-  //   'January',
-  //   'February',
-  //   'March',
-  //   'April',
-  //   'May',
-  //   'June',
-  //   'July'
-  // ];
-  // chartOptions: ChartOptions & { annotation: any } = {
-  //   responsive: true,
-  //   layout: {
-  //     padding: 0
-  //   },
-  //   // tooltips: {
-  //   //   enabled: false
-  //   // },
-  //   // maintainAspectRatio: false,
-  //   // scales: {
-  //   //
-  //   //   xAxes: [{}],
-  //   //   yAxes: [
-  //   //     {
-  //   //       id: 'y-axis-0',
-  //   //       position: 'right'
-  //   //     }
-  //   //     // {
-  //   //     //   id: "y-axis-1",
-  //   //     //   position: "right",
-  //   //     //   gridLines: {
-  //   //     //     color: "rgba(255,0,0,0.3)",
-  //   //     //   },
-  //   //     //   ticks: {
-  //   //     //     fontColor: "rgba(255,0,0,0.3)",
-  //   //     //   },
-  //   //     // },
-  //   //   ]
-  //   // },
-  //   annotation: {
-  //     annotations: [
-  //       {
-  //         type: 'line',
-  //         mode: 'vertical',
-  //         scaleID: 'x-axis-0',
-  //         value: 'March',
-  //         borderColor: 'orange',
-  //         borderWidth: 2,
-  //         label: {
-  //           enabled: true,
-  //           fontColor: 'orange',
-  //           content: 'LineAnno'
-  //         }
-  //       }
-  //     ]
-  //   }
-  // };
-  //
-  // chartColors: ChartColor = [
-  //
-  //   {
-  //     // blue
-  //     backgroundColor: 'rgba(33, 150, 243, 0.2)',
-  //     borderColor: 'rgba(33, 150, 243, 1)',
-  //     pointBackgroundColor: 'rgba(33, 150, 243, 1)',
-  //     pointBorderColor: '#fff',
-  //     pointHoverBackgroundColor: '#fff',
-  //     pointHoverBorderColor: 'rgba(33, 150, 243, 1)'
-  //   }
-  //
-  // ];
-  // chartLegend = true;
+
+  chartData: ChartDatasets = [
+    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series A' }
+
+  ];
+  chartLabels: ChartLabel[] = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July'
+  ];
+
+  dashboardRangeTypes: string[] = Object.keys(DashboardRangeFilterEnum);
+  dashboardRangeFilterEnum = DashboardRangeFilterEnum;
+
+  rangeFilterGroup: FormGroup<DashboardRequest> = new FormGroup<DashboardRequest>({
+    type: new FormControl<DashboardRangeFilterEnum>(DashboardRangeFilterEnum.WEEKLY),
+    start: new FormControl<string>('', [
+      Validators.required
+    ]),
+    end: new FormControl<string>('', [
+      Validators.required
+    ])
+  });
+
+  maxDate = DateTime.now();
 
   constructor(
     public store: DashboardStore
   ) {
+    this.rangeFilterGroup.controls.type.valueChanges.pipe(
+      tap((res) => {
+        switch (res) {
+          case DashboardRangeFilterEnum.WEEKLY: this.rangeFilterGroup.patchValue({
+            end: '',
+            start: ''
+          });
+          break;
+        }
+        this.rangeFilterGroup.patchValue({
+          end: '',
+          start: ''
+        });
+        this.rangeFilterGroup.markAsUntouched();
+      })
+    ).subscribe();
+  }
+
+  // get calenderView(): 'month' | 'year' | 'multi-year' {
+  //   const type: DashboardRangeFilterEnum = this.rangeFilterGroup.controls.type.value;
+  //   if (type === DashboardRangeFilterEnum.MONTHLY) {
+  //     return 'month';
+  //   }
+  // }
+
+  submit(): void {
+    console.log(this.rangeFilterGroup);
   }
 }
