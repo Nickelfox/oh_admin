@@ -1,0 +1,122 @@
+<div class='container-fluid p-0'>
+  <div class='row mb-4'>
+    <div class='col-6'>
+      <mat-card>
+
+        <div class='container-fluid p-0'>
+          <div class='row'>
+            <div class='col-12'>
+              <div class='d-flex align-items-center mb-3'>
+                <mat-icon color='primary' class='mr-1 card-icon'>female</mat-icon>
+                <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Female Age Group</h4>
+              </div>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-12'>
+              <canvas baseChart
+                      chartType='bar'
+                      [colors]='femaleAgeBarColor'
+                      [datasets]='femaleBarData'
+                      [labels]='ageLabels'
+                      [legend]='chartLegend'
+                      [options]='chartOptions'
+                      [plugins]='chartPlugins'
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div class='col-6'>
+      <mat-card>
+        <div class='container-fluid p-0'>
+          <div class='row'>
+            <div class='col-12'>
+              <div class='d-flex align-items-center mb-3'>
+                <mat-icon color='primary' class='mr-1 card-icon'>male</mat-icon>
+                <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Male Age Group</h4>
+              </div>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-12'>
+              <canvas
+                baseChart
+                chartType='bar'
+                [colors]='maleAgeBarColor'
+                [datasets]='maleBarData'
+                [labels]='ageLabels'
+                [legend]='chartLegend'
+                [options]='chartOptions'
+                [plugins]='chartPlugins'
+              ></canvas>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-12'>
+      <mat-card>
+
+        <div class='container-fluid p-0'>
+          <div class='row'>
+            <div class='col-12'>
+              <div class='d-flex align-items-center mb-3'>
+                <mat-icon color='primary' class='mr-1 card-icon'>people_alt</mat-icon>
+                <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Users By Gender</h4>
+              </div>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-6 d-flex align-items-center justify-content-center'>
+              <canvas
+                class='w-100'
+                baseChart
+                chartType='doughnut'
+                [colors]='doughnutChartColor'
+                [data]='ratioChartData'
+                [labels]='doughnutChartLabel'
+                [plugins]='doughnutPlugins'
+                [legend]='chartLegend'
+              ></canvas>
+            </div>
+            <div class='col-6 d-flex flex-column justify-content-around'>
+              <div class='container-fluid p-0 w-100'>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <button class='w-100' mat-stroked-button [ngStyle]='{"color": colors.female}'>
+                      <div class='d-flex align-items-center pt-1 py-0'>
+                        <mat-icon>female</mat-icon>
+                        <div class='d-flex flex-column align-items-center' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                          <h4 class='mat-h4 m-0'>Female</h4>
+                          <h1 class='mat-h1 m-0' [ngStyle]='{"color": colors.female}'>60 %</h1>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                <div class='row'>
+                  <div class='col-12'>
+                    <button class='w-100' mat-stroked-button [ngStyle]='{"color": colors.male}'>
+                      <div class='d-flex align-items-center pt-1 py-0'>
+                        <mat-icon>male</mat-icon>
+                        <div class='d-flex flex-column align-items-center' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                          <h4 class='mat-h4 m-0'>Male</h4>
+                          <h1 class='mat-h1 m-0' [ngStyle]='{"color": colors.male}'>40 %</h1>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

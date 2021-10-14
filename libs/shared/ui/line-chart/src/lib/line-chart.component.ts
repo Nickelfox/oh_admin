@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
 
 @Component({
-  selector: 'hidden-innovation-common-line-chart',
+  selector: 'hidden-innovation-line-chart',
   template: `
     <mat-card>
       <mat-card-content>
@@ -21,12 +21,11 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
       </mat-card-content>
     </mat-card>
   `,
-  styleUrls: ['./common-line-chart.component.scss'],
+  styleUrls: ['./line-chart.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CommonLineChartComponent {
-
+export class LineChartComponent {
   chartOptions: ChartOptions = {
     resizeDelay: 300,
     layout: {
@@ -50,11 +49,11 @@ export class CommonLineChartComponent {
   chartColors: ChartColor = [
     {
       backgroundColor: 'transparent',
-      borderColor: '#394155',
-      pointBackgroundColor: '#eef9be',
-      pointBorderColor: '#e7f6a7',
+      borderColor: '#CADF6E ',
+      pointBackgroundColor: '#367AEC',
+      pointBorderColor: '#CADF6E',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: '#394155'
+      pointHoverBorderColor: '#367AEC'
     }
   ];
 

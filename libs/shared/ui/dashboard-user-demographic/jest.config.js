@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'shared-ui-common-line-chart',
+  displayName: 'shared-ui-dashboard-user-demographic',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,8 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../../../coverage/libs/shared/ui/common-line-chart',
+  coverageDirectory:
+    '../../../../coverage/libs/shared/ui/dashboard-user-demographic',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

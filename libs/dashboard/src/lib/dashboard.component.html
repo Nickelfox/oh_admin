@@ -58,50 +58,32 @@
           </form>
           <div class='row mb-4'>
             <div class='col-6'>
-              <hidden-innovation-common-line-chart
+              <hidden-innovation-line-chart
                 [chartData]='chartData'
                 [chartLabels]='chartLabels'
                 label='Registered Users'
                 icon='how_to_reg'
-              ></hidden-innovation-common-line-chart>
+              ></hidden-innovation-line-chart>
             </div>
             <div class='col-6'>
-              <hidden-innovation-common-line-chart
+              <hidden-innovation-line-chart
                 [chartData]='chartData'
                 [chartLabels]='chartLabels'
                 label='Active Users'
                 icon='sports_martial_arts'
-              ></hidden-innovation-common-line-chart>
+              ></hidden-innovation-line-chart>
             </div>
           </div>
         </div>
       </div>
-      <div class='col-4'>
-        <div class='container-fluid p-0'>
-          <div class='row mb-4'>
-            <div class='col-12'>
-              <!--              <mat-card>-->
-              <!--                <mat-calendar></mat-calendar>-->
-              <!--              </mat-card>-->
-            </div>
-          </div>
-          <div class='row'>
-            <div class='col-12'>
-              <!--              <mat-card>-->
-              <!--                <mat-card-content>-->
-              <!--                  <canvas baseChart-->
-              <!--                          chartType='bar'-->
-              <!--                          [datasets]='chartData'-->
-              <!--                          [labels]='chartLabels'-->
-              <!--                          [legend]='chartLegend'-->
-              <!--                          [options]='chartOptions'>-->
-              <!--                  </canvas>-->
-              <!--                </mat-card-content>-->
-
-              <!--              </mat-card>-->
-            </div>
-          </div>
-        </div>
+    </div>
+    <div class='row'>
+      <div class='col-6'>
+        <hidden-innovation-dashboard-user-demographic
+          [femaleBarData]='femaleData'
+          [maleBarData]='maleData'
+          [ratioChartData]='ageRatioData'
+        ></hidden-innovation-dashboard-user-demographic>
       </div>
     </div>
   </div>

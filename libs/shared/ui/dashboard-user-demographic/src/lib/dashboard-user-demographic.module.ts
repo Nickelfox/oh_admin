@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CommonLineChartComponent } from './common-line-chart.component';
+import { DashboardUserDemographicComponent } from './dashboard-user-demographic.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { ChartsModule } from '@rinminase/ng-charts';
 
 @NgModule({
   imports: [CommonModule, MaterialModule, ChartsModule],
   exports: [
-    CommonLineChartComponent
+    DashboardUserDemographicComponent
   ],
   declarations: [
-    CommonLineChartComponent
+    DashboardUserDemographicComponent
   ]
 })
-export class CommonLineChartModule {
+export class DashboardUserDemographicModule {
 }
