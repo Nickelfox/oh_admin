@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { UserListingFacade } from './state/user-listing.facade';
 import { MatTableDataSource } from '@angular/material/table';
 import { StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserListingStore } from './user-listing.store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -34,7 +34,7 @@ export class UserListingComponent implements OnInit {
 
   constructor(
     public constantDataService: ConstantDataService,
-    public facade: UserListingFacade,
+    public store: UserListingStore,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
@@ -42,7 +42,7 @@ export class UserListingComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.pageIndex = params['index'];
       this.pageSize = params['size'];
-      this.facade.getList({
+      this.store.getUsers$({
         page: this.pageIndex,
         limit: this.pageSize
       });
@@ -54,8 +54,8 @@ export class UserListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.facade.users$.subscribe(
-      users => {
+    this.store.state$.subscribe(
+      ({ users }) => {
         this.users = new MatTableDataSource<UserDetails>(users);
         this.cdr.markForCheck();
       }
@@ -63,7 +63,6 @@ export class UserListingComponent implements OnInit {
   }
 
   onPaginateChange($event: PageEvent): void {
-    console.log($event);
     this.router.navigate([
       '/users/listing/', $event.pageSize, $event.pageIndex + 1
     ], {

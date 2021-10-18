@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { UserListingComponent } from './user-listing.component';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import * as fromUserListing from './state/user-listing.reducer';
-import { UserListingEffects } from './state/user-listing.effects';
-import { UserListingFacade } from './state/user-listing.facade';
 import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
-import { UserListingService } from './services/user-listing.service';
 import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
+import { UserListingStore } from './user-listing.store';
+import { UserListingService } from './services/user-listing.service';
 
 
 export const userListingComponent: Route[] = [{
   path: '',
   pathMatch: 'full',
-  component: UserListingComponent,
+  component: UserListingComponent
 }];
 
 @NgModule({
@@ -25,18 +21,14 @@ export const userListingComponent: Route[] = [{
     MaterialModule,
     UtilsModule,
     CommonDataFieldStatusModule,
-    RouterModule.forChild(userListingComponent),
-    StoreModule.forFeature(
-      fromUserListing.USER_LISTING_FEATURE_KEY,
-      fromUserListing.reducer
-    ),
-    EffectsModule.forFeature([UserListingEffects]),
+    RouterModule.forChild(userListingComponent)
   ],
   declarations: [UserListingComponent],
   providers: [
+    UserListingStore,
     UserListingService,
-    UserListingFacade,
     TitleCasePipe
-  ],
+  ]
 })
-export class UserListingModule {}
+export class UserListingModule {
+}

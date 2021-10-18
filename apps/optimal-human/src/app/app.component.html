@@ -29,7 +29,7 @@
           <mat-icon>menu</mat-icon>
         </button>
         <ng-container *ngIf="(breadcrumbService.breadcrumbs$ | async) as br">
-          <h2 class="mat-h2 m-0 mx-3 text-dark font-sf-pro">{{(br[0]?.label)}}</h2>
+          <h2 class="mat-h2 m-0 mx-3 text-dark font-sf-pro">{{getPageTitle(br)}}</h2>
         </ng-container>
       </div>
       <span class="spacer"></span>
