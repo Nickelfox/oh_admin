@@ -6,27 +6,30 @@ import { UserListingRequest } from '../models/user.interface';
 import { catchError, distinctUntilChanged, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { UserBlockRequest } from '@hidden-innovation/user/user-details';
+import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 
 export interface UserState {
   users?: UserDetails[];
   total?: number;
   selectedUser?: UserDetails;
   isLoading?: boolean;
+  isActing?: boolean;
 }
 
 const initialState: UserState = {
   users: [],
   total: 0,
-  isLoading: false
+  isLoading: false,
+  isActing: false
 };
 
 @Injectable()
 export class UserStore extends ComponentStore<UserState> {
 
   readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
+  readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly selectedUser$: Observable<UserDetails | undefined> = this.select(state => state.selectedUser);
-
   readonly updateUsers$ = this.updater<UserState>(({ isLoading }, {
     users,
     total
@@ -61,7 +64,6 @@ export class UserStore extends ComponentStore<UserState> {
       )
     )
   );
-
   getUserDetails$ = this.effect<{ id: number }>(params$ =>
     params$.pipe(
       distinctUntilChanged((x, y) => x.id === y.id),
@@ -90,26 +92,36 @@ export class UserStore extends ComponentStore<UserState> {
       )
     )
   );
-
-  blockUser$ = this.effect<UserBlockRequest>(params$ =>
+  private toastRef: CreateHotToastRef<unknown> | undefined;
+  toggleBlockUser$ = this.effect<UserBlockRequest>(params$ =>
     params$.pipe(
       tap(({ data }) => {
         this.patchState({
-          isLoading: true
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading(data.is_blocked ? 'Blocking User...' : 'Unblocking User...', {
+          dismissible: false,
+          role: 'status'
         });
       }),
       exhaustMap((blockObj) =>
         this.userService.blockUser(blockObj).pipe(
           tapResponse(
-            (user) => {
+            (updatedUser) => {
               this.patchState({
-                isLoading: false,
-                selectedUser: user
+                isActing: false,
+                selectedUser: updatedUser
+              });
+              this.toastRef?.updateMessage(updatedUser.is_blocked ? 'Success! User blocked' : 'Success! User unblocked');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success'
               });
             },
             (_) => {
               this.patchState({
-                isLoading: false
+                isActing: false
               });
             }
           )
@@ -119,6 +131,7 @@ export class UserStore extends ComponentStore<UserState> {
   );
 
   constructor(
+    private hotToastService: HotToastService,
     private userService: UserService) {
     super(initialState);
   }

@@ -1,16 +1,16 @@
 <div class='p-4'>
-  <div class='container-fluid p-0'>
-    <div class='row mb-4 '>
-      <div class='col-12 d-flex align-items-center justify-content-end'>
-        <button [disabled]='store.isLoading$ | async' mat-flat-button color='warn' class='ml-3'
-                type='button'>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</button>
-        <button [disabled]='store.isLoading$ | async'
-                mat-flat-button color='primary' class='ml-3'
-                type='button'>{{constantDataService.BUTTON_NAME.BLOCK | titlecase}}</button>
+  <ng-template [ngIf]='user$ | async' let-user>
+    <div class='container-fluid p-0'>
+      <div class='row mb-4 '>
+        <div class='col-12 d-flex align-items-center justify-content-end'>
+          <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
+                  mat-flat-button color='{{user.is_blocked ? "accent" : "warn"}}' class='ml-3'
+                  (click)='toggleBlock(userID, user.is_blocked)' type='button'>
+            {{(user.is_blocked ? constantDataService.BUTTON_NAME.UN_BLOCK : constantDataService.BUTTON_NAME.BLOCK) | titlecase}}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-  <ng-template [ngIf]='user$ | async' let-user>
     <mat-card class='p-0'>
 
       <div class='container-fluid p-4'>

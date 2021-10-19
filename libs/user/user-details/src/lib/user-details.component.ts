@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
+import { StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { UserStore } from '@hidden-innovation/user/data-access';
 
 @Component({
@@ -53,6 +53,15 @@ export class UserDetailsComponent {
       id: this.userID
     });
     this.imageSize = 150;
+  }
+
+  toggleBlock(id: number, currentState: boolean): void {
+    this.store.toggleBlockUser$({
+      id,
+      data: {
+        is_blocked: !currentState
+      }
+    });
   }
 
 }

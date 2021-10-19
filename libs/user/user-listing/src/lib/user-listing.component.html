@@ -33,8 +33,8 @@
               <th mat-header-cell *matHeaderCellDef> {{constantDataService.FIELD_NAME.STATUS | titlecase}} </th>
               <td mat-cell *matCellDef='let element'>
                 <hidden-innovation-common-data-field-status
-                  [text]='((element.status === null || element.status === undefined) ? "--" : (element.status ? userStatusEnum.ACTIVE : userStatusEnum.BLOCKED) | titlecase)'
-                  [chipType]='element.status ? statusChipType.SUCCESS : statusChipType.ERROR'
+                  [text]='(!element.is_blocked ? userStatusEnum.ACTIVE : userStatusEnum.BLOCKED) | titlecase'
+                  [chipType]='!element.is_blocked ? statusChipType.SUCCESS : statusChipType.ERROR'
                 ></hidden-innovation-common-data-field-status>
               </td>
             </ng-container>

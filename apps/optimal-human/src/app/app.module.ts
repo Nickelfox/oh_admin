@@ -124,7 +124,9 @@ import { UserPaginatorData } from '@hidden-innovation/user/user-listing';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HotToastModule.forRoot({
       theme: 'snackbar',
-      autoClose: true
+      position: 'bottom-right',
+      autoClose: true,
+      duration: 3000
     }),
     MatButtonModule,
     MatSidenavModule,
