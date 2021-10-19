@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { MatTableDataSource } from '@angular/material/table';
-import { StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserStore } from '@hidden-innovation/user/data-access';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -37,7 +39,8 @@ export class UserListingComponent implements OnInit {
     public store: UserStore,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private matDialog: MatDialog
   ) {
     this.route.params.subscribe((params) => {
       this.pageIndex = params['index'];
@@ -67,15 +70,6 @@ export class UserListingComponent implements OnInit {
       '/users/listing/', $event.pageSize, $event.pageIndex + 1
     ], {
       relativeTo: this.route
-    });
-  }
-
-  toggleBlock(id: number, currentState: boolean): void {
-    this.store.toggleBlockUser$({
-      id,
-      data: {
-        is_blocked: !currentState
-      }
     });
   }
 

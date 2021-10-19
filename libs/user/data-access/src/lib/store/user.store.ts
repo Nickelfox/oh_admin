@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { UserDetails } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, UserDetails } from '@hidden-innovation/shared/models';
 import { EMPTY, Observable } from 'rxjs';
 import { UserListingRequest } from '../models/user.interface';
 import { catchError, distinctUntilChanged, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { UserBlockRequest } from '@hidden-innovation/user/user-details';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
+import { MatDialog } from '@angular/material/dialog';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 
 export interface UserState {
   users?: UserDetails[];
@@ -65,7 +67,7 @@ export class UserStore extends ComponentStore<UserState> {
   );
   getUserDetails$ = this.effect<{ id: number }>(params$ =>
     params$.pipe(
-      distinctUntilChanged((x, y) => x.id === y.id),
+      // distinctUntilChanged((x, y) => x.id === y.id),
       tap((res) => {
         this.patchState({
           isLoading: true
@@ -92,7 +94,7 @@ export class UserStore extends ComponentStore<UserState> {
     )
   );
   private toastRef: CreateHotToastRef<unknown> | undefined;
-  toggleBlockUser$ = this.effect<UserBlockRequest>(params$ =>
+  private toggleBlockUser$ = this.effect<UserBlockRequest>(params$ =>
     params$.pipe(
       tap(({ data }) => {
         this.patchState({
@@ -136,8 +138,36 @@ export class UserStore extends ComponentStore<UserState> {
   );
 
   constructor(
+    private matDialog: MatDialog,
     private hotToastService: HotToastService,
     private userService: UserService) {
     super(initialState);
+  }
+
+  toggleBlock(id: number, currentState: boolean): void {
+    const updatedState = !currentState;
+    const dialogData: GenericDialogPrompt = {
+      title: updatedState ? 'Blocking User?' : 'Unblocking User?',
+      desc: `Are you sure you want to ${updatedState ? 'block this user' : 'unblock this user'}?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.toggleBlockUser$({
+          id,
+          data: {
+            is_blocked: updatedState
+          }
+        });
+      }
+    });
   }
 }

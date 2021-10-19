@@ -56,7 +56,7 @@
                     <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                   </button>
                   <button mat-menu-item [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
-                          (click)='toggleBlock(row.id, row.is_blocked)' type='button'>
+                          (click)='store.toggleBlock(row.id, row.is_blocked)' type='button'>
                     <mat-icon>{{row.is_blocked ? "check_circle_outline" : "block"}}</mat-icon>
                     <span>{{(row.is_blocked ? constantDataService.BUTTON_NAME.UN_BLOCK : constantDataService.BUTTON_NAME.BLOCK) | titlecase}}</span>
                   </button>

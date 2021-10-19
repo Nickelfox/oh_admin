@@ -55,13 +55,4 @@ export class UserDetailsComponent {
     this.imageSize = 150;
   }
 
-  toggleBlock(id: number, currentState: boolean): void {
-    this.store.toggleBlockUser$({
-      id,
-      data: {
-        is_blocked: !currentState
-      }
-    });
-  }
-
 }
