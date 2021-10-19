@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/shared/models';
+import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { UserStore } from '@hidden-innovation/user/data-access';
 
 @Component({

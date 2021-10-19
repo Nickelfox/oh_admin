@@ -20,7 +20,7 @@ import { ENVIRONMENT } from '@hidden-innovation/environment';
 import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
-import { UserPaginatorData } from '@hidden-innovation/user/user-listing';
+import { UserPaginatorData } from '@hidden-innovation/user/data-access';
 
 @NgModule({
   imports: [

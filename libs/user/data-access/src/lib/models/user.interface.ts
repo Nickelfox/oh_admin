@@ -31,3 +31,20 @@ export interface UserBlockRequest {
   id: number;
 }
 
+export interface UserDetailsResponse extends CustomApiResponse {
+  data: UserDetails;
+}
+
+export interface UserBlockRequest {
+  data: {
+    is_blocked: boolean;
+  };
+  id: number;
+}
+
+export interface UserBlockResponse extends CustomApiResponse {
+  data: {
+    user: UserDetails;
+  };
+}
+

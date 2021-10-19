@@ -3,9 +3,15 @@ import { Observable, throwError } from 'rxjs';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
-import { UserListingRequest, UserListingResponse, UserListingResponseData } from '../models/user.interface';
+import {
+  UserBlockRequest,
+  UserBlockResponse,
+  UserDetailsResponse,
+  UserListingRequest,
+  UserListingResponse,
+  UserListingResponseData
+} from '../models/user.interface';
 import { UserDetails } from '@hidden-innovation/shared/models';
-import { UserBlockRequest, UserBlockResponse, UserDetailsResponse } from '@hidden-innovation/user/user-details';
 
 @Injectable()
 export class UserService {
