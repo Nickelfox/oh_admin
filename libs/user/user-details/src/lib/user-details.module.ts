@@ -3,12 +3,11 @@ import { CommonModule, TitleCasePipe } from '@angular/common';
 import { UserDetailsComponent } from './user-details.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
-import { UserDetailsService } from './services/user-details.service';
-import { UserDetailsStore } from './user-details.store';
 import { SpinnerTextModule } from '@hidden-innovation/shared/ui/spinner-text';
 import { CommonDataFieldModule } from '@hidden-innovation/shared/ui/common-data-field';
 import { CommonDataFieldSkeletonModule } from '@hidden-innovation/shared/ui/common-data-field-skeleton';
 import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
+import { UserDataAccessModule } from '@hidden-innovation/user/data-access';
 
 export const userDetailComponent: Route[] = [
   {
@@ -23,6 +22,7 @@ export const userDetailComponent: Route[] = [
     CommonModule,
     MaterialModule,
     SpinnerTextModule,
+    UserDataAccessModule,
     CommonDataFieldModule,
     CommonDataFieldSkeletonModule,
     CommonDataFieldStatusModule,
@@ -30,8 +30,8 @@ export const userDetailComponent: Route[] = [
   ],
   declarations: [UserDetailsComponent],
   providers: [
-    UserDetailsService,
-    UserDetailsStore,
+    // UserDetailsService,
+    // UserDetailsStore,
     TitleCasePipe
   ]
 })

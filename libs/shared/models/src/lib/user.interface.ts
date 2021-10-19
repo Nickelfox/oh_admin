@@ -17,4 +17,6 @@ export interface UserDetails {
   status: boolean;
   video: boolean;
   weight: number;
+  is_blocked: boolean;
+  blocked_at: string;
 }

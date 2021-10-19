@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { UserDetailsStore } from './user-details.store';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
+import { UserStore } from '@hidden-innovation/user/data-access';
 
 @Component({
   selector: 'hidden-innovation-user-details',
@@ -16,6 +16,7 @@ export class UserDetailsComponent {
   imageSize: number;
 
   public userID: number;
+  user$ = this.store.selectedUser$;
 
   chartOptions = {
     responsive: true
@@ -44,7 +45,7 @@ export class UserDetailsComponent {
 
   constructor(
     private route: ActivatedRoute,
-    public store: UserDetailsStore,
+    public store: UserStore,
     public constantDataService: ConstantDataService
   ) {
     this.userID = this.route.snapshot.params.id as number;

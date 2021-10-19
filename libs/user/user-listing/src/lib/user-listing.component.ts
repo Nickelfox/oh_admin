@@ -5,7 +5,7 @@ import { StatusChipType, UserDetails, UserStatusEnum } from '@hidden-innovation/
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserListingStore } from './user-listing.store';
+import { UserStore } from '@hidden-innovation/user/data-access';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -34,7 +34,7 @@ export class UserListingComponent implements OnInit {
 
   constructor(
     public constantDataService: ConstantDataService,
-    public store: UserListingStore,
+    public store: UserStore,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
