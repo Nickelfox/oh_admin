@@ -13,6 +13,7 @@ import { CommonFormFieldMonthModule } from '@hidden-innovation/shared/ui/common-
 import { DashboardUserDemographicModule } from '@hidden-innovation/shared/ui/dashboard-user-demographic';
 import { LineChartModule } from '@hidden-innovation/shared/ui/line-chart';
 
+import { ChartsModule } from '@rinminase/ng-charts';
 // import {AuthGuard} from "@hidden-innovation/auth";
 
 @NgModule({
@@ -27,6 +28,7 @@ import { LineChartModule } from '@hidden-innovation/shared/ui/line-chart';
     CommonFormFieldWeekModule,
     CommonFormFieldDateModule,
     CommonFormFieldMonthModule,
+    ChartsModule,
     RouterModule.forChild([
       {
         path: '',

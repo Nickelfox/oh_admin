@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartDatasets, ChartLabel, SingleOrMultiDataSet } from '@rinminase/ng-charts';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
 import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
@@ -34,6 +34,8 @@ export class DashboardComponent {
     [60, 40],
   ];
 
+
+
   chartLabels: ChartLabel[] = [
     'January',
     'February',
@@ -43,6 +45,83 @@ export class DashboardComponent {
     'June',
     'July'
   ];
+
+
+  colors = {
+    cardio: '#3297E0',
+    strength: '#4EBC9C',
+    function: '#394155',
+    test1:'#394155',
+    test2:'#3297E0',
+    test3:'#9C5AB6',
+    test4:'#BFC4C8',
+    test5:'#CADF6E',
+    test6:'#54DBDF',
+  };
+
+  doughnutChartColorTest: ChartColor = [
+    {
+      backgroundColor: [
+        this.colors.cardio,
+        this.colors.strength,
+        this.colors.function
+      ]
+    }
+  ];
+  doughnutChartLabelTest: ChartLabel[] = [
+    'Cardio',
+    'Strength',
+    'Funtion'
+  ];
+  assestTest: SingleOrMultiDataSet = [
+    [20,20,20]
+  ]
+  doughnutPlugins = [this.doughnutChartLabelTest];
+
+  // Complete Test
+  doughnutChartColorComplete: ChartColor = [
+    {
+      backgroundColor: [
+        this.colors.test1,
+        this.colors.test2,
+        this.colors.test3,
+        this.colors.test4,
+        this.colors.test5,
+        this.colors.test6,
+      ]
+    }
+  ];
+  doughnutChartLabelComplete: ChartLabel[] = [
+    'Test 1',
+    'Test 2',
+    'Test 3',
+    'Test 4',
+    'Test 5',
+    'Test 6',
+  ];
+  completeTest: SingleOrMultiDataSet = [
+    [10,20,30,50,70,20]
+  ]
+  doughnutPluginsComplete = [this.doughnutChartLabelComplete];
+
+  chartOptions: ChartOptions = {
+    layout: {
+      padding: 0
+    },
+    elements: {
+      point: {
+        radius: 4,
+        hoverRadius: 8
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: true
+  };
+
+  chartLegendTest = false;
+  chartLegendComplete = false;
+
+  
 
   dashboardRangeTypes: string[] = Object.keys(DashboardRangeFilterEnum);
   dashboardRangeFilterEnum = DashboardRangeFilterEnum;
