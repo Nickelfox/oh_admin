@@ -20,7 +20,7 @@ import { ENVIRONMENT } from '@hidden-innovation/environment';
 import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
-import { PaginatorData } from '@hidden-innovation/user/user-listing';
+import { UserPaginatorData } from '@hidden-innovation/user/user-listing';
 
 @NgModule({
   imports: [
@@ -85,7 +85,7 @@ import { PaginatorData } from '@hidden-innovation/user/user-listing';
           {
             path: '',
             pathMatch: 'full',
-            redirectTo: `listing/${PaginatorData.pageSize}/${PaginatorData.pageIndex}`
+            redirectTo: `listing/${UserPaginatorData.pageSize}/${UserPaginatorData.pageIndex}`
           },
           {
             path: 'listing/:size/:index',
@@ -116,7 +116,9 @@ import { PaginatorData } from '@hidden-innovation/user/user-listing';
       // },
 
       { path: '**', redirectTo: '/dashboard' }
-    ]),
+    ], {
+      paramsInheritanceStrategy: 'always'
+    }),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],

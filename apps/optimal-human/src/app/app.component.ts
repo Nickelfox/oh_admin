@@ -7,7 +7,7 @@ import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { UiStore } from '@hidden-innovation/shared/store';
-import { BreadcrumbService } from 'xng-breadcrumb';
+import { BreadcrumbDefinition, BreadcrumbService } from 'xng-breadcrumb';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 
 @Component({
@@ -22,11 +22,10 @@ export class AppComponent implements OnInit, OnDestroy {
   isLoading = false;
   isTablet = false;
   isSliding = false;
-  private readonly destroy$ = new Subject();
-
   routerActiveLinkOptions = {
-    exact: true,
-  }
+    exact: true
+  };
+  private readonly destroy$ = new Subject();
 
   constructor(
     public breakpointObserver: BreakpointObserver,
@@ -51,6 +50,19 @@ export class AppComponent implements OnInit, OnDestroy {
     if (!this.isSliding) {
       this.sideBarOpen = !this.sideBarOpen;
     }
+  }
+
+  getPageTitle(breadCrumbThread: BreadcrumbDefinition[]): string {
+    if (!breadCrumbThread.length) {
+      return '--';
+    }
+    if (breadCrumbThread.length < 2) {
+      return <string>breadCrumbThread[0].label || 'N/A';
+    }
+    if (breadCrumbThread.length > 1) {
+      return <string>breadCrumbThread[1].label || 'N/A';
+    }
+    return 'N/A';
   }
 
   logoutPrompt(): void {
