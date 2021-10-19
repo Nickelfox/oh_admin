@@ -5,8 +5,7 @@ import { MaterialModule } from '@hidden-innovation/material';
 import { Route, RouterModule } from '@angular/router';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
-import { UserListingStore } from './user-listing.store';
-import { UserListingService } from './services/user-listing.service';
+import { UserDataAccessModule } from '@hidden-innovation/user/data-access';
 
 
 export const userListingComponent: Route[] = [{
@@ -20,13 +19,14 @@ export const userListingComponent: Route[] = [{
     CommonModule,
     MaterialModule,
     UtilsModule,
+    UserDataAccessModule,
     CommonDataFieldStatusModule,
     RouterModule.forChild(userListingComponent)
   ],
   declarations: [UserListingComponent],
   providers: [
-    UserListingStore,
-    UserListingService,
+    // UserListingStore,
+    // UserListingService,
     TitleCasePipe
   ]
 })

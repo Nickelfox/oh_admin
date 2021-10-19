@@ -20,7 +20,7 @@ import { ENVIRONMENT } from '@hidden-innovation/environment';
 import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
-import { UserPaginatorData } from '@hidden-innovation/user/user-listing';
+import { UserPaginatorData } from '@hidden-innovation/user/data-access';
 
 @NgModule({
   imports: [
@@ -124,7 +124,9 @@ import { UserPaginatorData } from '@hidden-innovation/user/user-listing';
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     HotToastModule.forRoot({
       theme: 'snackbar',
-      autoClose: true
+      position: 'bottom-right',
+      autoClose: true,
+      duration: 3000
     }),
     MatButtonModule,
     MatSidenavModule,

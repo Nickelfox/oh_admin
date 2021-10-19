@@ -1,22 +1,22 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { BreadcrumbDefinition, BreadcrumbService } from 'xng-breadcrumb';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
 
   sideBarOpen = true;
   isLoading = false;
@@ -25,7 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
   routerActiveLinkOptions = {
     exact: true
   };
-  private readonly destroy$ = new Subject();
 
   constructor(
     public breakpointObserver: BreakpointObserver,
@@ -79,19 +78,11 @@ export class AppComponent implements OnInit, OnDestroy {
       data: dialogData,
       minWidth: '25rem'
     });
-    dialogRef.afterClosed().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe((shouldUpdate: boolean) => {
+    dialogRef.afterClosed().subscribe((shouldUpdate: boolean) => {
       if (shouldUpdate) {
         this.authFacade.logoutLocal();
       }
     });
-  }
-
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   ngOnInit(): void {
