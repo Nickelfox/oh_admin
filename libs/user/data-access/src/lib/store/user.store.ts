@@ -34,7 +34,6 @@ export class UserStore extends ComponentStore<UserState> {
     users,
     total
   }) => ({ isLoading, users, total }));
-
   getUsers$ = this.effect<UserListingRequest>(params$ =>
     params$.pipe(
       tap((_) => {
@@ -109,15 +108,21 @@ export class UserStore extends ComponentStore<UserState> {
         this.userService.blockUser(blockObj).pipe(
           tapResponse(
             (updatedUser) => {
+              const tempUsers: UserDetails[] = this.get().users || [];
               this.patchState({
                 isActing: false,
-                selectedUser: updatedUser
+                selectedUser: updatedUser,
+                users: [...tempUsers.map(user => user.id === blockObj.id ? updatedUser : user)]
               });
               this.toastRef?.updateMessage(updatedUser.is_blocked ? 'Success! User blocked' : 'Success! User unblocked');
               this.toastRef?.updateToast({
                 dismissible: true,
                 type: 'success'
               });
+              // this.hotToastService.success(user.is_blocked ? 'Success! User blocked' : 'Success! User unblocked', {
+              //   dismissible: true,
+              //   role: 'status'
+              // });
             },
             (_) => {
               this.patchState({

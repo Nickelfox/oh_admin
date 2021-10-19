@@ -70,4 +70,13 @@ export class UserListingComponent implements OnInit {
     });
   }
 
+  toggleBlock(id: number, currentState: boolean): void {
+    this.store.toggleBlockUser$({
+      id,
+      data: {
+        is_blocked: !currentState
+      }
+    });
+  }
+
 }
