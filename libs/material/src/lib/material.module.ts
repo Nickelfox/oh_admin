@@ -11,6 +11,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
 import {
   DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE,
   MatNativeDateModule,
@@ -68,7 +71,8 @@ export const MY_FORMATS = {
     MatOptionModule,
     MatSelectModule,
     MatRippleModule,
-
+    MatSlideToggleModule,
+    MatCheckboxModule
     // Non-Material Imports
   ],
   exports: [
@@ -95,7 +99,8 @@ export const MY_FORMATS = {
     MatOptionModule,
     MatSelectModule,
     MatRippleModule,
-
+    MatSlideToggleModule,
+    MatCheckboxModule
     // Non-Material Exports
   ],
   providers: [
