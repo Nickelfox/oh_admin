@@ -21,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
 import { UserPaginatorData } from '@hidden-innovation/user/data-access';
+import { CreateQuestionnaireModule } from '@hidden-innovation/questionnaire/create-questionnaire';
 
 @NgModule({
   imports: [
@@ -104,6 +105,15 @@ import { UserPaginatorData } from '@hidden-innovation/user/data-access';
             data: { breadcrumb: 'User Details' }
           }
         ]
+      },
+      {
+        path: 'questionnaire',
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('@hidden-innovation/questionnaire/create-questionnaire').then(
+            (m) => m.CreateQuestionnaireModule
+          ),
+        data: { breadcrumb: 'Create Questionnaire' }
       },
       // {
       //   path: 'users/edit/:id',

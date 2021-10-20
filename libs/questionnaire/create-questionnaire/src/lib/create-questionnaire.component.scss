@@ -1,0 +1,16 @@
+.sentiment
+{
+  margin-right: 20px;
+}
+
+.icon
+{
+  &--success
+  {
+    color: #00C853;
+  }
+  &--error
+  {
+    color: #E53935;
+  }
+}

@@ -54,7 +54,7 @@ export class UiStore extends ComponentStore<UiState> {
         {
           name: 'Questionnaires',
           navItems: [
-            { label: 'Questionnaires', path: '/questionnaires', icon: 'comment' }
+            { label: 'Questionnaires', path: '/questionnaire', icon: 'comment' }
           ]
         },
         {
