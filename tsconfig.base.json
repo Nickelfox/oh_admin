@@ -31,6 +31,9 @@
         "libs/libs/ui/login/login/src/index.ts"
       ],
       "@hidden-innovation/material": ["libs/material/src/index.ts"],
+      "@hidden-innovation/questionnaire/create-questionnaire": [
+        "libs/questionnaire/create-questionnaire/src/index.ts"
+      ],
       "@hidden-innovation/reset-password": ["libs/reset-password/src/index.ts"],
       "@hidden-innovation/shared/form-config": [
         "libs/shared/form-config/src/index.ts"
