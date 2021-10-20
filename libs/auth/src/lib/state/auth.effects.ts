@@ -79,8 +79,8 @@ export class AuthEffects {
     this.actions$.pipe(
       ofType(AuthActions.logoutLocal),
       tap((res) => {
-        this.toast.close();
-        this.toast.show('Success! You are logged out.', {
+        // this.toast.close();
+        this.toast.show('You are logged out.', {
           autoClose: true,
           role: 'alert',
           dismissible: true

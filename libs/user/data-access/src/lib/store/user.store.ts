@@ -126,6 +126,7 @@ export class UserStore extends ComponentStore<UserState> {
               // });
             },
             (_) => {
+              this.toastRef?.close();
               this.patchState({
                 isActing: false
               });
