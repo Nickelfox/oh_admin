@@ -21,6 +21,7 @@ export class CreateQuestionnaireComponent implements OnInit {
   showField = false;
   showIcon = false;
   showSentiment = true;
+  selected = true;
 
   constructor() { }
 
