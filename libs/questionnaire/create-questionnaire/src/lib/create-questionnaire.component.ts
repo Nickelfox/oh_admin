@@ -18,11 +18,15 @@ export class CreateQuestionnaireComponent implements OnInit {
     questionName : 'How many Times'
   }
 
+  showField = false;
+  showIcon = false;
+  showSentiment = true;
 
   constructor() { }
 
   ngOnInit(): void {
 
   }
+
 
 }
