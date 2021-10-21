@@ -85,10 +85,27 @@
             </div>
           </div>
           <div class='row m-0 mt-4'>
-            <button color='primary' class='text-left' mat-flat-button type='button'>
+            <button color='primary' [matMenuTriggerFor]='add' class='text-left' mat-flat-button type='button'>
               <mat-icon class='mr-2 mb-1'>add</mat-icon>
               Add
             </button>
+            <mat-menu #add='matMenu' class='mt-2'>
+              <button mat-menu-item>
+                <span>Multiple Choice</span>
+              </button>
+              <button mat-menu-item>
+                <span>Image Select</span>
+              </button>
+              <button mat-menu-item>
+                <span>Yes/No</span>
+              </button>
+              <button mat-menu-item>
+                <span>Slider</span>
+              </button>
+              <button mat-menu-item>
+                <span>Vertical select</span>
+              </button>
+            </mat-menu>
           </div>
         </mat-card>
       </div>
@@ -129,17 +146,44 @@
               </mat-form-field>
             </div>
             <div class='col-12'>
-              <mat-checkbox class='example-margin mt-2' color='primary'><h4 class='text-muted m-0  ml-2'>Why are we
+              <mat-checkbox class='example-margin mt-2' color='primary'><h4 class='text-muted m-0  ml-2'> Omit From scoring</h4></mat-checkbox>
+            </div>
+            <div class='col-12'>
+              <div class='row m-0 mt-4 mb-2'>
+              <mat-form-field class='w-100'>
+                <mat-label>Questions</mat-label>
+                <input matInput autocomplete='no' type='text' required>
+              </mat-form-field>
+              </div>
+            </div>
+            <div class='col-12'>
+              <div class='row m-0 mb-2'>
+                <mat-form-field class='w-100'>
+                  <mat-label>Description</mat-label>
+                  <textarea matInput placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class='col-12'>
+              <mat-checkbox class='example-margin mt-2'  color='primary'><h4 class='text-muted m-0  ml-2'>Why are we
                 asking ?</h4></mat-checkbox>
             </div>
             <div class='col-12'>
-              <div class='row mt-5 mb-4'>
+              <div class='row m-0  mt-4 mb-2'>
+                <mat-form-field class='w-100' >
+                  <mat-label>Why are we asking</mat-label>
+                  <textarea matInput placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry. "></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class='col-12'>
+              <div class='row mt-4 mb-2'>
                 <div class='col-3'><p class='text-muted'>POINTS</p></div>
                 <div class='col-9'><p class='text-muted'>ANSWERS</p></div>
               </div>
             </div>
             <div class='col-12'>
-              <div class='row  mb-3'>
+              <div class='row  mb-2'>
                 <div class='col-3'>
                   <mat-form-field class='w-100'>
                     <input matInput autocomplete='no' type='text' required>
@@ -163,3 +207,4 @@
     </div>
   </div>
 </div>
+

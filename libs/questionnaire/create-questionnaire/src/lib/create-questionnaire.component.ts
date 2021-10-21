@@ -9,9 +9,20 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@
 })
 export class CreateQuestionnaireComponent implements OnInit {
 
+  choiceType = {
+    multipleChoice : 'Multiple Choice',
+    imageSelect : 'Image Select'
+  }
+
+  questions = {
+    questionName : 'How many Times'
+  }
+
+
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }
