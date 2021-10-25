@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CreateQuestionnaireComponent } from './create-questionnaire.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
   imports: [
@@ -12,9 +13,10 @@ import { MaterialModule } from '@hidden-innovation/material';
       {
         path: '',
         pathMatch: 'full',
-        component: CreateQuestionnaireComponent,
-      },
+        component: CreateQuestionnaireComponent
+      }
     ]),
+    A11yModule
   ],
   declarations: [
     CreateQuestionnaireComponent
