@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { QuestionTypeEnum } from '../../../../shared/models/src/lib/create-questionnaire.enum';
 
 @Component({
   selector: 'hidden-innovation-create-questionnaire',
@@ -9,14 +10,8 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@
 })
 export class CreateQuestionnaireComponent implements OnInit {
 
-  choiceType = {
-    multipleChoice : 'Multiple Choice',
-    imageSelect : 'Image Select'
-  }
+  choiceType = QuestionTypeEnum;
 
-  questions = {
-    questionName : 'How many Times'
-  }
 
   showField = false;
   showIcon = false;
