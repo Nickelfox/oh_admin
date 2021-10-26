@@ -5,6 +5,9 @@
         <mat-form-field class='w-100'>
           <mat-label>Search</mat-label>
           <input [formControl]='name' matInput>
+          <button mat-icon-button matSuffix *ngIf='name.value' (click)='name.setValue("")'>
+            <mat-icon style='font-size: 14px'>close</mat-icon>
+          </button>
         </mat-form-field>
       </div>
       <div class='col d-flex align-items-center justify-content-end'>
