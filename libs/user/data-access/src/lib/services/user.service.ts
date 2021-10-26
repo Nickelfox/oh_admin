@@ -23,7 +23,8 @@ export class UserService {
     let params = new HttpParams();
     params = params.appendAll({
       'page': reqObj.page.toString(),
-      'limit': reqObj.limit.toString()
+      'limit': reqObj.limit.toString(),
+      'name': reqObj.name ? reqObj.name : ''
     });
     return this.http.get<UserListingResponse>(`${this.env.baseURL}/v1/admin/getUser`, { params }).pipe(
       map(res => res.data),
