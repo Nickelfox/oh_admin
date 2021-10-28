@@ -1,5 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { QuestionTypeEnum } from '../../../../shared/models/src/lib/create-questionnaire.enum';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { QuestionTypeEnum } from '@hidden-innovation/shared/models';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { MultipleChoiceAnswer, Question, Questionnaire } from '@hidden-innovation/questionnaire/data-access';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'hidden-innovation-create-questionnaire',
@@ -8,21 +11,60 @@ import { QuestionTypeEnum } from '../../../../shared/models/src/lib/create-quest
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateQuestionnaireComponent implements OnInit {
+export class CreateQuestionnaireComponent {
+
+  questionnaire: FormGroup<Questionnaire> = new FormGroup<Questionnaire>({
+    name: new FormControl<string>('', [
+      Validators.required
+    ]),
+    questions: new FormArray<Question>([], [
+      Validators.min(2)
+    ])
+  });
 
   choiceType = QuestionTypeEnum;
-
 
   showField = false;
   showIcon = false;
   showSentiment = true;
   selected = true;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(
+    private fb: FormBuilder
+  ) {
 
   }
 
+  get questionsFormArray(): FormArray<Question> {
+    return this.questionnaire.controls.questions as FormArray<Question>;
+  }
+
+  triggerQuestionType(type: QuestionTypeEnum): void {
+    const formGroup: FormGroup<Question> | null = this.buildQuestion(type);
+    if (!formGroup) {
+      throw Error();
+    }
+    this.questionsFormArray.push(formGroup);
+    console.log(this.questionnaire);
+  }
+
+  private buildQuestion(type: QuestionTypeEnum): FormGroup<Question> | null {
+    switch (type) {
+      case QuestionTypeEnum.MULITPLE_CHOICE:
+        return this.fb.group({
+          name: new FormControl<string>('', [
+            Validators.required
+          ]),
+          type: new FormControl<QuestionTypeEnum>(type, [
+            Validators.required
+          ]),
+          description: new FormControl<string>(''),
+          reason: new FormControl<string>(''),
+          answers: new FormArray<MultipleChoiceAnswer>([])
+        });
+      default:
+        return null;
+    }
+  }
 
 }

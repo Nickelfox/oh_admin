@@ -11,6 +11,7 @@
     "optimal-human": "apps/optimal-human",
     "optimal-human-e2e": "apps/optimal-human-e2e",
     "questionnaire-create-questionnaire": "libs/questionnaire/create-questionnaire",
+    "questionnaire-data-access": "libs/questionnaire/data-access",
     "reset-password": "libs/reset-password",
     "shared-form-config": "libs/shared/form-config",
     "shared-models": "libs/shared/models",
