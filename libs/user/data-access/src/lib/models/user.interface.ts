@@ -3,6 +3,7 @@ import { CustomApiResponse, UserDetails } from '@hidden-innovation/shared/models
 export interface UserListingRequest {
   limit: number;
   page: number;
+  name: string;
 }
 
 export interface UserListingResponseData {
