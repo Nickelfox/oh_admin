@@ -42,8 +42,8 @@ export class UserStore extends ComponentStore<UserState> {
           isLoading: true
         });
       }),
-      switchMap(({ page, limit }) =>
-        this.userService.getUsers({ limit, page }).pipe(
+      switchMap(({ page, limit, name }) =>
+        this.userService.getUsers({ limit, page, name }).pipe(
           tapResponse(
             ({ users, total }) => {
               this.patchState({
@@ -126,6 +126,7 @@ export class UserStore extends ComponentStore<UserState> {
               // });
             },
             (_) => {
+              this.toastRef?.close();
               this.patchState({
                 isActing: false
               });
