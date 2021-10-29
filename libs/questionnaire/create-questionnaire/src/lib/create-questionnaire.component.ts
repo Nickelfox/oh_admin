@@ -41,9 +41,15 @@ export class CreateQuestionnaireComponent {
 
   }
 
+  questionFormGroup(questionIndex:number):FormGroup<Question>{
+    return  this.questionsFormArray.controls[questionIndex] as FormGroup<Question>;
+  }
+
+
   get questionsFormArray(): FormArray<Question> {
     return this.questionnaire.controls.questions as FormArray<Question>;
   }
+
 
   triggerQuestionType(type: QuestionTypeEnum): void {
     const formGroup: FormGroup<Question> | null = this.buildQuestion(type);
@@ -51,21 +57,21 @@ export class CreateQuestionnaireComponent {
       throw Error();
     }
     this.questionsFormArray.push(formGroup);
-    console.log(this.questionnaire.controls.name.value);
+    console.log(this.questionnaire.controls.questions.value);
   }
 
   private buildQuestion(type: QuestionTypeEnum): FormGroup<Question> | null {
     switch (type) {
       case QuestionTypeEnum.MULITPLE_CHOICE:
         return this.fb.group({
-          name: new FormControl<string>('', [
+          name: new FormControl<string>('dsjak', [
             Validators.required
           ]),
           type: new FormControl<QuestionTypeEnum>(type, [
             Validators.required
           ]),
-          description: new FormControl<string>(''),
-          reason: new FormControl<string>(''),
+          description: new FormControl<string>('dsjak'),
+          reason: new FormControl<string>('dsjak'),
           answers: new FormArray<MultipleChoiceAnswer>([])
         });
       case QuestionTypeEnum.SLIDER:
