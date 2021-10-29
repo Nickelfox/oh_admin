@@ -1,7 +1,13 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { MultipleChoiceAnswer, Question, Questionnaire } from '@hidden-innovation/questionnaire/data-access';
+import {
+  ImageSelectAnswer,
+  MultipleChoiceAnswer,
+  Question,
+  Questionnaire,
+  SliderAnswer, VerticalSelectAnswer, YesNoChoiceAnswer
+} from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
 
 @Component({
@@ -45,7 +51,7 @@ export class CreateQuestionnaireComponent {
       throw Error();
     }
     this.questionsFormArray.push(formGroup);
-    console.log(this.questionnaire);
+    console.log(this.questionnaire.controls.name.value);
   }
 
   private buildQuestion(type: QuestionTypeEnum): FormGroup<Question> | null {
@@ -62,6 +68,54 @@ export class CreateQuestionnaireComponent {
           reason: new FormControl<string>(''),
           answers: new FormArray<MultipleChoiceAnswer>([])
         });
+      case QuestionTypeEnum.SLIDER:
+        return  this.fb.group({
+          name: new FormControl<string>('', [
+            Validators.required
+          ]),
+          type: new FormControl<QuestionTypeEnum>(type, [
+            Validators.required
+          ]),
+          reason: new FormControl<string>(''),
+          answers: new FormArray<SliderAnswer>([])
+        });
+      case QuestionTypeEnum.IMAGE_SELECT:
+        return  this.fb.group({
+          name: new FormControl<string>('', [
+            Validators.required
+          ]),
+          description: new FormControl<string>(''),
+          type: new FormControl<QuestionTypeEnum>(type, [
+            Validators.required
+          ]),
+          reason: new FormControl<string>(''),
+          answers: new FormArray<ImageSelectAnswer>([])
+        });
+      case QuestionTypeEnum.YES_NO:
+        return  this.fb.group({
+          name: new FormControl<string>('', [
+            Validators.required
+          ]),
+          description: new FormControl<string>(''),
+          type: new FormControl<QuestionTypeEnum>(type, [
+            Validators.required
+          ]),
+          reason: new FormControl<string>(''),
+          answers: new FormArray<YesNoChoiceAnswer>([])
+        });
+      case QuestionTypeEnum.VERTICLE_SELECT:
+        return  this.fb.group({
+          name: new FormControl<string>('', [
+            Validators.required
+          ]),
+          description: new FormControl<string>(''),
+          type: new FormControl<QuestionTypeEnum>(type, [
+            Validators.required
+          ]),
+          reason: new FormControl<string>(''),
+          answers: new FormArray<VerticalSelectAnswer>([])
+        });
+
       default:
         return null;
     }

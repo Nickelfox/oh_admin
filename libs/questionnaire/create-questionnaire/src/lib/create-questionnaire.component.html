@@ -18,7 +18,7 @@
     </div>
   </div>
   <div class='container-fluid p-0'>
-    <form >
+
       <div class='row mb-4 justify-content-between'>
         <div class='col-lg-5'>
           <div class='row m-0'>
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-    </form>
+
   </div>
 
   <div class='container-fluid p-0'>
@@ -91,7 +91,7 @@
               Add
             </button>
             <mat-menu #add='matMenu' class='mt-2'>
-              <button (click)='triggerQuestionType(choiceType.MULITPLE_CHOICE)'  mat-menu-item>
+              <button  mat-menu-item>
                 <span>Multiple Choice</span>
               </button>
               <button mat-menu-item>
@@ -226,7 +226,7 @@
           </div>
           <div class='col-12'>
             <div class='row'>
-              <button mat-button>ADD ANSWER</button>
+              <button mat-button (click)='triggerQuestionType(choiceType.SLIDER)'>ADD ANSWER</button>
             </div>
           </div>
         </mat-card>
