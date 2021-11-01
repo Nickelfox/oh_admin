@@ -30,10 +30,7 @@ export class CreateQuestionnaireComponent {
 
   choiceType = QuestionTypeEnum;
 
-  showField = false;
-  showIcon = false;
   showSentiment = true;
-  selected = true;
 
   constructor(
     private fb: FormBuilder
@@ -50,81 +47,81 @@ export class CreateQuestionnaireComponent {
     return this.questionnaire.controls.questions as FormArray<Question>;
   }
 
+  //
+  // triggerQuestionType(type: QuestionTypeEnum): void {
+  //   const formGroup: FormGroup<Question> | null = this.buildQuestion(type);
+  //   if (!formGroup) {
+  //     throw Error();
+  //   }
+  //   this.questionsFormArray.push(formGroup);
+  //   console.log(this.questionnaire.controls.questions.value);
+  // }
 
-  triggerQuestionType(type: QuestionTypeEnum): void {
-    const formGroup: FormGroup<Question> | null = this.buildQuestion(type);
-    if (!formGroup) {
-      throw Error();
-    }
-    this.questionsFormArray.push(formGroup);
-    console.log(this.questionnaire.controls.questions.value);
-  }
-
-  private buildQuestion(type: QuestionTypeEnum): FormGroup<Question> | null {
-    switch (type) {
-      case QuestionTypeEnum.MULITPLE_CHOICE:
-        return this.fb.group({
-          name: new FormControl<string>('dsjak', [
-            Validators.required
-          ]),
-          type: new FormControl<QuestionTypeEnum>(type, [
-            Validators.required
-          ]),
-          description: new FormControl<string>('dsjak'),
-          reason: new FormControl<string>('dsjak'),
-          answers: new FormArray<MultipleChoiceAnswer>([])
-        });
-      case QuestionTypeEnum.SLIDER:
-        return  this.fb.group({
-          name: new FormControl<string>('', [
-            Validators.required
-          ]),
-          type: new FormControl<QuestionTypeEnum>(type, [
-            Validators.required
-          ]),
-          reason: new FormControl<string>(''),
-          answers: new FormArray<SliderAnswer>([])
-        });
-      case QuestionTypeEnum.IMAGE_SELECT:
-        return  this.fb.group({
-          name: new FormControl<string>('', [
-            Validators.required
-          ]),
-          description: new FormControl<string>(''),
-          type: new FormControl<QuestionTypeEnum>(type, [
-            Validators.required
-          ]),
-          reason: new FormControl<string>(''),
-          answers: new FormArray<ImageSelectAnswer>([])
-        });
-      case QuestionTypeEnum.YES_NO:
-        return  this.fb.group({
-          name: new FormControl<string>('', [
-            Validators.required
-          ]),
-          description: new FormControl<string>(''),
-          type: new FormControl<QuestionTypeEnum>(type, [
-            Validators.required
-          ]),
-          reason: new FormControl<string>(''),
-          answers: new FormArray<YesNoChoiceAnswer>([])
-        });
-      case QuestionTypeEnum.VERTICLE_SELECT:
-        return  this.fb.group({
-          name: new FormControl<string>('', [
-            Validators.required
-          ]),
-          description: new FormControl<string>(''),
-          type: new FormControl<QuestionTypeEnum>(type, [
-            Validators.required
-          ]),
-          reason: new FormControl<string>(''),
-          answers: new FormArray<VerticalSelectAnswer>([])
-        });
-
-      default:
-        return null;
-    }
-  }
+  // private buildQuestion(type: QuestionTypeEnum): FormGroup<Question> | null {
+  //   switch (type) {
+  //     case QuestionTypeEnum.MULITPLE_CHOICE:
+  //       return this.fb.group({
+  //         name: new FormControl<string>('dsjak', [
+  //           Validators.required
+  //         ]),
+  //         type: new FormControl<QuestionTypeEnum>(type, [
+  //           Validators.required
+  //         ]),
+  //         description: new FormControl<string>('dsjak'),
+  //         reason: new FormControl<string>('dsjak'),
+  //         answers: new FormArray<MultipleChoiceAnswer>([])
+  //       });
+  //     case QuestionTypeEnum.SLIDER:
+  //       return  this.fb.group({
+  //         name: new FormControl<string>('', [
+  //           Validators.required
+  //         ]),
+  //         type: new FormControl<QuestionTypeEnum>(type, [
+  //           Validators.required
+  //         ]),
+  //         reason: new FormControl<string>(''),
+  //         answers: new FormArray<SliderAnswer>([])
+  //       });
+  //     case QuestionTypeEnum.IMAGE_SELECT:
+  //       return  this.fb.group({
+  //         name: new FormControl<string>('', [
+  //           Validators.required
+  //         ]),
+  //         description: new FormControl<string>(''),
+  //         type: new FormControl<QuestionTypeEnum>(type, [
+  //           Validators.required
+  //         ]),
+  //         reason: new FormControl<string>(''),
+  //         answers: new FormArray<ImageSelectAnswer>([])
+  //       });
+  //     case QuestionTypeEnum.YES_NO:
+  //       return  this.fb.group({
+  //         name: new FormControl<string>('', [
+  //           Validators.required
+  //         ]),
+  //         description: new FormControl<string>(''),
+  //         type: new FormControl<QuestionTypeEnum>(type, [
+  //           Validators.required
+  //         ]),
+  //         reason: new FormControl<string>(''),
+  //         answers: new FormArray<YesNoChoiceAnswer>([])
+  //       });
+  //     case QuestionTypeEnum.VERTICLE_SELECT:
+  //       return  this.fb.group({
+  //         name: new FormControl<string>('', [
+  //           Validators.required
+  //         ]),
+  //         description: new FormControl<string>(''),
+  //         type: new FormControl<QuestionTypeEnum>(type, [
+  //           Validators.required
+  //         ]),
+  //         reason: new FormControl<string>(''),
+  //         answers: new FormArray<VerticalSelectAnswer>([])
+  //       });
+  //
+  //     default:
+  //       return null;
+  //   }
+  // }
 
 }

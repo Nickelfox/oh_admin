@@ -85,6 +85,9 @@
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/questionnaire-questions": [
+        "libs/shared/ui/questionnaire-questions/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/shimmer": [
         "libs/shared/ui/shimmer/src/index.ts"
       ],
