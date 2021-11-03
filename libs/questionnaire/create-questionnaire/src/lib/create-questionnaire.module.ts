@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
 import { A11yModule } from '@angular/cdk/a11y';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
-import { QuestionnaireQuestionsModule } from '@hidden-innovation/shared/ui/questionnaire-questions';
+import { QuestionnaireQuestionFormModule } from '@hidden-innovation/shared/ui/questionnaire-question-form';
 
 
 @NgModule({
@@ -13,7 +13,7 @@ import { QuestionnaireQuestionsModule } from '@hidden-innovation/shared/ui/quest
     CommonModule,
     MaterialModule,
     CommonFormFieldModule,
-    QuestionnaireQuestionsModule,
+    QuestionnaireQuestionFormModule,
     RouterModule.forChild([
       {
         path: '',
@@ -21,10 +21,11 @@ import { QuestionnaireQuestionsModule } from '@hidden-innovation/shared/ui/quest
         component: CreateQuestionnaireComponent
       }
     ]),
-    A11yModule,
+    A11yModule
   ],
   declarations: [
     CreateQuestionnaireComponent
-  ],
+  ]
 })
-export class CreateQuestionnaireModule {}
+export class CreateQuestionnaireModule {
+}

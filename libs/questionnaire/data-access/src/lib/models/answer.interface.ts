@@ -1,37 +1,15 @@
-interface Answer {
-  points: number; // req
-  answer: any; // req
+export interface AnswerCore {
+  point: number; // req
+  name: string;
 }
 
-export interface SliderAnswer extends Answer {
-  answer: string;
+export interface MultipleChoiceAnswer extends AnswerCore {
+  iconName: string; // req
 }
 
-export interface MultipleChoiceAnswer extends Answer {
-  fa_icon: string; // req
-  answer: string;
-}
-
-export interface VerticalSelectAnswer extends Answer {
-  fa_icon: string; // req
-  answer: number;
-}
-
-// Fixed count of answers YES/NO
-export interface YesNoChoiceAnswer extends Answer {
-  answer: string;
-}
-
-export interface ImageSelectAnswer extends Answer {
-  answer: {
-    media_url: string;
-    media_name: string;
-    title: string;
-    sub_title: string;
-  };
-}
-
-interface VerticleSelectAnswer extends Answer {
-  fa_icon: string; // req
-  answer: number;
+export interface ImageSelectAnswer {
+  point: number;
+  title: string;
+  sub_title: string;
+  imageId: number;
 }

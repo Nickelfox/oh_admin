@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'shared-ui-questionnaire-questions',
+  displayName: 'shared-ui-questionnaire-question-form',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   coverageDirectory:
-    '../../../../coverage/libs/shared/ui/questionnaire-questions',
+    '../../../../coverage/libs/shared/ui/questionnaire-question-form',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

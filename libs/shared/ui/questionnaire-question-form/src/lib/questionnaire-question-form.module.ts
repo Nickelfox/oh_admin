@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QuestionnaireQuestionsComponent } from './questionnaire-questions.component';
+import { QuestionnaireQuestionFormComponent } from './questionnaire-question-form.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
 
@@ -11,10 +11,10 @@ import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-
     CommonFormFieldModule,
   ],
   declarations: [
-    QuestionnaireQuestionsComponent
+    QuestionnaireQuestionFormComponent
   ],
   exports: [
-    QuestionnaireQuestionsComponent
+    QuestionnaireQuestionFormComponent
   ]
 })
-export class QuestionnaireQuestionsModule {}
+export class QuestionnaireQuestionFormModule {}

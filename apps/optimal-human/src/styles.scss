@@ -352,11 +352,11 @@ table.mat-table {
   }
 
   &__error {
-    color: #ec795f;
+    color: #ec795f !important;
   }
 
   &__success {
-    color: #00C853;
+    color: #00C853 !important;
   }
 }
 
