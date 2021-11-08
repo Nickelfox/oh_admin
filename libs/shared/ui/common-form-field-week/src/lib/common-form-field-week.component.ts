@@ -6,7 +6,7 @@ import {
   MAT_DATE_RANGE_SELECTION_STRATEGY,
   MatDateRangeSelectionStrategy
 } from '@angular/material/datepicker';
-import { DateAdapter } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { DateTime } from 'luxon';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
 
@@ -35,6 +35,18 @@ export class SevenDayRangeSelectionStrategy<D> implements MatDateRangeSelectionS
 
 }
 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'dd/LL/yyyy'
+  },
+  display: {
+    dateInput: 'dd/LL/yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
+
 @Component({
   selector: 'hidden-innovation-common-form-field-week',
   template: `
@@ -57,7 +69,8 @@ export class SevenDayRangeSelectionStrategy<D> implements MatDateRangeSelectionS
   providers: [{
     provide: MAT_DATE_RANGE_SELECTION_STRATEGY,
     useClass: SevenDayRangeSelectionStrategy
-  }]
+  }, { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ]
 })
 export class CommonFormFieldWeekComponent implements OnInit {
 

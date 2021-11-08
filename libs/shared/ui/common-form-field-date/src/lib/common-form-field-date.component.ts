@@ -3,6 +3,19 @@ import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { DateTime } from 'luxon';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'dd/LL/yyyy'
+  },
+  display: {
+    dateInput: 'dd/LL/yyyy',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 
 @Component({
   selector: 'hidden-innovation-common-form-field-date',
@@ -19,7 +32,10 @@ import { DateTime } from 'luxon';
   `,
   styleUrls: ['./common-form-field-date.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ]
 })
 export class CommonFormFieldDateComponent implements OnInit {
 

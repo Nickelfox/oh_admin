@@ -32,14 +32,14 @@ import {
 
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'LL/y'
+    dateInput: 'dd/LL/yyyy',
   },
   display: {
-    dateInput: 'LL/y',
-    monthYearLabel: 'LL y',
+    dateInput: 'dd/LL/yyyy',
+    monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'LLLL y'
-  }
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
 };
 
 @NgModule({

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
 
 @Component({
@@ -25,7 +25,13 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LineChartComponent {
+export class LineChartComponent implements OnInit {
+
+  @Input() chartLabels: ChartLabel[] = [];
+  @Input() chartData: ChartDatasets = [];
+  @Input() label?: string;
+  @Input() icon?: string;
+
   chartOptions: ChartOptions = {
     layout: {
       padding: 0
@@ -42,7 +48,15 @@ export class LineChartComponent {
       }
     },
     responsive: true,
-    maintainAspectRatio: true
+    maintainAspectRatio: true,
+    title: {
+      display: true,
+      position: 'left',
+      text: 'No. Of Users',
+      fontColor: '#394155',
+      fontSize: 10,
+      padding: 5
+    },
   };
 
   chartColors: ChartColor = [
@@ -58,9 +72,7 @@ export class LineChartComponent {
 
   chartLegend = false;
 
-  @Input() chartLabels: ChartLabel[] = [];
-  @Input() chartData: ChartDatasets = [];
-  @Input() label?: string;
-  @Input() icon?: string;
+  ngOnInit() {
+  }
 
 }

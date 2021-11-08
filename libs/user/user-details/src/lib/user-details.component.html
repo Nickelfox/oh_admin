@@ -23,9 +23,8 @@
             </ng-template>
             <ng-template #statusElse>
               <hidden-innovation-common-data-field-status
-                [showDot]='true'
-                [text]='(user.status === null || user.status === undefined) ? "--" : (((user.status) ? userStatusEnum.ACTIVE : userStatusEnum.BLOCKED) | titlecase)'
-                [chipType]='user.status ? statusChipType.SUCCESS : statusChipType.ERROR'
+                [text]='(!user.is_blocked ? userStatusEnum.ACTIVE : userStatusEnum.BLOCKED) | titlecase'
+                [chipType]='!user.is_blocked ? statusChipType.SUCCESS : statusChipType.ERROR'
               ></hidden-innovation-common-data-field-status>
             </ng-template>
           </div>
@@ -62,9 +61,6 @@
               [value]='user.name'
             ></hidden-innovation-common-data-field>
           </div>
-        </div>
-
-        <div class='row mb-2'>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
@@ -72,6 +68,9 @@
               [value]='user.username'
             ></hidden-innovation-common-data-field>
           </div>
+        </div>
+
+        <div class='row mb-2'>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
@@ -79,17 +78,6 @@
               [value]='user.email'
             ></hidden-innovation-common-data-field>
           </div>
-
-          <div class='col-4'>
-            <hidden-innovation-common-data-field
-              [isLoading]='store.isLoading$ | async'
-              [label]='constantDataService.FIELD_NAME.LANGUAGE_DETAIL'
-              [value]='user.language'
-            ></hidden-innovation-common-data-field>
-          </div>
-        </div>
-
-        <div class='row'>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
@@ -104,6 +92,11 @@
               [value]='(user.created_at | date: "shortDate")'
             ></hidden-innovation-common-data-field>
           </div>
+        </div>
+
+        <div class='row'>
+
+
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
