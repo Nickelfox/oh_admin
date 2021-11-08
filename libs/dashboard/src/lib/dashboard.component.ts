@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
 import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
@@ -12,7 +12,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 @Component({
   selector: 'oh-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  styleUrls: ['./dashboard.component.scss']
 })
 
 export class DashboardComponent {
@@ -123,12 +123,12 @@ export class DashboardComponent {
 
   rangeFilterGroup: FormGroup<DashboardRequest> = new FormGroup<DashboardRequest>({
     type: new FormControl<DashboardRangeFilterEnum>(DashboardRangeFilterEnum.WEEKLY),
-    start: new FormControl<string>(DateTime.now().toISODate(), [
-      Validators.required
-    ]),
-    end: new FormControl<string>(DateTime.now().minus({
+    start: new FormControl<string>(DateTime.now().minus({
       days: 7
     }).toISODate(), [
+      Validators.required
+    ]),
+    end: new FormControl<string>(DateTime.now().toISODate(), [
       Validators.required
     ])
   });
@@ -136,16 +136,16 @@ export class DashboardComponent {
   maxDate = DateTime.now();
 
   constructor(
-    public store: DashboardStore,
+    public store: DashboardStore
   ) {
     this.rangeFilterGroup.controls.type.valueChanges.subscribe(res => {
       switch (res) {
         case DashboardRangeFilterEnum.WEEKLY:
           this.rangeFilterGroup.patchValue({
-            end: DateTime.now().minus({
+            end: DateTime.now().toISODate(),
+            start: DateTime.now().minus({
               days: 7
-            }).toISODate(),
-            start: DateTime.now().toISODate()
+            }).toISODate()
           });
           break;
         case (DashboardRangeFilterEnum.MONTHLY || DashboardRangeFilterEnum.DAILY):
