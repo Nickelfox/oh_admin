@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
 import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
@@ -7,14 +7,12 @@ import { DashboardRequest } from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { tap } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'oh-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./dashboard.component.scss']
 })
 
 export class DashboardComponent {
@@ -31,9 +29,8 @@ export class DashboardComponent {
   ];
 
   ageRatioData: SingleOrMultiDataSet = [
-    [60, 40],
+    [60, 40]
   ];
-
 
 
   chartLabels: ChartLabel[] = [
@@ -46,17 +43,16 @@ export class DashboardComponent {
     'July'
   ];
 
-
   colors = {
     cardio: '#3297E0',
     strength: '#4EBC9C',
     function: '#394155',
-    test1:'#394155',
-    test2:'#3297E0',
-    test3:'#9C5AB6',
-    test4:'#BFC4C8',
-    test5:'#CADF6E',
-    test6:'#54DBDF',
+    test1: '#394155',
+    test2: '#3297E0',
+    test3: '#9C5AB6',
+    test4: '#BFC4C8',
+    test5: '#CADF6E',
+    test6: '#54DBDF'
   };
 
   doughnutChartColorTest: ChartColor = [
@@ -74,8 +70,8 @@ export class DashboardComponent {
     'Funtion'
   ];
   assestTest: SingleOrMultiDataSet = [
-    [20,20,20]
-  ]
+    [20, 20, 20]
+  ];
   doughnutPlugins = [this.doughnutChartLabelTest];
 
   // Complete Test
@@ -87,7 +83,7 @@ export class DashboardComponent {
         this.colors.test3,
         this.colors.test4,
         this.colors.test5,
-        this.colors.test6,
+        this.colors.test6
       ]
     }
   ];
@@ -97,11 +93,11 @@ export class DashboardComponent {
     'Test 3',
     'Test 4',
     'Test 5',
-    'Test 6',
+    'Test 6'
   ];
   completeTest: SingleOrMultiDataSet = [
-    [10,20,30,50,70,20]
-  ]
+    [10, 20, 30, 50, 70, 20]
+  ];
   doughnutPluginsComplete = [this.doughnutChartLabelComplete];
 
   chartOptions: ChartOptions = {
@@ -121,17 +117,18 @@ export class DashboardComponent {
   chartLegendTest = false;
   chartLegendComplete = false;
 
-  
 
   dashboardRangeTypes: string[] = Object.keys(DashboardRangeFilterEnum);
   dashboardRangeFilterEnum = DashboardRangeFilterEnum;
 
   rangeFilterGroup: FormGroup<DashboardRequest> = new FormGroup<DashboardRequest>({
     type: new FormControl<DashboardRangeFilterEnum>(DashboardRangeFilterEnum.WEEKLY),
-    start: new FormControl<string>('', [
+    start: new FormControl<string>(DateTime.now().minus({
+      days: 7
+    }).toISODate(), [
       Validators.required
     ]),
-    end: new FormControl<string>('', [
+    end: new FormControl<string>(DateTime.now().toISODate(), [
       Validators.required
     ])
   });
@@ -141,23 +138,25 @@ export class DashboardComponent {
   constructor(
     public store: DashboardStore
   ) {
-    this.rangeFilterGroup.controls.type.valueChanges.pipe(
-      tap((res) => {
-        switch (res) {
-          case DashboardRangeFilterEnum.WEEKLY:
-            this.rangeFilterGroup.patchValue({
-              end: '',
-              start: ''
-            });
-            break;
-        }
-        this.rangeFilterGroup.patchValue({
-          end: '',
-          start: ''
-        });
-        this.rangeFilterGroup.markAsUntouched();
-      })
-    ).subscribe();
+    this.rangeFilterGroup.controls.type.valueChanges.subscribe(res => {
+      switch (res) {
+        case DashboardRangeFilterEnum.WEEKLY:
+          this.rangeFilterGroup.patchValue({
+            end: DateTime.now().toISODate(),
+            start: DateTime.now().minus({
+              days: 7
+            }).toISODate()
+          });
+          break;
+        case (DashboardRangeFilterEnum.MONTHLY || DashboardRangeFilterEnum.DAILY):
+          this.rangeFilterGroup.patchValue({
+            end: DateTime.now().toISODate(),
+            start: DateTime.now().toISODate()
+          });
+          break;
+      }
+      this.rangeFilterGroup.markAsUntouched();
+    });
   }
 
   // get calenderView(): 'month' | 'year' | 'multi-year' {

@@ -62,7 +62,15 @@ export class DashboardUserDemographicComponent {
       }
     },
     responsive: true,
-    maintainAspectRatio: true
+    maintainAspectRatio: true,
+    title: {
+      display: true,
+      position: 'left',
+      text: 'No. Of Users',
+      fontColor: '#394155',
+      fontSize: 10,
+      padding: 4,
+    },
   };
 
   chartLegend = false;
