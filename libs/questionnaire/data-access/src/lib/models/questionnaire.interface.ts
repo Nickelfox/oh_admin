@@ -8,8 +8,9 @@ export interface Question {
   questionType: QuestionTypeEnum; // req
   whyAreWeAsking: boolean;
   whyAreWeAskingQuestion: string;
-  answers?: MultipleChoiceAnswer[] | AnswerCore[];
-  imageAnswer?: ImageSelectAnswer[];
+  showIcon: boolean;
+  answer: MultipleChoiceAnswer[] | AnswerCore[];
+  imageAnswer: ImageSelectAnswer[];
 }
 
 // Final Questionnaire Interface

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GenericErrorMessage } from './models/form-error-message.interface';
-import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
 import { FormGroup } from '@ngneat/reactive-forms';
 import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
+import { RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,11 @@ export class FormValidationService {
     required: 'field is required',
     invalid: 'Must not contain any special character or number',
     maxLength: `Must not exceed 150 character limit`
+  };
+
+  pointsValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'Point field is required',
+    invalid: 'Only numeric values allowed',
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {
@@ -48,6 +54,23 @@ export class FormValidationService {
   readonly fieldRegex: RegExp = /^[^\s]+(\s+[^\s]+)*$/;
   // Reference: https://regex101.com/r/0bH043/1
   private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
+
+  nameValidations = [
+    RxwebValidators.required(),
+    RxwebValidators.alpha({
+      allowWhiteSpace: true
+    }),
+    RxwebValidators.maxLength({
+      value: this.FIELD_VALIDATION_VALUES.NAME_LENGTH
+    }),
+    Validators.pattern(this.fieldRegex)
+  ];
+  pointValidations = [
+    RxwebValidators.required(),
+    RxwebValidators.numeric({
+      allowDecimal: true
+    })
+  ];
 
   get validPassword(): ValidatorFn {
     return (control: AbstractControl) => {

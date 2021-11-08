@@ -346,6 +346,7 @@ table.mat-table {
 .text-color {
   &__primary {
     color: var(--primary-color);
+
     &--light {
       color: var(--primary-lighter-color);
     }
@@ -379,8 +380,7 @@ table.mat-table {
   }
 }
 
-.mat-chip
-{
+.mat-chip {
   padding: 6px 12px;
   font-size: 14px;
   line-height: 21px;
@@ -388,20 +388,23 @@ table.mat-table {
   font-weight: normal;
   letter-spacing: 0.25px;
 
-  &--success{
+  &--success {
     background: #ECF9F3 !important;
     color: #00C853 !important;
   }
-  &--error
-  {
+
+  &--error {
     background: #FCE7E7 !important;
     color: #ec795f !important;
   }
 }
 
+.cursor {
+  &__pointer {
+    cursor: pointer;
+  }
+}
 
-
-.mat-select-arrow
-{
+.mat-select-arrow {
   margin-top: 6px !important;
 }

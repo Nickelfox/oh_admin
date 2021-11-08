@@ -21,7 +21,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
 import { UserPaginatorData } from '@hidden-innovation/user/data-access';
-import { CreateQuestionnaireModule } from '@hidden-innovation/questionnaire/create-questionnaire';
 
 @NgModule({
   imports: [

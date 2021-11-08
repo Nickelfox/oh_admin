@@ -10,6 +10,11 @@ export interface MultipleChoiceAnswer extends AnswerCore {
 export interface ImageSelectAnswer {
   point: number;
   title: string;
-  sub_title: string;
+  subTitle: string;
   imageId: number;
+}
+
+export interface MinMaxPoints {
+  min: number | undefined;
+  max: number | undefined;
 }
