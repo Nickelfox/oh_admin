@@ -15,7 +15,7 @@ export interface UserListingResponse extends CustomApiResponse {
   data: UserListingResponseData;
 }
 
-export const UserPaginatorData = {
+export const paginatorData = {
   pageIndex: 1,
   pageSizeOptions: [5, 10, 25, 100],
   pageSize: 10

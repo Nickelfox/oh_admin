@@ -1,0 +1,17 @@
+.icon {
+  &--success {
+    color: #00C853;
+  }
+
+  &--error {
+    color: #E53935;
+  }
+}
+
+.question-card {
+  transition: background-color ease 0.3s;
+
+  &:hover {
+    background-color: #F2F9FE;
+  }
+}

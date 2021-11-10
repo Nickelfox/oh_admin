@@ -12,7 +12,7 @@ export class MaxStringLimitPipe implements PipeTransform {
     this.numberLimit = this.constantDataService.CONST_NUMS.TABLE_TEXT_LIMIT;
   }
 
-  transform(value: string, limit?: number): unknown {
+  transform(value?: string, limit?: number): unknown {
     if (limit) {
       this.numberLimit = limit;
     }

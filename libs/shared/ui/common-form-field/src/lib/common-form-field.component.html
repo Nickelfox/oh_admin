@@ -1,6 +1,6 @@
 <mat-form-field class='w-100'>
   <mat-label>{{label}}</mat-label>
-  <input matInput autocomplete='no' [readonly]='readonly' type='text' [placeholder]='placeholder || label'
+  <input matInput autocomplete='no' [disabled]='disabled' [readonly]='readonly' type='text' [placeholder]='placeholder || label'
          [formControl]='control'>
   <mat-error
     *ngIf='control.errors?.required || control.errors?.notEmpty'>

@@ -1,0 +1,94 @@
+<div class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-3'>
+      </div>
+      <div class='col d-flex align-items-center justify-content-end'>
+        <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
+        <button mat-flat-button color='primary' class='ml-2' [routerLink]='["/questionnaire", "create"]'>
+          <mat-icon class='mr-2'>add</mat-icon>
+          {{"Add Questionnaire"}}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-card class='p-0'>
+    <div class='container-fluid p-0'>
+      <div class='row'>
+        <div class='col-12'>
+          <table mat-table [dataSource]='questionnaires' class='w-100'>
+
+            <ng-container matColumnDef='id'>
+              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
+              <td mat-cell *matCellDef='let element'
+                  [matTooltip]='element.name'> {{element.id || '--'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef='name'>
+              <th mat-header-cell *matHeaderCellDef> {{constantDataService.FIELD_NAME.NAME | titlecase}} </th>
+              <td mat-cell *matCellDef='let element'
+                  [matTooltip]='element.email'> {{(element.name | maxStringLimit) || '--'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef='date_added'>
+              <th mat-header-cell *matHeaderCellDef> {{constantDataService.FIELD_NAME.DATE_ADDED | titlecase}}</th>
+              <td mat-cell *matCellDef='let element'> {{(element.created_at | date: 'shortDate') || '--'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef='questions'>
+              <th mat-header-cell
+                  *matHeaderCellDef> {{constantDataService.FIELD_NAME.QUESTIONS | titlecase}} </th>
+              <td mat-cell *matCellDef='let element'> {{(element.questions?.length || 0)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef='scoring'>
+              <th mat-header-cell
+                  *matHeaderCellDef> {{constantDataService.FIELD_NAME.SCORING | titlecase}} </th>
+              <td mat-cell *matCellDef='let element'>
+                <hidden-innovation-common-data-field-status
+                  *ngIf='!!element.isScoring'
+                  [chipType]='statusChipType.PRIMARY'
+                  [text]='"enabled" | titlecase'
+                ></hidden-innovation-common-data-field-status>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef='status'>
+              <th mat-header-cell
+                  *matHeaderCellDef> {{constantDataService.FIELD_NAME.STATUS | titlecase}} </th>
+              <td mat-cell *matCellDef='let element'>
+                <hidden-innovation-common-data-field-status
+                  *ngIf='!!element.isScoring'
+                  [chipType]='element.isScoring ? statusChipType.SUCCESS : statusChipType.WARNING'
+                  [text]='((element.isScoring ? userStatusEnum.ACTIVE : userStatusEnum.BLOCKED)  | titlecase)'
+                ></hidden-innovation-common-data-field-status>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+            <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react'></tr>
+          </table>
+        </div>
+      </div>
+      <ng-template [ngIf]='store.isLoading$ | async' [ngIfElse]='noDataElse'></ng-template>
+      <ng-template #noDataElse>
+        <div class='row'>
+          <div class='col-12 d-flex align-items-center justify-content-center'>
+            <h4 class='mat-h4 mb-0 my-2 font-calibri' *ngIf='noData | async'>No Results Found</h4>
+          </div>
+        </div>
+      </ng-template>
+      <div class='row mt-2'>
+        <div class='col'></div>
+        <div class='col-6'>
+          <mat-paginator
+            [disabled]='store.isLoading$ | async'
+            [pageSize]='pageSize' [length]='store.count$ | async' [pageIndex]='paginatorIndex'
+            [pageSizeOptions]='pageSizeOptions'
+            (page)='pageEvent = $event; onPaginateChange($event)'></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

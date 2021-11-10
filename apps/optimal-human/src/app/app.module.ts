@@ -20,7 +20,7 @@ import { ENVIRONMENT } from '@hidden-innovation/environment';
 import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
-import { UserPaginatorData } from '@hidden-innovation/user/data-access';
+import { paginatorData } from '@hidden-innovation/user/data-access';
 
 @NgModule({
   imports: [
@@ -85,7 +85,7 @@ import { UserPaginatorData } from '@hidden-innovation/user/data-access';
           {
             path: '',
             pathMatch: 'full',
-            redirectTo: `listing/${UserPaginatorData.pageSize}/${UserPaginatorData.pageIndex}`
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
           {
             path: 'listing/:size/:index',
@@ -104,6 +104,33 @@ import { UserPaginatorData } from '@hidden-innovation/user/data-access';
             data: { breadcrumb: 'User Details' }
           }
         ]
+      },
+      {
+        path: 'questionnaire',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/questionnaire/questionnaire-listing').then(
+                (m) => m.QuestionnaireListingModule
+              ),
+            data: { breadcrumb: 'Questionnaires' }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/questionnaire/create-questionnaire').then(
+                (m) => m.CreateQuestionnaireModule
+              ),
+            data: { breadcrumb: 'Create Questionnaires' }
+          }
+        ],
       },
       // {
       //   path: 'users/edit/:id',

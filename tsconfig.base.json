@@ -31,10 +31,20 @@
         "libs/libs/ui/login/login/src/index.ts"
       ],
       "@hidden-innovation/material": ["libs/material/src/index.ts"],
+      "@hidden-innovation/media": ["libs/media/src/index.ts"],
       "@hidden-innovation/questionnaire/create-questionnaire": [
         "libs/questionnaire/create-questionnaire/src/index.ts"
       ],
+      "@hidden-innovation/questionnaire/data-access": [
+        "libs/questionnaire/data-access/src/index.ts"
+      ],
+      "@hidden-innovation/questionnaire/questionnaire-listing": [
+        "libs/questionnaire/questionnaire-listing/src/index.ts"
+      ],
       "@hidden-innovation/reset-password": ["libs/reset-password/src/index.ts"],
+      "@hidden-innovation/shared-ui/questionnaire-question": [
+        "libs/shared-ui/questionnaire-question/src/index.ts"
+      ],
       "@hidden-innovation/shared/form-config": [
         "libs/shared/form-config/src/index.ts"
       ],
@@ -78,6 +88,9 @@
       ],
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/questionnaire-question-form": [
+        "libs/shared/ui/questionnaire-question-form/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/shimmer": [
         "libs/shared/ui/shimmer/src/index.ts"
