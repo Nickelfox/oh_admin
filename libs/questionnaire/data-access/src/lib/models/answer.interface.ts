@@ -12,6 +12,8 @@ export interface ImageSelectAnswer {
   title: string;
   subTitle: string;
   imageId: number;
+  image: string;
+  imageName: string;
 }
 
 export interface MinMaxPoints {

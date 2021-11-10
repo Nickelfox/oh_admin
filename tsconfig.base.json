@@ -31,11 +31,15 @@
         "libs/libs/ui/login/login/src/index.ts"
       ],
       "@hidden-innovation/material": ["libs/material/src/index.ts"],
+      "@hidden-innovation/media": ["libs/media/src/index.ts"],
       "@hidden-innovation/questionnaire/create-questionnaire": [
         "libs/questionnaire/create-questionnaire/src/index.ts"
       ],
       "@hidden-innovation/questionnaire/data-access": [
         "libs/questionnaire/data-access/src/index.ts"
+      ],
+      "@hidden-innovation/questionnaire/questionnaire-listing": [
+        "libs/questionnaire/questionnaire-listing/src/index.ts"
       ],
       "@hidden-innovation/reset-password": ["libs/reset-password/src/index.ts"],
       "@hidden-innovation/shared-ui/questionnaire-question": [

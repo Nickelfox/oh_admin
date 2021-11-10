@@ -3,7 +3,7 @@ import { GenericErrorMessage } from './models/form-error-message.interface';
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
 import { FormGroup } from '@ngneat/reactive-forms';
 import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
-import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +57,7 @@ export class FormValidationService {
 
   nameValidations = [
     RxwebValidators.required(),
+    RxwebValidators.notEmpty(),
     RxwebValidators.alpha({
       allowWhiteSpace: true
     }),
@@ -68,8 +69,9 @@ export class FormValidationService {
   pointValidations = [
     RxwebValidators.required(),
     RxwebValidators.numeric({
-      allowDecimal: true
-    })
+      allowDecimal: false,
+      acceptValue: NumericValueType.Both
+    }),
   ];
 
   get validPassword(): ValidatorFn {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
 import { QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
@@ -10,9 +10,10 @@ import {
   Questionnaire
 } from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
-import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
 import { flattenDepth, max, min } from 'lodash-es';
+import { QuestionnaireStore } from '../../../data-access/src/lib/store/questionnaire.store';
 
 @Component({
   selector: 'hidden-innovation-create-questionnaire',
@@ -24,7 +25,10 @@ import { flattenDepth, max, min } from 'lodash-es';
 export class CreateQuestionnaireComponent {
 
   questionnaire: FormGroup<Questionnaire> = new FormGroup<Questionnaire>({
-    name: new FormControl<string>('', this.formValidationService.nameValidations),
+    name: new FormControl<string>('', [
+      RxwebValidators.required(),
+      RxwebValidators.notEmpty()
+    ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
       Validators.min(2)
@@ -37,7 +41,9 @@ export class CreateQuestionnaireComponent {
   activeQuestion: number | undefined;
 
   constructor(
-    public formValidationService: FormValidationService
+    private cdr: ChangeDetectorRef,
+    public formValidationService: FormValidationService,
+    public store: QuestionnaireStore
   ) {
   }
 
@@ -51,7 +57,7 @@ export class CreateQuestionnaireComponent {
       min: 0
     };
     if (this.questionsFormArray.length) {
-      const answers: (MultipleChoiceAnswer[] | AnswerCore[])[] = this.questionsFormArray.value.map(v => v.answer);
+      const answers: (MultipleChoiceAnswer[] | AnswerCore[])[] = this.questionsFormArray.value.filter(value => !value.omitScoring)?.map(v => v.answer);
       const imageAnswer: (ImageSelectAnswer[])[] = this.questionsFormArray.value.map(v => v.imageAnswer);
       const nestedPoints = answers.map(value => value.map(value1 => value1.point));
       const nestedImagePoints = imageAnswer.map(value => value.map(value1 => value1.point));
@@ -69,7 +75,10 @@ export class CreateQuestionnaireComponent {
 
   buildQuestion(type: QuestionTypeEnum): FormGroup<Question> {
     return new FormGroup<Question>({
-      name: new FormControl<string>('', this.formValidationService.nameValidations),
+      name: new FormControl<string>('', [
+        RxwebValidators.required(),
+        RxwebValidators.notEmpty()
+      ]),
       questionType: new FormControl<QuestionTypeEnum>(type, [
         Validators.required
       ]),
@@ -77,13 +86,29 @@ export class CreateQuestionnaireComponent {
       whyAreWeAsking: new FormControl<boolean>(false),
       whyAreWeAskingQuestion: new FormControl<string>(''),
       showIcon: new FormControl<boolean>(false),
+      omitScoring: new FormControl<boolean>(false),
       answer: new FormArray<MultipleChoiceAnswer | AnswerCore>([]),
       imageAnswer: new FormArray<ImageSelectAnswer>([])
     });
   }
 
   submit(): void {
-    console.log(this.questionnaire);
+    this.questionnaire.markAllAsDirty();
+    this.questionnaire.markAllAsTouched();
+    if (this.questionnaire.invalid) {
+      return;
+    }
+    const alteredQuestionnaire: Questionnaire = {
+      name: this.questionnaire.value.name,
+      isScoring: this.questionnaire.value.isScoring,
+      questions: this.questionnaire.value.questions?.map(question => {
+        return {
+          ...question,
+          questionType: question.questionType === QuestionTypeEnum.NUMBER_SELECT ? ('VERTICLE_SELECT' as QuestionTypeEnum) : question.questionType
+        };
+      })
+    };
+    this.store.createQuestionnaire$(alteredQuestionnaire);
   }
 
   questionFormGroup(questionIndex: number): FormGroup<Question> {
@@ -100,30 +125,48 @@ export class CreateQuestionnaireComponent {
     let answer: FormGroup<MultipleChoiceAnswer | ImageSelectAnswer | AnswerCore>;
 
     switch (question.type) {
-      case QuestionTypeEnum.MULITPLE_CHOICE:
+      case QuestionTypeEnum.MULTIPLE_CHOICE:
         answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.answer as FormArray<MultipleChoiceAnswer>;
         answer = new FormGroup<MultipleChoiceAnswer>({
-          name: new FormControl<string>('', this.formValidationService.nameValidations),
-          point: new FormControl<number>(undefined, this.formValidationService.pointValidations),
-          iconName: new FormControl<string>('', [
+          name: new FormControl<string>('', [
+            RxwebValidators.required(),
             RxwebValidators.notEmpty()
-          ])
+          ]),
+          point: new FormControl<number>(undefined, this.formValidationService.pointValidations),
+          iconName: new FormControl<string>('')
         });
         break;
       case QuestionTypeEnum.IMAGE_SELECT:
-        answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.answer as unknown as FormArray<ImageSelectAnswer>;
+        answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.imageAnswer as FormArray<ImageSelectAnswer>;
         answer = new FormGroup<ImageSelectAnswer>({
-          point: new FormControl<number>(),
-          title: new FormControl<string>(),
-          subTitle: new FormControl<string>(),
-          imageId: new FormControl<number>()
+          point: new FormControl<number>(undefined, this.formValidationService.pointValidations),
+          title: new FormControl<string>('', [
+            RxwebValidators.required(),
+            RxwebValidators.notEmpty()
+          ]),
+          subTitle: new FormControl<string>('', [
+            RxwebValidators.required(),
+            RxwebValidators.notEmpty()
+          ]),
+          imageId: new FormControl<number>(undefined, [
+            RxwebValidators.required(),
+            RxwebValidators.numeric({
+              allowDecimal: false,
+              acceptValue: NumericValueType.PositiveNumber
+            })
+          ]),
+          image: new FormControl<string>({ value: '', disabled: true }),
+          imageName: new FormControl<string>({ value: '', disabled: true })
         });
         break;
       default:
         answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.answer as FormArray<AnswerCore>;
         answer = new FormGroup<AnswerCore>({
-          name: new FormControl<string>('', this.formValidationService.nameValidations),
-          point: new FormControl<number>()
+          name: new FormControl<string>('', [
+            RxwebValidators.required(),
+            RxwebValidators.notEmpty()
+          ]),
+          point: new FormControl<number>(undefined, this.formValidationService.pointValidations)
         });
     }
     answerFormArray.push(answer);
@@ -133,6 +176,11 @@ export class CreateQuestionnaireComponent {
   triggerQuestionType(type: QuestionTypeEnum): void {
     const fg: FormGroup<Question> = this.buildQuestion(type);
     this.addQuestion(fg);
+  }
+
+  removeQuestion(index: number): void {
+    this.questionsFormArray.removeAt(index);
+    this.activeQuestion = undefined;
   }
 
 }

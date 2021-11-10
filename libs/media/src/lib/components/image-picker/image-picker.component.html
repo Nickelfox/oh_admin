@@ -1,0 +1,7 @@
+<input hidden type="file" accept="image/*" (change)="openImageCropper($event, thumbnailPicker)" #thumbnailPicker>
+
+<button [disabled]='isUploading' mat-stroked-button color='{{isInvalid ? "warn" : "primary"}}' (click)='thumbnailPicker.click()'
+        type='button'>
+  <mat-icon class='mr-2'>upload</mat-icon>
+  Upload
+</button>

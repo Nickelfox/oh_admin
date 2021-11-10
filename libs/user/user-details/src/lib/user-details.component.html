@@ -18,7 +18,6 @@
           <div class='col-2'>
             <ng-template [ngIf]='store.isLoading$ | async' [ngIfElse]='statusElse'>
               <hidden-innovation-common-data-field-status
-                [showDot]='true'
               ></hidden-innovation-common-data-field-status>
             </ng-template>
             <ng-template #statusElse>

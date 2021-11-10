@@ -21,9 +21,16 @@ export class CommonDataFieldStatusComponent {
   @Input() showDot? = false;
 
   get chipClass(): string {
-    return (this.chipType === StatusChipType.SUCCESS) ?
-      'mat-chip--success' : (this.chipType === StatusChipType.ERROR) ?
-        'mat-chip--error' : '';
+    switch (this.chipType) {
+      case (StatusChipType.WARNING || StatusChipType.ERROR):
+        return 'mat-chip--error';
+      case StatusChipType.SUCCESS:
+        return 'mat-chip--success';
+      case StatusChipType.PRIMARY:
+        return 'mat-chip--primary';
+      default:
+        return 'mat-chip--primary';
+    }
   }
 
   get chipText(): string {

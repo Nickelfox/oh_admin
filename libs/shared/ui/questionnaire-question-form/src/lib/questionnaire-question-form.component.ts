@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -20,6 +21,8 @@ import { FormGroupDirective } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
 import { max, min } from 'lodash-es';
+import { tap } from 'rxjs/operators';
+import { ImageCropperResponseData } from '@hidden-innovation/media';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -47,16 +50,13 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
   choiceType = QuestionTypeEnum;
   choiceTypeIte = Object.values(QuestionTypeEnum);
 
-  showField = false;
-  showIcon = false;
-  showSentiment = true;
-
   question?: FormGroup<Question>;
 
   constructor(
     private fb: FormBuilder,
     private questionGroup: FormGroupDirective,
-    public formValidationService: FormValidationService
+    public formValidationService: FormValidationService,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -86,12 +86,43 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
     return this.question?.controls.answer as FormArray<MultipleChoiceAnswer>;
   }
 
+  get imageAnswersArray(): FormArray<ImageSelectAnswer> {
+    return this.question?.controls.imageAnswer as FormArray<ImageSelectAnswer>;
+  }
+
   multipleChoiceAnswerGroup(index: number): FormGroup<MultipleChoiceAnswer | AnswerCore> {
     return this.answersArray.controls[index] as FormGroup<MultipleChoiceAnswer | AnswerCore>;
   }
 
+  imageAnswerGroup(index: number): FormGroup<ImageSelectAnswer> {
+    return this.imageAnswersArray.controls[index] as FormGroup<ImageSelectAnswer>;
+  }
+
   ngOnInit() {
     this.question = this.questionsFormArray.get(this._groupName) as FormGroup;
+    this.question.controls.questionType.valueChanges.pipe(
+      tap(_ => {
+        this.answersArray.clear();
+        this.imageAnswersArray.clear();
+      })
+    ).subscribe();
+  }
+
+  mapImageToForm($event: ImageCropperResponseData, answerIndex: number) {
+    this.imageAnswerGroup(answerIndex).patchValue({
+      imageId: $event.attachmentId,
+      image: $event.croppedImage,
+      imageName: $event.fileName
+    });
+    this.cdr.markForCheck();
+  }
+
+  removeImage(answerIndex: number): void {
+    this.imageAnswerGroup(answerIndex).patchValue({
+      imageName: '',
+      image: '',
+      imageId: undefined
+    });
   }
 
   addNewAnswer(): void {
@@ -100,4 +131,5 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
       type: this.type
     });
   }
+
 }

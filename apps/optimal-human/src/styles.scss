@@ -397,6 +397,11 @@ table.mat-table {
     background: #FCE7E7 !important;
     color: #ec795f !important;
   }
+
+  &--primary {
+    color: var(--primary-darker-color) !important;
+    background-color: var(--accent-color) !important;
+  }
 }
 
 .cursor {

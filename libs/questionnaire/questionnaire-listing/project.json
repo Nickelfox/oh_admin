@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/questionnaire/questionnaire-listing",
+  "sourceRoot": "libs/questionnaire/questionnaire-listing/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/questionnaire/questionnaire-listing"],
+      "options": {
+        "project": "libs/questionnaire/questionnaire-listing/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/questionnaire/questionnaire-listing/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/questionnaire/questionnaire-listing/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/questionnaire/questionnaire-listing"],
+      "options": {
+        "jestConfig": "libs/questionnaire/questionnaire-listing/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/questionnaire/questionnaire-listing/src/**/*.ts",
+          "libs/questionnaire/questionnaire-listing/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

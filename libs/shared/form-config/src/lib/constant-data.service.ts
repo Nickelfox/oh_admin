@@ -12,6 +12,9 @@ export class ConstantDataService {
     COUNTRY: 'country',
     LOCATION: 'location',
     DATE_OF_JOINING: 'date of joining',
+    DATE_ADDED: 'date added',
+    QUESTIONS: 'questions',
+    SCORING: 'scoring',
     ONBOARD_DATE: 'onboard date',
     STATUS: 'status',
     ACTION: 'action',
@@ -56,4 +59,10 @@ export class ConstantDataService {
     pageSizeOptions: [10, 25, 50, 100],
     pageSize: 10
   };
+
+  public FIZE_SIZE_DATA = {
+    limit: 52428800,
+    limitMessage: 'File must be smaller than 50MB.',
+  };
+
 }

@@ -59,6 +59,7 @@
     "chartjs-plugin-datalabels": "^2.0.0",
     "lodash-es": "^4.17.21",
     "luxon": "^2.0.2",
+    "ngx-image-cropper": "^5.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "xng-breadcrumb": "^6.7.0",
