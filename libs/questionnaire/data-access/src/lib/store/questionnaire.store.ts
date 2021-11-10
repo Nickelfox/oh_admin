@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Questionnaire, QuestionnaireListingRequest } from '@hidden-innovation/questionnaire/data-access';
+import { Questionnaire, QuestionnaireListingRequest } from '../models/questionnaire.interface';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { QuestionnaireService } from '../services/questionnaire.service';
 import { Router } from '@angular/router';
+import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 
 export interface QuestionnaireState {
   questionnaires?: Questionnaire[];
@@ -87,7 +88,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 type: 'success',
                 duration: 300
               });
-              this.router.navigate(['/questionnaire', 'listing']);
+              this.router.navigate(['/questionnaire', 'listing', this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex]);
             },
             error => {
               this.patchState({
@@ -105,7 +106,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
   constructor(
     private router: Router,
     private hotToastService: HotToastService,
-    private questionnaireService: QuestionnaireService
+    private questionnaireService: QuestionnaireService,
+    private constantDataService: ConstantDataService
   ) {
     super(initialState);
   }

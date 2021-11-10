@@ -7,13 +7,13 @@ import {
   MinMaxPoints,
   MultipleChoiceAnswer,
   Question,
-  Questionnaire
+  Questionnaire,
+  QuestionnaireStore
 } from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
 import { flattenDepth, max, min } from 'lodash-es';
-import { QuestionnaireStore } from '../../../data-access/src/lib/store/questionnaire.store';
 
 @Component({
   selector: 'hidden-innovation-create-questionnaire',

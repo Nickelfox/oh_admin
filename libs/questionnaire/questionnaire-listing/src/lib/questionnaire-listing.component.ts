@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { QuestionnaireStore } from '../../../data-access/src/lib/store/questionnaire.store';
 import { Observable } from 'rxjs';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { PageEvent } from '@angular/material/paginator';
 import { map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
-import { Questionnaire } from '@hidden-innovation/questionnaire/data-access';
+import { Questionnaire, QuestionnaireStore } from '@hidden-innovation/questionnaire/data-access';
 import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
 

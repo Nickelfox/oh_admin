@@ -54,7 +54,7 @@ export class ConstantDataService {
     TABLE_TEXT_LIMIT: 20
   };
 
-  PaginatorData = {
+  public PaginatorData = {
     pageIndex: 1,
     pageSizeOptions: [10, 25, 50, 100],
     pageSize: 10

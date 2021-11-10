@@ -7,7 +7,7 @@ import {
   QuestionnaireListingRequest,
   QuestionnaireListingResponse,
   QuestionnaireListingResponseData
-} from '@hidden-innovation/questionnaire/data-access';
+} from '../models/questionnaire.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 
