@@ -3,16 +3,19 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import {
   CreateQuestionnaireResponse,
-  Questionnaire,
+  Questionnaire, QuestionnaireExtended,
   QuestionnaireListingRequest,
   QuestionnaireListingResponse,
-  QuestionnaireListingResponseData
+  QuestionnaireListingResponseData,
+  QuestionnaireResponse, UpdateQuestionnaireResponse
 } from '../models/questionnaire.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { CustomApiResponse } from '@hidden-innovation/shared/models';
 
+@UntilDestroy()
 @Injectable()
-
 export class QuestionnaireService {
 
   constructor(private http: HttpClient, @Inject(ENVIRONMENT) private env: Environment) {
@@ -30,9 +33,29 @@ export class QuestionnaireService {
     );
   }
 
-  createQuestionnaire(reqObj: Questionnaire): Observable<Questionnaire> {
+  getQuestionnaire(id: number): Observable<QuestionnaireExtended> {
+    return this.http.get<QuestionnaireResponse>(`${this.env.baseURL}/v1/admin/questionnaire/${id}`).pipe(
+      map(res => res.data.questionnaire),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  createQuestionnaire(reqObj: Questionnaire): Observable<QuestionnaireExtended> {
     return this.http.post<CreateQuestionnaireResponse>(`${this.env.baseURL}/v1/admin/create-questionnaire`, reqObj).pipe(
-      map(res => res.data),
+      map(res => res.data.questionnaire),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  updateQuestionnaire(reqObj: Questionnaire, id: number): Observable<QuestionnaireExtended> {
+    return this.http.post<UpdateQuestionnaireResponse>(`${this.env.baseURL}/v1/admin/update-questionnaire/${id}`, reqObj).pipe(
+      map(res => res.data.questionnaire),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  toggleActiveQuestionnaire(id: number): Observable<CustomApiResponse> {
+    return this.http.patch<CustomApiResponse>(`${this.env.baseURL}/v1/admin/activate-deactivate/${id}`, {}).pipe(
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
