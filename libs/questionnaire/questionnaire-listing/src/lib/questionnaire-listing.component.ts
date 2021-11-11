@@ -7,7 +7,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Questionnaire, QuestionnaireStore } from '@hidden-innovation/questionnaire/data-access';
 import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-questionnaire-listing',
   templateUrl: './questionnaire-listing.component.html',
@@ -17,7 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class QuestionnaireListingComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'date_added', 'questions', 'scoring', 'status'];
+  displayedColumns: string[] = ['id', 'name', 'date_added', 'questions', 'scoring', 'status', 'action'];
   questionnaires: MatTableDataSource<Questionnaire> = new MatTableDataSource<Questionnaire>();
 
   noData: Observable<boolean>;

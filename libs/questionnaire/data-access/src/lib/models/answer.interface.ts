@@ -1,3 +1,5 @@
+import { Media } from '@hidden-innovation/media';
+
 export interface AnswerCore {
   point: number; // req
   name: string;
@@ -12,8 +14,12 @@ export interface ImageSelectAnswer {
   title: string;
   subTitle: string;
   imageId: number;
-  image: string;
+  imageBlob: string;
   imageName: string;
+}
+
+export interface ImageSelectAnswerExtended extends ImageSelectAnswer {
+  image: Media;
 }
 
 export interface MinMaxPoints {

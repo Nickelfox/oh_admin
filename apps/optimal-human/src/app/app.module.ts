@@ -132,7 +132,7 @@ import { OperationTypeEnum } from '@hidden-innovation/shared/models';
             data: { breadcrumb: 'Create Questionnaire', type: OperationTypeEnum.CREATE }
           },
           {
-            path: 'edit',
+            path: 'edit/:id',
             loadChildren: () =>
               import('@hidden-innovation/questionnaire/create-questionnaire').then(
                 (m) => m.CreateQuestionnaireModule

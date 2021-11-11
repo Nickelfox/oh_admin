@@ -111,7 +111,7 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
   mapImageToForm($event: ImageCropperResponseData, answerIndex: number) {
     this.imageAnswerGroup(answerIndex).patchValue({
       imageId: $event.attachmentId,
-      image: $event.croppedImage,
+      imageBlob: $event.croppedImage,
       imageName: $event.fileName
     });
     this.cdr.markForCheck();
@@ -120,7 +120,7 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
   removeImage(answerIndex: number): void {
     this.imageAnswerGroup(answerIndex).patchValue({
       imageName: '',
-      image: '',
+      imageBlob: '',
       imageId: undefined
     });
   }

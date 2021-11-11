@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { UserStore } from '@hidden-innovation/user/data-access';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-user-details',
   templateUrl: './user-details.component.html',

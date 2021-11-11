@@ -18,3 +18,12 @@ export interface ImageCropperResponseData extends MediaUpload {
   croppedImage: any;
   fileName: string;
 }
+
+export interface Media {
+  id: number;
+  type: string;
+  fileName: string;
+  path: string;
+  deletedAt: string;
+  url: string;
+}
