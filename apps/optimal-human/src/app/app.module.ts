@@ -21,6 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
 import { paginatorData } from '@hidden-innovation/user/data-access';
+import { OperationTypeEnum } from '@hidden-innovation/shared/models';
 
 @NgModule({
   imports: [
@@ -128,7 +129,15 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
               import('@hidden-innovation/questionnaire/create-questionnaire').then(
                 (m) => m.CreateQuestionnaireModule
               ),
-            data: { breadcrumb: 'Create Questionnaires' }
+            data: { breadcrumb: 'Create Questionnaire', type: OperationTypeEnum.CREATE }
+          },
+          {
+            path: 'edit',
+            loadChildren: () =>
+              import('@hidden-innovation/questionnaire/create-questionnaire').then(
+                (m) => m.CreateQuestionnaireModule
+              ),
+            data: { breadcrumb: 'Edit Questionnaire', type: OperationTypeEnum.EDIT }
           }
         ],
       },
