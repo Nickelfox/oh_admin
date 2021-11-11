@@ -91,7 +91,7 @@ export class ImagePickerComponent {
     this.cdr.markForCheck();
     this.authFacade.token$.pipe(
       filter((value) => value !== undefined),
-      switchMap((token) => this.mediaUploadService.uploadMedia(media, token))
+      switchMap((token) => this.mediaUploadService.uploadMedia(media, fileName, token))
     ).subscribe(
       (res) => {
         this.toastRef?.updateMessage('Success! Media Uploaded');

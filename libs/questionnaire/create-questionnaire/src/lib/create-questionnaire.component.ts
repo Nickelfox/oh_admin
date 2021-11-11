@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation } from '@angular/core';
-import { QuestionTypeEnum } from '@hidden-innovation/shared/models';
+import { OperationTypeEnum, QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   AnswerCore,
@@ -14,6 +14,8 @@ import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
 import { flattenDepth, max, min } from 'lodash-es';
+import { ActivatedRoute } from '@angular/router';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hidden-innovation-create-questionnaire',
@@ -40,11 +42,19 @@ export class CreateQuestionnaireComponent {
 
   activeQuestion: number | undefined;
 
+  opType?: OperationTypeEnum;
+
   constructor(
     private cdr: ChangeDetectorRef,
     public formValidationService: FormValidationService,
-    public store: QuestionnaireStore
+    public store: QuestionnaireStore,
+    private route: ActivatedRoute
   ) {
+    this.route.data.pipe(
+      tap((data) => {
+        this.opType = data.type as OperationTypeEnum;
+      })
+    ).subscribe();
   }
 
   get questionsFormArray(): FormArray<Question> {
