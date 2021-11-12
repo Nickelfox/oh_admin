@@ -1,0 +1,66 @@
+<div class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-3'>
+      </div>
+      <div class='col d-flex align-items-center justify-content-end'>
+        <mat-spinner [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
+      </div>
+    </div>
+  </div>
+
+  <mat-card class='p-0'>
+    <div class='container-fluid p-0'>
+      <div class='row'>
+        <div class='col-12'>
+          <table mat-table [dataSource]='tags' class='w-100'>
+            <ng-container matColumnDef='name'>
+              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.NAME | titlecase}}</th>
+              <td mat-cell *matCellDef='let element'
+                  [matTooltip]='element.name'> {{(element.name | maxStringLimit) || '--'}}  </td>
+            </ng-container>
+
+            <ng-container matColumnDef='type'>
+              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.TYPE | titlecase}}</th>
+              <td mat-cell *matCellDef='let element'> {{element.tagType || '--'}}  </td>
+            </ng-container>
+
+            <ng-container matColumnDef='category'>
+              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.CATEGORY | titlecase}}</th>
+              <td mat-cell *matCellDef='let element'> {{element.categoryName || '--'}}  </td>
+            </ng-container>
+
+            <ng-container matColumnDef='date_modified'>
+              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.DATE_MODIFIED | titlecase}}</th>
+              <td mat-cell *matCellDef='let element'> {{(element.updated_at | date: 'shortDate') || '--'}}  </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+            <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react'></tr>
+          </table>
+        </div>
+      </div>
+      <ng-template [ngIf]='store.isLoading$ | async' [ngIfElse]='noDataElse'></ng-template>
+      <ng-template #noDataElse>
+        <div class='row'>
+          <div class='col-12 d-flex align-items-center justify-content-center'>
+            <h4 class='mat-h4 mb-0 my-2 font-calibri' *ngIf='noData | async'>No Results Found</h4>
+          </div>
+        </div>
+      </ng-template>
+
+      <div class='row mt-2'>
+        <div class='col'></div>
+        <div class='col-6'>
+          <mat-paginator
+            [disabled]='store.isLoading$ | async'
+            [pageSize]='pageSize' [length]='store.count$ | async' [pageIndex]='paginatorIndex'
+            [pageSizeOptions]='pageSizeOptions'
+            (page)='pageEvent = $event; onPaginateChange($event)'></mat-paginator>
+        </div>
+      </div>
+
+    </div>
+  </mat-card>
+
+</div>

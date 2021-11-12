@@ -35,6 +35,8 @@
     "shared-ui-shimmer": "libs/shared/ui/shimmer",
     "shared-ui-spinner-text": "libs/shared/ui/spinner-text",
     "shared-utils": "libs/shared/utils",
+    "tags-data-access": "libs/tags/data-access",
+    "tags-tags": "libs/tags/tags",
     "user-data-access": "libs/user/data-access",
     "user-user-details": "libs/user/user-details",
     "user-user-edit": "libs/user/user-edit",

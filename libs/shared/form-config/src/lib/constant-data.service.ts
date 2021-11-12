@@ -7,12 +7,14 @@ export class ConstantDataService {
 
   FIELD_NAME = {
     NAME: 'name',
+    TYPE: 'type',
     FIRST_NAME: 'first name',
     EMAIL_ID: 'email id',
     COUNTRY: 'country',
     LOCATION: 'location',
     DATE_OF_JOINING: 'date of joining',
     DATE_ADDED: 'date added',
+    DATE_MODIFIED: 'date modified',
     QUESTIONS: 'questions',
     SCORING: 'scoring',
     ONBOARD_DATE: 'onboard date',
@@ -23,6 +25,7 @@ export class ConstantDataService {
     LANGUAGE_DETAIL: 'language detail',
     ROLE: 'role',
     CREATED_AT: 'created at',
+    CATEGORY: 'category',
     UPDATED_AT: 'updated at',
     HEIGHT: 'height',
     WEIGHT: 'weight',

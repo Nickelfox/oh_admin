@@ -64,15 +64,15 @@ export class UiStore extends ComponentStore<UiState> {
           ]
         },
         {
-          name: 'Exercises',
-          navItems: [
-            { label: 'Exercises', path: '/exercises', icon: 'flash_on' }
-          ]
-        },
-        {
           name: 'Featured',
           navItems: [
             { label: 'Featured', path: '/featured', icon: 'star' }
+          ]
+        },
+        {
+          name: 'Tags',
+          navItems: [
+            { label: 'Tags', path: '/tags', icon: 'style' }
           ]
         },
         {
