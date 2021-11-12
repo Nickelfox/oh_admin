@@ -81,6 +81,10 @@
                     <mat-icon>{{row.isActive ? "block" : "check_circle_outline"}}</mat-icon>
                     <span>{{(row.isActive ? constantDataService.BUTTON_NAME.DEACTIVATE : constantDataService.BUTTON_NAME.ACTIVATE) | titlecase}}</span>
                   </button>
+                  <button mat-menu-item (click)='store.deleteQuestionnaire(row.id, pageSize, pageIndex)'>
+                    <mat-icon>delete</mat-icon>
+                    <span>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</span>
+                  </button>
                 </mat-menu>
               </td>
             </ng-container>
@@ -111,3 +115,4 @@
     </div>
   </mat-card>
 </div>
+

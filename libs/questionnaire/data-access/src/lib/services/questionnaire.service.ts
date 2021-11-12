@@ -3,11 +3,13 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import {
   CreateQuestionnaireResponse,
-  Questionnaire, QuestionnaireExtended,
+  Questionnaire,
+  QuestionnaireExtended,
   QuestionnaireListingRequest,
   QuestionnaireListingResponse,
   QuestionnaireListingResponseData,
-  QuestionnaireResponse, UpdateQuestionnaireResponse
+  QuestionnaireResponse,
+  UpdateQuestionnaireResponse
 } from '../models/questionnaire.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
@@ -56,6 +58,12 @@ export class QuestionnaireService {
 
   toggleActiveQuestionnaire(id: number): Observable<CustomApiResponse> {
     return this.http.patch<CustomApiResponse>(`${this.env.baseURL}/v1/admin/activate-deactivate/${id}`, {}).pipe(
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  deleteQuestionnaire(id: number): Observable<CustomApiResponse> {
+    return this.http.delete<CustomApiResponse>(`${this.env.baseURL}/v1/admin/delete-questionnaire/${id}`).pipe(
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }

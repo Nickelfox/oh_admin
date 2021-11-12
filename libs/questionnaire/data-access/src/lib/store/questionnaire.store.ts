@@ -3,6 +3,7 @@ import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import {
   Questionnaire,
   QuestionnaireActiveToggleRequest,
+  QuestionnaireDeleteRequest,
   QuestionnaireExtended,
   QuestionnaireListingRequest
 } from '../models/questionnaire.interface';
@@ -226,6 +227,49 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
     )
   );
 
+  private deleteQuestionnaire$ = this.effect<QuestionnaireDeleteRequest>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Deleting Questionnaire...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap(({ id, pageIndex, pageSize }) =>
+        this.questionnaireService.deleteQuestionnaire(id).pipe(
+          tapResponse(
+            (_) => {
+              const questionnaires: QuestionnaireExtended[] | undefined = this.get().questionnaires;
+              this.patchState({
+                isActing: false,
+                questionnaires: questionnaires.filter(q => q.id !== id)
+              });
+              this.toastRef?.updateMessage('Success! Questionnaire deleted');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success'
+              });
+              this.getQuestionnaires$({
+                page: pageIndex,
+                limit: pageSize
+              });
+            },
+            (_) => {
+              this.toastRef?.close();
+              this.patchState({
+                isActing: false
+              });
+            }
+          )
+        )
+      )
+    )
+  );
+
 
   constructor(
     private router: Router,
@@ -257,6 +301,31 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
         this.toggleActiveState$({
           id,
           newState
+        });
+      }
+    });
+  }
+
+  deleteQuestionnaire(id: number, pageSize: number, pageIndex: number): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Delete Questionnaire?',
+      desc: `Are you sure you want to delete this Questionnaire?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.deleteQuestionnaire$({
+          id,
+          pageSize,
+          pageIndex
         });
       }
     });
