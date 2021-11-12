@@ -66,3 +66,9 @@ export interface QuestionnaireActiveToggleRequest {
   newState: boolean;
   id: number;
 }
+
+export interface QuestionnaireDeleteRequest {
+  id: number;
+  pageIndex: number;
+  pageSize: number;
+}
