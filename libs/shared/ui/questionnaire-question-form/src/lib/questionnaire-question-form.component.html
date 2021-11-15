@@ -27,7 +27,7 @@
           <mat-form-field class='w-100' appearance='fill'>
             <mat-label>Type</mat-label>
             <mat-select formControlName='questionType'>
-              <mat-option [value]=type *ngFor='let type of choiceTypeIte'>{{type}}</mat-option>
+              <mat-option [value]=type *ngFor='let type of choiceTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

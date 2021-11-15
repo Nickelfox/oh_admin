@@ -34,6 +34,7 @@
     "shared-ui-questionnaire-question-form": "libs/shared/ui/questionnaire-question-form",
     "shared-ui-shimmer": "libs/shared/ui/shimmer",
     "shared-ui-spinner-text": "libs/shared/ui/spinner-text",
+    "shared-ui-tag-create": "libs/shared/ui/tag-create",
     "shared-utils": "libs/shared/utils",
     "tags-data-access": "libs/tags/data-access",
     "tags-tags": "libs/tags/tags",

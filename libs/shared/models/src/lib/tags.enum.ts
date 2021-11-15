@@ -1,11 +1,11 @@
-export enum TagType {
-  SUB_CATEGORY = 'SUB_CATEGORY',
+export enum TagTypeEnum {
   EXERCISE = 'EXERCISE',
+  SUB_CATEGORY = 'SUB_CATEGORY',
   TARGET_AREA = 'TARGET_AREA',
   MOVEMENT_PATTERN = 'MOVEMENT_PATTERN',
 }
 
-export enum CategoryEnum {
+export enum TagCategoryEnum {
   STRENGTH = 'STRENGTH',
   CARDIO = 'CARDIO',
   FUNCTION = 'FUNCTION',

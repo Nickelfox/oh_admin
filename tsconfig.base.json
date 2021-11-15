@@ -98,6 +98,9 @@
       "@hidden-innovation/shared/ui/spinner-text": [
         "libs/shared/ui/spinner-text/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/tag-create": [
+        "libs/shared/ui/tag-create/src/index.ts"
+      ],
       "@hidden-innovation/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@hidden-innovation/tags/data-access": [
         "libs/tags/data-access/src/index.ts"
