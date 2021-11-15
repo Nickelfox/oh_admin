@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/tags/tags",
+  "sourceRoot": "libs/tags/tags/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/tags/tags"],
+      "options": {
+        "project": "libs/tags/tags/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/tags/tags/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/tags/tags/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/tags/tags"],
+      "options": {
+        "jestConfig": "libs/tags/tags/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/tags/tags/src/**/*.ts",
+          "libs/tags/tags/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

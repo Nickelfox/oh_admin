@@ -1,0 +1,36 @@
+<div>
+  <h2 mat-dialog-title
+      class='font-calibri--bold'>{{(data.isNew ? 'Add ' : 'Edit ') + (data.tagType | replaceUnderscore | titlecase) + ' tag'}}</h2>
+</div>
+<mat-dialog-content>
+  <form [formGroup]='tagForm'>
+    <div class='container-fluid p-0'>
+      <div class='row'>
+        <div class='col-12'>
+          <hidden-innovation-common-form-field
+            label='{{((data.tagType | replaceUnderscore) + " name") | titlecase}}'
+            controlPath='name'
+          ></hidden-innovation-common-form-field>
+        </div>
+      </div>
+      <div class='row mt-1' *ngIf='tagForm.controls.tagType.value === tagTypeEnum.SUB_CATEGORY'>
+        <div class='col-12'>
+          <mat-form-field class='w-100' appearance='fill'>
+            <mat-label>{{constantDataService.FIELD_NAME.CATEGORY | titlecase}}</mat-label>
+            <mat-select formControlName='categoryName'>
+              <mat-option [value]=category
+                          *ngFor='let category of tagCategoryEnum'>{{category  | replaceUnderscore | titlecase}}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf='tagForm.controls.categoryName.errors?.required || tagForm.controls.categoryName.errors?.notEmpty'>
+              Category field {{formValidationService.fieldValidationMessage.required}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align='end'>
+  <button mat-stroked-button mat-dialog-close>{{constantDataService.BUTTON_NAME.CANCEL}}</button>
+  <button mat-flat-button color='primary' (click)='submitTag()'>{{data.isNew ? constantDataService.BUTTON_NAME.SAVE : constantDataService.BUTTON_NAME.UPDATE}}</button>
+</mat-dialog-actions>

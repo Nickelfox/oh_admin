@@ -7,3 +7,4 @@ export * from './lib/user.enum';
 export * from './lib/dashboard.enum';
 export * from './lib/questionnaire.enum';
 export * from './lib/generic.enum';
+export * from './lib/tags.enum';

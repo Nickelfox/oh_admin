@@ -67,7 +67,7 @@
                         </div>
                         <mat-card-content>
                           <p class='font-calibri'>
-                            {{questionFormGroup(i).controls.name.value}}
+                            {{questionFormGroup(i).controls.name.value || '--'}}
                           </p>
                         </mat-card-content>
                       </mat-card>
@@ -83,7 +83,7 @@
                   <mat-menu #add='matMenu' class='mt-2'>
                     <button type='button' (click)='triggerQuestionType(type)' *ngFor='let type of choiceTypeIte'
                             mat-menu-item>
-                      <span>{{type}}</span>
+                      <span>{{type | replaceUnderscore | titlecase}}</span>
                     </button>
                   </mat-menu>
                 </mat-card-actions>

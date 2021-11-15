@@ -141,6 +141,25 @@ import { OperationTypeEnum } from '@hidden-innovation/shared/models';
           }
         ],
       },
+      {
+        path: 'tags',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/tags/tags').then(
+                (m) => m.TagsModule
+              ),
+            data: { breadcrumb: 'Tags' }
+          },
+        ],
+      },
       // {
       //   path: 'users/edit/:id',
       //   canActivate: [AuthGuard],

@@ -7,10 +7,12 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
 import { QuestionnaireQuestionFormModule } from '@hidden-innovation/shared/ui/questionnaire-question-form';
 import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
+import { UtilsModule } from '@hidden-innovation/shared/utils';
 
 @NgModule({
   imports: [
     CommonModule,
+    UtilsModule,
     MaterialModule,
     CommonFormFieldModule,
     QuestionnaireQuestionFormModule,
@@ -22,7 +24,7 @@ import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/
         component: CreateQuestionnaireComponent
       }
     ]),
-    A11yModule
+    A11yModule,
   ],
   declarations: [
     CreateQuestionnaireComponent

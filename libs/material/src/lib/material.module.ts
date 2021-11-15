@@ -31,6 +31,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { LuxonDateAdapter, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { MatSortModule } from '@angular/material/sort';
+import { MatListModule } from '@angular/material/list';
 
 export const MY_FORMATS = {
   parse: {
@@ -72,6 +74,8 @@ export const MY_FORMATS = {
     MatRippleModule,
     MatSlideToggleModule,
     MatCheckboxModule,
+    MatSortModule,
+    MatListModule,
 
     // Non-Material Imports
     ImageCropperModule
@@ -102,6 +106,8 @@ export const MY_FORMATS = {
     MatRippleModule,
     MatSlideToggleModule,
     MatCheckboxModule,
+    MatSortModule,
+    MatListModule,
 
     // Non-Material Exports
     ImageCropperModule

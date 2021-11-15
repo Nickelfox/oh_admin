@@ -21,14 +21,13 @@
 
             <ng-container matColumnDef='id'>
               <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
-              <td mat-cell *matCellDef='let element'
-                  [matTooltip]='element.name'> {{element.id || '--'}} </td>
+              <td mat-cell *matCellDef='let element'> {{element.id || '--'}} </td>
             </ng-container>
 
             <ng-container matColumnDef='name'>
               <th mat-header-cell *matHeaderCellDef> {{constantDataService.FIELD_NAME.NAME | titlecase}} </th>
               <td mat-cell *matCellDef='let element'
-                  [matTooltip]='element.email'> {{(element.name | maxStringLimit) || '--'}} </td>
+                  [matTooltip]='element.name'> {{(element.name | maxStringLimit) || '--'}} </td>
             </ng-container>
 
             <ng-container matColumnDef='date_added'>
