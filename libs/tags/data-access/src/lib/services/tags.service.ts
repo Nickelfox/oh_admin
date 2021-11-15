@@ -20,6 +20,18 @@ export class TagsService {
       'page': reqObj.page.toString(),
       'limit': reqObj.limit.toString()
     });
+    if (reqObj.type && reqObj.type.length) {
+      params = params.append('type', reqObj.type.join(','));
+    }
+    if (reqObj.category && reqObj.category.length) {
+      params = params.append('category', reqObj.category.join(','));
+    }
+    if (reqObj.nameSort) {
+      params = params.append('nameSort', reqObj.nameSort);
+    }
+    if (reqObj.dateSort) {
+      params = params.append('dateSort', reqObj.dateSort);
+    }
     return this.http.get<TagsListingResponse>(`${this.env.baseURL}/v1/admin/get-tags`, { params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))

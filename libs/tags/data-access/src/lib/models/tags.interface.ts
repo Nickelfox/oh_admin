@@ -1,4 +1,4 @@
-import { TagCategoryEnum, CustomApiResponse, TagTypeEnum } from '@hidden-innovation/shared/models';
+import { CustomApiResponse, SortingEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
 
 export interface TagCore {
   name: string;
@@ -13,7 +13,14 @@ export interface Tag extends TagCore {
   updated_at: string;
 }
 
-export interface TagsListingRequest {
+export interface TagListingFilters {
+  type: TagTypeEnum[] | undefined;
+  category: TagCategoryEnum[] | undefined;
+  dateSort: SortingEnum | undefined;
+  nameSort: SortingEnum | undefined;
+}
+
+export interface TagsListingRequest extends TagListingFilters {
   limit: number;
   page: number;
 }
@@ -31,14 +38,16 @@ export interface TagDialogReq {
   tag?: Tag;
 }
 
-export interface CreateTagRequest {
+export interface CreateTagRequest extends TagsListingRequest {
   tag: TagCore;
-  pageIndex: number;
-  pageSize: number;
 }
 
 export interface CreateTagResponse extends CustomApiResponse {
   data: {
     tag: Tag;
   };
+}
+
+export interface TagDeleteRequest extends TagsListingRequest {
+  id: number;
 }

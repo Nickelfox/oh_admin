@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { CreateTagRequest, Tag, TagsListingRequest } from '../models/tags.interface';
+import { CreateTagRequest, Tag, TagDeleteRequest, TagsListingRequest } from '../models/tags.interface';
 import { EMPTY, Observable } from 'rxjs';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { TagsService } from '../services/tags.service';
-import { QuestionnaireDeleteRequest } from '@hidden-innovation/questionnaire/data-access';
 import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 
@@ -39,8 +38,8 @@ export class TagsStore extends ComponentStore<TagsState> {
           isLoading: true
         });
       }),
-      switchMap(({ page, limit }) =>
-        this.tagsService.getTags({ page, limit }).pipe(
+      switchMap(({ page, limit, type, category, dateSort, nameSort }) =>
+        this.tagsService.getTags({ page, limit, type, category, dateSort, nameSort }).pipe(
           tapResponse(
             ({ tags, total }) => {
               this.patchState({
@@ -75,23 +74,25 @@ export class TagsStore extends ComponentStore<TagsState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ tag, pageIndex, pageSize }) =>
+      exhaustMap(({ tag, type, category, page, limit, dateSort, nameSort }) =>
         this.tagsService.createTag(tag).pipe(
           tapResponse(
             (newTag) => {
               this.patchState({
                 isActing: false,
-                tags: [newTag, ...this.get().tags]
               });
               this.toastRef?.updateMessage('Tag Created!');
               this.toastRef?.updateToast({
                 dismissible: true,
                 type: 'success',
-                duration: 300
               });
               this.getTags$({
-                page: pageIndex,
-                limit: pageSize
+                page,
+                limit,
+                category,
+                type,
+                dateSort,
+                nameSort
               });
             },
             error => {
@@ -142,7 +143,6 @@ export class TagsStore extends ComponentStore<TagsState> {
               this.toastRef?.updateToast({
                 dismissible: true,
                 type: 'success',
-                duration: 300
               });
             },
             _ => {
@@ -157,7 +157,7 @@ export class TagsStore extends ComponentStore<TagsState> {
     )
   );
 
-  private deleteTag$ = this.effect<QuestionnaireDeleteRequest>(params =>
+  private deleteTag$ = this.effect<TagDeleteRequest>(params =>
     params.pipe(
       tap((_) => {
         this.patchState({
@@ -169,7 +169,7 @@ export class TagsStore extends ComponentStore<TagsState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ id, pageIndex, pageSize }) =>
+      exhaustMap(({ id, page, limit, type, category, dateSort, nameSort }) =>
         this.tagsService.deleteTag(id).pipe(
           tapResponse(
             (_) => {
@@ -184,8 +184,12 @@ export class TagsStore extends ComponentStore<TagsState> {
                 type: 'success'
               });
               this.getTags$({
-                page: pageIndex,
-                limit: pageSize
+                page,
+                limit,
+                type,
+                category,
+                dateSort,
+                nameSort
               });
             },
             (_) => {
@@ -209,7 +213,8 @@ export class TagsStore extends ComponentStore<TagsState> {
     super(initialState);
   }
 
-  deleteTag(id: number, pageSize: number, pageIndex: number): void {
+  deleteTag(deleteObj: TagDeleteRequest): void {
+    const { page, limit, type, category, dateSort, nameSort, id } = deleteObj;
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Tag?',
       desc: `Are you sure you want to delete this Tag?`,
@@ -227,8 +232,12 @@ export class TagsStore extends ComponentStore<TagsState> {
       if (proceed) {
         this.deleteTag$({
           id,
-          pageSize,
-          pageIndex
+          page,
+          limit,
+          type,
+          category,
+          dateSort,
+          nameSort
         });
       }
     });

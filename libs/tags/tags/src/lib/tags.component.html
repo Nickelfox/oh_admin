@@ -5,7 +5,8 @@
       </div>
       <div class='col d-flex align-items-center justify-content-end'>
         <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
-        <button mat-flat-button color='primary' class='ml-2' [matMenuTriggerFor]='tagMenu'>
+        <button mat-flat-button color='primary' class='ml-2' [matMenuTriggerFor]='tagMenu'
+                [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'>
           <mat-icon class='mr-2'>add</mat-icon>
           {{"New Tag"}}
         </button>
@@ -25,24 +26,97 @@
         <div class='col-12'>
           <table mat-table [dataSource]='tags' class='w-100' [trackBy]='trackById'>
             <ng-container matColumnDef='name'>
-              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.NAME | titlecase}}</th>
+              <th mat-header-cell *matHeaderCellDef>
+                <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.NAME | titlecase}}
+                  </span>
+                  <div class='d-flex align-items-center'>
+                    <mat-icon
+                      style='font-size: 16px; margin-bottom: -8px; width: 16px;'>{{filters.controls.nameSort?.enabled ? (filters.controls.nameSort?.value === sortingEnum.ASC ? "keyboard_arrow_up" : "keyboard_arrow_down") : ""}}</mat-icon>
+                    <button mat-icon-button class='mr-3'
+                            [disabled]='(store.isActing$ | async)'
+                            (click)='updateSorting("nameSort")'
+                            color='{{filters.controls.nameSort?.enabled ? "primary" : ""}}'>
+                      <mat-icon style='font-size: 20px'>sort_by_alpha</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </th>
               <td mat-cell *matCellDef='let element'
-                  [matTooltip]='element.name'> {{(element.name | maxStringLimit) || '--'}}  </td>
+                  [matTooltip]='element.name'> {{(element.name | maxStringLimit: 30) || '--'}}  </td>
             </ng-container>
 
             <ng-container matColumnDef='type'>
-              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.TYPE | titlecase}}</th>
+              <th mat-header-cell *matHeaderCellDef>
+                <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.TYPE | titlecase}}
+                  </span>
+                  <div class='d-flex align-items-center'>
+                    <button mat-icon-button class='mr-3' [matMenuTriggerFor]='catMenu'
+                            [disabled]='(store.isActing$ | async)'
+                            color='{{filters.controls.type?.value?.length ? "primary" : ""}}'>
+                      <mat-icon style='font-size: 20px'>filter_list</mat-icon>
+                    </button>
+                    <mat-menu #catMenu='matMenu'>
+                      <mat-selection-list color='primary' (selectionChange)='typeFilterChange($event)' [multiple]='true'
+                                          class='pt-0'>
+                        <mat-list-option *ngFor='let type of tagTypeIte' [value]='type'>
+                          <h6 class='mat-h6'>{{type | replaceUnderscore | titlecase}}</h6>
+                        </mat-list-option>
+                      </mat-selection-list>
+                    </mat-menu>
+                  </div>
+                </div>
+              </th>
               <td mat-cell
                   *matCellDef='let element'> {{(element.tagType | replaceUnderscore | titlecase) || '--'}}  </td>
             </ng-container>
 
             <ng-container matColumnDef='category'>
-              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.CATEGORY | titlecase}}</th>
+              <th mat-header-cell *matHeaderCellDef>
+                <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
+                  </span>
+                  <div class='d-flex align-items-center'>
+                    <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
+                            [disabled]='(store.isActing$ | async)'
+                            color='{{filters.controls.category?.value?.length ? "primary" : ""}}'>
+                      <mat-icon style='font-size: 20px'>filter_list</mat-icon>
+                    </button>
+                    <mat-menu #typeMenu='matMenu'>
+                      <mat-selection-list color='primary' (selectionChange)='categoryFilterChange($event)'
+                                          [multiple]='true' class='pt-0'>
+                        <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
+                          <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>
+                        </mat-list-option>
+                      </mat-selection-list>
+                    </mat-menu>
+                  </div>
+                </div>
+              </th>
               <td mat-cell *matCellDef='let element'> {{(element.categoryName | titlecase) || '--'}}  </td>
             </ng-container>
 
             <ng-container matColumnDef='date_modified'>
-              <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.DATE_MODIFIED | titlecase}}</th>
+              <th mat-header-cell *matHeaderCellDef>
+                <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.DATE_MODIFIED | titlecase}}
+                  </span>
+                  <div class='d-flex align-items-center'>
+                    <button mat-icon-button class='mr-3'
+                            [disabled]='(store.isActing$ | async)'
+                            (click)='updateSorting("dateSort")'
+                            color='{{filters.controls.dateSort?.enabled ? "primary" : ""}}'>
+                      <mat-icon
+                        style='font-size: 20px;'>{{filters.controls.dateSort?.enabled ? (filters.controls.dateSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort"}}</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </th>
               <td mat-cell *matCellDef='let element'> {{(element.updated_at | date: 'shortDate') || '--'}}  </td>
             </ng-container>
 
@@ -58,7 +132,7 @@
                     <mat-icon>create</mat-icon>
                     <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                   </button>
-                  <button (click)='store.deleteTag(row.id, pageSize, pageIndex)' mat-menu-item>
+                  <button (click)='deleteTag(row.id)' mat-menu-item>
                     <mat-icon>delete</mat-icon>
                     <span>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</span>
                   </button>
