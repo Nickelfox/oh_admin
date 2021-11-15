@@ -6,7 +6,7 @@
       <div class='col d-flex align-items-center justify-content-end'>
         <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
         <button mat-flat-button color='primary' class='ml-2' [matMenuTriggerFor]='tagMenu'
-                [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'>
+                [disabled]='(store.isActing$ | async)'>
           <mat-icon class='mr-2'>add</mat-icon>
           {{"New Tag"}}
         </button>
