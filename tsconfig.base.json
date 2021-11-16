@@ -101,11 +101,23 @@
       "@hidden-innovation/shared/ui/tag-create": [
         "libs/shared/ui/tag-create/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/test-tab-group": [
+        "libs/shared/ui/test-tab-group/src/index.ts"
+      ],
       "@hidden-innovation/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@hidden-innovation/tags/data-access": [
         "libs/tags/data-access/src/index.ts"
       ],
       "@hidden-innovation/tags/tags": ["libs/tags/tags/src/index.ts"],
+      "@hidden-innovation/test-group/test-group-listing": [
+        "libs/test-group/test-group-listing/src/index.ts"
+      ],
+      "@hidden-innovation/test/data-access": [
+        "libs/test/data-access/src/index.ts"
+      ],
+      "@hidden-innovation/test/test-listing": [
+        "libs/test/test-listing/src/index.ts"
+      ],
       "@hidden-innovation/user/data-access": [
         "libs/user/data-access/src/index.ts"
       ],
