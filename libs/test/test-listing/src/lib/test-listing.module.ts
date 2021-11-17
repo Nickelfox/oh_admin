@@ -6,6 +6,7 @@ import { MaterialModule } from '@hidden-innovation/material';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
 import { TestTabGroupModule } from '@hidden-innovation/shared/ui/test-tab-group';
+import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { TestTabGroupModule } from '@hidden-innovation/shared/ui/test-tab-group'
     UtilsModule,
     CommonFormFieldModule,
     TestTabGroupModule,
+    CommonDataFieldStatusModule,
     RouterModule.forChild([
       {
         path: '',
