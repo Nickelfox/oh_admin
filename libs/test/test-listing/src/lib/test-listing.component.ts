@@ -3,7 +3,13 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { PageEvent } from '@angular/material/paginator';
-import { DifficultyEnum, PublishStatusEnum, StatusChipType, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import {
+  DifficultyEnum,
+  PublishStatusEnum,
+  StatusChipType,
+  TagCategoryEnum,
+  TestInputTypeEnum
+} from '@hidden-innovation/shared/models';
 import { map } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { TestCore } from '@hidden-innovation/test/data-access';
@@ -17,7 +23,7 @@ const dummyTests: TestCore[] = [
     deleted_at: DateTime.now().toISODate(),
     updated_at: DateTime.now().toISODate(),
     difficulty: DifficultyEnum.ADVANCE,
-    input: 'Ratio',
+    input: TestInputTypeEnum.RATIO,
     status: true
   },
   {
@@ -28,7 +34,7 @@ const dummyTests: TestCore[] = [
     deleted_at: DateTime.now().toISODate(),
     updated_at: DateTime.now().toISODate(),
     difficulty: DifficultyEnum.BEGINNER,
-    input: '1RM',
+    input: TestInputTypeEnum.ONE_RM,
     status: true
   },
   {
@@ -39,7 +45,7 @@ const dummyTests: TestCore[] = [
     deleted_at: DateTime.now().toISODate(),
     updated_at: DateTime.now().toISODate(),
     difficulty: DifficultyEnum.INTERMEDIATE,
-    input: 'Questionnaire',
+    input: TestInputTypeEnum.TIME,
     status: false
   },
   {
@@ -50,7 +56,7 @@ const dummyTests: TestCore[] = [
     deleted_at: DateTime.now().toISODate(),
     updated_at: DateTime.now().toISODate(),
     difficulty: DifficultyEnum.ADVANCE,
-    input: 'None',
+    input: TestInputTypeEnum.REPS,
     status: true
   },
   {
@@ -61,7 +67,7 @@ const dummyTests: TestCore[] = [
     deleted_at: DateTime.now().toISODate(),
     updated_at: DateTime.now().toISODate(),
     difficulty: DifficultyEnum.ADVANCE,
-    input: 'Weight',
+    input: TestInputTypeEnum.DISTANCE,
     status: true
   }
 ];
@@ -89,6 +95,11 @@ export class TestListingComponent implements OnInit {
   tagCategoryEnum = TagCategoryEnum;
   statusChipType = StatusChipType;
   publishStatusEnum = PublishStatusEnum;
+  testInputTypeEnum = TestInputTypeEnum;
+
+  tagCategoryIte = Object.values(TagCategoryEnum);
+  difficultyIte = Object.values(DifficultyEnum);
+  testInputTypeIte = Object.values(TestInputTypeEnum);
 
   constructor(
     public constantDataService: ConstantDataService

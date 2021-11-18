@@ -1,4 +1,4 @@
-import { DifficultyEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { DifficultyEnum, TagCategoryEnum, TestInputTypeEnum } from '@hidden-innovation/shared/models';
 
 export interface TestCore {
   id: number;
@@ -8,6 +8,6 @@ export interface TestCore {
   updated_at: string;
   category: TagCategoryEnum;
   difficulty: DifficultyEnum;
-  input: string;
+  input: TestInputTypeEnum;
   status: boolean;
 }

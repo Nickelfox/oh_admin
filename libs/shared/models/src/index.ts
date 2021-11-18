@@ -9,3 +9,4 @@ export * from './lib/questionnaire.enum';
 export * from './lib/generic.enum';
 export * from './lib/tags.enum';
 export * from './lib/difficulty.enum';
+export * from './lib/test.enum';
