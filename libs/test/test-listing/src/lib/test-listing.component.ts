@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { TestCore } from '../../../data-access/src/lib/models/test.interface';
 import { Observable } from 'rxjs';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { PageEvent } from '@angular/material/paginator';
 import { DifficultyEnum, PublishStatusEnum, StatusChipType, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { map } from 'rxjs/operators';
 import { DateTime } from 'luxon';
+import { TestCore } from '@hidden-innovation/test/data-access';
 
 const dummyTests: TestCore[] = [
   {
