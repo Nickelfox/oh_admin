@@ -108,6 +108,11 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
         this.imageAnswersArray.clear();
       })
     ).subscribe();
+    this.question.controls.whyAreWeAsking.valueChanges.pipe(
+      tap(isActive => {
+        isActive ? this.question?.controls.whyAreWeAskingQuestion.enable() : this.question?.controls.whyAreWeAskingQuestion.disable();
+      })
+    ).subscribe();
   }
 
   mapImageToForm($event: ImageCropperResponseData, answerIndex: number) {

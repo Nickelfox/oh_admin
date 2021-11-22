@@ -64,18 +64,23 @@
           </mat-checkbox>
         </div>
       </div>
-      <div class='row' *ngIf='!!question.controls.whyAreWeAsking.value'>
+      <div class='row mb-2' *ngIf='(question.controls.whyAreWeAskingQuestion.enabled$ | async)'>
         <div class='col-12 d-flex align-items-center'>
           <mat-form-field class='w-100'>
             <mat-label>Why are we asking</mat-label>
             <textarea formControlName='whyAreWeAskingQuestion' matInput></textarea>
+            <mat-error
+              *ngIf='question.controls.whyAreWeAskingQuestion.errors?.required || question.controls.whyAreWeAskingQuestion.errors?.notEmpty'>
+              This {{formValidationService.fieldValidationMessage.required}}</mat-error>
+            <mat-error
+              *ngIf='question.controls.whyAreWeAskingQuestion.errors?.invalid'>{{formValidationService.fieldValidationMessage.invalid}}</mat-error>
           </mat-form-field>
         </div>
       </div>
       <mat-divider></mat-divider>
       <ng-template
         [ngIf]='answersArray.controls.length && question.controls.questionType.value !== choiceType.IMAGE_SELECT'>
-        <div class='row' [ngClass]='{"mt-3": !question?.controls?.whyAreWeAsking?.value}'
+        <div class='row mb-3 pt-3'
              *ngIf='question.controls.questionType.value === choiceType.MULTIPLE_CHOICE'>
           <div class='col-12'>
             <mat-checkbox formControlName='showIcon' color='primary'>
@@ -92,26 +97,41 @@
           </div>
         </div>
         <ng-template ngFor [ngForOf]='answersArray.controls' let-i='index'>
-          <div class='row mb-2' [formGroup]='multipleChoiceAnswerGroup(i)'>
-            <div class='col-3'>
-              <hidden-innovation-common-form-field-number
-                [errorMessage]='formValidationService.pointsValidationMessage'
-                controlPath='point'
-              ></hidden-innovation-common-form-field-number>
-            </div>
-            <div class='col-9'>
-              <hidden-innovation-common-form-field
-                label='Answer {{i + 1}}'
-                controlPath='name'
-              ></hidden-innovation-common-form-field>
-            </div>
-            <div class='col-3'></div>
-            <div class='col-9'
-                 *ngIf='!!question.controls.showIcon?.value && question.controls.questionType.value === choiceType.MULTIPLE_CHOICE'>
-              <hidden-innovation-common-form-field
-                label='Font Awesome Icon 6 Code'
-                controlPath='iconName'
-              ></hidden-innovation-common-form-field>
+          <div class='row ' [ngClass]='{"mb-2": (answersArray.controls.length - 1) !== i}'>
+            <div class='col-12'>
+              <mat-card class='mat-elevation-z1'>
+                <mat-card-content>
+                  <div class='container-fluid p-0' [formGroup]='multipleChoiceAnswerGroup(i)'>
+                    <div class='row'>
+                      <div class='col-3'>
+                        <hidden-innovation-common-form-field-number
+                          [errorMessage]='formValidationService.pointsValidationMessage'
+                          controlPath='point'
+                        ></hidden-innovation-common-form-field-number>
+                      </div>
+                      <div class='col-9'>
+                        <hidden-innovation-common-form-field
+                          label='Answer {{i + 1}}'
+                          controlPath='name'
+                        ></hidden-innovation-common-form-field>
+                      </div>
+                      <div class='col-3'></div>
+                      <div class='col-9 mt-2'
+                           *ngIf='!!question.controls.showIcon?.value && question.controls.questionType.value === choiceType.MULTIPLE_CHOICE'>
+                        <hidden-innovation-common-form-field
+                          label='Font Awesome Icon 6 Code'
+                          controlPath='iconName'
+                        ></hidden-innovation-common-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+                <mat-card-actions align='end'>
+                  <button mat-icon-button color='warn' (click)='removeAnswerReq(i)'>
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-card-actions>
+              </mat-card>
             </div>
           </div>
         </ng-template>
@@ -127,21 +147,9 @@
           </div>
         </div>
         <ng-template ngFor [ngForOf]='imageAnswersArray.controls' let-i='index'>
-          <div class='row mb-2'>
+          <div class='row' [ngClass]='{"mb-2": (imageAnswersArray.controls.length - 1) !== i}'>
             <div class='col-12'>
               <mat-card class='mat-elevation-z1'>
-                <mat-card-title>
-                  <div class='d-flex justify-content-between align-items-center mb-3 '>
-                    <h4 class='mat-h4 mb-0 font-sf-pro'>
-                      Answer {{i + 1}}
-                    </h4>
-                    <div class='d-flex align-items-center'>
-                      <button type='button' mat-icon-button (click)='removeAnswerReq(i)'>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-                </mat-card-title>
                 <mat-card-content>
                   <div class='container-fluid p-0' [formGroup]='imageAnswerGroup(i)'>
                     <div class='row'>
@@ -197,6 +205,11 @@
                     </div>
                   </div>
                 </mat-card-content>
+                <mat-card-actions align='end'>
+                  <button mat-icon-button color='warn' (click)='removeAnswerReq(i)'>
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </mat-card-actions>
               </mat-card>
             </div>
           </div>
@@ -205,7 +218,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button [disabled]='!!this.question?.controls?.omitScoring?.value' (click)='addNewAnswer()'>ADD ANSWER
+    <button mat-button (click)='addNewAnswer()'>ADD ANSWER
     </button>
   </mat-card-actions>
 </mat-card>

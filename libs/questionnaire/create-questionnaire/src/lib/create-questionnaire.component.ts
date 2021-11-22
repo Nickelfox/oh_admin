@@ -189,7 +189,13 @@ export class CreateQuestionnaireComponent implements OnDestroy {
       ]),
       description: new FormControl<string>(questionData?.description ?? ''),
       whyAreWeAsking: new FormControl<boolean>(questionData?.whyAreWeAsking ?? false),
-      whyAreWeAskingQuestion: new FormControl<string>(questionData?.whyAreWeAskingQuestion ?? ''),
+      whyAreWeAskingQuestion: new FormControl<string>({
+        value: questionData?.whyAreWeAskingQuestion ?? '',
+        disabled: !questionData?.whyAreWeAsking
+      }, [
+        RxwebValidators.required(),
+        RxwebValidators.notEmpty()
+      ]),
       showIcon: new FormControl<boolean>(questionData?.showIcon ?? false),
       omitScoring: new FormControl<boolean>(questionData?.omitScoring ?? false),
       answer: new FormArray<MultipleChoiceAnswer | AnswerCore>([]),
