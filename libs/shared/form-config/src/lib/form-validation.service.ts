@@ -23,7 +23,7 @@ export class FormValidationService {
 
   pointsValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Point field is required',
-    invalid: 'Only numeric values allowed',
+    invalid: 'Only numeric & non-floating point values allowed',
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {

@@ -6,6 +6,8 @@ import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/
 import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { RouterModule } from '@angular/router';
+import { SortingHeaderDateModule } from '@hidden-innovation/shared/ui/sorting-header-date';
+import { SortingHeaderNameModule } from '@hidden-innovation/shared/ui/sorting-header-name';
 
 @NgModule({
   imports: [
@@ -20,11 +22,14 @@ import { RouterModule } from '@angular/router';
     MaterialModule,
     QuestionnaireDataAccessModule,
     CommonDataFieldStatusModule,
+    SortingHeaderDateModule,
+    SortingHeaderNameModule,
     UtilsModule
   ],
   declarations: [
     QuestionnaireListingComponent
   ]
 })
+
 export class QuestionnaireListingModule {
 }

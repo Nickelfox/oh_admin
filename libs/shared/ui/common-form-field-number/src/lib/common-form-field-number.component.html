@@ -1,0 +1,13 @@
+<mat-form-field class='w-100'>
+  <mat-label>{{label}}</mat-label>
+  <input matInput autocomplete='no' [disabled]='disabled' [readonly]='readonly' type='number'
+         [placeholder]='placeholder || label'
+         [formControl]='control'>
+  <mat-error
+    *ngIf='control.errors?.required || control.errors?.notEmpty'>
+    {{label}} {{errorMessage.required}}</mat-error>
+  <mat-error
+    *ngIf='control.errors?.invalid || control.errors?.numeric'>{{errorMessage.invalid}}</mat-error>
+  <mat-error
+    *ngIf='control.errors?.min'>Invalid! Must be greater than {{control.errors?.min?.min}}</mat-error>
+</mat-form-field>

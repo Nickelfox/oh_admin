@@ -27,7 +27,8 @@
           <mat-form-field class='w-100' appearance='fill'>
             <mat-label>Type</mat-label>
             <mat-select formControlName='questionType'>
-              <mat-option [value]=type *ngFor='let type of choiceTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
+              <mat-option [value]=type
+                          *ngFor='let type of choiceTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -39,7 +40,7 @@
           </mat-checkbox>
         </div>
       </div>
-      <div class='row'>
+      <div class='row mb-2'>
         <div class='col-12'>
           <hidden-innovation-common-form-field
             label='Question'
@@ -47,7 +48,7 @@
           ></hidden-innovation-common-form-field>
         </div>
       </div>
-      <div class='row'>
+      <div class='row mb-2'>
         <div class='col-12'>
           <mat-form-field class='w-100'>
             <mat-label>Description</mat-label>
@@ -55,7 +56,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class='row' [ngClass]='{"mb-3": !!question.controls.whyAreWeAsking.value}'>
+      <div class='row mb-3'>
         <div class='col-12 d-flex align-items-center'>
           <mat-checkbox formControlName='whyAreWeAsking' color='primary'>
             <h4 class='text-muted m-0 ml-2'>
@@ -71,6 +72,7 @@
           </mat-form-field>
         </div>
       </div>
+      <mat-divider></mat-divider>
       <ng-template
         [ngIf]='answersArray.controls.length && question.controls.questionType.value !== choiceType.IMAGE_SELECT'>
         <div class='row' [ngClass]='{"mt-3": !question?.controls?.whyAreWeAsking?.value}'
@@ -90,12 +92,12 @@
           </div>
         </div>
         <ng-template ngFor [ngForOf]='answersArray.controls' let-i='index'>
-          <div class='row' [formGroup]='multipleChoiceAnswerGroup(i)'>
+          <div class='row mb-2' [formGroup]='multipleChoiceAnswerGroup(i)'>
             <div class='col-3'>
-              <hidden-innovation-common-form-field
+              <hidden-innovation-common-form-field-number
                 [errorMessage]='formValidationService.pointsValidationMessage'
                 controlPath='point'
-              ></hidden-innovation-common-form-field>
+              ></hidden-innovation-common-form-field-number>
             </div>
             <div class='col-9'>
               <hidden-innovation-common-form-field
@@ -116,7 +118,7 @@
       </ng-template>
       <ng-template
         [ngIf]='imageAnswersArray.controls.length && question.controls.questionType.value === choiceType.IMAGE_SELECT'>
-        <div class='row' [ngClass]='{"mt-3": !question?.controls?.whyAreWeAsking?.value}'>
+        <div class='row pt-3 mb-3'>
           <div class='col-3'>
             <h5 class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>POINTS</h5>
           </div>
@@ -125,60 +127,77 @@
           </div>
         </div>
         <ng-template ngFor [ngForOf]='imageAnswersArray.controls' let-i='index'>
-          <div class='row' [formGroup]='imageAnswerGroup(i)'>
+          <div class='row mb-2'>
             <div class='col-12'>
-              <div class='container-fluid p-0'>
-                <div class='row'>
-                  <div class='col-3'>
-                    <hidden-innovation-common-form-field
-                      [errorMessage]='formValidationService.pointsValidationMessage'
-                      controlPath='point'
-                    ></hidden-innovation-common-form-field>
-                  </div>
-                  <ng-template [ngIf]='imageAnswerGroup(i).controls.imageId.valid' [ngIfElse]='imageSelectedElse'>
-                    <div class='col-2'>
-                      <img class='img-fluid'
-                           src='{{imageAnswerGroup(i).controls.imageBlob?.value}}'
-                           [ngStyle]='{"maxHeight": "51px"}'>
-                    </div>
-                    <div class='col'>
-                      <button (click)='removeImage(i)' matTooltip='{{imageAnswerGroup(i).controls.imageName?.value}}'
-                              [disabled]='question.controls.omitScoring.value' mat-stroked-button color='primary'
-                              type='button'>
-                        <mat-icon color='warn' class='mr-1'>image</mat-icon>
-                        {{(imageAnswerGroup(i).controls.imageName?.value | maxStringLimit: 10) ?? '--'}}
-                        <mat-icon class='ml-2'>close</mat-icon>
+              <mat-card class='mat-elevation-z1'>
+                <mat-card-title>
+                  <div class='d-flex justify-content-between align-items-center mb-3 '>
+                    <h4 class='mat-h4 mb-0 font-sf-pro'>
+                      Answer {{i + 1}}
+                    </h4>
+                    <div class='d-flex align-items-center'>
+                      <button type='button' mat-icon-button (click)='removeAnswerReq(i)'>
+                        <mat-icon>delete</mat-icon>
                       </button>
                     </div>
-                  </ng-template>
-                  <ng-template #imageSelectedElse>
-                    <div class='col'>
-                      <hidden-innovation-image-picker
-                        [isInvalid]='imageAnswerGroup(i).controls.imageId.invalid && imageAnswerGroup(i).controls.imageId.touched'
-                        (imageUploadRes)='mapImageToForm($event, i)'
-                      ></hidden-innovation-image-picker>
+                  </div>
+                </mat-card-title>
+                <mat-card-content>
+                  <div class='container-fluid p-0' [formGroup]='imageAnswerGroup(i)'>
+                    <div class='row'>
+                      <div class='col-3'>
+                        <hidden-innovation-common-form-field-number
+                          [errorMessage]='formValidationService.pointsValidationMessage'
+                          controlPath='point'
+                        ></hidden-innovation-common-form-field-number>
+                      </div>
+                      <ng-template [ngIf]='imageAnswerGroup(i).controls.imageId.valid' [ngIfElse]='imageSelectedElse'>
+                        <div class='col-2'>
+                          <img class='img-fluid'
+                               src='{{imageAnswerGroup(i).controls.imageBlob?.value}}'
+                               [ngStyle]='{"maxHeight": "51px"}'>
+                        </div>
+                        <div class='col'>
+                          <button (click)='removeImage(i)'
+                                  matTooltip='{{imageAnswerGroup(i).controls.imageName?.value}}'
+                                  [disabled]='question.controls.omitScoring.value' mat-stroked-button color='primary'
+                                  type='button'>
+                            <mat-icon color='warn' class='mr-1'>image</mat-icon>
+                            {{(imageAnswerGroup(i).controls.imageName?.value | maxStringLimit: 10) ?? '--'}}
+                            <mat-icon class='ml-2'>close</mat-icon>
+                          </button>
+                        </div>
+                      </ng-template>
+                      <ng-template #imageSelectedElse>
+                        <div class='col'>
+                          <hidden-innovation-image-picker
+                            [isInvalid]='imageAnswerGroup(i).controls.imageId.invalid && imageAnswerGroup(i).controls.imageId.touched'
+                            (imageUploadRes)='mapImageToForm($event, i)'
+                          ></hidden-innovation-image-picker>
+                        </div>
+                      </ng-template>
                     </div>
-                  </ng-template>
-                </div>
-                <div class='row'>
-                  <div class='col-3'></div>
-                  <div class='col-9'>
-                    <hidden-innovation-common-form-field
-                      label='Title'
-                      controlPath='title'
-                    ></hidden-innovation-common-form-field>
+                    <div class='row'>
+                      <div class='col-3'></div>
+                      <div class='col-9'>
+                        <hidden-innovation-common-form-field
+                          label='Title'
+                          controlPath='title'
+                        ></hidden-innovation-common-form-field>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-3'></div>
+                      <div class='col-9'>
+                        <hidden-innovation-common-form-field
+                          label='Subtitle'
+                          controlPath='subTitle'
+                        ></hidden-innovation-common-form-field>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class='row'>
-                  <div class='col-3'></div>
-                  <div class='col-9'>
-                    <hidden-innovation-common-form-field
-                      label='Subtitle'
-                      controlPath='subTitle'
-                    ></hidden-innovation-common-form-field>
-                  </div>
-                </div>
-              </div>
+                </mat-card-content>
+              </mat-card>
             </div>
           </div>
         </ng-template>

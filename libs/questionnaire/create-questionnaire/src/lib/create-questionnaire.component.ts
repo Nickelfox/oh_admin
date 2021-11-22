@@ -293,6 +293,17 @@ export class CreateQuestionnaireComponent implements OnDestroy {
     this.addQuestion(fg);
   }
 
+  removeAnswer(index: number, activeQuestion: number): void {
+    const question: FormGroup<Question> = this.questionFormGroup(activeQuestion);
+    if (question.value.questionType === QuestionTypeEnum.IMAGE_SELECT) {
+      const imageArray: FormArray<ImageSelectAnswer> = question.controls.imageAnswer as FormArray<ImageSelectAnswer>;
+      imageArray.removeAt(index);
+      return;
+    }
+    const answerArray: FormArray<AnswerCore> = question.controls.answer as FormArray<AnswerCore>;
+    answerArray.removeAt(index);
+  }
+
   removeQuestion(index: number): void {
     this.questionsFormArray.removeAt(index);
     this.activeQuestion = undefined;
@@ -303,5 +314,4 @@ export class CreateQuestionnaireComponent implements OnDestroy {
       selectedQuestionnaire: undefined
     });
   }
-
 }

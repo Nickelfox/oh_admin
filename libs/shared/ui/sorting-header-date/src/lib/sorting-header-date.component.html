@@ -1,0 +1,14 @@
+<div class='d-flex align-items-center justify-content-between'>
+  <span>
+    {{title || '--'}}
+  </span>
+  <div class='d-flex align-items-center'>
+    <button mat-icon-button class='mr-3'
+            [disabled]='isDisabled'
+            (click)='emitSorting.emit("dateSort")'
+            color='{{ctrlEnabled ? "primary" : ""}}'>
+      <mat-icon
+        style='font-size: 20px;'>{{ctrlEnabled ? (ctrlValue === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort"}}</mat-icon>
+    </button>
+  </div>
+</div>
