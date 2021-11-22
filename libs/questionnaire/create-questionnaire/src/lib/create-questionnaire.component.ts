@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { OperationTypeEnum, QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
@@ -20,6 +20,8 @@ import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
+import { Observable } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -29,7 +31,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateQuestionnaireComponent implements OnDestroy {
+export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeactivate {
 
   questionnaire: FormGroup<Questionnaire> = new FormGroup<Questionnaire>({
     name: new FormControl<string>('', [
@@ -319,5 +321,10 @@ export class CreateQuestionnaireComponent implements OnDestroy {
     this.store.patchState({
       selectedQuestionnaire: undefined
     });
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.questionnaire.dirty;
   }
 }

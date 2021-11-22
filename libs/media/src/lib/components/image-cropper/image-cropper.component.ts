@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { ImageCropperReq, ImageCropperResponseData } from '../../models/media.interface';
+import { ImageCropperReq } from '../../models/media.interface';
 
 @Component({
   selector: 'hidden-innovation-image-cropper',
@@ -36,7 +36,7 @@ export class ImageCropperComponent {
 
   loadImageFailed(): void {
     this.loading = false;
-    this.hotToastService.error('Image load failed! Please try another image');
+    this.hotToastService.error('Image load failed! Please try a valid jpeg/jpg, png image.');
     this.dialogRef.close(null);
   }
 

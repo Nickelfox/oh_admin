@@ -77,7 +77,7 @@ export class ImagePickerComponent {
           type: 'error',
           dismissible: true
         });
-        this.toastRef?.updateMessage('File load error. Try with some other file');
+        this.toastRef?.updateMessage('File load error. Try with some other valid jpeg/jpg, png image.');
       };
     }
   }

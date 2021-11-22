@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DisableCopyPasteDirective } from './directives/disable-copy-paste.directive';
 import { MaxStringLimitPipe } from './pipes/max-string-limit.pipe';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
+import { PendingChangesGuard } from './guards/pending-changes.guard';
 
 @NgModule({
   imports: [CommonModule],
@@ -16,5 +17,8 @@ import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
     MaxStringLimitPipe,
     ReplaceUnderscorePipe,
   ],
+  providers:[
+    PendingChangesGuard
+  ]
 })
 export class UtilsModule {}
