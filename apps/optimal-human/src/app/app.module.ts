@@ -163,16 +163,35 @@ import { MatCardModule } from '@angular/material/card';
         ]
       },
       {
+        path: 'tests-group',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/test-group/test-group-listing').then(
+                (m) => m.TestGroupListingModule
+              ),
+            data: { breadcrumb: 'Tests Group' }
+          }
+        ]
+      },
+      {
         path: 'tests',
         canActivate: [AuthGuard],
         children: [
           {
             path: '',
             pathMatch: 'full',
-            redirectTo: `single/listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
           {
-            path: 'single/listing/:size/:index',
+            path: 'listing/:size/:index',
             loadChildren: () =>
               import('@hidden-innovation/test/test-listing').then(
                 (m) => m.TestListingModule
@@ -180,12 +199,12 @@ import { MatCardModule } from '@angular/material/card';
             data: { breadcrumb: 'Tests' }
           },
           {
-            path: 'group/listing/:size/:index',
+            path: 'create',
             loadChildren: () =>
-              import('@hidden-innovation/test-group/test-group-listing').then(
-                (m) => m.TestGroupListingModule
+              import('@hidden-innovation/test/test-create').then(
+                (m) => m.TestCreateModule
               ),
-            data: { breadcrumb: 'Tests Group' }
+            data: { breadcrumb: 'Add Test' }
           }
         ]
       },

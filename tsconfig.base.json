@@ -115,6 +115,9 @@
       "@hidden-innovation/test/data-access": [
         "libs/test/data-access/src/index.ts"
       ],
+      "@hidden-innovation/test/test-create": [
+        "libs/test/test-create/src/index.ts"
+      ],
       "@hidden-innovation/test/test-listing": [
         "libs/test/test-listing/src/index.ts"
       ],
