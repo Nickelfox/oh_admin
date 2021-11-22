@@ -46,8 +46,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           isLoading: true
         });
       }),
-      switchMap(({ page, limit }) =>
-        this.questionnaireService.getQuestionnaires({ page, limit }).pipe(
+      switchMap(({ page, limit, dateSort, nameSort, active, scoring }) =>
+        this.questionnaireService.getQuestionnaires({ page, limit, dateSort, nameSort, active, scoring }).pipe(
           tapResponse(
             ({ questionnaire, count }) => {
               this.patchState({
@@ -239,7 +239,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ id, pageIndex, pageSize }) =>
+      exhaustMap(({ id, pageIndex, pageSize, nameSort, active, scoring, dateSort }) =>
         this.questionnaireService.deleteQuestionnaire(id).pipe(
           tapResponse(
             (_) => {
@@ -255,7 +255,11 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
               });
               this.getQuestionnaires$({
                 page: pageIndex,
-                limit: pageSize
+                limit: pageSize,
+                nameSort,
+                active,
+                scoring,
+                dateSort
               });
             },
             (_) => {
@@ -306,7 +310,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
     });
   }
 
-  deleteQuestionnaire(id: number, pageSize: number, pageIndex: number): void {
+  deleteQuestionnaire(deleteObj: QuestionnaireDeleteRequest): void {
+    const { id, pageSize, pageIndex, active, dateSort, nameSort, scoring } = deleteObj;
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Questionnaire?',
       desc: `Are you sure you want to delete this Questionnaire?`,
@@ -325,7 +330,11 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
         this.deleteQuestionnaire$({
           id,
           pageSize,
-          pageIndex
+          pageIndex,
+          nameSort,
+          active,
+          scoring,
+          dateSort
         });
       }
     });

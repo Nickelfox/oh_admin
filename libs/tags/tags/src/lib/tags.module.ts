@@ -6,6 +6,8 @@ import { MaterialModule } from '@hidden-innovation/material';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
 import { TagsDataAccessModule } from '@hidden-innovation/tags/data-access';
+import { SortingHeaderDateModule } from '@hidden-innovation/shared/ui/sorting-header-date';
+import { SortingHeaderNameModule } from '@hidden-innovation/shared/ui/sorting-header-name';
 
 @NgModule({
   imports: [
@@ -21,6 +23,8 @@ import { TagsDataAccessModule } from '@hidden-innovation/tags/data-access';
     TagsDataAccessModule,
     UtilsModule,
     CommonDataFieldStatusModule,
+    SortingHeaderDateModule,
+    SortingHeaderNameModule,
   ],
   declarations: [
     TagsComponent

@@ -94,13 +94,14 @@ export class TagsComponent implements OnInit {
   }
 
   refreshList(): void {
+    const { type, category, nameSort, dateSort } = this.filters.value;
     this.store.getTags$({
       page: this.pageIndex,
       limit: this.pageSize,
-      type: this.filters.value.type,
-      category: this.filters.value.category,
-      nameSort: this.filters.value.nameSort,
-      dateSort: this.filters.value.dateSort
+      type,
+      category,
+      nameSort,
+      dateSort
     });
   }
 

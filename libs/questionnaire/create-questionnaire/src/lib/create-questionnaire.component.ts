@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { OperationTypeEnum, QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
@@ -20,6 +20,8 @@ import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
+import { Observable } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -29,7 +31,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateQuestionnaireComponent implements OnDestroy {
+export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeactivate {
 
   questionnaire: FormGroup<Questionnaire> = new FormGroup<Questionnaire>({
     name: new FormControl<string>('', [
@@ -189,7 +191,13 @@ export class CreateQuestionnaireComponent implements OnDestroy {
       ]),
       description: new FormControl<string>(questionData?.description ?? ''),
       whyAreWeAsking: new FormControl<boolean>(questionData?.whyAreWeAsking ?? false),
-      whyAreWeAskingQuestion: new FormControl<string>(questionData?.whyAreWeAskingQuestion ?? ''),
+      whyAreWeAskingQuestion: new FormControl<string>({
+        value: questionData?.whyAreWeAskingQuestion ?? '',
+        disabled: !questionData?.whyAreWeAsking
+      }, [
+        RxwebValidators.required(),
+        RxwebValidators.notEmpty()
+      ]),
       showIcon: new FormControl<boolean>(questionData?.showIcon ?? false),
       omitScoring: new FormControl<boolean>(questionData?.omitScoring ?? false),
       answer: new FormArray<MultipleChoiceAnswer | AnswerCore>([]),
@@ -293,6 +301,17 @@ export class CreateQuestionnaireComponent implements OnDestroy {
     this.addQuestion(fg);
   }
 
+  removeAnswer(index: number, activeQuestion: number): void {
+    const question: FormGroup<Question> = this.questionFormGroup(activeQuestion);
+    if (question.value.questionType === QuestionTypeEnum.IMAGE_SELECT) {
+      const imageArray: FormArray<ImageSelectAnswer> = question.controls.imageAnswer as FormArray<ImageSelectAnswer>;
+      imageArray.removeAt(index);
+      return;
+    }
+    const answerArray: FormArray<AnswerCore> = question.controls.answer as FormArray<AnswerCore>;
+    answerArray.removeAt(index);
+  }
+
   removeQuestion(index: number): void {
     this.questionsFormArray.removeAt(index);
     this.activeQuestion = undefined;
@@ -304,4 +323,8 @@ export class CreateQuestionnaireComponent implements OnDestroy {
     });
   }
 
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.questionnaire.dirty;
+  }
 }

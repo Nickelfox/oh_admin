@@ -47,6 +47,8 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
     type: QuestionTypeEnum
   }>();
 
+  @Output() removeAnswer: EventEmitter<number> = new EventEmitter<number>();
+
   choiceType = QuestionTypeEnum;
   choiceTypeIte = Object.values(QuestionTypeEnum);
 
@@ -106,6 +108,11 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
         this.imageAnswersArray.clear();
       })
     ).subscribe();
+    this.question.controls.whyAreWeAsking.valueChanges.pipe(
+      tap(isActive => {
+        isActive ? this.question?.controls.whyAreWeAskingQuestion.enable() : this.question?.controls.whyAreWeAskingQuestion.disable();
+      })
+    ).subscribe();
   }
 
   mapImageToForm($event: ImageCropperResponseData, answerIndex: number) {
@@ -130,6 +137,10 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
       index: this._groupName,
       type: this.type
     });
+  }
+
+  removeAnswerReq(index: number): void {
+    this.removeAnswer.emit(index);
   }
 
 }

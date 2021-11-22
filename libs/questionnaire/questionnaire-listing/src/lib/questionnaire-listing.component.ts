@@ -2,12 +2,20 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEnca
 import { Observable } from 'rxjs';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { PageEvent } from '@angular/material/paginator';
-import { map } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
-import { Questionnaire, QuestionnaireStore } from '@hidden-innovation/questionnaire/data-access';
-import { StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
+import {
+  Questionnaire,
+  QuestionnaireDeleteRequest,
+  QuestionnaireListingFilters,
+  QuestionnaireStore
+} from '@hidden-innovation/questionnaire/data-access';
+import { SortingEnum, StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { isEqual } from 'lodash-es';
+import { MatSelectionListChange } from '@angular/material/list';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -24,6 +32,13 @@ export class QuestionnaireListingComponent implements OnInit {
 
   noData: Observable<boolean>;
 
+  filters: FormGroup<QuestionnaireListingFilters> = new FormGroup<QuestionnaireListingFilters>({
+    dateSort: new FormControl(SortingEnum.DESC),
+    nameSort: new FormControl({ value: undefined, disabled: true }),
+    active: new FormControl({ value: undefined, disabled: true }),
+    scoring: new FormControl({ value: undefined, disabled: true })
+  });
+
   // Paginator options
   pageIndex = this.constantDataService.PaginatorData.pageIndex;
   pageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
@@ -32,6 +47,7 @@ export class QuestionnaireListingComponent implements OnInit {
 
   statusChipType = StatusChipType;
   userStatusEnum = UserStatusEnum;
+  sortingEnum = SortingEnum;
 
   listingRoute = '/questionnaire/listing/';
 
@@ -55,9 +71,14 @@ export class QuestionnaireListingComponent implements OnInit {
   }
 
   refreshList(): void {
+    const { nameSort, dateSort, scoring, active } = this.filters.value;
     this.store.getQuestionnaires$({
       page: this.pageIndex,
-      limit: this.pageSize
+      limit: this.pageSize,
+      nameSort,
+      dateSort,
+      scoring,
+      active
     });
   }
 
@@ -69,6 +90,10 @@ export class QuestionnaireListingComponent implements OnInit {
         this.cdr.markForCheck();
       }
     );
+    this.filters.valueChanges.pipe(
+      distinctUntilChanged((x, y) => isEqual(x, y)),
+      tap(_ => this.refreshList())
+    ).subscribe();
   }
 
   onPaginateChange($event: PageEvent): void {
@@ -77,6 +102,62 @@ export class QuestionnaireListingComponent implements OnInit {
     ], {
       relativeTo: this.route
     });
+  }
+
+  deleteQuestionnaire(id: number) {
+    const { scoring, active, dateSort, nameSort } = this.filters.value;
+    const deleteObj: QuestionnaireDeleteRequest = {
+      id,
+      dateSort,
+      nameSort,
+      active,
+      scoring,
+      pageSize: this.pageSize,
+      pageIndex: this.pageIndex
+    };
+    this.store.deleteQuestionnaire(deleteObj);
+  }
+
+  updateSorting(fieldName: 'dateSort' | 'nameSort'): void {
+    const { nameSort, dateSort } = this.filters.controls;
+
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+    switch (fieldName) {
+      case 'nameSort':
+        dateSort.disable();
+        updateSortingCtrl(nameSort);
+        break;
+      case 'dateSort':
+        nameSort.disable();
+        updateSortingCtrl(dateSort);
+        break;
+    }
+  }
+
+  updateFilterChange(matSelection: MatSelectionListChange, ctrl: FormControl): void {
+    const value = matSelection.source._value as unknown as Array<'TRUE' | 'FALSE' | undefined>;
+    let expandedVal: 'TRUE' | 'FALSE' | undefined;
+    try {
+      expandedVal = value[0] ?? undefined;
+    } catch {
+      expandedVal = undefined;
+    }
+    if (expandedVal !== undefined && expandedVal !== null) {
+      ctrl.setValue(expandedVal);
+      ctrl.enable();
+    } else {
+      ctrl.setValue(undefined);
+      ctrl.disable();
+    }
   }
 
 }

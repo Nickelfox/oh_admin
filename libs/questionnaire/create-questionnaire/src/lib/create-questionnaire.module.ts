@@ -7,7 +7,7 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
 import { QuestionnaireQuestionFormModule } from '@hidden-innovation/shared/ui/questionnaire-question-form';
 import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
-import { UtilsModule } from '@hidden-innovation/shared/utils';
+import { PendingChangesGuard, UtilsModule } from '@hidden-innovation/shared/utils';
 
 @NgModule({
   imports: [
@@ -21,7 +21,8 @@ import { UtilsModule } from '@hidden-innovation/shared/utils';
       {
         path: '',
         pathMatch: 'full',
-        component: CreateQuestionnaireComponent
+        component: CreateQuestionnaireComponent,
+        canDeactivate: [PendingChangesGuard]
       }
     ]),
     A11yModule,

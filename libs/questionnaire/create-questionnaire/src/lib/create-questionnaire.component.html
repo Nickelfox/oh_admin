@@ -23,7 +23,7 @@
     <div class='row justify-content-between'>
       <div class='col-lg-5'>
         <div class='container-fluid p-0 m-0 h-100'>
-          <div class='row'>
+          <div class='row mb-2'>
             <div class='col-12'>
               <hidden-innovation-common-form-field
                 label='Questionnaire Name'
@@ -117,7 +117,8 @@
                   _groupName='{{activeQuestion}}'
                   [isScoring]='questionnaire.controls.isScoring.value'
                   [type]='questionFormGroup(activeQuestion).controls.questionType.value'
-                  (addAnswer)='addAnswer($event)'>
+                  (addAnswer)='addAnswer($event)'
+                  (removeAnswer)='removeAnswer($event, activeQuestion)'>
                 </hidden-innovation-questionnaire-question-form>
               </div>
             </div>
