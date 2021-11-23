@@ -83,13 +83,13 @@
                                           (selectionChange)='updateFilterChange($event, filters.controls.scoring)'
                                           [multiple]='false' class='pt-0'>
                         <mat-list-option [value]='"TRUE"'>
-                          <h6 class='mat-h6'>Enabled</h6>
+                          Enabled
                         </mat-list-option>
                         <mat-list-option [value]='"FALSE"'>
-                          <h6 class='mat-h6'>Disabled</h6>
+                          Disabled
                         </mat-list-option>
                         <mat-list-option [value]='undefined'>
-                          <h6 class='mat-h6'>Clear</h6>
+                          Clear
                         </mat-list-option>
                       </mat-selection-list>
                     </mat-menu>
@@ -99,7 +99,7 @@
               <td mat-cell *matCellDef='let element'>
                 <hidden-innovation-common-data-field-status
                   *ngIf='!!element.isScoring'
-                  [chipType]='statusChipType.PRIMARY'
+                  [chipType]='statusChipType.SUCCESS'
                   [text]='"enabled" | titlecase'
                 ></hidden-innovation-common-data-field-status>
               </td>
@@ -124,13 +124,13 @@
                                           (selectionChange)='updateFilterChange($event, filters.controls.active)'
                                           [multiple]='false' class='pt-0'>
                         <mat-list-option [value]='"TRUE"'>
-                          <h6 class='mat-h6'>{{userStatusEnum.ACTIVE | titlecase}}</h6>
+                          {{userStatusEnum.ACTIVE | titlecase}}
                         </mat-list-option>
                         <mat-list-option [value]='"FALSE"'>
-                          <h6 class='mat-h6'>{{userStatusEnum.INACTIVE | titlecase}}</h6>
+                          {{userStatusEnum.INACTIVE | titlecase}}
                         </mat-list-option>
                         <mat-list-option [value]='undefined'>
-                          <h6 class='mat-h6'>Clear</h6>
+                          Clear
                         </mat-list-option>
                       </mat-selection-list>
                     </mat-menu>

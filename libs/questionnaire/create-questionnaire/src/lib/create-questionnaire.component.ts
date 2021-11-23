@@ -21,7 +21,6 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
-import { Observable } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -52,7 +51,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   opType?: OperationTypeEnum;
 
   operationTypeEnum = OperationTypeEnum;
-
+  loaded = false;
   private questionnaireID?: number;
 
   constructor(
@@ -84,6 +83,9 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         });
       }
     });
+    this.store.loaded$.pipe(
+      tap(res => this.loaded = res)
+    ).subscribe();
   }
 
   get questionsFormArray(): FormArray<Question> {
@@ -324,7 +326,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   }
 
   @HostListener('window:beforeunload')
-  canDeactivate(): Observable<boolean> | boolean {
-    return !this.questionnaire.dirty;
+  canDeactivate(): boolean {
+    return this.questionnaire.dirty ? this.loaded : true;
   }
 }
