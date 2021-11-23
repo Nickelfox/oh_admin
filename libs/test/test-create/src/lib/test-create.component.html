@@ -1,1 +1,173 @@
-// TODO Add create test template only.
+<form class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button
+          mat-stroked-button type='button'
+          [routerLink]="['/questionnaire']"
+          class='ml-3'>
+          Cancel
+        </button>
+        <button
+          mat-flat-button
+          class='ml-3'
+          color='primary' type='submit'>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class='container-fluid p-0'>
+    <div class='row '>
+      <div class='col-lg-7 col-12'>
+        <div class='container-fluid p-0'>
+          <div class='row pt-1' >
+            <div class='col-12'>
+              <mat-card>
+
+                <mat-card-content class='mb-0'>
+                  <div class='container-fluid p-0 pt-3'>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <h3 class='mat-h3 pb-3 mb-0 font-sf-pro'>
+                          General
+                        </h3>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <hidden-innovation-common-form-field
+                          label='Test Name'
+                          controlPath='name'
+                        ></hidden-innovation-common-form-field>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <mat-form-field class='w-100' appearance="fill">
+                          <mat-label>Category</mat-label>
+                          <mat-select>
+                            <mat-option value="cardio">Cardio</mat-option>
+                            <mat-option value="strength">Strength</mat-option>
+                            <mat-option value="function">Function</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='container-fluid p-0 pt-3'>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <h3 class='mat-h3 pb-3 mb-0 font-sf-pro'>
+                          Media
+                        </h3>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <p class='text-muted'>Video File</p>
+                        <button
+                          mat-flat-button
+                          class='mb-3'
+                          color='accent' type='submit'>
+                          Upload
+                        </button>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <p class='text-muted'>Thumnail</p>
+                        <button
+                          mat-flat-button
+                          class='mb-3'
+                          color='accent' type='submit'>
+                          Upload
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='container-fluid p-0 pt-3'>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <h3 class='mat-h3 pb-3 mb-0 font-sf-pro'>
+                          Overview
+                        </h3>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <mat-form-field class='w-100'>
+                          <mat-label>Label</mat-label>
+                          <textarea matInput ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <mat-form-field class='w-100'>
+                          <mat-label>Description</mat-label>
+                          <textarea matInput ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <mat-form-field class='w-100'>
+                          <mat-label>Outcomes</mat-label>
+                          <textarea matInput ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <mat-form-field class='w-100'>
+                          <mat-label>Procedure</mat-label>
+                          <textarea matInput ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <mat-checkbox color='primary'>
+                          <h4 class='text-muted m-0 ml-2'>
+                            Equipment</h4>
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <mat-form-field class='w-100 mt-3'>
+                          <mat-label>Equipment</mat-label>
+                          <textarea matInput ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class='container-fluid p-0 pt-3'>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <div class='row'>
+                          <div class='col-12'>
+                            <h3 class='mat-h3 pb-3 mb-0 font-sf-pro'>
+                              Tags
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</form>

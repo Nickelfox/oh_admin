@@ -131,5 +131,4 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
       type: this.type
     });
   }
-
 }

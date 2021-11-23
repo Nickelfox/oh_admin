@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
+
 @Component({
   selector: 'hidden-innovation-test-create',
   templateUrl: './test-create.component.html',
@@ -7,9 +8,14 @@ import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+
 export class TestCreateComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+
+  }
+
 
   ngOnInit(): void {
   }
