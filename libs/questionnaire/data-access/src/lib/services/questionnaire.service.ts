@@ -35,6 +35,9 @@ export class QuestionnaireService {
     if (reqObj.dateSort) {
       params = params.append('dateSort', reqObj.dateSort);
     }
+    if (reqObj.search && reqObj.search?.length) {
+      params = params.append('search', reqObj.search);
+    }
     if (reqObj.scoring !== undefined && reqObj.scoring !== null) {
       params = params.append('scoring', reqObj.scoring);
     }

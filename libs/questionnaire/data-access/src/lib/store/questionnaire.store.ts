@@ -46,8 +46,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           isLoading: true
         });
       }),
-      switchMap(({ page, limit, dateSort, nameSort, active, scoring }) =>
-        this.questionnaireService.getQuestionnaires({ page, limit, dateSort, nameSort, active, scoring }).pipe(
+      switchMap((listObj) =>
+        this.questionnaireService.getQuestionnaires(listObj).pipe(
           tapResponse(
             ({ questionnaire, count }) => {
               this.patchState({
@@ -239,7 +239,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ id, pageIndex, pageSize, nameSort, active, scoring, dateSort }) =>
+      exhaustMap(({ id, pageIndex, pageSize, nameSort, active, scoring, dateSort, search }) =>
         this.questionnaireService.deleteQuestionnaire(id).pipe(
           tapResponse(
             (_) => {
@@ -259,7 +259,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 nameSort,
                 active,
                 scoring,
-                dateSort
+                dateSort,
+                search
               });
             },
             (_) => {
@@ -311,7 +312,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
   }
 
   deleteQuestionnaire(deleteObj: QuestionnaireDeleteRequest): void {
-    const { id, pageSize, pageIndex, active, dateSort, nameSort, scoring } = deleteObj;
+    const { id, pageSize, pageIndex, active, dateSort, nameSort, scoring, search } = deleteObj;
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Questionnaire?',
       desc: `Are you sure you want to delete this Questionnaire?`,
@@ -334,7 +335,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           nameSort,
           active,
           scoring,
-          dateSort
+          dateSort,
+          search
         });
       }
     });

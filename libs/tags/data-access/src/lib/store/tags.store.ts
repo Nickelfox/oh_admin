@@ -38,8 +38,8 @@ export class TagsStore extends ComponentStore<TagsState> {
           isLoading: true
         });
       }),
-      switchMap(({ page, limit, type, category, dateSort, nameSort }) =>
-        this.tagsService.getTags({ page, limit, type, category, dateSort, nameSort }).pipe(
+      switchMap((reqObj) =>
+        this.tagsService.getTags(reqObj).pipe(
           tapResponse(
             ({ tags, total }) => {
               this.patchState({
@@ -74,17 +74,17 @@ export class TagsStore extends ComponentStore<TagsState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ tag, type, category, page, limit, dateSort, nameSort }) =>
+      exhaustMap(({ tag, type, category, page, limit, dateSort, nameSort, search }) =>
         this.tagsService.createTag(tag).pipe(
           tapResponse(
             (newTag) => {
               this.patchState({
-                isActing: false,
+                isActing: false
               });
               this.toastRef?.updateMessage('Tag Created!');
               this.toastRef?.updateToast({
                 dismissible: true,
-                type: 'success',
+                type: 'success'
               });
               this.getTags$({
                 page,
@@ -92,7 +92,8 @@ export class TagsStore extends ComponentStore<TagsState> {
                 category,
                 type,
                 dateSort,
-                nameSort
+                nameSort,
+                search
               });
             },
             error => {
@@ -142,7 +143,7 @@ export class TagsStore extends ComponentStore<TagsState> {
               this.toastRef?.updateMessage('Tag Updated!');
               this.toastRef?.updateToast({
                 dismissible: true,
-                type: 'success',
+                type: 'success'
               });
             },
             _ => {
@@ -169,7 +170,7 @@ export class TagsStore extends ComponentStore<TagsState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ id, page, limit, type, category, dateSort, nameSort }) =>
+      exhaustMap(({ id, page, limit, type, category, dateSort, nameSort, search }) =>
         this.tagsService.deleteTag(id).pipe(
           tapResponse(
             (_) => {
@@ -189,7 +190,8 @@ export class TagsStore extends ComponentStore<TagsState> {
                 type,
                 category,
                 dateSort,
-                nameSort
+                nameSort,
+                search
               });
             },
             (_) => {
@@ -214,7 +216,7 @@ export class TagsStore extends ComponentStore<TagsState> {
   }
 
   deleteTag(deleteObj: TagDeleteRequest): void {
-    const { page, limit, type, category, dateSort, nameSort, id } = deleteObj;
+    const { page, limit, type, category, dateSort, nameSort, id, search } = deleteObj;
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Tag?',
       desc: `Are you sure you want to delete this Tag?`,
@@ -237,7 +239,8 @@ export class TagsStore extends ComponentStore<TagsState> {
           type,
           category,
           dateSort,
-          nameSort
+          nameSort,
+          search
         });
       }
     });

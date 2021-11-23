@@ -32,6 +32,9 @@ export class TagsService {
     if (reqObj.dateSort) {
       params = params.append('dateSort', reqObj.dateSort);
     }
+    if (reqObj.search && reqObj.search?.length) {
+      params = params.append('search', reqObj.search);
+    }
     return this.http.get<TagsListingResponse>(`${this.env.baseURL}/v1/admin/get-tags`, { params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
