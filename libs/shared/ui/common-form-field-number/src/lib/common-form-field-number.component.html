@@ -3,11 +3,17 @@
   <input matInput autocomplete='no' [disabled]='disabled' [readonly]='readonly' type='number'
          [placeholder]='placeholder || label'
          [formControl]='control'>
-  <mat-error
-    *ngIf='control.errors?.required || control.errors?.notEmpty'>
-    {{label}} {{errorMessage.required}}</mat-error>
-  <mat-error
-    *ngIf='control.errors?.invalid || control.errors?.numeric'>{{errorMessage.invalid}}</mat-error>
-  <mat-error
-    *ngIf='control.errors?.min'>Invalid! Must be greater than {{control.errors?.min?.min}}</mat-error>
+  <mat-error>
+    <ng-template [ngIf]='((control.touch$ | async) || (control.dirty$ | async)) && (control.errors$ | async)' let-error>
+      <ng-container *ngIf='error?.required || error?.notEmpty'>
+        {{label}} {{errorMessage.required}} <br>
+      </ng-container>
+      <ng-container *ngIf='error?.invalid || error?.numeric'>
+        {{errorMessage.invalid}} <br>
+      </ng-container>
+      <ng-container *ngIf='error?.min'>
+        Invalid! Must be greater than {{control.errors?.min?.min}} <br>
+      </ng-container>
+    </ng-template>
+  </mat-error>
 </mat-form-field>

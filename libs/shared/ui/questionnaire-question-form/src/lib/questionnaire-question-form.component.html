@@ -88,7 +88,8 @@
             </mat-checkbox>
           </div>
         </div>
-        <div class='row my-3'>
+        <div class='row my-3'
+             [ngClass]='{"pt-3": question.controls.questionType.value !== choiceType.MULTIPLE_CHOICE }'>
           <div class='col-3'>
             <h5 class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>POINTS</h5>
           </div>
@@ -182,7 +183,9 @@
                             [isInvalid]='imageAnswerGroup(i).controls.imageId.invalid && imageAnswerGroup(i).controls.imageId.touched'
                             (imageUploadRes)='mapImageToForm($event, i)'
                           ></hidden-innovation-image-picker>
-                          <mat-error *ngIf='imageAnswerGroup(i).controls.imageId.invalid && imageAnswerGroup(i).controls.imageId.touched'><small class='ml-2'>Image is required</small></mat-error>
+                          <mat-error
+                            *ngIf='imageAnswerGroup(i).controls.imageId.invalid && imageAnswerGroup(i).controls.imageId.touched'>
+                            <small class='ml-2'>Image is required</small></mat-error>
                         </div>
                       </ng-template>
                     </div>
@@ -218,8 +221,18 @@
       </ng-template>
     </div>
   </mat-card-content>
-  <mat-card-actions>
+  <mat-card-actions class='d-flex align-items-center justify-content-between'>
     <button mat-button (click)='addNewAnswer()'>ADD ANSWER
     </button>
+    <div>
+      <ng-template
+        [ngIf]='((question?.controls?.answer?.errors && question?.controls?.answer?.touched) || question?.controls?.imageAnswer?.errors && question?.controls?.imageAnswer?.touched)'
+        [ngIfElse]='answerLengthErrorElse'>
+        <mat-error><small>{{formValidationService.answerValidationMessage.minLength}}</small></mat-error>
+      </ng-template>
+      <ng-template #answerLengthErrorElse>
+        <mat-hint><small>{{formValidationService.answerValidationMessage.minLength}}</small></mat-hint>
+      </ng-template>
+    </div>
   </mat-card-actions>
 </mat-card>

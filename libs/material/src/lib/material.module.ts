@@ -33,6 +33,7 @@ import { LuxonDateAdapter, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/mater
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatSortModule } from '@angular/material/sort';
 import { MatListModule } from '@angular/material/list';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 export const MY_FORMATS = {
   parse: {
@@ -76,6 +77,7 @@ export const MY_FORMATS = {
     MatCheckboxModule,
     MatSortModule,
     MatListModule,
+    DragDropModule,
 
     // Non-Material Imports
     ImageCropperModule
@@ -108,6 +110,7 @@ export const MY_FORMATS = {
     MatCheckboxModule,
     MatSortModule,
     MatListModule,
+    DragDropModule,
 
     // Non-Material Exports
     ImageCropperModule

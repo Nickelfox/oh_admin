@@ -21,6 +21,7 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -39,7 +40,8 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
-      Validators.min(2)
+      Validators.required,
+      Validators.minLength(2)
     ])
   });
 
@@ -202,34 +204,52 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       ]),
       showIcon: new FormControl<boolean>(questionData?.showIcon ?? false),
       omitScoring: new FormControl<boolean>(questionData?.omitScoring ?? false),
-      answer: new FormArray<MultipleChoiceAnswer | AnswerCore>([]),
-      imageAnswer: new FormArray<ImageSelectAnswer>([])
+      answer: new FormArray<MultipleChoiceAnswer | AnswerCore>([], type !== QuestionTypeEnum.IMAGE_SELECT ? [
+        Validators.required,
+        Validators.minLength(2)
+      ] : null),
+      imageAnswer: new FormArray<ImageSelectAnswer>([], type === QuestionTypeEnum.IMAGE_SELECT ? [
+        Validators.required,
+        Validators.minLength(2)
+      ] : null)
     });
+  }
+
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.questionsFormArray.controls, event.previousIndex, event.currentIndex);
   }
 
   submit(): void {
     this.questionnaire.markAllAsDirty();
     this.questionnaire.markAllAsTouched();
     if (this.questionnaire.invalid) {
-      return;
-    }
-    const alteredQuestionnaire: Questionnaire = {
-      name: this.questionnaire.value.name,
-      isScoring: this.questionnaire.value.isScoring,
-      questions: this.changedQuestionType(this.questionnaire.value.questions)
-    };
-    if (this.opType === OperationTypeEnum.CREATE) {
-      this.store.createQuestionnaire$(alteredQuestionnaire);
-    } else if (this.opType === OperationTypeEnum.EDIT) {
-      if (!this.questionnaireID) {
-        this.hotToastService.error('Error occurred while submitting details');
+      if (this.questionnaire.controls.name.invalid || this.questionnaire.controls.isScoring.invalid) {
         return;
       }
-      this.store.updateQuestionnaire$({
-        id: this.questionnaireID,
-        questionnaire: alteredQuestionnaire
-      });
+      if (this.questionnaire.controls.questions.errors?.required || this.questionnaire.controls.questions.errors?.minlength) {
+        this.hotToastService.error(this.formValidationService.questionValidationMessage.minLength);
+        return;
+      }
+      return;
     }
+    // const alteredQuestionnaire: Questionnaire = {
+    //   name: this.questionnaire.value.name,
+    //   isScoring: this.questionnaire.value.isScoring,
+    //   questions: this.changedQuestionType(this.questionnaire.value.questions)
+    // };
+    // if (this.opType === OperationTypeEnum.CREATE) {
+    //   this.store.createQuestionnaire$(alteredQuestionnaire);
+    // } else if (this.opType === OperationTypeEnum.EDIT) {
+    //   if (!this.questionnaireID) {
+    //     this.hotToastService.error('Error occurred while submitting details');
+    //     return;
+    //   }
+    //   this.store.updateQuestionnaire$({
+    //     id: this.questionnaireID,
+    //     questionnaire: alteredQuestionnaire
+    //   });
+    // }
   }
 
   questionFormGroup(questionIndex: number): FormGroup<Question> {
