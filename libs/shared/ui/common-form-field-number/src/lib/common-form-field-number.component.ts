@@ -4,7 +4,6 @@ import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-common-form-field-number',
   templateUrl: './common-form-field-number.component.html',
@@ -26,14 +25,12 @@ export class CommonFormFieldNumberComponent implements OnInit {
   constructor(
     private fgd: FormGroupDirective,
     public formValidationService: FormValidationService,
-    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
     this.control = this.fgd.control.get(
       this.controlPath
     ) as FormControl;
-    this.control.touch$.subscribe(_ => this.cdr.markForCheck());
   }
 
 }

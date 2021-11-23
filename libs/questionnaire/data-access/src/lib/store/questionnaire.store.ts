@@ -23,19 +23,22 @@ export interface QuestionnaireState {
   total: number;
   isLoading?: boolean;
   isActing?: boolean;
+  loaded?: boolean;
 }
 
 const initialState: QuestionnaireState = {
   questionnaires: [],
   total: 0,
   isLoading: false,
-  isActing: false
+  isActing: false,
+  loaded: false
 };
 
 @Injectable()
 export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
 
   readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
+  readonly loaded$: Observable<boolean> = this.select(state => !!state.loaded);
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly selectedQuestionnaire$: Observable<QuestionnaireExtended | undefined> = this.select(state => state.selectedQuestionnaire);
@@ -46,12 +49,13 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           isLoading: true
         });
       }),
-      switchMap(({ page, limit, dateSort, nameSort, active, scoring }) =>
-        this.questionnaireService.getQuestionnaires({ page, limit, dateSort, nameSort, active, scoring }).pipe(
+      switchMap((listObj) =>
+        this.questionnaireService.getQuestionnaires(listObj).pipe(
           tapResponse(
             ({ questionnaire, count }) => {
               this.patchState({
                 isLoading: false,
+                loaded: true,
                 questionnaires: questionnaire,
                 total: count
               });
@@ -118,7 +122,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           tapResponse(
             (response) => {
               this.patchState({
-                isActing: false
+                isActing: false,
+                loaded: true
               });
               this.toastRef?.updateMessage('Questionnaire Created!');
               this.toastRef?.updateToast({
@@ -158,6 +163,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
             (response) => {
               this.patchState({
                 isActing: false,
+                loaded: true,
                 selectedQuestionnaire: response
               });
               this.toastRef?.updateMessage('Questionnaire Updated!');
@@ -198,6 +204,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
               const questionnaires: QuestionnaireExtended[] | undefined = this.get().questionnaires;
               this.patchState({
                 isActing: false,
+                loaded: true,
                 questionnaires: questionnaires.map(q => {
                   if (q.id === id) {
                     return {
@@ -239,13 +246,14 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ id, pageIndex, pageSize, nameSort, active, scoring, dateSort }) =>
+      exhaustMap(({ id, pageIndex, pageSize, nameSort, active, scoring, dateSort, search }) =>
         this.questionnaireService.deleteQuestionnaire(id).pipe(
           tapResponse(
             (_) => {
               const questionnaires: QuestionnaireExtended[] | undefined = this.get().questionnaires;
               this.patchState({
                 isActing: false,
+                loaded: true,
                 questionnaires: questionnaires.filter(q => q.id !== id)
               });
               this.toastRef?.updateMessage('Success! Questionnaire deleted');
@@ -259,7 +267,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 nameSort,
                 active,
                 scoring,
-                dateSort
+                dateSort,
+                search
               });
             },
             (_) => {
@@ -311,7 +320,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
   }
 
   deleteQuestionnaire(deleteObj: QuestionnaireDeleteRequest): void {
-    const { id, pageSize, pageIndex, active, dateSort, nameSort, scoring } = deleteObj;
+    const { id, pageSize, pageIndex, active, dateSort, nameSort, scoring, search } = deleteObj;
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Questionnaire?',
       desc: `Are you sure you want to delete this Questionnaire?`,
@@ -334,7 +343,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
           nameSort,
           active,
           scoring,
-          dateSort
+          dateSort,
+          search
         });
       }
     });

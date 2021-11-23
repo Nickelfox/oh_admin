@@ -36,7 +36,8 @@ export class QuestionnaireListingComponent implements OnInit {
     dateSort: new FormControl(SortingEnum.DESC),
     nameSort: new FormControl({ value: undefined, disabled: true }),
     active: new FormControl({ value: undefined, disabled: true }),
-    scoring: new FormControl({ value: undefined, disabled: true })
+    scoring: new FormControl({ value: undefined, disabled: true }),
+    search: new FormControl(undefined),
   });
 
   // Paginator options
@@ -71,14 +72,15 @@ export class QuestionnaireListingComponent implements OnInit {
   }
 
   refreshList(): void {
-    const { nameSort, dateSort, scoring, active } = this.filters.value;
+    const { nameSort, dateSort, scoring, active, search } = this.filters.value;
     this.store.getQuestionnaires$({
       page: this.pageIndex,
       limit: this.pageSize,
       nameSort,
       dateSort,
       scoring,
-      active
+      active,
+      search
     });
   }
 
@@ -105,13 +107,14 @@ export class QuestionnaireListingComponent implements OnInit {
   }
 
   deleteQuestionnaire(id: number) {
-    const { scoring, active, dateSort, nameSort } = this.filters.value;
+    const { scoring, active, dateSort, nameSort, search } = this.filters.value;
     const deleteObj: QuestionnaireDeleteRequest = {
       id,
       dateSort,
       nameSort,
       active,
       scoring,
+      search,
       pageSize: this.pageSize,
       pageIndex: this.pageIndex
     };

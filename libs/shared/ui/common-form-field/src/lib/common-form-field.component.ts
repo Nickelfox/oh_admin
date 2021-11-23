@@ -4,7 +4,6 @@ import { FormGroupDirective } from '@angular/forms';
 import { FormControl } from '@ngneat/reactive-forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
-@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-common-form-field',
   templateUrl: './common-form-field.component.html',
@@ -26,7 +25,6 @@ export class CommonFormFieldComponent implements OnInit {
   constructor(
     private fgd: FormGroupDirective,
     public formValidationService: FormValidationService,
-    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -34,7 +32,6 @@ export class CommonFormFieldComponent implements OnInit {
     this.control = this.fgd.control.get(
       this.controlPath
     ) as FormControl;
-    this.control.touch$.subscribe(_ => this.cdr.markForCheck());
   }
 
 }

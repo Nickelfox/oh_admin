@@ -29,6 +29,7 @@ export interface QuestionnaireListingFilters {
   nameSort: SortingEnum | undefined;
   active: "TRUE" | "FALSE" | undefined;
   scoring: "TRUE" | "FALSE" | undefined;
+  search: string | undefined;
 }
 
 export interface QuestionnaireListingRequest extends QuestionnaireListingFilters {

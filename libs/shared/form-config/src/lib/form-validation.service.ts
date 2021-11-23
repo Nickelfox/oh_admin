@@ -47,6 +47,14 @@ export class FormValidationService {
     invalid: 'Invalid! Must be a HEX color code'
   };
 
+  questionValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 questions are required to create a questionnaire'
+  }
+
+  answerValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 answers are required to create a question'
+  }
+
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
 
   // private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
