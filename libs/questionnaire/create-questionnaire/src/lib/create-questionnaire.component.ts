@@ -233,23 +233,23 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       }
       return;
     }
-    // const alteredQuestionnaire: Questionnaire = {
-    //   name: this.questionnaire.value.name,
-    //   isScoring: this.questionnaire.value.isScoring,
-    //   questions: this.changedQuestionType(this.questionnaire.value.questions)
-    // };
-    // if (this.opType === OperationTypeEnum.CREATE) {
-    //   this.store.createQuestionnaire$(alteredQuestionnaire);
-    // } else if (this.opType === OperationTypeEnum.EDIT) {
-    //   if (!this.questionnaireID) {
-    //     this.hotToastService.error('Error occurred while submitting details');
-    //     return;
-    //   }
-    //   this.store.updateQuestionnaire$({
-    //     id: this.questionnaireID,
-    //     questionnaire: alteredQuestionnaire
-    //   });
-    // }
+    const alteredQuestionnaire: Questionnaire = {
+      name: this.questionnaire.value.name,
+      isScoring: this.questionnaire.value.isScoring,
+      questions: this.changedQuestionType(this.questionnaire.value.questions)
+    };
+    if (this.opType === OperationTypeEnum.CREATE) {
+      this.store.createQuestionnaire$(alteredQuestionnaire);
+    } else if (this.opType === OperationTypeEnum.EDIT) {
+      if (!this.questionnaireID) {
+        this.hotToastService.error('Error occurred while submitting details');
+        return;
+      }
+      this.store.updateQuestionnaire$({
+        id: this.questionnaireID,
+        questionnaire: alteredQuestionnaire
+      });
+    }
   }
 
   questionFormGroup(questionIndex: number): FormGroup<Question> {
