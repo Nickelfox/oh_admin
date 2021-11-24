@@ -21,7 +21,7 @@
     <div class='row '>
       <div class='col-lg-7 col-12'>
         <div class='container-fluid p-0'>
-          <div class='row pt-1' >
+          <div class='row pt-1'>
             <div class='col-12'>
               <mat-card>
 
@@ -44,12 +44,12 @@
                     </div>
                     <div class='row mb-3'>
                       <div class='col-12'>
-                        <mat-form-field class='w-100' appearance="fill">
+                        <mat-form-field class='w-100' appearance='fill'>
                           <mat-label>Category</mat-label>
                           <mat-select>
-                            <mat-option value="cardio">Cardio</mat-option>
-                            <mat-option value="strength">Strength</mat-option>
-                            <mat-option value="function">Function</mat-option>
+                            <mat-option value='cardio'>Cardio</mat-option>
+                            <mat-option value='strength'>Strength</mat-option>
+                            <mat-option value='function'>Function</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
@@ -96,7 +96,7 @@
                       <div class='col-12'>
                         <mat-form-field class='w-100'>
                           <mat-label>Label</mat-label>
-                          <textarea matInput ></textarea>
+                          <textarea matInput></textarea>
                         </mat-form-field>
                       </div>
                     </div>
@@ -104,7 +104,7 @@
                       <div class='col-12'>
                         <mat-form-field class='w-100'>
                           <mat-label>Description</mat-label>
-                          <textarea matInput ></textarea>
+                          <textarea matInput></textarea>
                         </mat-form-field>
                       </div>
                     </div>
@@ -112,7 +112,7 @@
                       <div class='col-12'>
                         <mat-form-field class='w-100'>
                           <mat-label>Outcomes</mat-label>
-                          <textarea matInput ></textarea>
+                          <textarea matInput></textarea>
                         </mat-form-field>
                       </div>
                     </div>
@@ -120,7 +120,7 @@
                       <div class='col-12'>
                         <mat-form-field class='w-100'>
                           <mat-label>Procedure</mat-label>
-                          <textarea matInput ></textarea>
+                          <textarea matInput></textarea>
                         </mat-form-field>
                       </div>
                     </div>
@@ -136,7 +136,7 @@
                       <div class='col-12'>
                         <mat-form-field class='w-100 '>
                           <mat-label>Equipment</mat-label>
-                          <textarea matInput ></textarea>
+                          <textarea matInput></textarea>
                         </mat-form-field>
                       </div>
                     </div>
@@ -155,30 +155,30 @@
                     </div>
                     <div class='row mb-3'>
                       <div class='col-12'>
-                        <mat-form-field class="example-chip-list w-100" appearance="fill">
+                        <mat-form-field class='example-chip-list w-100' appearance='fill'>
                           <mat-label>Subcategory(s)</mat-label>
-                          <mat-chip-list #chipList aria-label="tag selection">
+                          <mat-chip-list #chipList aria-label='tag selection'>
                             <mat-chip
-                              *ngFor="let tag of tags"
-                              [selectable]="selectable"
-                              [removable]="removable"
-                              (removed)="remove(tag)">
+                              *ngFor='let tag of tags'
+                              [selectable]='selectable'
+                              [removable]='removable'
+                              (removed)='remove(tag)'>
                               {{tag}}
-                              <button matChipRemove *ngIf="removable">
+                              <button matChipRemove *ngIf='removable'>
                                 <mat-icon>cancel</mat-icon>
                               </button>
                             </mat-chip>
                             <input
-                              placeholder="New tag..."
+                              placeholder='New tag...'
                               #tagInput
-                              [formControl]="tagsCtrl"
-                              [matAutocomplete]="auto"
-                              [matChipInputFor]="chipList"
-                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                              (matChipInputTokenEnd)="add($event)">
+                              [formControl]='tagsCtrl'
+                              [matAutocomplete]='auto'
+                              [matChipInputFor]='chipList'
+                              [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
+                              (matChipInputTokenEnd)='add($event)'>
                           </mat-chip-list>
-                          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                          <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
+                            <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
                               {{tag}}
                             </mat-option>
                           </mat-autocomplete>
@@ -187,30 +187,30 @@
                     </div>
                     <div class='row mb-3'>
                       <div class='col-12'>
-                        <mat-form-field class="example-chip-list w-100" appearance="fill">
+                        <mat-form-field class='example-chip-list w-100' appearance='fill'>
                           <mat-label>Exercise(s)</mat-label>
-                          <mat-chip-list #chipList aria-label="tag selection">
+                          <mat-chip-list #chipList aria-label='tag selection'>
                             <mat-chip
-                              *ngFor="let tag of tags"
-                              [selectable]="selectable"
-                              [removable]="removable"
-                              (removed)="remove(tag)">
+                              *ngFor='let tag of tags'
+                              [selectable]='selectable'
+                              [removable]='removable'
+                              (removed)='remove(tag)'>
                               {{tag}}
-                              <button matChipRemove *ngIf="removable">
+                              <button matChipRemove *ngIf='removable'>
                                 <mat-icon>cancel</mat-icon>
                               </button>
                             </mat-chip>
                             <input
-                              placeholder="New tag..."
+                              placeholder='New tag...'
                               #tagInput
-                              [formControl]="tagsCtrl"
-                              [matAutocomplete]="auto"
-                              [matChipInputFor]="chipList"
-                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                              (matChipInputTokenEnd)="add($event)">
+                              [formControl]='tagsCtrl'
+                              [matAutocomplete]='auto'
+                              [matChipInputFor]='chipList'
+                              [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
+                              (matChipInputTokenEnd)='add($event)'>
                           </mat-chip-list>
-                          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                          <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
+                            <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
                               {{tag}}
                             </mat-option>
                           </mat-autocomplete>
@@ -219,30 +219,30 @@
                     </div>
                     <div class='row mb-3'>
                       <div class='col-12'>
-                        <mat-form-field class="example-chip-list w-100" appearance="fill">
+                        <mat-form-field class='example-chip-list w-100' appearance='fill'>
                           <mat-label>Target Area(s)</mat-label>
-                          <mat-chip-list #chipList aria-label="tag selection">
+                          <mat-chip-list #chipList aria-label='tag selection'>
                             <mat-chip
-                              *ngFor="let tag of tags"
-                              [selectable]="selectable"
-                              [removable]="removable"
-                              (removed)="remove(tag)">
+                              *ngFor='let tag of tags'
+                              [selectable]='selectable'
+                              [removable]='removable'
+                              (removed)='remove(tag)'>
                               {{tag}}
-                              <button matChipRemove *ngIf="removable">
+                              <button matChipRemove *ngIf='removable'>
                                 <mat-icon>cancel</mat-icon>
                               </button>
                             </mat-chip>
                             <input
-                              placeholder="New tag..."
+                              placeholder='New tag...'
                               #tagInput
-                              [formControl]="tagsCtrl"
-                              [matAutocomplete]="auto"
-                              [matChipInputFor]="chipList"
-                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                              (matChipInputTokenEnd)="add($event)">
+                              [formControl]='tagsCtrl'
+                              [matAutocomplete]='auto'
+                              [matChipInputFor]='chipList'
+                              [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
+                              (matChipInputTokenEnd)='add($event)'>
                           </mat-chip-list>
-                          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                          <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
+                            <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
                               {{tag}}
                             </mat-option>
                           </mat-autocomplete>
@@ -251,30 +251,30 @@
                     </div>
                     <div class='row mb-3'>
                       <div class='col-12'>
-                        <mat-form-field class="example-chip-list w-100" appearance="fill">
+                        <mat-form-field class='example-chip-list w-100' appearance='fill'>
                           <mat-label>Movement Patterns(s)</mat-label>
-                          <mat-chip-list #chipList aria-label="tag selection">
+                          <mat-chip-list #chipList aria-label='tag selection'>
                             <mat-chip
-                              *ngFor="let tag of tags"
-                              [selectable]="selectable"
-                              [removable]="removable"
-                              (removed)="remove(tag)">
+                              *ngFor='let tag of tags'
+                              [selectable]='selectable'
+                              [removable]='removable'
+                              (removed)='remove(tag)'>
                               {{tag}}
-                              <button matChipRemove *ngIf="removable">
+                              <button matChipRemove *ngIf='removable'>
                                 <mat-icon>cancel</mat-icon>
                               </button>
                             </mat-chip>
                             <input
-                              placeholder="New tag..."
+                              placeholder='New tag...'
                               #tagInput
-                              [formControl]="tagsCtrl"
-                              [matAutocomplete]="auto"
-                              [matChipInputFor]="chipList"
-                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                              (matChipInputTokenEnd)="add($event)">
+                              [formControl]='tagsCtrl'
+                              [matAutocomplete]='auto'
+                              [matChipInputFor]='chipList'
+                              [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
+                              (matChipInputTokenEnd)='add($event)'>
                           </mat-chip-list>
-                          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                          <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
+                            <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
                               {{tag}}
                             </mat-option>
                           </mat-autocomplete>
@@ -283,30 +283,30 @@
                     </div>
                     <div class='row mb-3'>
                       <div class='col-12'>
-                        <mat-form-field class="example-chip-list w-100" appearance="fill">
+                        <mat-form-field class='example-chip-list w-100' appearance='fill'>
                           <mat-label>Difficulty Level</mat-label>
-                          <mat-chip-list #chipList aria-label="tag selection">
+                          <mat-chip-list #chipList aria-label='tag selection'>
                             <mat-chip
-                              *ngFor="let tag of tags"
-                              [selectable]="selectable"
-                              [removable]="removable"
-                              (removed)="remove(tag)">
+                              *ngFor='let tag of tags'
+                              [selectable]='selectable'
+                              [removable]='removable'
+                              (removed)='remove(tag)'>
                               {{tag}}
-                              <button matChipRemove *ngIf="removable">
+                              <button matChipRemove *ngIf='removable'>
                                 <mat-icon>cancel</mat-icon>
                               </button>
                             </mat-chip>
                             <input
-                              placeholder="New tag..."
+                              placeholder='New tag...'
                               #tagInput
-                              [formControl]="tagsCtrl"
-                              [matAutocomplete]="auto"
-                              [matChipInputFor]="chipList"
-                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                              (matChipInputTokenEnd)="add($event)">
+                              [formControl]='tagsCtrl'
+                              [matAutocomplete]='auto'
+                              [matChipInputFor]='chipList'
+                              [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
+                              (matChipInputTokenEnd)='add($event)'>
                           </mat-chip-list>
-                          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                          <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
+                            <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
                               {{tag}}
                             </mat-option>
                           </mat-autocomplete>
@@ -315,7 +315,7 @@
                     </div>
                   </div>
 
-<!--                  Input Dropdown-->
+                  <!--                  Input Dropdown-->
                   <div class='container-fluid p-0'>
                     <div class='row mb-3'>
                       <div class='col-12'>
@@ -326,35 +326,35 @@
                     </div>
                     <div class='row mb-3'>
                       <div class='col-12'>
-                        <mat-form-field class='w-100' appearance="fill">
+                        <mat-form-field class='w-100' appearance='fill'>
                           <mat-label>Input</mat-label>
                           <mat-select>
-                            <mat-option value="none">None</mat-option>
-                            <mat-option value="1rm">1 RM</mat-option>
-                            <mat-option value="multipleChoice">Multiple Choice</mat-option>
-                            <mat-option value="reps">Reps</mat-option>
-                            <mat-option value="distance">Distance</mat-option>
-                            <mat-option value="time">Time</mat-option>
-                            <mat-option value="weight">Weight</mat-option>
-                            <mat-option value="ratio">Ratio</mat-option>
-                            <mat-option value="relativeProfile">Relative Profile</mat-option>
-                            <mat-option value="customNumeric">Custom Numeric</mat-option>
+                            <mat-option value='none'>None</mat-option>
+                            <mat-option value='1rm'>1 RM</mat-option>
+                            <mat-option value='multipleChoice'>Multiple Choice</mat-option>
+                            <mat-option value='reps'>Reps</mat-option>
+                            <mat-option value='distance'>Distance</mat-option>
+                            <mat-option value='time'>Time</mat-option>
+                            <mat-option value='weight'>Weight</mat-option>
+                            <mat-option value='ratio'>Ratio</mat-option>
+                            <mat-option value='relativeProfile'>Relative Profile</mat-option>
+                            <mat-option value='customNumeric'>Custom Numeric</mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
                     </div>
                   </div>
 
-<!--                  Input Type section-->
+                  <!--                  Input Type section-->
 
-<!--                  1 RM-->
+                  <!--                  1 RM-->
                   <ng-template>
                     <div class='container p-0'>
                       <div class='row mb-3'>
                         <div class='col-12'>
-                          <mat-checkbox class="mr-4 "  >1 rep</mat-checkbox>
-                          <mat-checkbox class="mr-4">3 rep</mat-checkbox>
-                          <mat-checkbox class="mr-4">5 rep</mat-checkbox>
+                          <mat-checkbox class='mr-4 '>1 rep</mat-checkbox>
+                          <mat-checkbox class='mr-4'>3 rep</mat-checkbox>
+                          <mat-checkbox class='mr-4'>5 rep</mat-checkbox>
                         </div>
                       </div>
 
@@ -367,7 +367,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             0 Points
                           </h4>
                         </div>
@@ -386,7 +386,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             1 Points
                           </h4>
                         </div>
@@ -405,7 +405,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             2 Points
                           </h4>
                         </div>
@@ -424,7 +424,26 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            3 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             4 Points
                           </h4>
                         </div>
@@ -443,7 +462,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             5 Points <br> (optimal)
                           </h4>
                         </div>
@@ -462,7 +481,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             HP
                           </h4>
                         </div>
@@ -483,14 +502,14 @@
                         <div class='col-12'>
                           <mat-form-field class='w-100'>
                             <mat-label>Result Explanation</mat-label>
-                            <textarea matInput ></textarea>
+                            <textarea matInput></textarea>
                           </mat-form-field>
                         </div>
                       </div>
                     </div>
                   </ng-template>
 
-<!--                  Multiple Choice-->
+                  <!--                  Multiple Choice-->
                   <ng-template>
                     <div class='container p-0'>
                       <div class='row mb-3'>
@@ -503,7 +522,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             0 Points
                           </h4>
                         </div>
@@ -516,7 +535,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             1 Points
                           </h4>
                         </div>
@@ -529,7 +548,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             2 Points
                           </h4>
                         </div>
@@ -542,7 +561,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             3 Points
                           </h4>
                         </div>
@@ -555,7 +574,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             4 Points
                           </h4>
                         </div>
@@ -568,7 +587,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             5 Points <br> (optimal)
                           </h4>
                         </div>
@@ -581,12 +600,12 @@
                       </div>
                     </div>
                   </ng-template>
-<!--                  Reps-->
+                  <!--                  Reps-->
                   <ng-template>
                     <div class='container p-0'>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             0 Points
                           </h4>
                         </div>
@@ -605,7 +624,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             1 Points
                           </h4>
                         </div>
@@ -624,7 +643,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             2 Points
                           </h4>
                         </div>
@@ -643,7 +662,26 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            3 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             4 Points
                           </h4>
                         </div>
@@ -662,7 +700,241 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            5 Points <br> (optimal)
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                    </div>
+                  </ng-template>
+                  <!--                  Distance Length-->
+                  <ng-template>
+                    <div class='container p-0'>
+                      <div class='row mb-3'>
+                        <div class='col-12'>
+                          <mat-form-field class='w-100' appearance='fill'>
+                            <mat-label>Units</mat-label>
+                            <mat-select>
+                              <mat-option value='millimetres'>Millimetres (mm)</mat-option>
+                              <mat-option value='centimetres'>Centimetres (cm)</mat-option>
+                              <mat-option value='metres'>Metres (m)</mat-option>
+                              <mat-option value='kilometres'>Kilometres (km)</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            0 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            1 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            2 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            3 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            4 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            5 Points <br> (optimal)
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+
+                  <!--                  Time -->
+                  <ng-template>
+                    <div class='container p-0'>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            0 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            1 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            2 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            4 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             5 Points <br> (optimal)
                           </h4>
                         </div>
@@ -681,7 +953,7 @@
                       </div>
                       <div class='row mb-3'>
                         <div class='col-2 align-self-center'>
-                          <h4  class='mat-h4  mb-0 font-sf-pro'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
                             HP
                           </h4>
                         </div>
@@ -699,138 +971,138 @@
                         </div>
                       </div>
                     </div>
-<!--                  Distance Length-->
                   </ng-template>
-                  <div class='container p-0'>
-                    <div class='row mb-3'>
-                      <div class='col-12'>
-                        <mat-form-field class='w-100' appearance="fill">
-                          <mat-label>Units</mat-label>
-                          <mat-select>
-                            <mat-option value="millimetres">Millimetres (mm)</mat-option>
-                            <mat-option value="centimetres">Centimetres (cm)</mat-option>
-                            <mat-option value="metres">Metres (m)</mat-option>
-                            <mat-option value="kilometres">Kilometres (km)</mat-option>
-                          </mat-select>
-                        </mat-form-field>
+                  <!--                  Weight-->
+                  <ng-template>
+                    <div class='container p-0'>
+                      <div class='row mb-3'>
+                        <div class='col-12'>
+                          <mat-form-field class='w-100' appearance='fill'>
+                            <mat-label>Units</mat-label>
+                            <mat-select>
+                              <mat-option value='milligrams'>Milligrams (mg)</mat-option>
+                              <mat-option value='grams'>Grams (g)</mat-option>
+                              <mat-option value='kilograms'>Kilograms (kg)</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            0 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            1 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            2 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            3 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            4 Points
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class='row mb-3'>
+                        <div class='col-2 align-self-center'>
+                          <h4 class='mat-h4  mb-0 font-sf-pro'>
+                            5 Points <br> (optimal)
+                          </h4>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>Low</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
+                        <div class='col-5'>
+                          <mat-form-field class='w-100'>
+                            <mat-label>High</mat-label>
+                            <input matInput autocomplete='no' type='text'>
+                          </mat-form-field>
+                        </div>
                       </div>
                     </div>
-                    <div class='row mb-3'>
-                      <div class='col-2 align-self-center'>
-                        <h4  class='mat-h4  mb-0 font-sf-pro'>
-                          0 Points
-                        </h4>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>Low</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>High</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class='row mb-3'>
-                      <div class='col-2 align-self-center'>
-                        <h4  class='mat-h4  mb-0 font-sf-pro'>
-                          1 Points
-                        </h4>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>Low</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>High</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class='row mb-3'>
-                      <div class='col-2 align-self-center'>
-                        <h4  class='mat-h4  mb-0 font-sf-pro'>
-                          2 Points
-                        </h4>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>Low</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>High</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class='row mb-3'>
-                      <div class='col-2 align-self-center'>
-                        <h4  class='mat-h4  mb-0 font-sf-pro'>
-                          4 Points
-                        </h4>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>Low</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>High</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class='row mb-3'>
-                      <div class='col-2 align-self-center'>
-                        <h4  class='mat-h4  mb-0 font-sf-pro'>
-                          5 Points <br> (optimal)
-                        </h4>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>Low</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>High</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class='row mb-3'>
-                      <div class='col-2 align-self-center'>
-                        <h4  class='mat-h4  mb-0 font-sf-pro'>
-                          HP
-                        </h4>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>Low</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                      <div class='col-5'>
-                        <mat-form-field class='w-100'>
-                          <mat-label>High</mat-label>
-                          <input matInput autocomplete='no' type='text'>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-
+                  </ng-template>
                 </mat-card-content>
               </mat-card>
             </div>
