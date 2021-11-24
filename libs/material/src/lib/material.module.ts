@@ -34,6 +34,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatSortModule } from '@angular/material/sort';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export const MY_FORMATS = {
   parse: {
@@ -78,7 +79,8 @@ export const MY_FORMATS = {
     MatSortModule,
     MatListModule,
     MatTabsModule,
-
+    MatChipsModule,
+    MatAutocompleteModule,
     // Non-Material Imports
     ImageCropperModule
   ],
@@ -111,7 +113,8 @@ export const MY_FORMATS = {
     MatSortModule,
     MatListModule,
     MatTabsModule,
-
+    MatChipsModule,
+    MatAutocompleteModule,
     // Non-Material Exports
     ImageCropperModule
   ],
