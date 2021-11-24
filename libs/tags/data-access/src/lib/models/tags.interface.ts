@@ -18,6 +18,7 @@ export interface TagListingFilters {
   category: TagCategoryEnum[] | undefined;
   dateSort: SortingEnum | undefined;
   nameSort: SortingEnum | undefined;
+  search: string | undefined;
 }
 
 export interface TagsListingRequest extends TagListingFilters {

@@ -1,4 +1,4 @@
-import { CustomApiResponse, QuestionTypeEnum } from '@hidden-innovation/shared/models';
+import { CustomApiResponse, QuestionTypeEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { AnswerCore, ImageSelectAnswer, ImageSelectAnswerExtended, MultipleChoiceAnswer } from './answer.interface';
 
 export interface Question {
@@ -24,10 +24,19 @@ export interface Questionnaire {
   questions: Question[];
 }
 
-export interface QuestionnaireListingRequest {
+export interface QuestionnaireListingFilters {
+  dateSort: SortingEnum | undefined;
+  nameSort: SortingEnum | undefined;
+  active: "TRUE" | "FALSE" | undefined;
+  scoring: "TRUE" | "FALSE" | undefined;
+  search: string | undefined;
+}
+
+export interface QuestionnaireListingRequest extends QuestionnaireListingFilters {
   limit: number;
   page: number;
 }
+
 
 export interface QuestionnaireListingResponse extends CustomApiResponse {
   data: QuestionnaireListingResponseData;
@@ -67,7 +76,7 @@ export interface QuestionnaireActiveToggleRequest {
   id: number;
 }
 
-export interface QuestionnaireDeleteRequest {
+export interface QuestionnaireDeleteRequest extends QuestionnaireListingFilters {
   id: number;
   pageIndex: number;
   pageSize: number;

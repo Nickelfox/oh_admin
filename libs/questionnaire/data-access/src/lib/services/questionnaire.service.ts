@@ -29,6 +29,21 @@ export class QuestionnaireService {
       'page': reqObj.page.toString(),
       'limit': reqObj.limit.toString()
     });
+    if (reqObj.nameSort) {
+      params = params.append('nameSort', reqObj.nameSort);
+    }
+    if (reqObj.dateSort) {
+      params = params.append('dateSort', reqObj.dateSort);
+    }
+    if (reqObj.search && reqObj.search?.length) {
+      params = params.append('search', reqObj.search);
+    }
+    if (reqObj.scoring !== undefined && reqObj.scoring !== null) {
+      params = params.append('scoring', reqObj.scoring);
+    }
+    if (reqObj.active !== undefined && reqObj.active !== null) {
+      params = params.append('active', reqObj.active);
+    }
     return this.http.get<QuestionnaireListingResponse>(`${this.env.baseURL}/v1/admin/all-questionnaire`, { params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))

@@ -23,7 +23,7 @@ export class FormValidationService {
 
   pointsValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Point field is required',
-    invalid: 'Only numeric values allowed',
+    invalid: 'Only numeric & non-floating point values allowed',
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {
@@ -46,6 +46,14 @@ export class FormValidationService {
     required: 'field is required',
     invalid: 'Invalid! Must be a HEX color code'
   };
+
+  questionValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 questions are required to create a questionnaire'
+  }
+
+  answerValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 answers are required to create a question'
+  }
 
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
 

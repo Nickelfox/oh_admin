@@ -74,6 +74,9 @@
       "@hidden-innovation/shared/ui/common-form-field-month": [
         "libs/shared/ui/common-form-field-month/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/common-form-field-number": [
+        "libs/shared/ui/common-form-field-number/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/common-form-field-week": [
         "libs/shared/ui/common-form-field-week/src/index.ts"
       ],
@@ -94,6 +97,12 @@
       ],
       "@hidden-innovation/shared/ui/shimmer": [
         "libs/shared/ui/shimmer/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/sorting-header-date": [
+        "libs/shared/ui/sorting-header-date/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/sorting-header-name": [
+        "libs/shared/ui/sorting-header-name/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/spinner-text": [
         "libs/shared/ui/spinner-text/src/index.ts"

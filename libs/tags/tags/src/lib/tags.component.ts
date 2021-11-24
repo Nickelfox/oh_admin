@@ -40,7 +40,8 @@ export class TagsComponent implements OnInit {
     type: new FormControl(undefined),
     category: new FormControl(undefined),
     dateSort: new FormControl(SortingEnum.DESC),
-    nameSort: new FormControl({ value: undefined, disabled: true })
+    nameSort: new FormControl({ value: undefined, disabled: true }),
+    search: new FormControl(undefined)
   });
 
   // Paginator options
@@ -94,13 +95,15 @@ export class TagsComponent implements OnInit {
   }
 
   refreshList(): void {
+    const { type, category, nameSort, dateSort, search } = this.filters.value;
     this.store.getTags$({
       page: this.pageIndex,
       limit: this.pageSize,
-      type: this.filters.value.type,
-      category: this.filters.value.category,
-      nameSort: this.filters.value.nameSort,
-      dateSort: this.filters.value.dateSort
+      type,
+      category,
+      nameSort,
+      dateSort,
+      search
     });
   }
 
@@ -127,7 +130,7 @@ export class TagsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((tag: TagCore | undefined) => {
       if (tag) {
-        const { nameSort, dateSort, type, category } = this.filters.value;
+        const { nameSort, dateSort, type, category, search } = this.filters.value;
         this.store.createTag$({
           tag,
           page: this.pageIndex,
@@ -135,7 +138,8 @@ export class TagsComponent implements OnInit {
           type,
           category,
           nameSort,
-          dateSort
+          dateSort,
+          search
         });
       }
     });
@@ -214,13 +218,14 @@ export class TagsComponent implements OnInit {
   }
 
   deleteTag(id: number) {
-    const { category, type, dateSort, nameSort } = this.filters.value;
+    const { category, type, dateSort, nameSort, search } = this.filters.value;
     const deleteObj: TagDeleteRequest = {
       id,
       dateSort,
       type,
       category,
       nameSort,
+      search,
       limit: this.pageSize,
       page: this.pageIndex
     };

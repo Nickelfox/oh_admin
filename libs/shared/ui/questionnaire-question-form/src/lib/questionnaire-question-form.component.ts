@@ -17,7 +17,7 @@ import {
   MultipleChoiceAnswer,
   Question
 } from '@hidden-innovation/questionnaire/data-access';
-import { FormGroupDirective } from '@angular/forms';
+import { FormGroupDirective, Validators } from '@angular/forms';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
 import { max, min } from 'lodash-es';
@@ -46,6 +46,8 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
     index: string,
     type: QuestionTypeEnum
   }>();
+
+  @Output() removeAnswer: EventEmitter<number> = new EventEmitter<number>();
 
   choiceType = QuestionTypeEnum;
   choiceTypeIte = Object.values(QuestionTypeEnum);
@@ -101,9 +103,28 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
   ngOnInit() {
     this.question = this.questionsFormArray.get(this._groupName) as FormGroup;
     this.question.controls.questionType.valueChanges.pipe(
-      tap(_ => {
+      tap(type => {
+        if (type === QuestionTypeEnum.IMAGE_SELECT) {
+          this.question?.controls.answer.removeValidators([]);
+          this.question?.controls.imageAnswer.addValidators([
+            Validators.required,
+            Validators.minLength(2)
+          ]);
+        } else {
+          this.question?.controls.imageAnswer.removeValidators([]);
+          this.question?.controls.answer.addValidators([
+            Validators.required,
+            Validators.minLength(2)
+          ]);
+        }
         this.answersArray.clear();
         this.imageAnswersArray.clear();
+        this.question?.updateValueAndValidity();
+      })
+    ).subscribe();
+    this.question.controls.whyAreWeAsking.valueChanges.pipe(
+      tap(isActive => {
+        isActive ? this.question?.controls.whyAreWeAskingQuestion.enable() : this.question?.controls.whyAreWeAskingQuestion.disable();
       })
     ).subscribe();
   }
@@ -131,4 +152,9 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
       type: this.type
     });
   }
+
+  removeAnswerReq(index: number): void {
+    this.removeAnswer.emit(index);
+  }
+
 }
