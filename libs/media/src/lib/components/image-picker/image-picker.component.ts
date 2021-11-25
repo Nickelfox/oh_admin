@@ -71,14 +71,14 @@ export class ImagePickerComponent {
         });
       };
       reader.onloadend = _ => {
-        if(coverPicker) {
+        if (coverPicker) {
           coverPicker.value = '';
           coverPicker.removeAttribute('src');
         }
         this.toastRef?.close();
       };
       reader.onerror = _ => {
-        if(coverPicker) {
+        if (coverPicker) {
           coverPicker.value = '';
           coverPicker.removeAttribute('src');
         }
