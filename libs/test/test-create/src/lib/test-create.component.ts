@@ -16,7 +16,6 @@ import { TagsStore } from '@hidden-innovation/tags/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-
 export class TestCreateComponent implements OnInit {
   selectable = true;
   removable = true;

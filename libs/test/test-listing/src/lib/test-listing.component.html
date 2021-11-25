@@ -185,7 +185,7 @@
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #testListMenu='matMenu'>
-                        <button mat-menu-item>
+                        <button mat-menu-item [routerLink]='["/tests", "edit", "01"]'>
                           <mat-icon>create</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>

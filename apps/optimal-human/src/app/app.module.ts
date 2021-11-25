@@ -205,6 +205,14 @@ import { MatCardModule } from '@angular/material/card';
                 (m) => m.TestCreateModule
               ),
             data: { breadcrumb: 'Add Test' }
+          },
+          {
+            path: 'edit/:id',
+            loadChildren: () =>
+              import('@hidden-innovation/test/test-create').then(
+                (m) => m.TestCreateModule
+              ),
+            data: { breadcrumb: 'Add Test' }
           }
         ]
       },
