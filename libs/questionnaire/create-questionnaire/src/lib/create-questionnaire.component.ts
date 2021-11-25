@@ -1,27 +1,34 @@
-import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { OperationTypeEnum, QuestionTypeEnum } from '@hidden-innovation/shared/models';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  ViewEncapsulation
+} from '@angular/core';
+import { GenericDialogPrompt, OperationTypeEnum, QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   AnswerCore,
   ImageSelectAnswer,
-  MinMaxPoints,
   MultipleChoiceAnswer,
   Question,
   QuestionExtended,
   Questionnaire,
   QuestionnaireExtended,
-  QuestionnaireStore
+  QuestionnaireStore, QuestionnaireUtilitiesService
 } from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
-import { flattenDepth, max, min } from 'lodash-es';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -60,7 +67,10 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     private hotToastService: HotToastService,
     public formValidationService: FormValidationService,
     public store: QuestionnaireStore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private matDialog: MatDialog,
+    private cdr: ChangeDetectorRef,
+    public questionnaireUtilitiesService: QuestionnaireUtilitiesService
   ) {
     this.route.data.pipe(
       filter(data => data?.type !== undefined),
@@ -135,7 +145,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       }
     });
     tempQuestions.map((q, questionIndex) => {
-      const fg: FormGroup<Question> = this.buildQuestion(q.questionType, q);
+      const fg: FormGroup<Question> = this.questionnaireUtilitiesService.buildQuestion(q.questionType, q);
       this.addQuestion(fg);
       if (q.questionType === QuestionTypeEnum.IMAGE_SELECT) {
         q.imageAnswer.map(imAns => {
@@ -161,60 +171,6 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       }
     });
   }
-
-  minMaxPoints(): MinMaxPoints | undefined {
-    let tempPoints: MinMaxPoints = {
-      max: 0,
-      min: 0
-    };
-    if (this.questionsFormArray.length) {
-      const answers: (MultipleChoiceAnswer[] | AnswerCore[])[] = this.questionsFormArray.value.filter(value => !value.omitScoring)?.map(v => v.answer);
-      const imageAnswer: (ImageSelectAnswer[])[] = this.questionsFormArray.value.map(v => v.imageAnswer);
-      const nestedPoints = answers.map(value => value.map(value1 => value1.point));
-      const nestedImagePoints = imageAnswer.map(value => value.map(value1 => value1.point));
-      const points: number[] = [...flattenDepth(nestedPoints, 1), ...flattenDepth(nestedImagePoints, 1)].map(value => typeof value === 'string' ? parseInt(value) : value);
-      const maxPoint = max(points) !== null && max(points) !== undefined ? max(points) : 0;
-      const minPoint = min(points) !== null && min(points) !== undefined ? min(points) : 0;
-      tempPoints = {
-        max: maxPoint,
-        min: minPoint
-      };
-      return tempPoints;
-    }
-    return tempPoints;
-  }
-
-  buildQuestion(type: QuestionTypeEnum, questionData?: Question): FormGroup<Question> {
-    return new FormGroup<Question>({
-      name: new FormControl<string>(questionData?.name ?? '', [
-        RxwebValidators.required(),
-        RxwebValidators.notEmpty()
-      ]),
-      questionType: new FormControl<QuestionTypeEnum>(type, [
-        Validators.required
-      ]),
-      description: new FormControl<string>(questionData?.description ?? ''),
-      whyAreWeAsking: new FormControl<boolean>(questionData?.whyAreWeAsking ?? false),
-      whyAreWeAskingQuestion: new FormControl<string>({
-        value: questionData?.whyAreWeAskingQuestion ?? '',
-        disabled: !questionData?.whyAreWeAsking
-      }, [
-        RxwebValidators.required(),
-        RxwebValidators.notEmpty()
-      ]),
-      showIcon: new FormControl<boolean>(questionData?.showIcon ?? false),
-      omitScoring: new FormControl<boolean>(questionData?.omitScoring ?? false),
-      answer: new FormArray<MultipleChoiceAnswer | AnswerCore>([], type !== QuestionTypeEnum.IMAGE_SELECT ? [
-        Validators.required,
-        Validators.minLength(2)
-      ] : null),
-      imageAnswer: new FormArray<ImageSelectAnswer>([], type === QuestionTypeEnum.IMAGE_SELECT ? [
-        Validators.required,
-        Validators.minLength(2)
-      ] : null)
-    });
-  }
-
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.questionsFormArray.controls, event.previousIndex, event.currentIndex);
@@ -315,28 +271,66 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         });
     }
     answerFormArray.push(answer);
-    this.minMaxPoints();
+    this.questionnaireUtilitiesService.minMaxPoints(this.questionsFormArray);
   }
 
   triggerQuestionType(type: QuestionTypeEnum): void {
-    const fg: FormGroup<Question> = this.buildQuestion(type);
+    const fg: FormGroup<Question> = this.questionnaireUtilitiesService.buildQuestion(type);
     this.addQuestion(fg);
   }
 
   removeAnswer(index: number, activeQuestion: number): void {
-    const question: FormGroup<Question> = this.questionFormGroup(activeQuestion);
-    if (question.value.questionType === QuestionTypeEnum.IMAGE_SELECT) {
-      const imageArray: FormArray<ImageSelectAnswer> = question.controls.imageAnswer as FormArray<ImageSelectAnswer>;
-      imageArray.removeAt(index);
-      return;
-    }
-    const answerArray: FormArray<AnswerCore> = question.controls.answer as FormArray<AnswerCore>;
-    answerArray.removeAt(index);
+    const dialogData: GenericDialogPrompt = {
+      title: 'Delete Answer?',
+      desc: `Are you sure you want to delete this Answer?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        const question: FormGroup<Question> = this.questionFormGroup(activeQuestion);
+        if (question.value.questionType === QuestionTypeEnum.IMAGE_SELECT) {
+          const imageArray: FormArray<ImageSelectAnswer> = question.controls.imageAnswer as FormArray<ImageSelectAnswer>;
+          imageArray.removeAt(index);
+          return;
+        }
+        const answerArray: FormArray<AnswerCore> = question.controls.answer as FormArray<AnswerCore>;
+        answerArray.removeAt(index);
+        this.cdr.markForCheck();
+        this.cdr.detectChanges();
+        this.cdr.checkNoChanges();
+      }
+    });
   }
 
   removeQuestion(index: number): void {
-    this.questionsFormArray.removeAt(index);
-    this.activeQuestion = undefined;
+    const dialogData: GenericDialogPrompt = {
+      title: 'Delete Question?',
+      desc: `Are you sure you want to delete this Question?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.questionsFormArray.removeAt(index);
+        this.activeQuestion = undefined;
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   ngOnDestroy() {
