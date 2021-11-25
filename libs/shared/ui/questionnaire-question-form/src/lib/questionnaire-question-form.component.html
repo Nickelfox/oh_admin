@@ -110,7 +110,7 @@
                     label='Answer {{i + 1}}'
                     controlPath='name'
                   ></hidden-innovation-common-form-field>
-                  <button mat-icon-button color='warn' (click)='removeAnswer(i)'>
+                  <button type='button' mat-icon-button color='warn' (click)='removeAnswer(i)'>
                     <mat-icon>delete</mat-icon>
                   </button>
                   <ng-template
@@ -166,7 +166,7 @@
                         </button>
                       </div>
                       <div class='col-2 d-flex justify-content-end'>
-                        <button mat-icon-button color='warn' (click)='removeAnswer(i)'>
+                        <button type='button' mat-icon-button color='warn' (click)='removeAnswer(i)'>
                           <mat-icon>delete</mat-icon>
                         </button>
                       </div>
@@ -182,7 +182,7 @@
                           <small class='ml-2'>Image is required</small></mat-error>
                       </div>
                       <div class='col-2 d-flex justify-content-end'>
-                        <button mat-icon-button color='warn' (click)='removeAnswer(i)'>
+                        <button type='button' mat-icon-button color='warn' (click)='removeAnswer(i)'>
                           <mat-icon>delete</mat-icon>
                         </button>
                       </div>
@@ -215,7 +215,7 @@
     </div>
   </mat-card-content>
   <mat-card-actions class='d-flex align-items-center justify-content-between'>
-    <button mat-button (click)='addNewAnswer()'>ADD ANSWER
+    <button type='button' mat-button (click)='addNewAnswer()'>ADD ANSWER
     </button>
     <div>
       <ng-template
