@@ -65,6 +65,8 @@
                             </mat-menu>
                           </div>
                         </div>
+                        <h5
+                          class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>{{questionFormGroup(i).controls.questionType.value || '--'}}</h5>
                         <mat-card-content>
                           <p class='font-calibri'>
                             {{questionFormGroup(i).controls.name.value || '--'}}
@@ -102,11 +104,11 @@
               <div class='d-flex align-items-center ml-5 mr-3'>
                 <div class='d-flex align-items-center'>
                   <mat-icon color='primary' class='mr-3 text-color__success'>sentiment_satisfied_alt</mat-icon>
-                  <h2 class='m-0 text-color__success'>{{minMaxPoints()?.max}}</h2>
+                  <h2 class='m-0 text-color__success'>{{questionnaireUtilitiesService.minMaxPoints(questionsFormArray)?.max}}</h2>
                 </div>
                 <div class='d-flex align-items-center ml-5'>
                   <mat-icon color='primary' class='mr-3 text-color__error'>sentiment_very_dissatisfied</mat-icon>
-                  <h2 class='m-0 text-color__error'>{{minMaxPoints()?.min}}</h2>
+                  <h2 class='m-0 text-color__error'>{{questionnaireUtilitiesService.minMaxPoints(questionsFormArray)?.min}}</h2>
                 </div>
               </div>
             </div>
@@ -118,8 +120,7 @@
                   _groupName='{{activeQuestion}}'
                   [isScoring]='questionnaire.controls.isScoring.value'
                   [type]='questionFormGroup(activeQuestion).controls.questionType.value'
-                  (addAnswer)='addAnswer($event)'
-                  (removeAnswer)='removeAnswer($event, activeQuestion)'>
+                  (addAnswer)='addAnswer($event)'>
                 </hidden-innovation-questionnaire-question-form>
               </div>
             </div>

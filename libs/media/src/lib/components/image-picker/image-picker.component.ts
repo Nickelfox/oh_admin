@@ -65,14 +65,23 @@ export class ImagePickerComponent {
         dialogRef.afterClosed().subscribe((cropperResult: any) => {
           if (cropperResult) {
             coverPicker.value = '';
+            coverPicker.removeAttribute('src');
             this.upload(base64ToFile(cropperResult), cropperResult, file.name);
           }
         });
       };
       reader.onloadend = _ => {
+        if(coverPicker) {
+          coverPicker.value = '';
+          coverPicker.removeAttribute('src');
+        }
         this.toastRef?.close();
       };
       reader.onerror = _ => {
+        if(coverPicker) {
+          coverPicker.value = '';
+          coverPicker.removeAttribute('src');
+        }
         this.toastRef?.updateToast({
           type: 'error',
           dismissible: true

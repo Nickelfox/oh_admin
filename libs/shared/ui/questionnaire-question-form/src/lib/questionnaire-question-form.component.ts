@@ -9,7 +9,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@ngneat/reactive-forms';
-import { QuestionTypeEnum } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import {
   AnswerCore,
   ImageSelectAnswer,
@@ -23,6 +23,8 @@ import { FormValidationService } from '@hidden-innovation/shared/form-config';
 import { max, min } from 'lodash-es';
 import { tap } from 'rxjs/operators';
 import { ImageCropperResponseData } from '@hidden-innovation/media';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -47,8 +49,6 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
     type: QuestionTypeEnum
   }>();
 
-  @Output() removeAnswer: EventEmitter<number> = new EventEmitter<number>();
-
   choiceType = QuestionTypeEnum;
   choiceTypeIte = Object.values(QuestionTypeEnum);
 
@@ -56,6 +56,7 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private matDialog: MatDialog,
     private questionGroup: FormGroupDirective,
     public formValidationService: FormValidationService,
     private cdr: ChangeDetectorRef
@@ -153,8 +154,33 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
     });
   }
 
-  removeAnswerReq(index: number): void {
-    this.removeAnswer.emit(index);
+  removeAnswer(index: number): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Delete Answer?',
+      desc: `Are you sure you want to delete this Answer?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        if (this.question?.value.questionType === QuestionTypeEnum.IMAGE_SELECT) {
+          const imageArray: FormArray<ImageSelectAnswer> = this.question?.controls.imageAnswer as FormArray<ImageSelectAnswer>;
+          imageArray.removeAt(index);
+          this.cdr.markForCheck();
+          return;
+        }
+        const answerArray: FormArray<AnswerCore> = this.question?.controls.answer as FormArray<AnswerCore>;
+        answerArray.removeAt(index);
+        this.cdr.markForCheck();
+      }
+    });
   }
 
 }
