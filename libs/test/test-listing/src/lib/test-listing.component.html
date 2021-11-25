@@ -190,6 +190,10 @@
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>
                         <button mat-menu-item>
+                          <mat-icon>{{row.isActive ? "block" : "check_circle_outline"}}</mat-icon>
+                          <span>{{(row.isActive ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
+                        </button>
+                        <button mat-menu-item>
                           <mat-icon>delete</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</span>
                         </button>

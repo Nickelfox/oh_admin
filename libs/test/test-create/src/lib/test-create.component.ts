@@ -5,6 +5,8 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { FormControl } from '@ngneat/reactive-forms';
+import { TestInputTypeEnum } from '@hidden-innovation/shared/models';
+import { TagsStore } from '@hidden-innovation/tags/data-access';
 
 @Component({
   selector: 'hidden-innovation-test-create',
@@ -24,9 +26,15 @@ export class TestCreateComponent implements OnInit {
   tags: string[] = ['Nutrition'];
   allTags: string[] = ['Muscular Strength', 'Nutrition'];
 
+  testInputTypeEnum = TestInputTypeEnum;
+
+  testInputTypeIte = Object.values(TestInputTypeEnum).map(value => value.toString());
+
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
-  constructor() {
+  constructor(
+    public tagStore: TagsStore,
+  ) {
     this.filteredTags = this.tagsCtrl.valueChanges.pipe(
       startWith(null),
       map((tags: string | null) => (tags ? this._filter(tags) : this.allTags.slice())),

@@ -4,6 +4,8 @@ import { TestCreateComponent } from './test-create.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
+import { UtilsModule } from '@hidden-innovation/shared/utils';
+import { TagsDataAccessModule } from '@hidden-innovation/tags/data-access';
 
 
 @NgModule({
@@ -11,16 +13,19 @@ import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-
     CommonModule,
     MaterialModule,
     CommonFormFieldModule,
+    UtilsModule,
+    TagsDataAccessModule,
     RouterModule.forChild([
       {
         path: '',
         pathMatch: 'full',
         component: TestCreateComponent
       }
-    ]),
+    ])
   ],
   declarations: [
     TestCreateComponent
-  ],
+  ]
 })
-export class TestCreateModule {}
+export class TestCreateModule {
+}

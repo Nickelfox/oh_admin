@@ -26,7 +26,7 @@ export class ErrorHandlerService implements ErrorHandler {
       if (!this.env.production) {
         console.log(message);
       }
-      notifier.error('Application Error');
+      notifier.error(`Application ${error.name}! ${error.message}`);
       console.error(error);
     }
   }
