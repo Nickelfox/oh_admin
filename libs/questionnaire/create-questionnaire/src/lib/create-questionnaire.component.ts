@@ -16,7 +16,7 @@ import {
   QuestionExtended,
   Questionnaire,
   QuestionnaireExtended,
-  QuestionnaireStore
+  QuestionnaireStore, QuestionnaireUtilitiesService
 } from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
@@ -27,7 +27,6 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { QuestionnaireUtilitiesService } from '../../../data-access/src/lib/questionnaire-utilities.service';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { MatDialog } from '@angular/material/dialog';
 

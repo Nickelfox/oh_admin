@@ -1,17 +1,12 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import {
-  AnswerCore,
-  ImageSelectAnswer,
-  MinMaxPoints,
-  MultipleChoiceAnswer,
-  Question
-} from '@hidden-innovation/questionnaire/data-access';
+import { Question } from '../models/questionnaire.interface';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
 import { FormValidationService } from '@hidden-innovation/shared/form-config';
 import { QuestionTypeEnum } from '@hidden-innovation/shared/models';
 import { Validators } from '@angular/forms';
 import { flattenDepth, max, min } from 'lodash-es';
+import { AnswerCore, ImageSelectAnswer, MinMaxPoints, MultipleChoiceAnswer } from '../models/answer.interface';
 
 @Injectable()
 export class QuestionnaireUtilitiesService {
