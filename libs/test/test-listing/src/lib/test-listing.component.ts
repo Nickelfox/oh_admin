@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
@@ -79,7 +79,7 @@ const dummyTests: TestCore[] = [
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TestListingComponent implements OnInit {
+export class TestListingComponent {
 
   displayedColumns: string[] = ['id', 'name', 'updated_at', 'category', 'difficulty', 'input', 'status', 'action'];
   tests: MatTableDataSource<TestCore> = new MatTableDataSource<TestCore>();
@@ -110,9 +110,6 @@ export class TestListingComponent implements OnInit {
 
   get paginatorIndex() {
     return this.pageIndex - 1;
-  }
-
-  ngOnInit(): void {
   }
 
 }

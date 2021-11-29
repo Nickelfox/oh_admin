@@ -43,6 +43,7 @@
     "tags-data-access": "libs/tags/data-access",
     "tags-tags": "libs/tags/tags",
     "test-data-access": "libs/test/data-access",
+    "test-group-data-access": "libs/test-group/data-access",
     "test-group-test-group-listing": "libs/test-group/test-group-listing",
     "test-test-create": "libs/test/test-create",
     "test-test-listing": "libs/test/test-listing",
