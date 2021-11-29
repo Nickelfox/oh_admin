@@ -121,6 +121,9 @@
       "@hidden-innovation/test-group/data-access": [
         "libs/test-group/data-access/src/index.ts"
       ],
+      "@hidden-innovation/test-group/test-group-create": [
+        "libs/test-group/test-group-create/src/index.ts"
+      ],
       "@hidden-innovation/test-group/test-group-listing": [
         "libs/test-group/test-group-listing/src/index.ts"
       ],
