@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
 import { DateTime } from 'luxon';
 import { TestCore } from '@hidden-innovation/test/data-access';
 
-const dummyTests: TestCore[] = [
+export const dummyTests: TestCore[] = [
   {
     id: 0,
     name: 'Test 1',
@@ -47,6 +47,160 @@ const dummyTests: TestCore[] = [
     difficulty: DifficultyEnum.INTERMEDIATE,
     input: TestInputTypeEnum.TIME,
     status: false
+  },
+  {
+    id: 3,
+    name: 'Test 3',
+    category: TagCategoryEnum.MOBILE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.REPS,
+    status: true
+  },
+  {
+    id: 4,
+    name: 'Test 4',
+    category: TagCategoryEnum.LIFESTYLE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.DISTANCE,
+    status: true
+  },
+  {
+    id: 3,
+    name: 'Test 3',
+    category: TagCategoryEnum.MOBILE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.REPS,
+    status: true
+  },
+  {
+    id: 4,
+    name: 'Test 4',
+    category: TagCategoryEnum.LIFESTYLE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.DISTANCE,
+    status: true
+  },
+  {
+    id: 3,
+    name: 'Test 3',
+    category: TagCategoryEnum.MOBILE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.REPS,
+    status: true
+  },
+  {
+    id: 4,
+    name: 'Test 4',
+    category: TagCategoryEnum.LIFESTYLE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.DISTANCE,
+    status: true
+  },
+  {
+    id: 3,
+    name: 'Test 3',
+    category: TagCategoryEnum.MOBILE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.REPS,
+    status: true
+  },
+  {
+    id: 4,
+    name: 'Test 4',
+    category: TagCategoryEnum.LIFESTYLE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.DISTANCE,
+    status: true
+  },
+  {
+    id: 3,
+    name: 'Test 3',
+    category: TagCategoryEnum.MOBILE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.REPS,
+    status: true
+  },
+  {
+    id: 4,
+    name: 'Test 4',
+    category: TagCategoryEnum.LIFESTYLE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.DISTANCE,
+    status: true
+  },
+  {
+    id: 3,
+    name: 'Test 3',
+    category: TagCategoryEnum.MOBILE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.REPS,
+    status: true
+  },
+  {
+    id: 4,
+    name: 'Test 4',
+    category: TagCategoryEnum.LIFESTYLE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.DISTANCE,
+    status: true
+  },
+  {
+    id: 3,
+    name: 'Test 3',
+    category: TagCategoryEnum.MOBILE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.REPS,
+    status: true
+  },
+  {
+    id: 4,
+    name: 'Test 4',
+    category: TagCategoryEnum.LIFESTYLE,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate(),
+    difficulty: DifficultyEnum.ADVANCE,
+    input: TestInputTypeEnum.DISTANCE,
+    status: true
   },
   {
     id: 3,

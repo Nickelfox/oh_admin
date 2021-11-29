@@ -38,6 +38,7 @@
     "shared-ui-sorting-header-name": "libs/shared/ui/sorting-header-name",
     "shared-ui-spinner-text": "libs/shared/ui/spinner-text",
     "shared-ui-tag-create": "libs/shared/ui/tag-create",
+    "shared-ui-test-selector": "libs/shared/ui/test-selector",
     "shared-ui-test-tab-group": "libs/shared/ui/test-tab-group",
     "shared-utils": "libs/shared/utils",
     "tags-data-access": "libs/tags/data-access",

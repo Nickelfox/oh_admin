@@ -97,9 +97,16 @@
           </mat-card-title>
           <mat-divider></mat-divider>
           <mat-card-content>
+            <mat-card class='mat-elevation-z3 p-2 mb-3' [ngClass]='{"mt-4" : isFirst, "mb-0": isLast }'
+                      *ngFor='let test of selection.selected; first as isFirst; last as isLast'>
+              <h4 class='mat-h4 mb-0 font-weight-bold'>{{test.name || '--'}}</h4>
+              <h5
+                class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>{{(test.category | titlecase) || '--'}}</h5>
+            </mat-card>
           </mat-card-content>
           <mat-card-actions>
             <button
+              (click)='openTestSelector()'
               color='accent' class='w-100' mat-flat-button
               type='button'>
               <mat-icon class='mr-2 mb-1'>add</mat-icon>
