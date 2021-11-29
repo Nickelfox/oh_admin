@@ -22,6 +22,8 @@ import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
 import { paginatorData } from '@hidden-innovation/user/data-access';
 import { OperationTypeEnum } from '@hidden-innovation/shared/models';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   imports: [
@@ -139,7 +141,7 @@ import { OperationTypeEnum } from '@hidden-innovation/shared/models';
               ),
             data: { breadcrumb: 'Edit Questionnaire', type: OperationTypeEnum.EDIT }
           }
-        ],
+        ]
       },
       {
         path: 'tags',
@@ -157,8 +159,62 @@ import { OperationTypeEnum } from '@hidden-innovation/shared/models';
                 (m) => m.TagsModule
               ),
             data: { breadcrumb: 'Tags' }
+          }
+        ]
+      },
+      {
+        path: 'tests-group',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
-        ],
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/test-group/test-group-listing').then(
+                (m) => m.TestGroupListingModule
+              ),
+            data: { breadcrumb: 'Tests Group' }
+          }
+        ]
+      },
+      {
+        path: 'tests',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/test/test-listing').then(
+                (m) => m.TestListingModule
+              ),
+            data: { breadcrumb: 'Tests' }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/test/test-create').then(
+                (m) => m.TestCreateModule
+              ),
+            data: { breadcrumb: 'Add Test' }
+          },
+          {
+            path: 'edit/:id',
+            loadChildren: () =>
+              import('@hidden-innovation/test/test-create').then(
+                (m) => m.TestCreateModule
+              ),
+            data: { breadcrumb: 'Add Test' }
+          }
+        ]
       },
       // {
       //   path: 'users/edit/:id',
@@ -190,7 +246,9 @@ import { OperationTypeEnum } from '@hidden-innovation/shared/models';
     MatListModule,
     MatIconModule,
     MatMenuModule,
-    MatRippleModule
+    MatRippleModule,
+    MatTabsModule,
+    MatCardModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

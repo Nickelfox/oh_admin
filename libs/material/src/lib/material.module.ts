@@ -34,6 +34,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatSortModule } from '@angular/material/sort';
 import { MatListModule } from '@angular/material/list';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 export const MY_FORMATS = {
   parse: {
@@ -77,6 +79,9 @@ export const MY_FORMATS = {
     MatCheckboxModule,
     MatSortModule,
     MatListModule,
+    MatTabsModule,
+    MatChipsModule,
+    MatAutocompleteModule,
     DragDropModule,
 
     // Non-Material Imports
@@ -110,6 +115,9 @@ export const MY_FORMATS = {
     MatCheckboxModule,
     MatSortModule,
     MatListModule,
+    MatTabsModule,
+    MatChipsModule,
+    MatAutocompleteModule,
     DragDropModule,
 
     // Non-Material Exports

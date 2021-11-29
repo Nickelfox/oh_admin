@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/test/data-access",
+  "sourceRoot": "libs/test/data-access/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/test/data-access"],
+      "options": {
+        "project": "libs/test/data-access/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/test/data-access/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/test/data-access/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/test/data-access"],
+      "options": {
+        "jestConfig": "libs/test/data-access/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/test/data-access/src/**/*.ts",
+          "libs/test/data-access/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

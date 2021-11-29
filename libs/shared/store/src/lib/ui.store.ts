@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { NavItem } from '@hidden-innovation/shared/models';
 import { tap } from 'rxjs/operators';
-import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 
 export interface UiState {
   navData: {
@@ -27,9 +26,7 @@ export class UiStore extends ComponentStore<UiState> {
     )
   );
 
-  constructor(
-    private constantDataService: ConstantDataService
-  ) {
+  constructor() {
     super({
       isLoading: false,
       navData: [

@@ -26,6 +26,7 @@ export class ConstantDataService {
     ROLE: 'role',
     CREATED_AT: 'created at',
     CATEGORY: 'category',
+    DIFFICULTY: 'difficulty',
     UPDATED_AT: 'updated at',
     HEIGHT: 'height',
     WEIGHT: 'weight',
