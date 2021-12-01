@@ -16,7 +16,8 @@ import {
   QuestionExtended,
   Questionnaire,
   QuestionnaireExtended,
-  QuestionnaireStore, QuestionnaireUtilitiesService
+  QuestionnaireStore,
+  QuestionnaireUtilitiesService
 } from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
@@ -159,7 +160,8 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
           if (q.questionType === QuestionTypeEnum.MULTIPLE_CHOICE) {
             this.addAnswer({
               index: questionIndex.toString(),
-              type: q.questionType
+              type: q.questionType,
+              showIcon: q.showIcon
             }, undefined, ans as MultipleChoiceAnswer, undefined);
           } else {
             this.addAnswer({
@@ -218,7 +220,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   }
 
   addAnswer(
-    question: { index: string; type: QuestionTypeEnum },
+    question: { index: string; type: QuestionTypeEnum, showIcon?: boolean },
     answerData?: AnswerCore,
     multipleChoice?: MultipleChoiceAnswer,
     imageAnswerData?: ImageSelectAnswer): void {
@@ -232,12 +234,15 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
           name: new FormControl<string>(multipleChoice?.name ?? '', [
             RxwebValidators.required(),
             RxwebValidators.notEmpty(),
-            RxwebValidators.unique(),
+            RxwebValidators.unique()
           ]),
           point: new FormControl<number>(multipleChoice?.point ?? undefined, this.formValidationService.pointValidations),
-          iconName: new FormControl<string>( { value: multipleChoice?.iconName ?? '', disabled: true }, [
+          iconName: new FormControl<string>({
+            value: multipleChoice?.iconName ?? '',
+            disabled: !question.showIcon
+          }, [
             RxwebValidators.required(),
-            RxwebValidators.notEmpty(),
+            RxwebValidators.notEmpty()
           ])
         });
         break;
