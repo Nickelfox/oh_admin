@@ -4,9 +4,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { DifficultyEnum, PublishStatusEnum, StatusChipType, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { MatTableDataSource } from '@angular/material/table';
-import { TestGroup } from '../../../data-access/src/lib/models/test-group.interface';
 import { map } from 'rxjs/operators';
 import { DateTime } from 'luxon';
+import { TestGroup } from '@hidden-innovation/test-group/data-access';
 
 const dummyTestGroup: TestGroup[] = [{
   id: 0,

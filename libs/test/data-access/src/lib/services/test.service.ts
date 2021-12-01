@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
-import { TestListingRequest, TestListingResponse, TestListingResponseData } from '@hidden-innovation/test/data-access';
+import { TestListingRequest, TestListingResponse, TestListingResponseData } from '../models/test.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 

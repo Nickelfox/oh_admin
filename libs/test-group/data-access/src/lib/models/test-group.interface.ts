@@ -1,6 +1,4 @@
 import { CustomApiResponse, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
-import { TestListingFliters } from '@hidden-innovation/test/data-access';
-
 
 export interface TestGroup {
   id: number;
@@ -21,7 +19,7 @@ export interface TestGroupListingFilters {
   published: 'TRUE' | 'FALSE' | undefined;
 }
 
-export interface TestGroupListingRequest extends TestListingFliters {
+export interface TestGroupListingRequest extends TestGroupListingFilters {
   limit: number;
   page: number;
 }
