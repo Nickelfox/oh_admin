@@ -178,6 +178,14 @@ import { MatCardModule } from '@angular/material/card';
                 (m) => m.TestGroupListingModule
               ),
             data: { breadcrumb: 'Tests Group' }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/test-group/test-group-create').then(
+                (m) => m.TestGroupCreateModule
+              ),
+            data: { breadcrumb: 'Add Test Group' }
           }
         ]
       },

@@ -30,6 +30,7 @@ export class TagsStore extends ComponentStore<TagsState> {
   readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly count$: Observable<number> = this.select(state => state.total || 0);
+  readonly tags$: Observable<Tag[]> = this.select(state => state.tags || []);
 
   getTags$ = this.effect<TagsListingRequest>(params$ =>
     params$.pipe(

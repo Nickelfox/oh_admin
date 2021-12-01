@@ -158,30 +158,48 @@
                             <div class='col-12'>
                               <mat-form-field class='example-chip-list w-100' appearance='fill'>
                                 <mat-label>Subcategory(s)</mat-label>
-                                <mat-chip-list #chipList aria-label='tag selection'>
+                                <mat-chip-list [formControl]='subCtrl' #subList aria-label='tag selection'>
                                   <mat-chip
-                                    *ngFor='let tag of tags'
+                                    [value]='tag'
+                                    *ngFor='let tag of (subCtrl.value$ | async)'
                                     [selectable]='selectable'
-                                    [removable]='removable'
-                                    (removed)='remove(tag)'>
-                                    {{tag}}
+                                    [removable]='removable'>
+                                    {{tag.name | maxStringLimit: 15}}
                                     <button matChipRemove *ngIf='removable'>
                                       <mat-icon>cancel</mat-icon>
                                     </button>
                                   </mat-chip>
                                   <input
+                                    (keyup)='getTags(tagTypeEnum.SUB_CATEGORY, subInput.value)'
+                                    (focusin)='getTags(tagTypeEnum.SUB_CATEGORY, subInput.value)'
                                     placeholder='New tag...'
-                                    #tagInput
-                                    [formControl]='tagsCtrl'
-                                    [matAutocomplete]='auto'
-                                    [matChipInputFor]='chipList'
-                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
-                                    (matChipInputTokenEnd)='add($event)'>
+                                    #subInput
+                                    [matAutocomplete]='subTag'
+                                    [matChipInputFor]='subList'
+                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'>
                                 </mat-chip-list>
-                                <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
-                                  <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
-                                    {{tag}}
-                                  </mat-option>
+                                <mat-autocomplete #subTag='matAutocomplete'>
+                                  <ng-template [ngIf]='(tagStore.isLoading$ | async)' [ngIfElse]='subElse'>
+                                    <mat-option disabled>
+                                      <div class='w-100 d-flex align-items-center justify-content-center'>
+                                        <mat-spinner [diameter]='18'></mat-spinner>
+                                      </div>
+                                    </mat-option>
+                                  </ng-template>
+                                  <ng-template #subElse>
+                                    <ng-template [ngIf]='(tagStore.count$ | async)' [ngIfElse]='subCountElse'>
+                                      <ng-template ngFor [ngForOf]='(tagStore.tags$ | async)' let-tag>
+                                        <mat-option [disabled]='isExisitingTag(subCtrl, tag)'
+                                                    (onSelectionChange)='test(tagTypeEnum.SUB_CATEGORY, tag)'
+                                                    [value]='tag'>
+                                          {{tag.name}}
+                                        </mat-option>
+                                      </ng-template>
+                                    </ng-template>
+                                    <ng-template #subCountElse>
+                                      <mat-option disabled>No Results Found</mat-option>
+                                    </ng-template>
+                                  </ng-template>
                                 </mat-autocomplete>
                               </mat-form-field>
                             </div>
@@ -190,30 +208,46 @@
                             <div class='col-12'>
                               <mat-form-field class='example-chip-list w-100' appearance='fill'>
                                 <mat-label>Exercise(s)</mat-label>
-                                <mat-chip-list #chipList aria-label='tag selection'>
+                                <mat-chip-list #exList aria-label='tag selection'>
                                   <mat-chip
-                                    *ngFor='let tag of tags'
+                                    [value]='tag'
+                                    *ngFor='let tag of (exerCtrl.value$ | async)'
                                     [selectable]='selectable'
-                                    [removable]='removable'
-                                    (removed)='remove(tag)'>
-                                    {{tag}}
+                                    [removable]='removable'>
+                                    {{tag.name | maxStringLimit: 15}}
                                     <button matChipRemove *ngIf='removable'>
                                       <mat-icon>cancel</mat-icon>
                                     </button>
                                   </mat-chip>
                                   <input
+                                    (keyup)='getTags(tagTypeEnum.EXERCISE, exerInput.value)'
+                                    (focusin)='getTags(tagTypeEnum.EXERCISE)'
                                     placeholder='New tag...'
-                                    #tagInput
-                                    [formControl]='tagsCtrl'
-                                    [matAutocomplete]='auto'
-                                    [matChipInputFor]='chipList'
-                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
-                                    (matChipInputTokenEnd)='add($event)'>
+                                    #exerInput
+                                    [matAutocomplete]='exTag'
+                                    [matChipInputFor]='exList'
+                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'>
                                 </mat-chip-list>
-                                <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
-                                  <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
-                                    {{tag}}
-                                  </mat-option>
+                                <mat-autocomplete #exTag='matAutocomplete'>
+                                  <ng-template [ngIf]='(tagStore.count$ | async)' [ngIfElse]='exElse'>
+                                    <ng-template ngFor [ngForOf]='(tagStore.tags$ | async)' let-tag>
+                                      <mat-option [disabled]='isExisitingTag(exerCtrl, tag)'
+                                                  (onSelectionChange)='test(tagTypeEnum.EXERCISE, tag)'
+                                                  [value]='tag'>
+                                        {{tag.name}}
+                                      </mat-option>
+                                    </ng-template>
+                                  </ng-template>
+                                  <ng-template #exElse>
+                                    <ng-template [ngIf]='(tagStore.count$ | async)' [ngIfElse]='exCountElse'>
+                                      <mat-option *ngFor='let tag of (tagStore.tags$ | async)' [value]='tag.id'>
+                                        {{tag.name}}
+                                      </mat-option>
+                                    </ng-template>
+                                    <ng-template #exCountElse>
+                                      <mat-option disabled>No Results Found</mat-option>
+                                    </ng-template>
+                                  </ng-template>
                                 </mat-autocomplete>
                               </mat-form-field>
                             </div>
@@ -222,30 +256,47 @@
                             <div class='col-12'>
                               <mat-form-field class='example-chip-list w-100' appearance='fill'>
                                 <mat-label>Target Area(s)</mat-label>
-                                <mat-chip-list #chipList aria-label='tag selection'>
+                                <mat-chip-list #targetList aria-label='tag selection'>
                                   <mat-chip
                                     *ngFor='let tag of tags'
                                     [selectable]='selectable'
-                                    [removable]='removable'
-                                    (removed)='remove(tag)'>
+                                    [removable]='removable'>
                                     {{tag}}
                                     <button matChipRemove *ngIf='removable'>
                                       <mat-icon>cancel</mat-icon>
                                     </button>
                                   </mat-chip>
                                   <input
+                                    (keyup)='getTags(tagTypeEnum.SUB_CATEGORY, targetInput.value)'
+                                    (focusin)='getTags(tagTypeEnum.TARGET_AREA)'
                                     placeholder='New tag...'
-                                    #tagInput
-                                    [formControl]='tagsCtrl'
-                                    [matAutocomplete]='auto'
-                                    [matChipInputFor]='chipList'
-                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
-                                    (matChipInputTokenEnd)='add($event)'>
+                                    #targetInput
+                                    [matAutocomplete]='targetTag'
+                                    [matChipInputFor]='targetList'
+                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'>
                                 </mat-chip-list>
-                                <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
-                                  <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
-                                    {{tag}}
-                                  </mat-option>
+                                <mat-autocomplete #targetTag='matAutocomplete'>
+                                  <ng-template [ngIf]='(tagStore.isLoading$ | async)' [ngIfElse]='tarElse'>
+                                    <mat-option disabled>
+                                      <div class='w-100 d-flex align-items-center justify-content-center'>
+                                        <mat-spinner [diameter]='18'></mat-spinner>
+                                      </div>
+                                    </mat-option>
+                                  </ng-template>
+                                  <ng-template #tarElse>
+                                    <ng-template [ngIf]='(tagStore.count$ | async)' [ngIfElse]='tarCountElse'>
+                                      <ng-template ngFor [ngForOf]='(tagStore.tags$ | async)' let-tag>
+                                        <mat-option [disabled]='isExisitingTag(subCtrl, tag)'
+                                                    (onSelectionChange)='test(tagTypeEnum.TARGET_AREA, tag)'
+                                                    [value]='tag'>
+                                          {{tag.name}}
+                                        </mat-option>
+                                      </ng-template>
+                                    </ng-template>
+                                    <ng-template #tarCountElse>
+                                      <mat-option disabled>No Results Found</mat-option>
+                                    </ng-template>
+                                  </ng-template>
                                 </mat-autocomplete>
                               </mat-form-field>
                             </div>
@@ -254,30 +305,48 @@
                             <div class='col-12'>
                               <mat-form-field class='example-chip-list w-100' appearance='fill'>
                                 <mat-label>Movement Patterns(s)</mat-label>
-                                <mat-chip-list #chipList aria-label='tag selection'>
+                                <mat-chip-list #moveList aria-label='tag selection'>
                                   <mat-chip
                                     *ngFor='let tag of tags'
                                     [selectable]='selectable'
-                                    [removable]='removable'
-                                    (removed)='remove(tag)'>
+                                    [removable]='removable'>
                                     {{tag}}
                                     <button matChipRemove *ngIf='removable'>
                                       <mat-icon>cancel</mat-icon>
                                     </button>
                                   </mat-chip>
                                   <input
+                                    (keyup)='getTags(tagTypeEnum.SUB_CATEGORY, moveInput.value)'
+                                    (focusin)='getTags(tagTypeEnum.MOVEMENT_PATTERN)'
                                     placeholder='New tag...'
-                                    #tagInput
+                                    #moveInput
                                     [formControl]='tagsCtrl'
-                                    [matAutocomplete]='auto'
-                                    [matChipInputFor]='chipList'
-                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
-                                    (matChipInputTokenEnd)='add($event)'>
+                                    [matAutocomplete]='movementTag'
+                                    [matChipInputFor]='moveList'
+                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'>
                                 </mat-chip-list>
-                                <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
-                                  <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
-                                    {{tag}}
-                                  </mat-option>
+                                <mat-autocomplete #movementTag='matAutocomplete'>
+                                  <ng-template [ngIf]='(tagStore.isLoading$ | async)' [ngIfElse]='moveElse'>
+                                    <mat-option disabled>
+                                      <div class='w-100 d-flex align-items-center justify-content-center'>
+                                        <mat-spinner [diameter]='18'></mat-spinner>
+                                      </div>
+                                    </mat-option>
+                                  </ng-template>
+                                  <ng-template #moveElse>
+                                    <ng-template [ngIf]='(tagStore.count$ | async)' [ngIfElse]='moveCountElse'>
+                                      <ng-template ngFor [ngForOf]='(tagStore.tags$ | async)' let-tag>
+                                        <mat-option [disabled]='isExisitingTag(subCtrl, tag)'
+                                                    (onSelectionChange)='test(tagTypeEnum.MOVEMENT_PATTERN, tag)'
+                                                    [value]='tag'>
+                                          {{tag.name}}
+                                        </mat-option>
+                                      </ng-template>
+                                    </ng-template>
+                                    <ng-template #moveCountElse>
+                                      <mat-option disabled>No Results Found</mat-option>
+                                    </ng-template>
+                                  </ng-template>
                                 </mat-autocomplete>
                               </mat-form-field>
                             </div>
@@ -286,30 +355,48 @@
                             <div class='col-12'>
                               <mat-form-field class='example-chip-list w-100' appearance='fill'>
                                 <mat-label>Difficulty Level</mat-label>
-                                <mat-chip-list #chipList aria-label='tag selection'>
+                                <mat-chip-list #diffList aria-label='tag selection'>
                                   <mat-chip
                                     *ngFor='let tag of tags'
                                     [selectable]='selectable'
-                                    [removable]='removable'
-                                    (removed)='remove(tag)'>
+                                    [removable]='removable'>
                                     {{tag}}
                                     <button matChipRemove *ngIf='removable'>
                                       <mat-icon>cancel</mat-icon>
                                     </button>
                                   </mat-chip>
                                   <input
+                                    (keyup)='getTags(tagTypeEnum.SUB_CATEGORY, diffInput.value)'
+                                    (focusin)='getTags(tagTypeEnum.SUB_CATEGORY)'
                                     placeholder='New tag...'
-                                    #tagInput
+                                    #diffInput
                                     [formControl]='tagsCtrl'
-                                    [matAutocomplete]='auto'
-                                    [matChipInputFor]='chipList'
-                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'
-                                    (matChipInputTokenEnd)='add($event)'>
+                                    [matAutocomplete]='diffTag'
+                                    [matChipInputFor]='diffList'
+                                    [matChipInputSeparatorKeyCodes]='separatorKeysCodes'>
                                 </mat-chip-list>
-                                <mat-autocomplete #auto='matAutocomplete' (optionSelected)='selected($event)'>
-                                  <mat-option *ngFor='let tag of filteredTags | async' [value]='tag'>
-                                    {{tag}}
-                                  </mat-option>
+                                <mat-autocomplete #diffTag='matAutocomplete'>
+                                  <ng-template [ngIf]='(tagStore.isLoading$ | async)' [ngIfElse]='diffElse'>
+                                    <mat-option disabled>
+                                      <div class='w-100 d-flex align-items-center justify-content-center'>
+                                        <mat-spinner [diameter]='18'></mat-spinner>
+                                      </div>
+                                    </mat-option>
+                                  </ng-template>
+                                  <ng-template #diffElse>
+                                    <ng-template [ngIf]='(tagStore.count$ | async)' [ngIfElse]='diffCountElse'>
+                                      <ng-template ngFor [ngForOf]='(tagStore.tags$ | async)' let-tag>
+                                        <mat-option [disabled]='isExisitingTag(subCtrl, tag)'
+                                                    (onSelectionChange)='test(tagTypeEnum.SUB_CATEGORY, tag)'
+                                                    [value]='tag'>
+                                          {{tag.name}}
+                                        </mat-option>
+                                      </ng-template>
+                                    </ng-template>
+                                    <ng-template #diffCountElse>
+                                      <mat-option disabled>No Results Found</mat-option>
+                                    </ng-template>
+                                  </ng-template>
                                 </mat-autocomplete>
                               </mat-form-field>
                             </div>
@@ -332,7 +419,9 @@
                                   <mat-option *ngFor='let type of testInputTypeIte'
                                               [value]='type'>{{type | replaceUnderscore | titlecase}}</mat-option>
                                 </mat-select>
-                                <mat-hint *ngIf='typeSelection._control.value === testInputTypeEnum.RATIO'>Ratio calculated by Value (x) / Value (y)</mat-hint>
+                                <mat-hint *ngIf='typeSelection._control.value === testInputTypeEnum.RATIO'>Ratio
+                                  calculated by Value (x) / Value (y)
+                                </mat-hint>
                               </mat-form-field>
                             </div>
                           </div>

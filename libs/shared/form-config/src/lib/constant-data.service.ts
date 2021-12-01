@@ -15,6 +15,7 @@ export class ConstantDataService {
     DATE_OF_JOINING: 'date of joining',
     DATE_ADDED: 'date added',
     DATE_MODIFIED: 'date modified',
+    OPTIONS: 'options',
     QUESTIONS: 'questions',
     SCORING: 'scoring',
     ONBOARD_DATE: 'onboard date',
