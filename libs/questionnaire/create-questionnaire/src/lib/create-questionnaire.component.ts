@@ -231,21 +231,26 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         answer = new FormGroup<MultipleChoiceAnswer>({
           name: new FormControl<string>(multipleChoice?.name ?? '', [
             RxwebValidators.required(),
-            RxwebValidators.notEmpty()
+            RxwebValidators.notEmpty(),
+            RxwebValidators.unique(),
           ]),
           point: new FormControl<number>(multipleChoice?.point ?? undefined, this.formValidationService.pointValidations),
-          iconName: new FormControl<string>(multipleChoice?.iconName ?? '')
+          iconName: new FormControl<string>( { value: multipleChoice?.iconName ?? '', disabled: true }, [
+            RxwebValidators.required(),
+            RxwebValidators.notEmpty(),
+          ])
         });
         break;
       case QuestionTypeEnum.IMAGE_SELECT:
         answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.imageAnswer as FormArray<ImageSelectAnswer>;
         answer = new FormGroup<ImageSelectAnswer>({
           point: new FormControl<number>(imageAnswerData?.point ?? undefined, this.formValidationService.pointValidations),
-          title: new FormControl<string>(imageAnswerData?.title ?? '', [
+          title: new FormControl<string>(imageAnswerData?.title ?? undefined, [
             RxwebValidators.required(),
-            RxwebValidators.notEmpty()
+            RxwebValidators.notEmpty(),
+            RxwebValidators.unique()
           ]),
-          subTitle: new FormControl<string>(imageAnswerData?.subTitle ?? '', [
+          subTitle: new FormControl<string>(imageAnswerData?.subTitle ?? undefined, [
             RxwebValidators.required(),
             RxwebValidators.notEmpty()
           ]),
@@ -265,7 +270,8 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         answer = new FormGroup<AnswerCore>({
           name: new FormControl<string>(answerData?.name ?? '', [
             RxwebValidators.required(),
-            RxwebValidators.notEmpty()
+            RxwebValidators.notEmpty(),
+            RxwebValidators.unique()
           ]),
           point: new FormControl<number>(answerData?.point ?? undefined, this.formValidationService.pointValidations)
         });

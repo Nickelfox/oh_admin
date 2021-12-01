@@ -25,6 +25,9 @@ export class TagCreateComponent {
       RxwebValidators.notEmpty(),
       RxwebValidators.alphaNumeric({
         allowWhiteSpace: true
+      }),
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
       })
     ]),
     tagType: new FormControl<TagTypeEnum>(TagTypeEnum.EXERCISE, [

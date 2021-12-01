@@ -12,7 +12,7 @@ export class FormValidationService {
 
   public readonly FIELD_VALIDATION_VALUES = {
     NAME_LENGTH: 45,
-    USERNAME_LENGTH: 30
+    USERNAME_LENGTH: 30,
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {

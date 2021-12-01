@@ -220,7 +220,7 @@ export class TagsStore extends ComponentStore<TagsState> {
     const { page, limit, type, category, dateSort, nameSort, id, search } = deleteObj;
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Tag?',
-      desc: `Are you sure you want to delete this Tag?`,
+      desc: `Deleting this tag will remove it from all Tests. Are you sure?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
