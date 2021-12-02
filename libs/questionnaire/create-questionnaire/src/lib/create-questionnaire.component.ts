@@ -44,7 +44,13 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   questionnaire: FormGroup<Questionnaire> = new FormGroup<Questionnaire>({
     name: new FormControl<string>('', [
       RxwebValidators.required(),
-      RxwebValidators.notEmpty()
+      RxwebValidators.notEmpty(),
+      RxwebValidators.minLength({
+        value: 1
+      }),
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.QUESTIONNAIRE_LENGTH
+      }),
     ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
