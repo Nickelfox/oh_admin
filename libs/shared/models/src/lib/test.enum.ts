@@ -1,5 +1,5 @@
 export enum TestInputTypeEnum {
-  ONE_RM = '1_RM',
+  ONE_RM = 'ONE_RM',
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   REPS = 'REPS',
   DISTANCE = 'DISTANCE',
