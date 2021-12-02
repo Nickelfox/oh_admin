@@ -112,9 +112,21 @@
             <button
               mat-flat-button
               class='ml-3'
+              [matMenuTriggerFor]="menuPack"
               color='primary' type='submit'>
               Add
             </button>
+            <mat-menu #menuPack="matMenu">
+              <button mat-menu-item>
+                <span>Test</span>
+              </button>
+              <button mat-menu-item >
+                <span>Lessons</span>
+              </button>
+              <button mat-menu-item>
+                <span>Questionnaire</span>
+              </button>
+            </mat-menu>
           </mat-card-title>
           <mat-divider></mat-divider>
           <mat-card-content >
