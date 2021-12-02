@@ -32,6 +32,15 @@
       ],
       "@hidden-innovation/material": ["libs/material/src/index.ts"],
       "@hidden-innovation/media": ["libs/media/src/index.ts"],
+      "@hidden-innovation/pack/data-access": [
+        "libs/pack/data-access/src/index.ts"
+      ],
+      "@hidden-innovation/pack/pack-create": [
+        "libs/pack/pack-create/src/index.ts"
+      ],
+      "@hidden-innovation/pack/pack-listing": [
+        "libs/pack/pack-listing/src/index.ts"
+      ],
       "@hidden-innovation/questionnaire/create-questionnaire": [
         "libs/questionnaire/create-questionnaire/src/index.ts"
       ],
