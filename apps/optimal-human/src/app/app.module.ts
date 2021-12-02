@@ -240,7 +240,15 @@ import { MatCardModule } from '@angular/material/card';
                 (m) => m.PackListingModule
               ),
             data: { breadcrumb: 'Packs' }
-          }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/pack/pack-create').then(
+                (m) => m.PackCreateModule
+              ),
+            data: { breadcrumb: 'Add Pack' }
+          },
         ]
       },
 
