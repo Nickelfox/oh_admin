@@ -35,6 +35,9 @@
       <ng-container *ngIf='error?.alphaNumeric'>
         Must not contain any special character. <br>
       </ng-container>
+      <ng-container *ngIf='error?.unique'>
+        Must be an unique field <br>
+      </ng-container>
     </ng-template>
   </mat-error>
 </mat-form-field>

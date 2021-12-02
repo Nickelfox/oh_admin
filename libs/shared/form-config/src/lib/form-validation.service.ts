@@ -12,7 +12,8 @@ export class FormValidationService {
 
   public readonly FIELD_VALIDATION_VALUES = {
     NAME_LENGTH: 45,
-    USERNAME_LENGTH: 30
+    USERNAME_LENGTH: 30,
+    QUESTIONNAIRE_LENGTH: 320
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {

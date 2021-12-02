@@ -16,7 +16,8 @@ import {
   QuestionExtended,
   Questionnaire,
   QuestionnaireExtended,
-  QuestionnaireStore, QuestionnaireUtilitiesService
+  QuestionnaireStore,
+  QuestionnaireUtilitiesService
 } from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
@@ -43,7 +44,13 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   questionnaire: FormGroup<Questionnaire> = new FormGroup<Questionnaire>({
     name: new FormControl<string>('', [
       RxwebValidators.required(),
-      RxwebValidators.notEmpty()
+      RxwebValidators.notEmpty(),
+      RxwebValidators.minLength({
+        value: 1
+      }),
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.QUESTIONNAIRE_LENGTH
+      }),
     ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
@@ -159,7 +166,8 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
           if (q.questionType === QuestionTypeEnum.MULTIPLE_CHOICE) {
             this.addAnswer({
               index: questionIndex.toString(),
-              type: q.questionType
+              type: q.questionType,
+              showIcon: q.showIcon
             }, undefined, ans as MultipleChoiceAnswer, undefined);
           } else {
             this.addAnswer({
@@ -218,7 +226,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   }
 
   addAnswer(
-    question: { index: string; type: QuestionTypeEnum },
+    question: { index: string; type: QuestionTypeEnum, showIcon?: boolean },
     answerData?: AnswerCore,
     multipleChoice?: MultipleChoiceAnswer,
     imageAnswerData?: ImageSelectAnswer): void {
@@ -231,21 +239,29 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         answer = new FormGroup<MultipleChoiceAnswer>({
           name: new FormControl<string>(multipleChoice?.name ?? '', [
             RxwebValidators.required(),
-            RxwebValidators.notEmpty()
+            RxwebValidators.notEmpty(),
+            RxwebValidators.unique()
           ]),
           point: new FormControl<number>(multipleChoice?.point ?? undefined, this.formValidationService.pointValidations),
-          iconName: new FormControl<string>(multipleChoice?.iconName ?? '')
+          iconName: new FormControl<string>({
+            value: multipleChoice?.iconName ?? '',
+            disabled: !question.showIcon
+          }, [
+            RxwebValidators.required(),
+            RxwebValidators.notEmpty()
+          ])
         });
         break;
       case QuestionTypeEnum.IMAGE_SELECT:
         answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.imageAnswer as FormArray<ImageSelectAnswer>;
         answer = new FormGroup<ImageSelectAnswer>({
           point: new FormControl<number>(imageAnswerData?.point ?? undefined, this.formValidationService.pointValidations),
-          title: new FormControl<string>(imageAnswerData?.title ?? '', [
+          title: new FormControl<string>(imageAnswerData?.title ?? undefined, [
             RxwebValidators.required(),
-            RxwebValidators.notEmpty()
+            RxwebValidators.notEmpty(),
+            RxwebValidators.unique()
           ]),
-          subTitle: new FormControl<string>(imageAnswerData?.subTitle ?? '', [
+          subTitle: new FormControl<string>(imageAnswerData?.subTitle ?? undefined, [
             RxwebValidators.required(),
             RxwebValidators.notEmpty()
           ]),
@@ -265,7 +281,8 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         answer = new FormGroup<AnswerCore>({
           name: new FormControl<string>(answerData?.name ?? '', [
             RxwebValidators.required(),
-            RxwebValidators.notEmpty()
+            RxwebValidators.notEmpty(),
+            RxwebValidators.unique()
           ]),
           point: new FormControl<number>(answerData?.point ?? undefined, this.formValidationService.pointValidations)
         });

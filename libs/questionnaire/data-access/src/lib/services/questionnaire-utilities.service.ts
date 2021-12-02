@@ -21,7 +21,8 @@ export class QuestionnaireUtilitiesService {
     return yesNoData.map(value => new FormGroup<AnswerCore>({
       name: new FormControl<string>(value, [
         RxwebValidators.required(),
-        RxwebValidators.notEmpty()
+        RxwebValidators.notEmpty(),
+        RxwebValidators.unique()
       ]),
       point: new FormControl<number>(undefined, this.formValidationService.pointValidations)
     }));
