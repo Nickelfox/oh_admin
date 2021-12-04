@@ -94,7 +94,8 @@ export class ImagePickerComponent {
   upload(media: Blob, imageBase: string, fileName: string): void {
     this.toastRef?.close();
     this.toastRef = this.hotToastService.loading('Uploading Media...', {
-      dismissible: false
+      dismissible: false,
+      autoClose: false,
     });
     this.isUploading = true;
     this.cdr.markForCheck();

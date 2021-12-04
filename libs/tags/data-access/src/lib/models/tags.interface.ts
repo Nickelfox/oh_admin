@@ -39,7 +39,7 @@ export interface TagDialogReq {
   tag?: Tag;
 }
 
-export interface CreateTagRequest extends TagsListingRequest {
+export interface CreateTagRequest {
   tag: TagCore;
 }
 
