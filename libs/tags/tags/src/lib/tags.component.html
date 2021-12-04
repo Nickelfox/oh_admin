@@ -60,7 +60,7 @@
                       <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                     </button>
                     <mat-menu #catMenu='matMenu'>
-                      <mat-selection-list color='primary' (selectionChange)='typeFilterChange($event)' [multiple]='true'
+                      <mat-selection-list color='primary' #typeFilter (selectionChange)='typeFilterChange($event)' [multiple]='true'
                                           class='pt-0'>
                         <mat-list-option *ngFor='let type of tagTypeIte' [value]='type'>
                           <h6 class='mat-h6'>{{type | replaceUnderscore | titlecase}}</h6>
@@ -87,7 +87,7 @@
                       <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                     </button>
                     <mat-menu #typeMenu='matMenu'>
-                      <mat-selection-list color='primary' (selectionChange)='categoryFilterChange($event)'
+                      <mat-selection-list color='primary' #categoryFilter (selectionChange)='categoryFilterChange($event)'
                                           [multiple]='true' class='pt-0'>
                         <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
                           <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>

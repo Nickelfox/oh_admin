@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Tag,
@@ -17,7 +24,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { TagCreateComponent } from '@hidden-innovation/shared/ui/tag-create';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { MatSelectionListChange } from '@angular/material/list';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { isEqual } from 'lodash-es';
 
@@ -59,6 +66,8 @@ export class TagsComponent implements OnInit {
 
   listingRoute = '/tags/listing/';
 
+  @ViewChild('categoryFilter') catFilter: MatSelectionList | undefined;
+  @ViewChild('typeFilter') typeFilter: MatSelectionList | undefined;
 
   constructor(
     public constantDataService: ConstantDataService,
@@ -81,6 +90,7 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.catFilter);
     this.store.state$.subscribe(
       ({ tags }) => {
         this.tags = new MatTableDataSource<Tag>(tags);
@@ -134,6 +144,8 @@ export class TagsComponent implements OnInit {
       nameSort: undefined
     });
     this.filters.controls.nameSort.disable();
+    this.catFilter?.deselectAll();
+    this.typeFilter?.deselectAll();
     this.cdr.markForCheck();
   }
 
