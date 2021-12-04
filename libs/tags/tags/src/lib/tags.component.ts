@@ -134,6 +134,7 @@ export class TagsComponent implements OnInit {
       nameSort: undefined
     });
     this.filters.controls.nameSort.disable();
+    this.cdr.markForCheck();
   }
 
   openCreateTagDialog(tagType: TagTypeEnum): void {
