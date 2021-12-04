@@ -119,6 +119,23 @@ export class TagsComponent implements OnInit {
     return tag.id;
   }
 
+  resetFilters(): void {
+    this.router.navigate([
+      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
+    ], {
+      relativeTo: this.route
+    });
+    this.filters.enable();
+    this.filters.reset({
+      dateSort: SortingEnum.DESC,
+      type: undefined,
+      search: undefined,
+      category: undefined,
+      nameSort: undefined
+    });
+    this.filters.controls.nameSort.disable();
+  }
+
   openCreateTagDialog(tagType: TagTypeEnum): void {
     const tagCreateReqObj: TagDialogReq = {
       tagType,
@@ -130,17 +147,10 @@ export class TagsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((tag: TagCore | undefined) => {
       if (tag) {
-        const { nameSort, dateSort, type, category, search } = this.filters.value;
         this.store.createTag$({
-          tag,
-          page: this.pageIndex,
-          limit: this.pageSize,
-          type,
-          category,
-          nameSort,
-          dateSort,
-          search
+          tag
         });
+        this.resetFilters();
       }
     });
   }
