@@ -69,11 +69,9 @@ export class QuestionnaireQuestionFormComponent implements OnInit {
     const nestedPoints = answers.map(value => value.point);
     const nestedImagePoints = imageAnswer.map(value => value.point);
     const points: number[] = [...nestedPoints, ...nestedImagePoints].map(value => typeof value === 'string' ? parseInt(value) : value);
-    const maxPoint = max(points) !== null && max(points) !== undefined ? max(points) : 0;
-    const minPoint = min(points) !== null && min(points) !== undefined ? min(points) : 0;
     return {
-      max: maxPoint,
-      min: minPoint
+      max: max(points) ?? 0,
+      min: min(points) ?? 0
     };
   }
 
