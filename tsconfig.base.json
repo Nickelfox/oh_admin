@@ -95,6 +95,9 @@
       "@hidden-innovation/shared/ui/dashboard-user-demographic": [
         "libs/shared/ui/dashboard-user-demographic/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/lesson-create": [
+        "libs/shared/ui/lesson-create/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/line-chart": [
         "libs/shared/ui/line-chart/src/index.ts"
       ],
