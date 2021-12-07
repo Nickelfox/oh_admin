@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Tag,
@@ -17,7 +24,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { TagCreateComponent } from '@hidden-innovation/shared/ui/tag-create';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { MatSelectionListChange } from '@angular/material/list';
+import { MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { isEqual } from 'lodash-es';
 
@@ -59,6 +66,8 @@ export class TagsComponent implements OnInit {
 
   listingRoute = '/tags/listing/';
 
+  @ViewChild('categoryFilter') catFilter: MatSelectionList | undefined;
+  @ViewChild('typeFilter') typeFilter: MatSelectionList | undefined;
 
   constructor(
     public constantDataService: ConstantDataService,
@@ -81,6 +90,7 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.catFilter);
     this.store.state$.subscribe(
       ({ tags }) => {
         this.tags = new MatTableDataSource<Tag>(tags);
@@ -119,6 +129,26 @@ export class TagsComponent implements OnInit {
     return tag.id;
   }
 
+  resetFilters(): void {
+    this.router.navigate([
+      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
+    ], {
+      relativeTo: this.route
+    });
+    this.filters.enable();
+    this.filters.reset({
+      dateSort: SortingEnum.DESC,
+      type: undefined,
+      search: undefined,
+      category: undefined,
+      nameSort: undefined
+    });
+    this.filters.controls.nameSort.disable();
+    this.catFilter?.deselectAll();
+    this.typeFilter?.deselectAll();
+    this.cdr.markForCheck();
+  }
+
   openCreateTagDialog(tagType: TagTypeEnum): void {
     const tagCreateReqObj: TagDialogReq = {
       tagType,
@@ -130,17 +160,10 @@ export class TagsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((tag: TagCore | undefined) => {
       if (tag) {
-        const { nameSort, dateSort, type, category, search } = this.filters.value;
         this.store.createTag$({
-          tag,
-          page: this.pageIndex,
-          limit: this.pageSize,
-          type,
-          category,
-          nameSort,
-          dateSort,
-          search
+          tag
         });
+        this.resetFilters();
       }
     });
   }

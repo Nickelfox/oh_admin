@@ -75,7 +75,7 @@ export class TagsStore extends ComponentStore<TagsState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ tag, type, category, page, limit, dateSort, nameSort, search }) =>
+      exhaustMap(({ tag }) =>
         this.tagsService.createTag(tag).pipe(
           tapResponse(
             (newTag) => {
@@ -86,15 +86,6 @@ export class TagsStore extends ComponentStore<TagsState> {
               this.toastRef?.updateToast({
                 dismissible: true,
                 type: 'success'
-              });
-              this.getTags$({
-                page,
-                limit,
-                category,
-                type,
-                dateSort,
-                nameSort,
-                search
               });
             },
             error => {
