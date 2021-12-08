@@ -1,4 +1,4 @@
-<form class='p-4'>
+<form class='p-4' [formGroup]='testGroup'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -37,20 +37,19 @@
                           </div>
                           <div class='row mb-2'>
                             <div class='col-12'>
-                              <mat-form-field class='w-100'>
-                                <mat-label>Test Name</mat-label>
-                                <input matInput autocomplete='no' type='text'>
-                              </mat-form-field>
+                              <hidden-innovation-common-form-field
+                                [label]='constantDataService.FIELD_NAME.TEST_NAME | titlecase'
+                                controlPath='name'
+                              ></hidden-innovation-common-form-field>
                             </div>
                           </div>
                           <div class='row mb-2'>
                             <div class='col-12'>
                               <mat-form-field class='w-100' appearance='fill'>
                                 <mat-label>Category</mat-label>
-                                <mat-select>
-                                  <mat-option value='cardio'>Cardio</mat-option>
-                                  <mat-option value='strength'>Strength</mat-option>
-                                  <mat-option value='function'>Function</mat-option>
+                                <mat-select formControlName='category'>
+                                  <mat-option [value]=type
+                                              *ngFor='let type of testCatTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
                                 </mat-select>
                               </mat-form-field>
                             </div>
@@ -66,21 +65,23 @@
                           <div class='row mb-3'>
                             <div class='col-12'>
                               <p class='text-muted mb-2'>Video File</p>
-                              <button
-                                mat-stroked-button
-                                color='primary' type='submit'>
-                                Upload
-                              </button>
+                              <hidden-innovation-common-form-field-image
+                                controlPath='videoId'
+                                [parentCtrl]='testGroup.controls.videoId'
+                                (emitImageCtrlData)='testGroup.controls.videoId?.setValue($event)'
+                                (emitRemoveImage)='testGroup.controls.videoId?.reset($event)'
+                              ></hidden-innovation-common-form-field-image>
                             </div>
                           </div>
                           <div class='row mb-4'>
                             <div class='col-12'>
                               <p class='text-muted mb-2'>Thumbnail</p>
-                              <button
-                                mat-stroked-button
-                                color='primary' type='submit'>
-                                Upload
-                              </button>
+                              <hidden-innovation-common-form-field-image
+                                controlPath='thumbnailId'
+                                [parentCtrl]='testGroup.controls.thumbnailId'
+                                (emitImageCtrlData)='testGroup.controls.thumbnailId?.setValue($event)'
+                                (emitRemoveImage)='testGroup.controls.thumbnailId?.reset($event)'
+                              ></hidden-innovation-common-form-field-image>
                             </div>
                           </div>
                         </div>
@@ -93,34 +94,34 @@
                           </div>
                           <div class='row mb-2'>
                             <div class='col-12'>
-                              <mat-form-field class='w-100'>
-                                <mat-label>Label</mat-label>
-                                <textarea matInput></textarea>
-                              </mat-form-field>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.LABEL | titlecase'
+                                controlPath='label'
+                              ></hidden-innovation-common-form-field-textarea>
                             </div>
                           </div>
                           <div class='row mb-2'>
                             <div class='col-12'>
-                              <mat-form-field class='w-100'>
-                                <mat-label>Description</mat-label>
-                                <textarea matInput></textarea>
-                              </mat-form-field>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.DESC | titlecase'
+                                controlPath='description'
+                              ></hidden-innovation-common-form-field-textarea>
                             </div>
                           </div>
                           <div class='row mb-2'>
                             <div class='col-12'>
-                              <mat-form-field class='w-100'>
-                                <mat-label>Outcomes</mat-label>
-                                <textarea matInput></textarea>
-                              </mat-form-field>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.OUTCOME | titlecase'
+                                controlPath='outcomes'
+                              ></hidden-innovation-common-form-field-textarea>
                             </div>
                           </div>
                           <div class='row mb-2'>
                             <div class='col-12'>
-                              <mat-form-field class='w-100'>
-                                <mat-label>Procedure</mat-label>
-                                <textarea matInput></textarea>
-                              </mat-form-field>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.PROCEDURE | titlecase'
+                                controlPath='procedure'
+                              ></hidden-innovation-common-form-field-textarea>
                             </div>
                           </div>
                           <div class='row mb-3'>

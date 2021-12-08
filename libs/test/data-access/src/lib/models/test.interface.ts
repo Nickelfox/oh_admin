@@ -1,41 +1,51 @@
 import {
   CustomApiResponse,
-  DifficultyEnum,
+  DifficultyEnum, DistanceTypeEnum,
   SortingEnum,
   TagCategoryEnum,
   TestInputTypeEnum
 } from '@hidden-innovation/shared/models';
 import { Media } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
+import { InputInputField, OneRMInputField } from './input.interface';
 
-export interface TestCore {
-  category: string;
-  difficulty: string;
-  inputType: string;
+export interface Test {
+  category: TagCategoryEnum;
+  difficulty: DifficultyEnum;
   name: string;
-  poster?: any;
+  poster: Media;
   thumbnail: Media;
   video: Media;
   reps: Reps;
   tags: Tag[];
+  inputType: TestInputTypeEnum;
   oneRMInputFields: OneRMInputField[];
   multipleChoiceInputFields: any[];
-  // inputFields: InputField[];
+  inputFields: InputInputField[];
   ratioVariable?: any;
-}
-
-export interface Test extends TestCore {
   id: number;
   isPublished: boolean;
   updated_at: string;
   created_at: string;
 }
 
-export interface OneRMInputField {
-  pointType: string;
-  point: number;
-  low: number;
-  high: number;
+export interface CreateTest {
+  name: string;
+  category: TagCategoryEnum;
+  difficulty: DifficultyEnum;
+  inputType: TestInputTypeEnum | undefined,
+  needEquipment: boolean;
+  equipment: string;
+  description: string;
+  label: string;
+  outcomes: string;
+  procedure: string;
+  isPublished: boolean;
+  thumbnailId: number | undefined;
+  videoId: number | undefined;
+  posterId: number | undefined;
+  tags: number[];
+  distanceUnit: DistanceTypeEnum | undefined;
 }
 
 export interface TestListingFliters {
@@ -67,7 +77,7 @@ export interface Reps {
   oneRep: boolean;
   threeRep: boolean;
   fiveRep: boolean;
-  deletedAt?: any;
-  createdAt: Date;
-  updatedAt?: any;
+  deletedAt: string;
+  createdAt: string;
+  updatedAt: string;
 }

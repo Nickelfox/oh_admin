@@ -71,11 +71,17 @@
       "@hidden-innovation/shared/ui/common-form-field-date-range": [
         "libs/shared/ui/common-form-field-date-range/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/common-form-field-image": [
+        "libs/shared/ui/common-form-field-image/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/common-form-field-month": [
         "libs/shared/ui/common-form-field-month/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/common-form-field-number": [
         "libs/shared/ui/common-form-field-number/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/common-form-field-textarea": [
+        "libs/shared/ui/common-form-field-textarea/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/common-form-field-week": [
         "libs/shared/ui/common-form-field-week/src/index.ts"
@@ -85,6 +91,9 @@
       ],
       "@hidden-innovation/shared/ui/dashboard-user-demographic": [
         "libs/shared/ui/dashboard-user-demographic/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/form-field-errors": [
+        "libs/shared/ui/form-field-errors/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/line-chart": [
         "libs/shared/ui/line-chart/src/index.ts"

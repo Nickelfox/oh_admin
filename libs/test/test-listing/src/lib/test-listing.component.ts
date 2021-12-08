@@ -12,7 +12,7 @@ import {
   TestInputTypeEnum
 } from '@hidden-innovation/shared/models';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { Test, TestCore, TestListingFliters, TestStore } from '@hidden-innovation/test/data-access';
+import { Test, TestListingFliters, TestStore } from '@hidden-innovation/test/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { isEqual } from 'lodash-es';

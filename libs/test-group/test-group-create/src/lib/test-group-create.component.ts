@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEnca
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
 import { SelectionModel } from '@angular/cdk/collections';
-import { TestCore } from '@hidden-innovation/test/data-access';
+import { Test } from '@hidden-innovation/test/data-access';
 
 @Component({
   selector: 'hidden-innovation-test-group-create',
@@ -13,7 +13,7 @@ import { TestCore } from '@hidden-innovation/test/data-access';
 })
 export class TestGroupCreateComponent implements OnInit {
 
-  selection = new SelectionModel<TestCore>(true, []);
+  selection = new SelectionModel<Test>(true, []);
 
   constructor(
     private matDialog: MatDialog,
@@ -32,7 +32,7 @@ export class TestGroupCreateComponent implements OnInit {
       maxWidth: '100%',
       role: 'dialog'
     });
-    dialogRef.afterClosed().subscribe((tests: TestCore[] | undefined) => {
+    dialogRef.afterClosed().subscribe((tests: Test[] | undefined) => {
       if (tests !== undefined && tests !== null) {
         this.selection.select(...tests);
         this.cdr.markForCheck();

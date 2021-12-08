@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@ngneat/reactive-forms';
-import { TagTypeEnum, TestInputTypeEnum } from '@hidden-innovation/shared/models';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { DifficultyEnum, TagCategoryEnum, TagTypeEnum, TestInputTypeEnum } from '@hidden-innovation/shared/models';
 import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
 import { paginatorData } from '@hidden-innovation/user/data-access';
+import { CreateTest } from '@hidden-innovation/test/data-access';
+import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
+import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'hidden-innovation-test-create',
@@ -27,11 +30,54 @@ export class TestCreateComponent implements OnInit {
   tagTypeEnum = TagTypeEnum;
 
   testInputTypeIte = Object.values(TestInputTypeEnum).map(value => value.toString());
+  testCatTypeIte = Object.values(TagCategoryEnum).map(value => value.toString());
 
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
+  testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
+    name: new FormControl('',[
+      RxwebValidators.required(),
+      RxwebValidators.notEmpty(),
+      RxwebValidators.unique()
+    ]),
+    category: new FormControl(TagCategoryEnum.STRENGTH),
+    videoId: new FormControl(undefined, [
+      RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]),
+    thumbnailId: new FormControl(undefined,[
+      RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]),
+    posterId: new FormControl(undefined),
+    label: new FormControl('', [
+      RxwebValidators.required(),
+      RxwebValidators.notEmpty(),
+      RxwebValidators.unique()
+    ]),
+    description: new FormControl(''),
+    outcomes: new FormControl(''),
+    procedure: new FormControl(''),
+    needEquipment: new FormControl(false),
+    equipment: new FormControl(''),
+    tags: new FormControl([]),
+    difficulty: new FormControl(DifficultyEnum.BEGINNER),
+    inputType: new FormControl(undefined),
+    distanceUnit: new FormControl(undefined),
+    isPublished: new FormControl(true)
+  });
+
+
   constructor(
-    public tagStore: TagsStore
+    public tagStore: TagsStore,
+    public formValidationService: FormValidationService,
+    public constantDataService: ConstantDataService
   ) {
     // this.filteredTags = this.tagsCtrl.valueChanges.pipe(
     //   startWith(null),
