@@ -43,8 +43,8 @@
                   </div>
                 </mat-card-title>
                 <mat-divider></mat-divider>
-                <mat-card-content cdkDropList (cdkDropListDropped)='drop($event)'>
-                  <ng-template ngFor [ngForOf]='questionsFormArray.controls' let-existingQuestion let-i='index'>
+                <mat-card-content cdkDropList (cdkDropListDropped)='moveItemInFormArray(questionsFormArray, $event.previousIndex, $event.currentIndex)'>
+                  <ng-template ngFor [ngForOf]='questionsFormArray.controls' let-i='index'>
                     <div class='pt-3' cdkDrag>
                       <mat-card class='question-card mat-elevation-z3 pt-1 pr-1'>
                         <div class='d-flex align-items-center justify-content-between'>
@@ -130,3 +130,5 @@
     </div>
   </div>
 </form>
+
+
