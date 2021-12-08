@@ -27,7 +27,6 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -50,7 +49,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       }),
       RxwebValidators.maxLength({
         value: this.formValidationService.FIELD_VALIDATION_VALUES.QUESTIONNAIRE_LENGTH
-      }),
+      })
     ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
@@ -180,8 +179,21 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     });
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.questionsFormArray.controls, event.previousIndex, event.currentIndex);
+  moveItemInFormArray(formArray: FormArray, fromIndex: number, toIndex: number): void {
+    const from = this.clamp(fromIndex, formArray.length - 1);
+    const to = this.clamp(toIndex, formArray.length - 1);
+    if (from === to) {
+      return;
+    }
+    const previous = formArray.at(from);
+    const current = formArray.at(to);
+    formArray.setControl(to, previous);
+    formArray.setControl(from, current);
+  }
+
+  /** Clamps a number between zero and a maximum. */
+  clamp(value: number, max: number): number {
+    return Math.max(0, Math.min(max, value));
   }
 
   submit(): void {
