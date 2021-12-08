@@ -1,0 +1,27 @@
+<div class='container-fluid p-0'>
+  <div class='row'>
+    <ng-template [ngIf]='parentCtrl.valid && fileName' [ngIfElse]='videoSelectedElse'>
+      <div class='col'>
+        <button (click)='removeVideo()'
+                matTooltip='{{fileName ?? "--"}}'
+                mat-stroked-button color='primary'
+                type='button'>
+          <mat-icon color='warn' class='mr-1'>movie</mat-icon>
+          {{(fileName | maxStringLimit: 10) ?? '--'}}
+          <mat-icon class='ml-2'>close</mat-icon>
+        </button>
+      </div>
+    </ng-template>
+    <ng-template #videoSelectedElse>
+      <div class='col'>
+        <hidden-innovation-video-picker
+          [isInvalid]='parentCtrl.invalid && parentCtrl.touched'
+          (emitVideoFile)='mapVideo($event)'
+        ></hidden-innovation-video-picker>
+        <mat-error
+          *ngIf='parentCtrl.invalid && parentCtrl.touched'>
+          <small class='ml-2'>Image is required</small></mat-error>
+      </div>
+    </ng-template>
+  </div>
+</div>

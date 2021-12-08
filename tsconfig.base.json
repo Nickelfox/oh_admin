@@ -83,6 +83,9 @@
       "@hidden-innovation/shared/ui/common-form-field-textarea": [
         "libs/shared/ui/common-form-field-textarea/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/common-form-field-video": [
+        "libs/shared/ui/common-form-field-video/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/common-form-field-week": [
         "libs/shared/ui/common-form-field-week/src/index.ts"
       ],

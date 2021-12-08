@@ -9,6 +9,7 @@ import { TagsDataAccessModule } from '@hidden-innovation/tags/data-access';
 import { MediaModule } from '@hidden-innovation/media';
 import { CommonFormFieldImageModule } from '@hidden-innovation/shared/ui/common-form-field-image';
 import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/common-form-field-textarea';
+import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-form-field-video';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/comm
     UtilsModule,
     TagsDataAccessModule,
     CommonFormFieldTextareaModule,
+    CommonFormFieldVideoModule,
     MediaModule,
     RouterModule.forChild([
       {

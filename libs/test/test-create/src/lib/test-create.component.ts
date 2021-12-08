@@ -7,6 +7,7 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
 import { CreateTest } from '@hidden-innovation/test/data-access';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { AspectRatio } from '@hidden-innovation/media';
 
 @Component({
   selector: 'hidden-innovation-test-create',
@@ -28,6 +29,7 @@ export class TestCreateComponent implements OnInit {
 
   testInputTypeEnum = TestInputTypeEnum;
   tagTypeEnum = TagTypeEnum;
+  aspectRatio = AspectRatio;
 
   testInputTypeIte = Object.values(TestInputTypeEnum).map(value => value.toString());
   testCatTypeIte = Object.values(TagCategoryEnum).map(value => value.toString());

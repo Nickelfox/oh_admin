@@ -8,14 +8,23 @@ export interface MediaUploadResponse extends CustomApiResponse {
   data: MediaUpload;
 }
 
+export enum AspectRatio {
+  CUBE = 'cube',
+  WIDE = 'wide'
+}
+
 export interface ImageCropperReq {
   file: File;
-  aspectRatio: 'cube' | 'wide';
+  aspectRatio?: AspectRatio;
   round: boolean;
 }
 
 export interface ImageCropperResponseData extends MediaUpload {
   croppedImage: any;
+  fileName: string;
+}
+
+export interface VideoPickedResponseData extends MediaUpload {
   fileName: string;
 }
 

@@ -65,22 +65,35 @@
                           <div class='row mb-3'>
                             <div class='col-12'>
                               <p class='text-muted mb-2'>Video File</p>
-                              <hidden-innovation-common-form-field-image
+                              <hidden-innovation-common-form-field-video
                                 controlPath='videoId'
                                 [parentCtrl]='testGroup.controls.videoId'
-                                (emitImageCtrlData)='testGroup.controls.videoId?.setValue($event)'
-                                (emitRemoveImage)='testGroup.controls.videoId?.reset($event)'
+                                (emitVideoCtrlData)='testGroup.controls.videoId?.setValue($event)'
+                                (emitRemoveVideo)='testGroup.controls.videoId?.reset($event)'
+                              ></hidden-innovation-common-form-field-video>
+                            </div>
+                          </div>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <p class='text-muted mb-2'>Thumbnail</p>
+                              <hidden-innovation-common-form-field-image
+                                controlPath='thumbnailId'
+                                [aspectRatio]='aspectRatio.CUBE'
+                                [parentCtrl]='testGroup.controls.thumbnailId'
+                                (emitImageCtrlData)='testGroup.controls.thumbnailId?.setValue($event)'
+                                (emitRemoveImage)='testGroup.controls.thumbnailId?.reset($event)'
                               ></hidden-innovation-common-form-field-image>
                             </div>
                           </div>
                           <div class='row mb-4'>
                             <div class='col-12'>
-                              <p class='text-muted mb-2'>Thumbnail</p>
+                              <p class='text-muted mb-2'>Poster</p>
                               <hidden-innovation-common-form-field-image
-                                controlPath='thumbnailId'
-                                [parentCtrl]='testGroup.controls.thumbnailId'
-                                (emitImageCtrlData)='testGroup.controls.thumbnailId?.setValue($event)'
-                                (emitRemoveImage)='testGroup.controls.thumbnailId?.reset($event)'
+                                controlPath='posterId'
+                                [aspectRatio]='aspectRatio.WIDE'
+                                [parentCtrl]='testGroup.controls.posterId'
+                                (emitImageCtrlData)='testGroup.controls.posterId?.setValue($event)'
+                                (emitRemoveImage)='testGroup.controls.posterId?.reset($event)'
                               ></hidden-innovation-common-form-field-image>
                             </div>
                           </div>

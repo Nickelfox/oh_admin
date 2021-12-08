@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
-import { ImageCropperResponseData } from '@hidden-innovation/media';
+import { AspectRatio, ImageCropperResponseData } from '@hidden-innovation/media';
 
 @Component({
   selector: 'hidden-innovation-common-form-field-image',
@@ -21,6 +21,7 @@ import { ImageCropperResponseData } from '@hidden-innovation/media';
 export class CommonFormFieldImageComponent implements OnInit {
 
   @Input() controlPath: any;
+  @Input() aspectRatio?: AspectRatio;
   @Input() parentCtrl!: FormControl;
 
   @Output() emitImageCtrlData: EventEmitter<number> = new EventEmitter<number>();

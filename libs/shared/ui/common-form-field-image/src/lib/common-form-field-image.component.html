@@ -21,6 +21,7 @@
       <div class='col'>
         <hidden-innovation-image-picker
           [isInvalid]='parentCtrl.invalid && parentCtrl.touched'
+          [aspectRatio]='aspectRatio'
           (imageUploadRes)='mapImage($event)'
         ></hidden-innovation-image-picker>
         <mat-error

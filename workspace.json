@@ -29,6 +29,7 @@
     "shared-ui-common-form-field-month": "libs/shared/ui/common-form-field-month",
     "shared-ui-common-form-field-number": "libs/shared/ui/common-form-field-number",
     "shared-ui-common-form-field-textarea": "libs/shared/ui/common-form-field-textarea",
+    "shared-ui-common-form-field-video": "libs/shared/ui/common-form-field-video",
     "shared-ui-common-form-field-week": "libs/shared/ui/common-form-field-week",
     "shared-ui-dashboard-count-card": "libs/shared/ui/dashboard-count-card",
     "shared-ui-dashboard-user-demographic": "libs/shared/ui/dashboard-user-demographic",
