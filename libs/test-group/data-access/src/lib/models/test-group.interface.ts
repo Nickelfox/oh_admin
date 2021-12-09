@@ -9,6 +9,7 @@ export interface TestGroup {
   category: TagCategoryEnum;
   options: number;
   status: boolean;
+
 }
 
 export interface TestGroupListingFilters {

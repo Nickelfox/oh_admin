@@ -122,6 +122,9 @@
       "@hidden-innovation/shared/ui/tag-create": [
         "libs/shared/ui/tag-create/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/test-group-selector": [
+        "libs/shared/ui/test-group-selector/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/test-selector": [
         "libs/shared/ui/test-selector/src/index.ts"
       ],
