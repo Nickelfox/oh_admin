@@ -6,6 +6,7 @@ import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selecto
 import { TestCore } from '@hidden-innovation/test/data-access';
 import { TestGroupSelectorComponent } from '@hidden-innovation/shared/ui/test-group-selector';
 import { SelectionModel } from '@angular/cdk/collections';
+import { QuestionnaireSelectorComponent } from '@hidden-innovation/shared/ui/questionnaire-selector';
 
 export interface LessonDialogReq {
   isNew: boolean;
@@ -73,6 +74,21 @@ export class PackCreateComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((tests: TestCore[] | undefined) => {
       if (tests) {
+        return;
+      }
+    });
+  }
+  openQuestionnaireDialog():void
+  {
+    const dialogRef = this.matDialog.open(QuestionnaireSelectorComponent, {
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
+    dialogRef.afterClosed().subscribe((packs: PackCore[] | undefined) => {
+      if (packs) {
         return;
       }
     });
