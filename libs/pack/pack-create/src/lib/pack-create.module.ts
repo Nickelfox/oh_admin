@@ -5,6 +5,7 @@ import { MaterialModule } from '@hidden-innovation/material';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { RouterModule } from '@angular/router';
+import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { RouterModule } from '@angular/router';
     MaterialModule,
     CommonFormFieldModule,
     UtilsModule,
+    QuestionnaireDataAccessModule,
     RouterModule.forChild([
       {
         path: '',

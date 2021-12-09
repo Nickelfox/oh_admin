@@ -7,6 +7,7 @@ import { TestCore } from '@hidden-innovation/test/data-access';
 import { TestGroupSelectorComponent } from '@hidden-innovation/shared/ui/test-group-selector';
 import { SelectionModel } from '@angular/cdk/collections';
 import { QuestionnaireSelectorComponent } from '@hidden-innovation/shared/ui/questionnaire-selector';
+import { Questionnaire } from '@hidden-innovation/questionnaire/data-access';
 
 export interface LessonDialogReq {
   isNew: boolean;
@@ -87,9 +88,12 @@ export class PackCreateComponent implements OnInit {
       maxWidth: '100%',
       role: 'dialog'
     });
-    dialogRef.afterClosed().subscribe((packs: PackCore[] | undefined) => {
-      if (packs) {
-        return;
+    dialogRef.afterClosed().subscribe((questions: Questionnaire[] | undefined) => {
+      if (questions !== undefined && questions !== null) {
+
+        // @ts-ignore
+        this.selection.select(...questions);
+        this.cdr.markForCheck();
       }
     });
   }
