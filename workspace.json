@@ -37,6 +37,7 @@
     "shared-ui-line-chart": "libs/shared/ui/line-chart",
     "shared-ui-prompt-dialog": "libs/shared/ui/prompt-dialog",
     "shared-ui-questionnaire-question-form": "libs/shared/ui/questionnaire-question-form",
+    "shared-ui-questionnaire-selector": "libs/shared/ui/questionnaire-selector",
     "shared-ui-shimmer": "libs/shared/ui/shimmer",
     "shared-ui-sorting-header-date": "libs/shared/ui/sorting-header-date",
     "shared-ui-sorting-header-name": "libs/shared/ui/sorting-header-name",

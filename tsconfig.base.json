@@ -107,6 +107,9 @@
       "@hidden-innovation/shared/ui/questionnaire-question-form": [
         "libs/shared/ui/questionnaire-question-form/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/questionnaire-selector": [
+        "libs/shared/ui/questionnaire-selector/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/shimmer": [
         "libs/shared/ui/shimmer/src/index.ts"
       ],

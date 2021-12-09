@@ -117,7 +117,7 @@
               Add
             </button>
             <mat-menu #menuPack="matMenu">
-              <button mat-menu-item>
+              <button mat-menu-item (click)='openTestSelector()' >
                 <span>Test</span>
               </button>
               <button mat-menu-item (click)='openTestGroupDialog()' >

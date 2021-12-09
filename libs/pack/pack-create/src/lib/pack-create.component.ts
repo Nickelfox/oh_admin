@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
 import { PackCore } from '@hidden-innovation/pack/data-access';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
 import { TestCore } from '@hidden-innovation/test/data-access';
 import { TestGroupSelectorComponent } from '@hidden-innovation/shared/ui/test-group-selector';
+import { SelectionModel } from '@angular/cdk/collections';
 
 export interface LessonDialogReq {
   isNew: boolean;
@@ -20,8 +21,11 @@ export interface LessonDialogReq {
 })
 export class PackCreateComponent implements OnInit {
 
+  selection = new SelectionModel<TestCore>(true, []);
+
   constructor(
-    private matDialog: MatDialog
+    private matDialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +58,21 @@ export class PackCreateComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((pack: PackCore[] | undefined) => {
       if (pack) {
+        return;
+      }
+    });
+  }
+
+  openTestSelector(): void {
+    const dialogRef = this.matDialog.open(TestSelectorComponent, {
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
+    dialogRef.afterClosed().subscribe((tests: TestCore[] | undefined) => {
+      if (tests) {
         return;
       }
     });
