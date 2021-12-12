@@ -15,7 +15,7 @@ import { MediaUploadService } from '../../services/media-upload.service';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { filter, switchMap } from 'rxjs/operators';
-import { VideoPickedResponseData } from '@hidden-innovation/media';
+import { VideoPickedResponseData } from '../../models/media.interface';
 import { getMetadata } from 'video-metadata-thumbnails';
 
 @Component({
