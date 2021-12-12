@@ -13,12 +13,12 @@
     <ng-template #videoSelectedElse>
       <div class='col'>
         <hidden-innovation-video-picker
-          [isInvalid]='parentCtrl.invalid && parentCtrl.touched'
+          [isInvalid]='!!((parentCtrl.invalid && (parentCtrl.touch$ | async)))'
           (emitVideoFile)='mapVideo($event)'
         ></hidden-innovation-video-picker>
         <mat-error
-          *ngIf='parentCtrl.invalid && parentCtrl.touched'>
-          <small class='ml-2'>Image is required</small></mat-error>
+          *ngIf='!!(parentCtrl.invalid && (parentCtrl.touch$ | async))'>
+          <small class='ml-2'>Video is required</small></mat-error>
       </div>
     </ng-template>
   </div>

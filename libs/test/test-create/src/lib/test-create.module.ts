@@ -12,6 +12,7 @@ import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/comm
 import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-form-field-video';
 import { CommonFormFieldTagAutocompleteModule } from '@hidden-innovation/shared/ui/common-form-field-tag-autocomplete';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
         component: TestCreateComponent
       }
     ]),
-    RxReactiveFormsModule
+    RxReactiveFormsModule,
+    TestDataAccessModule,
   ],
   declarations: [
     TestCreateComponent

@@ -47,7 +47,8 @@ export class ConstantDataService {
     OCS: 'ocs',
     OOS: 'oos',
     AGE: 'age',
-    GENDER: 'gender'
+    GENDER: 'gender',
+    RESULT_EXPLANATION: 'result explanation'
   };
 
   BUTTON_NAME = {

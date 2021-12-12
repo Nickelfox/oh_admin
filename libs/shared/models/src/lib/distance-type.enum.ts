@@ -1,5 +1,6 @@
-export interface DistanceTypeEnum {
-  CENTIMETERS: 'CENTIMETERS';
-  METERS: 'METERS';
-  KILOMETERS: 'KILOMETERS';
+export enum DistanceTypeEnum {
+  MILLIMETRE = 'MILLIMETRE',
+  CENTIMETRE = 'CENTIMETRE',
+  METRE = 'METRE',
+  KILOMETRE = 'KILOMETRE',
 }

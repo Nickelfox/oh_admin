@@ -4,11 +4,12 @@ import {
   DistanceTypeEnum,
   SortingEnum,
   TagCategoryEnum,
-  TestInputTypeEnum
+  TestInputTypeEnum,
+  WeightTypeEnum
 } from '@hidden-innovation/shared/models';
 import { Media } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
-import { InputInputField, MultipleChoiceField, OneRMInputField } from './input.interface';
+import { InputField, MultipleChoiceField, OneRMField } from './input.interface';
 
 export interface Test {
   category: TagCategoryEnum;
@@ -20,9 +21,9 @@ export interface Test {
   reps: Reps;
   tags: Tag[];
   inputType: TestInputTypeEnum;
-  oneRMInputFields: OneRMInputField[];
+  oneRMInputFields: OneRMField[];
   multipleChoiceInputFields: any[];
-  inputFields: InputInputField[];
+  inputFields: InputField[];
   ratioVariable?: any;
   id: number;
   isPublished: boolean;
@@ -46,10 +47,9 @@ export interface CreateTest {
   videoId: number | undefined;
   posterId: number | undefined;
   tags: number[];
-  distanceUnit: DistanceTypeEnum | undefined;
   // OneRemType Start
   resultExplanation: string;
-  oneRMInputFields: OneRMInputField[];
+  oneRMInputFields: OneRMField[];
   reps: {
     oneRep: boolean;
     threeRep: boolean;
@@ -60,6 +60,22 @@ export interface CreateTest {
   multipleChoiceQuestion: string;
   multipleChoiceInputFields: MultipleChoiceField[];
   // MultipleChoiceType End
+  // DistanceType Start
+  distanceUnit: DistanceTypeEnum | undefined;
+  // DistanceType End
+
+  // WeightType Start
+  weightUnit: WeightTypeEnum | undefined;
+  // WeightType End
+
+  // Common Input Field
+  inputFields: InputField[];
+}
+
+export interface CreateTestResponse extends CustomApiResponse {
+  data: {
+    test: Test;
+  };
 }
 
 export interface TestListingFliters {

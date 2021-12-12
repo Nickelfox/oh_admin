@@ -1,5 +1,5 @@
 import {
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -31,7 +31,8 @@ export class CommonFormFieldVideoComponent implements OnInit {
   fileName: string | undefined;
 
   constructor(
-    private fgd: FormGroupDirective
+    private fgd: FormGroupDirective,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
@@ -39,6 +40,7 @@ export class CommonFormFieldVideoComponent implements OnInit {
     this.control = this.fgd.control.get(
       this.controlPath
     ) as FormControl;
+    this.control.valueChanges.subscribe(_ => this.cdr.markForCheck());
   }
 
   removeVideo() {

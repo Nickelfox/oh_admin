@@ -57,6 +57,8 @@ export class FormValidationService {
     minLength: 'Minimum of 2 answers are required to create a question'
   };
 
+  formSubmitError = 'Invalid Submission! Please fill all valid details';
+
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
 
   // private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;

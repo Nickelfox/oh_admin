@@ -5,7 +5,7 @@ export interface CoreInputField {
   point: number | string;
 }
 
-export interface OneRMInputField extends CoreInputField {
+export interface OneRMField extends CoreInputField {
   low: number | undefined;
   high: number | undefined;
 }
@@ -14,14 +14,7 @@ export interface MultipleChoiceField extends CoreInputField {
   answer: string;
 }
 
-export interface InputInputFieldCore {
-  pointType: string;
-  point: number;
-  low: number;
-  high: number;
-}
-
-export interface InputInputField extends InputInputFieldCore {
-  id: number;
-  testId: number;
+export interface InputField extends CoreInputField {
+  low: number | undefined;
+  high: number | undefined;
 }

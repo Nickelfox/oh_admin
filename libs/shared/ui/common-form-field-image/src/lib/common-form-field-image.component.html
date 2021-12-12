@@ -20,12 +20,12 @@
     <ng-template #imageSelectedElse>
       <div class='col'>
         <hidden-innovation-image-picker
-          [isInvalid]='parentCtrl.invalid && parentCtrl.touched'
+          [isInvalid]='!!(parentCtrl.invalid && (parentCtrl.touch$ | async))'
           [aspectRatio]='aspectRatio'
           (imageUploadRes)='mapImage($event)'
         ></hidden-innovation-image-picker>
         <mat-error
-          *ngIf='parentCtrl.invalid && parentCtrl.touched'>
+          *ngIf='!!(parentCtrl.invalid && (parentCtrl.touch$ | async))'>
           <small class='ml-2'>Image is required</small></mat-error>
       </div>
     </ng-template>
