@@ -1,13 +1,14 @@
 import {
   CustomApiResponse,
-  DifficultyEnum, DistanceTypeEnum,
+  DifficultyEnum,
+  DistanceTypeEnum,
   SortingEnum,
   TagCategoryEnum,
   TestInputTypeEnum
 } from '@hidden-innovation/shared/models';
 import { Media } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
-import { InputInputField, OneRMInputField } from './input.interface';
+import { InputInputField, MultipleChoiceField, OneRMInputField } from './input.interface';
 
 export interface Test {
   category: TagCategoryEnum;
@@ -31,9 +32,9 @@ export interface Test {
 
 export interface CreateTest {
   name: string;
-  category: TagCategoryEnum;
+  category: TagCategoryEnum | undefined;
   difficulty: DifficultyEnum;
-  inputType: TestInputTypeEnum | undefined,
+  inputType: TestInputTypeEnum | 'NONE',
   needEquipment: boolean;
   equipment: string;
   description: string;
@@ -46,6 +47,19 @@ export interface CreateTest {
   posterId: number | undefined;
   tags: number[];
   distanceUnit: DistanceTypeEnum | undefined;
+  // OneRemType Start
+  resultExplanation: string;
+  oneRMInputFields: OneRMInputField[];
+  reps: {
+    oneRep: boolean;
+    threeRep: boolean;
+    fiveRep: boolean;
+  }
+  // OneRemType End
+  // MultipleChoiceType Start
+  multipleChoiceQuestion: string;
+  multipleChoiceInputFields: MultipleChoiceField[];
+  // MultipleChoiceType End
 }
 
 export interface TestListingFliters {

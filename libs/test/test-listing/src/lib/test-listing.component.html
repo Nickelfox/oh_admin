@@ -70,7 +70,7 @@
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
                                   [disabled]='(store.isActing$ | async)'
-                                  color='{{filters.controls.category?.value?.length ? "primary" : ""}}'>
+                                  color='{{filters.controls.category?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #typeMenu='matMenu'>
@@ -95,7 +95,9 @@
                     {{constantDataService.FIELD_NAME.DIFFICULTY | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='difficultyMenu'>
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.level?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='difficultyMenu'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #difficultyMenu='matMenu'>
@@ -121,7 +123,9 @@
                     {{constantDataService.FIELD_NAME.INPUTS | slice: 0: 5 | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='inputTypeMenu'>
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.type?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='inputTypeMenu'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #inputTypeMenu='matMenu'>
@@ -150,7 +154,9 @@
                     {{constantDataService.FIELD_NAME.STATUS | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='statusMenu'
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='statusMenu'
                                   [disabled]='(store.isActing$ | async)'
                                   color='{{filters.controls.published?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>

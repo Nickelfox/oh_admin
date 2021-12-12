@@ -11,6 +11,7 @@ export class ConstantDataService {
     TYPE: 'type',
     FIRST_NAME: 'first name',
     EMAIL_ID: 'email id',
+    EQUIPMENT: 'equipment',
     COUNTRY: 'country',
     LOCATION: 'location',
     LABEL: 'label',
@@ -76,6 +77,13 @@ export class ConstantDataService {
   public FIZE_SIZE_DATA = {
     limit: 52428800,
     limitMessage: 'File must be smaller than 50MB.',
+    videoFormatMessage: 'Only MOV & MP4 formats are allowed',
+    videoRatioMessage: 'Video file must be in 16:9 aspect ratio'
   };
+
+  public FILE_FORMAT_DATA = {
+    video_mp4: 'video/mp4',
+    video_mov: 'video/quicktime'
+  }
 
 }

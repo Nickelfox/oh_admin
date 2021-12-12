@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GenericErrorMessage } from './models/form-error-message.interface';
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
-import { FormGroup } from '@ngneat/reactive-forms';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 
@@ -25,6 +25,7 @@ export class FormValidationService {
   pointsValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Point field is required',
     invalid: 'Only numeric & non-floating point values allowed',
+    highField: 'Must be greater than the low field value'
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {
@@ -50,20 +51,17 @@ export class FormValidationService {
 
   questionValidationMessage: Partial<GenericErrorMessage> = {
     minLength: 'Minimum of 2 questions are required to create a questionnaire'
-  }
+  };
 
   answerValidationMessage: Partial<GenericErrorMessage> = {
     minLength: 'Minimum of 2 answers are required to create a question'
-  }
+  };
 
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
 
   // private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
   // Updated regex not allowing white space now
   readonly fieldRegex: RegExp = /^[^\s]+(\s+[^\s]+)*$/;
-  // Reference: https://regex101.com/r/0bH043/1
-  private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
-
   nameValidations = [
     RxwebValidators.required(),
     RxwebValidators.notEmpty(),
@@ -80,8 +78,10 @@ export class FormValidationService {
     RxwebValidators.numeric({
       allowDecimal: false,
       acceptValue: NumericValueType.Both
-    }),
+    })
   ];
+  // Reference: https://regex101.com/r/0bH043/1
+  private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
 
   get validPassword(): ValidatorFn {
     return (control: AbstractControl) => {
@@ -139,6 +139,35 @@ export class FormValidationService {
       } else {
         confirmPasswordControl.setErrors(null);
       }
+    };
+  }
+
+  oneRemGreaterPointValidator(): ValidatorFn {
+    // The validator is on the array, so the AbstractControl is of type FormArray
+    return (arr: AbstractControl) => {
+      if (!arr) {
+        return null;
+      }
+      // Create an object of errors to return
+      const errors: any = {};
+      // Get the list of controls in the array (which are FormGroups)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const controls = arr.controls;
+      // Iterate over them
+      for (let i = 1; i < controls.length; i++) {
+        // Get references to controls to compare them (split code again)
+        const previousValueControl = controls[i - 1].controls.high as FormControl<number>;
+        const valueControl = controls[i].controls.low as FormControl<number>;
+
+        // if error, set array error
+        if (previousValueControl.value >= valueControl.value) {
+          // array error (sum up of all errors)
+          errors[(i-1) + 'lessThan' + (i)] = true;
+        }
+      }
+      // return array errors ({} is considered an error so return null if it is the case)
+      return errors;
     };
   }
 }

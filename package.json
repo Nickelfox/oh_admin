@@ -62,6 +62,7 @@
     "ngx-image-cropper": "^5.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "video-metadata-thumbnails": "^1.0.22",
     "xng-breadcrumb": "^6.7.0",
     "zone.js": "~0.11.4"
   },

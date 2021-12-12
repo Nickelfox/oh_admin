@@ -28,6 +28,7 @@
     "shared-ui-common-form-field-image": "libs/shared/ui/common-form-field-image",
     "shared-ui-common-form-field-month": "libs/shared/ui/common-form-field-month",
     "shared-ui-common-form-field-number": "libs/shared/ui/common-form-field-number",
+    "shared-ui-common-form-field-tag-autocomplete": "libs/shared/ui/common-form-field-tag-autocomplete",
     "shared-ui-common-form-field-textarea": "libs/shared/ui/common-form-field-textarea",
     "shared-ui-common-form-field-video": "libs/shared/ui/common-form-field-video",
     "shared-ui-common-form-field-week": "libs/shared/ui/common-form-field-week",

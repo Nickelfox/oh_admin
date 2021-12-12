@@ -10,6 +10,8 @@ import { MediaModule } from '@hidden-innovation/media';
 import { CommonFormFieldImageModule } from '@hidden-innovation/shared/ui/common-form-field-image';
 import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/common-form-field-textarea';
 import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-form-field-video';
+import { CommonFormFieldTagAutocompleteModule } from '@hidden-innovation/shared/ui/common-form-field-tag-autocomplete';
+import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 
 @NgModule({
   imports: [
@@ -21,6 +23,7 @@ import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-
     TagsDataAccessModule,
     CommonFormFieldTextareaModule,
     CommonFormFieldVideoModule,
+    CommonFormFieldTagAutocompleteModule,
     MediaModule,
     RouterModule.forChild([
       {
@@ -28,7 +31,8 @@ import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-
         pathMatch: 'full',
         component: TestCreateComponent
       }
-    ])
+    ]),
+    RxReactiveFormsModule
   ],
   declarations: [
     TestCreateComponent

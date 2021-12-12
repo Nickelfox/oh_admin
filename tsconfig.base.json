@@ -80,6 +80,9 @@
       "@hidden-innovation/shared/ui/common-form-field-number": [
         "libs/shared/ui/common-form-field-number/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/common-form-field-tag-autocomplete": [
+        "libs/shared/ui/common-form-field-tag-autocomplete/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/common-form-field-textarea": [
         "libs/shared/ui/common-form-field-textarea/src/index.ts"
       ],

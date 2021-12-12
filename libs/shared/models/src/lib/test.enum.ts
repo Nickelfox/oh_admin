@@ -9,3 +9,13 @@ export enum TestInputTypeEnum {
   RELATIVE_PROFILE = 'RELATIVE_PROFILE',
   CUSTOM_NUMERIC = 'CUSTOM_NUMERIC',
 }
+
+export enum PointTypeEnum {
+  ZERO = 'ZERO',
+  ONE = 'ONE',
+  TWO = 'TWO',
+  THREE = 'THREE',
+  FOUR = 'FOUR',
+  FIVE = 'FIVE',
+  HP = 'HP'
+}
