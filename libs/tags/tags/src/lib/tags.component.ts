@@ -90,7 +90,6 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.catFilter);
     this.store.state$.subscribe(
       ({ tags }) => {
         this.tags = new MatTableDataSource<Tag>(tags);
@@ -101,6 +100,9 @@ export class TagsComponent implements OnInit {
     this.filters.valueChanges.pipe(
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
+    ).subscribe();
+    this.filters.controls.search.valueChanges.pipe(
+      tap(_ => this.resetRoute())
     ).subscribe();
   }
 
@@ -117,6 +119,14 @@ export class TagsComponent implements OnInit {
     });
   }
 
+  resetRoute(): void {
+    this.router.navigate([
+      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
+    ], {
+      relativeTo: this.route
+    });
+  }
+
   onPaginateChange($event: PageEvent): void {
     this.router.navigate([
       this.listingRoute, $event.pageSize, $event.pageIndex + 1
@@ -130,11 +140,7 @@ export class TagsComponent implements OnInit {
   }
 
   resetFilters(): void {
-    this.router.navigate([
-      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
-    ], {
-      relativeTo: this.route
-    });
+    this.resetRoute();
     this.filters.enable();
     this.filters.reset({
       dateSort: SortingEnum.DESC,
@@ -226,6 +232,7 @@ export class TagsComponent implements OnInit {
       type.setValue(undefined);
       type.disable();
     }
+    this.resetRoute();
   }
 
   categoryFilterChange(matSelection: MatSelectionListChange): void {
@@ -238,6 +245,7 @@ export class TagsComponent implements OnInit {
       category.setValue(undefined);
       category.disable();
     }
+    this.resetRoute();
   }
 
   deleteTag(id: number) {
