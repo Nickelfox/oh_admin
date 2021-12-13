@@ -12,7 +12,7 @@ import {
   TestInputTypeEnum
 } from '@hidden-innovation/shared/models';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { Test, TestListingFliters, TestStore } from '@hidden-innovation/test/data-access';
+import { Test, TestListingFilters, TestStore } from '@hidden-innovation/test/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { isEqual } from 'lodash-es';
@@ -50,7 +50,7 @@ export class TestListingComponent implements OnInit {
   difficultyIte = Object.values(DifficultyEnum);
   testInputTypeIte = Object.values(TestInputTypeEnum);
 
-  filters: FormGroup<TestListingFliters> = new FormGroup<TestListingFliters>({
+  filters: FormGroup<TestListingFilters> = new FormGroup<TestListingFilters>({
     type: new FormControl(undefined),
     category: new FormControl(undefined),
     dateSort: new FormControl(SortingEnum.DESC),

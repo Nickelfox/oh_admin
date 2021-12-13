@@ -78,7 +78,7 @@ export interface CreateTestResponse extends CustomApiResponse {
   };
 }
 
-export interface TestListingFliters {
+export interface TestListingFilters {
   dateSort: SortingEnum | undefined;
   nameSort: SortingEnum | undefined;
   category: TagCategoryEnum[] | undefined;
@@ -88,7 +88,7 @@ export interface TestListingFliters {
   level: DifficultyEnum[] | undefined;
 }
 
-export interface TestListingRequest extends TestListingFliters {
+export interface TestListingRequest extends TestListingFilters {
   limit: number;
   page: number;
 }
