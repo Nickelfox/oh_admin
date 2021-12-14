@@ -81,6 +81,14 @@ export class TestListingComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  resetRoute(): void {
+    this.router.navigate([
+      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
+    ], {
+      relativeTo: this.route
+    });
+  }
+
   refreshList(): void {
     const { type, category, nameSort, dateSort, search, published, level } = this.filters.value;
     this.store.getTests$({
@@ -120,6 +128,9 @@ export class TestListingComponent implements OnInit {
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
     ).subscribe();
+    this.filters.controls.search.valueChanges.pipe(
+      tap(_ => this.resetRoute())
+    ).subscribe();
   }
 
   updateSorting(fieldName: 'type' | 'category' | 'dateSort' | 'nameSort'): void {
@@ -157,6 +168,7 @@ export class TestListingComponent implements OnInit {
       category.setValue(undefined);
       category.disable();
     }
+    this.resetRoute();
   }
 
   difficultyFilterChange(matSelection: MatSelectionListChange): void {
@@ -169,6 +181,7 @@ export class TestListingComponent implements OnInit {
       level.setValue(undefined);
       level.disable();
     }
+    this.resetRoute();
   }
 
   typeFilterChange(matSelection: MatSelectionListChange): void {
@@ -181,6 +194,7 @@ export class TestListingComponent implements OnInit {
       type.setValue(undefined);
       type.disable();
     }
+    this.resetRoute();
   }
 
   updateFilterChange(matSelection: MatSelectionListChange, ctrl: FormControl): void {
@@ -198,6 +212,7 @@ export class TestListingComponent implements OnInit {
       ctrl.setValue(undefined);
       ctrl.disable();
     }
+    this.resetRoute();
   }
 
 }
