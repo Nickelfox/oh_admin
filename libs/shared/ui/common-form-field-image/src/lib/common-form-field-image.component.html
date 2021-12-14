@@ -1,0 +1,33 @@
+<div class='container-fluid p-0'>
+  <div class='row'>
+    <ng-template [ngIf]='parentCtrl.valid && imageData' [ngIfElse]='imageSelectedElse'>
+      <div class='col-2'>
+        <img class='img-fluid'
+             src='{{imageData?.croppedImage}}'
+             [ngStyle]='{"maxHeight": "51px"}'>
+      </div>
+      <div class='col'>
+        <button (click)='removeImage()'
+                matTooltip='{{imageData?.fileName}}'
+                mat-stroked-button color='primary'
+                type='button'>
+          <mat-icon color='warn' class='mr-1'>image</mat-icon>
+          {{(imageData?.fileName | maxStringLimit: 10) ?? '--'}}
+          <mat-icon class='ml-2'>close</mat-icon>
+        </button>
+      </div>
+    </ng-template>
+    <ng-template #imageSelectedElse>
+      <div class='col'>
+        <hidden-innovation-image-picker
+          [isInvalid]='!!(parentCtrl.invalid && (parentCtrl.touch$ | async))'
+          [aspectRatio]='aspectRatio'
+          (imageUploadRes)='mapImage($event)'
+        ></hidden-innovation-image-picker>
+        <mat-error
+          *ngIf='!!(parentCtrl.invalid && (parentCtrl.touch$ | async))'>
+          <small class='ml-2'>Image is required</small></mat-error>
+      </div>
+    </ng-template>
+  </div>
+</div>

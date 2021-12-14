@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { TestCore } from '@hidden-innovation/test/data-access';
+import { Test } from '@hidden-innovation/test/data-access';
 import { Observable } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import {
@@ -12,9 +12,8 @@ import {
 } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { map } from 'rxjs/operators';
-import { dummyTests } from '@hidden-innovation/test/test-listing';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'hidden-innovation-test-selector',
@@ -26,9 +25,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class TestSelectorComponent implements OnInit {
 
   displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'difficulty', 'input', 'status'];
-  tests: MatTableDataSource<TestCore> = new MatTableDataSource<TestCore>();
+  tests: MatTableDataSource<Test> = new MatTableDataSource<Test>();
 
-  selection = new SelectionModel<TestCore>(true, []);
+  selection = new SelectionModel<Test>(true, []);
 
   noData: Observable<boolean>;
 
@@ -47,10 +46,9 @@ export class TestSelectorComponent implements OnInit {
 
   constructor(
     public constantDataService: ConstantDataService,
-    public matDialogRef: MatDialogRef<TestCore[]>
+    public matDialogRef: MatDialogRef<Test[]>
   ) {
     this.noData = this.tests.connect().pipe(map(data => data.length === 0));
-    this.tests = new MatTableDataSource<TestCore>(dummyTests);
   }
 
   get paginatorIndex() {

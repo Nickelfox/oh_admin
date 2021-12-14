@@ -10,4 +10,4 @@ import { TestStore } from './store/test.store';
     TestStore
   ]
 })
-export class DataAccessModule {}
+export class TestDataAccessModule {}

@@ -1,0 +1,16 @@
+.timePicker__container {
+  min-height: 55px;
+  padding: 4px 8px 0 8px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px 4px 0px 0px;
+  border-bottom: 1px #9E9E9E solid;
+
+  mat-label {
+    margin: 0 0 0 2px;
+    padding: 0;
+  }
+
+  &.error {
+    border-color: var(--warn-darker-color) !important;
+  }
+}
