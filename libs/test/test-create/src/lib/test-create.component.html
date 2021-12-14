@@ -258,6 +258,7 @@
                                   <mat-option [value]='testInputTypeEnum.MULTIPLE_CHOICE'>{{testInputTypeEnum.MULTIPLE_CHOICE | replaceUnderscore | titlecase}}</mat-option>
                                   <mat-option [value]='testInputTypeEnum.WEIGHT'>{{testInputTypeEnum.WEIGHT | replaceUnderscore | titlecase}}</mat-option>
                                   <mat-option [value]='testInputTypeEnum.DISTANCE'>{{testInputTypeEnum.DISTANCE | replaceUnderscore | titlecase}}</mat-option>
+                                  <mat-option [value]='testInputTypeEnum.TIME'>{{testInputTypeEnum.TIME | replaceUnderscore | titlecase}}</mat-option>
                                 </mat-select>
                                 <mat-hint *ngIf='testGroup.value.inputType === testInputTypeEnum.RATIO'>Ratio
                                   calculated by Value (x) / Value (y)
@@ -573,7 +574,7 @@
                                 </div>
                                 <div class='col-5'>
                                   <div class='timePicker__container'
-                                       [ngClass]='{"error": inputFieldGroup(i).controls.low.hasErrorAndDirty("maxDate") && (inputFieldGroup(i).controls.low.dirty$ | async)}'>
+                                       [ngClass]='{"error": inputFieldGroup(i).controls.low.hasError("minDate") && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))}'>
                                     <mat-label><small class='text-muted'>Low</small></mat-label>
                                     <ngx-mat-timepicker
                                       color='primary'
@@ -586,7 +587,7 @@
                                 </div>
                                 <div class='col-5'>
                                   <div class='timePicker__container'
-                                       [ngClass]='{"error": inputFieldGroup(i).controls.high.hasErrorAndDirty("minDate") && (inputFieldGroup(i).controls.high.dirty$ | async)}'>
+                                       [ngClass]='{"error": inputFieldGroup(i).controls.high.hasError("maxDate") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))}'>
                                     <mat-label><small class='text-muted'>High</small></mat-label>
                                     <ngx-mat-timepicker
                                       color='primary'
@@ -596,17 +597,17 @@
                                       [enableMeridian]='false'
                                       [showSpinners]='false'></ngx-mat-timepicker>
                                   </div>
-                                  <mat-error *ngIf='inputFieldGroup(i).controls.high.hasErrorAndDirty("minDate") && (inputFieldGroup(i).controls.high.dirty$ | async)'>
-                                      <small>{{formValidationService.pointsValidationMessage?.highField}}</small>
+                                  <mat-error *ngIf='inputFieldGroup(i).controls.high.hasError("maxDate") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))'>
+                                      <small>{{formValidationService.pointsValidationMessage?.lowField}}</small>
                                   </mat-error>
                                 </div>
                                 <ng-template [ngIf]='i > 0'>
                                   <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
                                     <div class='col-2'></div>
                                     <div class='col-10 mb-2'
-                                         *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").dirty$ | async)'>
+                                         *ngIf='err[(i - 1) + "lessThan" + (i)] && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))'>
                                       <mat-error>
-                                        <small>Choose a higher value from previous high point</small>
+                                        <small>Choose a lower value from previous high point</small>
                                       </mat-error>
                                     </div>
                                   </ng-template>
