@@ -6,6 +6,7 @@
     "dashboard": "libs/dashboard",
     "edit-admin-profile": "libs/edit-admin-profile",
     "environment": "libs/environment",
+    "featured-create-featured": "libs/featured/create-featured",
     "featured-data-access": "libs/featured/data-access",
     "featured-featured-listing": "libs/featured/featured-listing",
     "forgot-password": "libs/forgot-password",

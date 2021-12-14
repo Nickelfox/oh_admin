@@ -24,6 +24,9 @@
         "libs/edit-admin-profile/src/index.ts"
       ],
       "@hidden-innovation/environment": ["libs/environment/src/index.ts"],
+      "@hidden-innovation/featured/create-featured": [
+        "libs/featured/create-featured/src/index.ts"
+      ],
       "@hidden-innovation/featured/data-access": [
         "libs/featured/data-access/src/index.ts"
       ],

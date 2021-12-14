@@ -241,6 +241,14 @@ import { MatCardModule } from '@angular/material/card';
               ),
             data: { breadcrumb: 'Featured' }
           },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/featured/create-featured').then(
+                (m) => m.CreateFeaturedModule
+              ),
+            data: { breadcrumb: 'Add Featured' }
+          },
         ]
       },
 
