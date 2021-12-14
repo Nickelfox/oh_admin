@@ -5,4 +5,5 @@ export interface GenericErrorMessage {
   minLength:  string;
   mismatch: string;
   highField: string;
+  lowField: string;
 }

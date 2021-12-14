@@ -26,7 +26,8 @@ export class FormValidationService {
   pointsValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Point field is required',
     invalid: 'Only numeric & non-floating point values allowed',
-    highField: 'Must be greater than the low field value'
+    highField: 'Must be greater than the low field value',
+    lowField: 'Must be lower than the low field value'
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {
@@ -184,7 +185,7 @@ export class FormValidationService {
         const prevVal = DateTime.fromJSDate(previousValueControl.value).toSeconds();
         const currVal = DateTime.fromJSDate(valueControl.value).toSeconds();
         // if error, set array error
-        if (Math.round(currVal) <= Math.round(prevVal)) {
+        if (Math.round(prevVal) <= Math.round(currVal)) {
           // array error (sum up of all errors)
           errors[(i - 1) + 'lessThan' + (i)] = true;
         }

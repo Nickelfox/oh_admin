@@ -21,6 +21,7 @@ import { ConstantDataService, FormValidationService } from '@hidden-innovation/s
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { AspectRatio } from '@hidden-innovation/media';
 import { HotToastService } from '@ngneat/hot-toast';
+import { DateTime } from 'luxon';
 
 
 @Component({
@@ -229,11 +230,35 @@ export class TestCreateComponent implements OnInit {
     const isOneRemValid = (oneRMInputFields.valid && !!(oneRMInputFields.value?.length)) || oneRMInputFields.disabled;
     const isInputValid = (inputFields.valid && !!(inputFields.value?.length)) || inputFields.disabled;
     const isMChoiceValid = (multipleChoiceInputFields.valid && !!(multipleChoiceInputFields.value?.length)) || multipleChoiceInputFields.disabled;
-    if (isInputTypeValid && isOneRemValid && isInputValid && isMChoiceValid) {
+    if (isInputTypeValid) {
       isPublished.setValue(true);
     } else {
       isPublished.setValue(false);
+      return;
     }
+    switch (inputType.value) {
+      case TestInputTypeEnum.ONE_RM:
+        if (isOneRemValid) {
+          isPublished.setValue(true);
+        } else {
+          isPublished.setValue(false);
+        }
+        break;
+      case TestInputTypeEnum.MULTIPLE_CHOICE:
+        if (isMChoiceValid) {
+          isPublished.setValue(true);
+        } else {
+          isPublished.setValue(false);
+        }
+        break;
+      default :
+        if (isInputValid) {
+          isPublished.setValue(true);
+        } else {
+          isPublished.setValue(false);
+        }
+    }
+
   }
 
   getOneRMInputFieldGroup(i: number): FormGroup<OneRMField> {
@@ -342,19 +367,17 @@ export class TestCreateComponent implements OnInit {
     const lowValidations = [
       RxwebValidators.required(),
       RxwebValidators.notEmpty(),
-      RxwebValidators.maxDate({
+      RxwebValidators.minDate({
         fieldName: 'high',
-        operator: '<=',
-        allowISODate: true
+        operator: '>'
       })
     ];
     const highValidations = [
       RxwebValidators.required(),
       RxwebValidators.notEmpty(),
-      RxwebValidators.minDate({
+      RxwebValidators.maxDate({
         fieldName: 'low',
-        operator: '>=',
-        allowISODate: true
+        operator: '<'
       })
     ];
     return [
@@ -517,7 +540,24 @@ export class TestCreateComponent implements OnInit {
       this.hotToastService.error(this.formValidationService.formSubmitError);
       return;
     }
-    this.store.createTest$(this.testGroup.value);
+    if (this.testGroup.value.inputType === TestInputTypeEnum.TIME) {
+      let testObj = this.testGroup.value;
+      testObj = {
+        ...testObj,
+        inputFields: testObj.inputFields.map(fields => {
+          const low = DateTime.fromJSDate(fields.low as Date).toSeconds();
+          const high = DateTime.fromJSDate(fields.high as Date).toSeconds();
+          return {
+            ...fields,
+            low,
+            high
+          };
+        })
+      };
+      this.store.createTest$({ ...testObj });
+    } else {
+      this.store.createTest$(this.testGroup.value);
+    }
   }
 
 }
