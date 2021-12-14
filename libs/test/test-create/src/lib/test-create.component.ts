@@ -100,10 +100,7 @@ export class TestCreateComponent implements OnInit {
       RxwebValidators.required(),
       RxwebValidators.notEmpty()
     ]),
-    inputType: new FormControl('NONE', [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    inputType: new FormControl('NONE'),
     resultExplanation: new FormControl({ value: '', disabled: true }, [
       RxwebValidators.required(),
       RxwebValidators.notEmpty()
@@ -154,26 +151,12 @@ export class TestCreateComponent implements OnInit {
       multipleChoiceQuestion,
       multipleChoiceInputFields,
       inputFields,
-      weightUnit,
-      isPublished
+      weightUnit
     } = this.testGroup.controls;
-    inputFields.valueChanges.subscribe(res => console.log(inputFields));
-    // TODO Implement published status changes
-    // this.testGroup.valueChanges.subscribe((_) => {
-    //   // const {inputType, oneRMInputFields, inputFields, multipleChoiceInputFields, isPublished} = this.;
-    //   if (inputType.valid
-    //     && (oneRMInputFields.valid || oneRMInputFields.disabled)
-    //     && (inputFields.valid || inputFields.disabled)
-    //     && (multipleChoiceInputFields.valid || multipleChoiceInputFields.disabled)) {
-    //     isPublished.setValue(true);
-    //   } else {
-    //     isPublished.setValue(false);
-    //   }
-    //   console.log(inputFields);
-    // });
-    needEquipment.valueChanges.subscribe(isActive => {
-      isActive ? equipment.enable() : equipment.disable();
-    });
+    needEquipment.valueChanges.subscribe(isActive => isActive ? equipment.enable() : equipment.disable());
+    oneRMInputFields.valueChanges.subscribe(_ => this.validatePublishedState());
+    inputFields.valueChanges.subscribe(_ => this.validatePublishedState());
+    multipleChoiceInputFields.valueChanges.subscribe(_ => this.validatePublishedState());
     inputType.valueChanges.subscribe(type => {
       const oneRMFArray: FormArray<OneRMField> = oneRMInputFields as FormArray<OneRMField>;
       const mCArray: FormArray<MultipleChoiceField> = multipleChoiceInputFields as FormArray<MultipleChoiceField>;
@@ -187,6 +170,7 @@ export class TestCreateComponent implements OnInit {
       distanceUnit.disable();
       weightUnit.disable();
       multipleChoiceQuestion.disable();
+      this.validatePublishedState();
       switch (type) {
         case TestInputTypeEnum.DISTANCE:
           this.buildDistanceOrWeightForm().map(fg => inputFArray.push(fg));
@@ -231,6 +215,25 @@ export class TestCreateComponent implements OnInit {
 
   get inputFieldFormArray(): FormArray<InputField> {
     return this.testGroup.controls.inputFields as FormArray<InputField>;
+  }
+
+  validatePublishedState(): void {
+    const {
+      inputType,
+      oneRMInputFields,
+      multipleChoiceInputFields,
+      inputFields,
+      isPublished
+    } = this.testGroup.controls;
+    const isInputTypeValid = (inputType.valid && inputType.value !== 'NONE');
+    const isOneRemValid = (oneRMInputFields.valid && !!(oneRMInputFields.value?.length)) || oneRMInputFields.disabled;
+    const isInputValid = (inputFields.valid && !!(inputFields.value?.length)) || inputFields.disabled;
+    const isMChoiceValid = (multipleChoiceInputFields.valid && !!(multipleChoiceInputFields.value?.length)) || multipleChoiceInputFields.disabled;
+    if (isInputTypeValid && isOneRemValid && isInputValid && isMChoiceValid) {
+      isPublished.setValue(true);
+    } else {
+      isPublished.setValue(false);
+    }
   }
 
   getOneRMInputFieldGroup(i: number): FormGroup<OneRMField> {
@@ -293,7 +296,7 @@ export class TestCreateComponent implements OnInit {
         pointVal = 5;
         break;
       case PointTypeEnum.HP:
-        pointVal = 'HP';
+        pointVal = 6;
         break;
     }
     return {
@@ -342,7 +345,7 @@ export class TestCreateComponent implements OnInit {
       RxwebValidators.maxDate({
         fieldName: 'high',
         operator: '<=',
-        allowISODate: true,
+        allowISODate: true
       })
     ];
     const highValidations = [
@@ -351,7 +354,7 @@ export class TestCreateComponent implements OnInit {
       RxwebValidators.minDate({
         fieldName: 'low',
         operator: '>=',
-        allowISODate: true,
+        allowISODate: true
       })
     ];
     return [

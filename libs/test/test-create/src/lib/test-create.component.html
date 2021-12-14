@@ -251,8 +251,13 @@
                               <mat-form-field class='w-100'>
                                 <mat-label>Input Type</mat-label>
                                 <mat-select formControlName='inputType'>
-                                  <mat-option *ngFor='let type of testInputTypeIte'
-                                              [value]='type'>{{type | replaceUnderscore | titlecase}}</mat-option>
+<!--                                  <mat-option *ngFor='let type of testInputTypeIte'-->
+<!--                                              [value]='type'>{{type | replaceUnderscore | titlecase}}</mat-option>-->
+                                  <mat-option value='NONE'>None</mat-option>
+                                  <mat-option [value]='testInputTypeEnum.ONE_RM'>{{testInputTypeEnum.ONE_RM | replaceUnderscore | titlecase}}</mat-option>
+                                  <mat-option [value]='testInputTypeEnum.MULTIPLE_CHOICE'>{{testInputTypeEnum.MULTIPLE_CHOICE | replaceUnderscore | titlecase}}</mat-option>
+                                  <mat-option [value]='testInputTypeEnum.WEIGHT'>{{testInputTypeEnum.WEIGHT | replaceUnderscore | titlecase}}</mat-option>
+                                  <mat-option [value]='testInputTypeEnum.DISTANCE'>{{testInputTypeEnum.DISTANCE | replaceUnderscore | titlecase}}</mat-option>
                                 </mat-select>
                                 <mat-hint *ngIf='testGroup.value.inputType === testInputTypeEnum.RATIO'>Ratio
                                   calculated by Value (x) / Value (y)
