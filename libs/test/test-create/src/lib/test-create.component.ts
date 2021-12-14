@@ -131,7 +131,11 @@ export class TestCreateComponent implements OnInit {
       RxwebValidators.required(),
       RxwebValidators.notEmpty()
     ]),
-    inputFields: new FormArray<InputField>([])
+    inputFields: new FormArray<InputField>([]),
+    customNumericLabel: new FormControl({ value: '', disabled: true }, [
+      RxwebValidators.required(),
+      RxwebValidators.notEmpty()
+    ])
   });
 
   constructor(
@@ -152,7 +156,8 @@ export class TestCreateComponent implements OnInit {
       multipleChoiceQuestion,
       multipleChoiceInputFields,
       inputFields,
-      weightUnit
+      weightUnit,
+      customNumericLabel
     } = this.testGroup.controls;
     needEquipment.valueChanges.subscribe(isActive => isActive ? equipment.enable() : equipment.disable());
     oneRMInputFields.valueChanges.subscribe(_ => this.validatePublishedState());
@@ -170,6 +175,7 @@ export class TestCreateComponent implements OnInit {
       resultExplanation.disable();
       distanceUnit.disable();
       weightUnit.disable();
+      customNumericLabel.disable();
       multipleChoiceQuestion.disable();
       this.validatePublishedState();
       switch (type) {
@@ -177,6 +183,11 @@ export class TestCreateComponent implements OnInit {
           this.buildDistanceOrWeightForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           distanceUnit.enable();
+          break;
+        case TestInputTypeEnum.CUSTOM_NUMERIC:
+          this.buildDistanceOrWeightForm().map(fg => inputFArray.push(fg));
+          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          customNumericLabel.enable();
           break;
         case TestInputTypeEnum.WEIGHT:
           this.buildDistanceOrWeightForm().map(fg => inputFArray.push(fg));

@@ -42,7 +42,7 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
           <ng-template [ngIf]='(store.count$ | async)' [ngIfElse]='exCountElse'>
             <ng-template ngFor [ngForOf]='(store.tags$ | async)' let-tag>
               <mat-option [disabled]='isExistingTag(tag)'
-                          (onSelectionChange)='updateTags.emit(tag)'
+                          (onSelectionChange)='emitUpdatedTags(tag, input)'
                           [value]='tag'>
                 {{tag.name}}
               </mat-option>
@@ -62,7 +62,7 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
 export class CommonFormFieldTagAutocompleteComponent {
 
   @Input() tagTypeEnum!: TagTypeEnum;
-  @Input() tagCategory?: TagCategoryEnum;
+  @Input() tagCategory?: TagCategoryEnum | 'NONE';
   @Input() testTags: Tag[] = [];
   @Input() label?: string;
 
@@ -83,7 +83,7 @@ export class CommonFormFieldTagAutocompleteComponent {
       type: [cat],
       search: search ?? undefined,
       dateSort: undefined,
-      category: this.tagCategory ? [this.tagCategory] : [],
+      category: (this.tagCategory && this.tagCategory !== 'NONE') ? [this.tagCategory] : [],
       nameSort: undefined
     });
   }
@@ -94,6 +94,11 @@ export class CommonFormFieldTagAutocompleteComponent {
     } else {
       return false;
     }
+  }
+
+  emitUpdatedTags(tag: Tag, input: HTMLInputElement): void {
+    input.value = '';
+    this.updateTags.emit(tag);
   }
 
 }

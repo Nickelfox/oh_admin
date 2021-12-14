@@ -257,7 +257,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
           point: new FormControl<number>(multipleChoice?.point ?? undefined, this.formValidationService.pointValidations),
           iconName: new FormControl<string>({
             value: multipleChoice?.iconName ?? '',
-            disabled: !question.showIcon
+            disabled: question.showIcon
           }, [
             RxwebValidators.required(),
             RxwebValidators.notEmpty()
@@ -301,6 +301,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     }
     answerFormArray.push(answer);
     this.questionnaireUtilitiesService.minMaxPoints(this.questionsFormArray);
+    this.cdr.markForCheck();
   }
 
   triggerQuestionType(type: QuestionTypeEnum): void {
