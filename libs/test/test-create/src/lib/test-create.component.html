@@ -558,120 +558,56 @@
 
                           <!--                  Time -->
                           <div class='container p-0' *ngSwitchCase='testInputTypeEnum.TIME'>
-                            <div class='row mb-2'>
-                              <div class='col-2'>
-                                <h4 class='mat-h4  mt-4  mb-0 font-calibri--bold'>
-                                  0 Points
-                                </h4>
+                            <ng-template formArrayName='inputFields' ngFor
+                                         [ngForOf]='inputFieldFormArray.controls' let-i='index'>
+                              <div class='row mb-2' formGroupName='{{i}}'>
+                                <div class='col-2'>
+                                  <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                    {{inputFieldGroup(i).controls.point.value}} Points
+                                  </h4>
+                                </div>
+                                <div class='col-5'>
+                                  <div class='timePicker__container'
+                                       [ngClass]='{"error": inputFieldGroup(i).controls.low.hasErrorAndDirty("maxDate") && (inputFieldGroup(i).controls.low.dirty$ | async)}'>
+                                    <mat-label><small class='text-muted'>Low</small></mat-label>
+                                    <ngx-mat-timepicker
+                                      color='primary'
+                                      formControlName='low'
+                                      [defaultTime]='[]'
+                                      [showSeconds]='true'
+                                      [enableMeridian]='false'
+                                      [showSpinners]='false'></ngx-mat-timepicker>
+                                  </div>
+                                </div>
+                                <div class='col-5'>
+                                  <div class='timePicker__container'
+                                       [ngClass]='{"error": inputFieldGroup(i).controls.high.hasErrorAndDirty("minDate") && (inputFieldGroup(i).controls.high.dirty$ | async)}'>
+                                    <mat-label><small class='text-muted'>High</small></mat-label>
+                                    <ngx-mat-timepicker
+                                      color='primary'
+                                      formControlName='high'
+                                      [defaultTime]='[]'
+                                      [showSeconds]='true'
+                                      [enableMeridian]='false'
+                                      [showSpinners]='false'></ngx-mat-timepicker>
+                                  </div>
+                                  <mat-error *ngIf='inputFieldGroup(i).controls.high.hasErrorAndDirty("minDate") && (inputFieldGroup(i).controls.high.dirty$ | async)'>
+                                      <small>{{formValidationService.pointsValidationMessage?.highField}}</small>
+                                  </mat-error>
+                                </div>
+                                <ng-template [ngIf]='i > 0'>
+                                  <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                    <div class='col-2'></div>
+                                    <div class='col-10 mb-2'
+                                         *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").dirty$ | async)'>
+                                      <mat-error>
+                                        <small>Choose a higher value from previous high point</small>
+                                      </mat-error>
+                                    </div>
+                                  </ng-template>
+                                </ng-template>
                               </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>Low</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>High</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class='row mb-2'>
-                              <div class='col-2'>
-                                <h4 class='mat-h4  mt-4  mb-0 font-calibri--bold'>
-                                  1 Points
-                                </h4>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>Low</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>High</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class='row mb-2'>
-                              <div class='col-2'>
-                                <h4 class='mat-h4  mt-4  mb-0 font-calibri--bold'>
-                                  2 Points
-                                </h4>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>Low</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>High</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class='row mb-2'>
-                              <div class='col-2'>
-                                <h4 class='mat-h4  mt-4  mb-0 font-calibri--bold'>
-                                  4 Points
-                                </h4>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>Low</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>High</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class='row mb-2'>
-                              <div class='col-2'>
-                                <h4 class='mat-h4  mt-2  mb-0 font-calibri--bold'>
-                                  5 Points <br> (optimal)
-                                </h4>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>Low</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>High</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                            </div>
-                            <div class='row mb-2'>
-                              <div class='col-2'>
-                                <h4 class='mat-h4  mt-4  mb-0 font-calibri--bold'>
-                                  HP
-                                </h4>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>Low</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                              <div class='col-5'>
-                                <mat-form-field class='w-100'>
-                                  <mat-label>High</mat-label>
-                                  <input matInput autocomplete='no' type='text'>
-                                </mat-form-field>
-                              </div>
-                            </div>
+                            </ng-template>
                           </div>
 
                           <!--                  Weight-->

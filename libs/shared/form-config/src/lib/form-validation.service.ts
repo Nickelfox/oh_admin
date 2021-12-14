@@ -4,6 +4,7 @@ import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root'
@@ -144,28 +145,48 @@ export class FormValidationService {
     };
   }
 
-  oneRemGreaterPointValidator(): ValidatorFn {
-    // The validator is on the array, so the AbstractControl is of type FormArray
+  greaterPointValidator(): ValidatorFn {
     return (arr: AbstractControl) => {
       if (!arr) {
         return null;
       }
-      // Create an object of errors to return
       const errors: any = {};
-      // Get the list of controls in the array (which are FormGroups)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const controls = arr.controls;
-      // Iterate over them
       for (let i = 1; i < controls.length; i++) {
-        // Get references to controls to compare them (split code again)
         const previousValueControl = controls[i - 1].controls.high as FormControl<number>;
         const valueControl = controls[i].controls.low as FormControl<number>;
 
         // if error, set array error
         if (previousValueControl.value >= valueControl.value) {
           // array error (sum up of all errors)
-          errors[(i-1) + 'lessThan' + (i)] = true;
+          errors[(i - 1) + 'lessThan' + (i)] = true;
+        }
+      }
+      // return array errors ({} is considered an error so return null if it is the case)
+      return errors;
+    };
+  }
+
+  greaterTimeValidator(): ValidatorFn {
+    return (arr: AbstractControl) => {
+      if (!arr) {
+        return null;
+      }
+      const errors: any = {};
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const controls = arr.controls;
+      for (let i = 1; i < controls.length; i++) {
+        const previousValueControl = controls[i - 1].controls.high as FormControl<Date>;
+        const valueControl = controls[i].controls.low as FormControl<Date>;
+        const prevVal = DateTime.fromJSDate(previousValueControl.value).toSeconds();
+        const currVal = DateTime.fromJSDate(valueControl.value).toSeconds();
+        // if error, set array error
+        if (Math.round(currVal) <= Math.round(prevVal)) {
+          // array error (sum up of all errors)
+          errors[(i - 1) + 'lessThan' + (i)] = true;
         }
       }
       // return array errors ({} is considered an error so return null if it is the case)

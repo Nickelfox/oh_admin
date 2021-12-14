@@ -13,6 +13,7 @@ import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-
 import { CommonFormFieldTagAutocompleteModule } from '@hidden-innovation/shared/ui/common-form-field-tag-autocomplete';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
+import { MTX_DATETIME_FORMATS } from '@ng-matero/extensions/core';
 
 @NgModule({
   imports: [
@@ -34,7 +35,7 @@ import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
       }
     ]),
     RxReactiveFormsModule,
-    TestDataAccessModule,
+    TestDataAccessModule
   ],
   declarations: [
     TestCreateComponent
