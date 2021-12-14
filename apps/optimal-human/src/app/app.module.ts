@@ -224,6 +224,26 @@ import { MatCardModule } from '@angular/material/card';
           }
         ]
       },
+      {
+        path: 'feature',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/feature/feature-listing').then(
+                (m) => m.FeatureListingModule
+              ),
+            data: { breadcrumb: 'Feature' }
+          },
+        ]
+      },
+
       // {
       //   path: 'users/edit/:id',
       //   canActivate: [AuthGuard],
