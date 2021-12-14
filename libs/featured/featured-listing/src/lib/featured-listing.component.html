@@ -12,9 +12,9 @@
       </div>
       <div class='col d-flex align-items-center justify-content-end'>
         <mat-spinner class='mr-4' [diameter]='20' *ngIf='true'></mat-spinner>
-        <button mat-flat-button color='primary' class='ml-2' [routerLink]='["/feature", "create"]'>
+        <button mat-flat-button color='primary' class='ml-2' [routerLink]='["/featured", "create"]'>
           <mat-icon class='mr-2'>add</mat-icon>
-          {{"Add Feature"}}
+          {{"Add Featured"}}
         </button>
       </div>
     </div>
@@ -24,7 +24,7 @@
           <div class='container-fluid p-0'>
             <div class='row'>
               <div class='col-12'>
-                <table mat-table [dataSource]='feature' class='w-100'>
+                <table mat-table [dataSource]='featured' class='w-100'>
                   <ng-container matColumnDef='name'>
                     <th mat-header-cell *matHeaderCellDef>
                       <div class='d-flex align-items-center justify-content-between'>

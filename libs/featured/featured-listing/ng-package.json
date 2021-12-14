@@ -1,6 +1,6 @@
 {
   "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../../dist/libs/feature/data-access",
+  "dest": "../../../dist/libs/featured/featured-listing",
   "lib": {
     "entryFile": "src/index.ts"
   }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FeatureListingComponent } from './feature-listing.component';
+import { FeaturedListingComponent } from './featured-listing.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
 import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
@@ -13,7 +13,7 @@ import { UtilsModule } from '@hidden-innovation/shared/utils';
       {
         path: '',
         pathMatch: 'full',
-        component: FeatureListingComponent
+        component: FeaturedListingComponent
       }
     ]),
     MaterialModule,
@@ -21,7 +21,7 @@ import { UtilsModule } from '@hidden-innovation/shared/utils';
     UtilsModule
   ],
   declarations: [
-    FeatureListingComponent
+    FeaturedListingComponent
   ],
 })
-export class FeatureListingModule {}
+export class FeaturedListingModule {}

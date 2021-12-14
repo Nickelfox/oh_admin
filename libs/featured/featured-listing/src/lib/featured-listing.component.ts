@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { FeatureCore } from '@hidden-innovation/feature/data-access';
+import { FeaturedCore } from '@hidden-innovation/featured/data-access';
 import { DateTime } from 'luxon';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 
 
-export const dummyFeature: FeatureCore[] = [
+export const dummyFeatured: FeaturedCore[] = [
   {
     name: 'Spotlight',
     screen: 'Home',
@@ -25,9 +25,9 @@ export const dummyFeature: FeatureCore[] = [
 ];
 
 @Component({
-  selector: 'hidden-innovation-feature-listing',
-  templateUrl: './feature-listing.component.html',
-  styleUrls: ['./feature-listing.component.scss'],
+  selector: 'hidden-innovation-featured-listing',
+  templateUrl: './featured-listing.component.html',
+  styleUrls: ['./featured-listing.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -36,18 +36,18 @@ export const dummyFeature: FeatureCore[] = [
 
 
 
-export class FeatureListingComponent implements OnInit {
+export class FeaturedListingComponent implements OnInit {
   displayedColumns: string[] = ['name','screen','updated_at', 'items'];
-  feature: MatTableDataSource<FeatureCore> = new MatTableDataSource<FeatureCore>();
+  featured: MatTableDataSource<FeaturedCore> = new MatTableDataSource<FeaturedCore>();
 
   constructor(
     public constantDataService: ConstantDataService
   ) {
-    this.feature = new MatTableDataSource<FeatureCore>(dummyFeature);
+    this.featured = new MatTableDataSource<FeaturedCore>(dummyFeatured);
   }
 
   ngOnInit(): void {
-    console.log(dummyFeature);
+    console.log(dummyFeatured);
   }
 
 }

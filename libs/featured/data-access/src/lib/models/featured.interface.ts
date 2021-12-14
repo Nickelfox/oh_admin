@@ -1,4 +1,4 @@
-export interface FeatureCore {
+export interface FeaturedCore {
   name: string;
   screen: string;
   items: number;

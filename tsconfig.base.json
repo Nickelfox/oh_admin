@@ -24,11 +24,11 @@
         "libs/edit-admin-profile/src/index.ts"
       ],
       "@hidden-innovation/environment": ["libs/environment/src/index.ts"],
-      "@hidden-innovation/feature/data-access": [
-        "libs/feature/data-access/src/index.ts"
+      "@hidden-innovation/featured/data-access": [
+        "libs/featured/data-access/src/index.ts"
       ],
-      "@hidden-innovation/feature/feature-listing": [
-        "libs/feature/feature-listing/src/index.ts"
+      "@hidden-innovation/featured/featured-listing": [
+        "libs/featured/featured-listing/src/index.ts"
       ],
       "@hidden-innovation/forgot-password": [
         "libs/forgot-password/src/index.ts"

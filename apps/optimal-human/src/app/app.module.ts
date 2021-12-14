@@ -225,7 +225,7 @@ import { MatCardModule } from '@angular/material/card';
         ]
       },
       {
-        path: 'feature',
+        path: 'featured',
         canActivate: [AuthGuard],
         children: [
           {
@@ -236,10 +236,10 @@ import { MatCardModule } from '@angular/material/card';
           {
             path: 'listing/:size/:index',
             loadChildren: () =>
-              import('@hidden-innovation/feature/feature-listing').then(
-                (m) => m.FeatureListingModule
+              import('@hidden-innovation/featured/featured-listing').then(
+                (m) => m.FeaturedListingModule
               ),
-            data: { breadcrumb: 'Feature' }
+            data: { breadcrumb: 'Featured' }
           },
         ]
       },
