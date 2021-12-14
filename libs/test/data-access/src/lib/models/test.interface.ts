@@ -68,6 +68,10 @@ export interface CreateTest {
   weightUnit: WeightTypeEnum | undefined;
   // WeightType End
 
+  //Custom Numeric Start
+  customNumericLabel: string;
+  //Custom Numeric End
+
   // Common Input Field
   inputFields: InputField[];
 }
