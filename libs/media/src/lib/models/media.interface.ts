@@ -9,8 +9,10 @@ export interface MediaUploadResponse extends CustomApiResponse {
 }
 
 export enum AspectRatio {
-  CUBE = 'cube',
-  WIDE = 'wide'
+  CUBE,
+  WIDE,
+  STANDARD,
+  POSTER,
 }
 
 export interface ImageCropperReq {

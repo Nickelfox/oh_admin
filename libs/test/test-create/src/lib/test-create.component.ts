@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { FormArray, FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
 import {
   DifficultyEnum,
   DistanceTypeEnum,
@@ -180,17 +180,17 @@ export class TestCreateComponent implements OnInit {
       this.validatePublishedState();
       switch (type) {
         case TestInputTypeEnum.DISTANCE:
-          this.buildDistanceOrWeightForm().map(fg => inputFArray.push(fg));
+          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           distanceUnit.enable();
           break;
         case TestInputTypeEnum.CUSTOM_NUMERIC:
-          this.buildDistanceOrWeightForm().map(fg => inputFArray.push(fg));
+          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           customNumericLabel.enable();
           break;
         case TestInputTypeEnum.WEIGHT:
-          this.buildDistanceOrWeightForm().map(fg => inputFArray.push(fg));
+          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           weightUnit.enable();
           break;
@@ -207,9 +207,13 @@ export class TestCreateComponent implements OnInit {
           this.buildTimeForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterTimeValidator()]);
           break;
+        case TestInputTypeEnum.REPS:
+          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          break;
       }
     });
-    category.valueChanges.subscribe(cat => {
+    category.valueChanges.subscribe(_ => {
       this.testTags = [
         ...this.testTags.filter(t => t.tagType !== TagTypeEnum.SUB_CATEGORY)
       ];
@@ -341,6 +345,41 @@ export class TestCreateComponent implements OnInit {
     };
   }
 
+  buildInputFieldsForm(lowValidations: ValidatorFn[], highValidations: ValidatorFn[]): FormGroup<InputField>[] {
+    return [
+      new FormGroup<InputField>({
+        ...this.buildCorePointFormCtrl(PointTypeEnum.ZERO),
+        low: new FormControl(undefined, lowValidations),
+        high: new FormControl(undefined, highValidations)
+      }),
+      new FormGroup<InputField>({
+        ...this.buildCorePointFormCtrl(PointTypeEnum.ONE),
+        low: new FormControl(undefined, lowValidations),
+        high: new FormControl(undefined, highValidations)
+      }),
+      new FormGroup<InputField>({
+        ...this.buildCorePointFormCtrl(PointTypeEnum.TWO),
+        low: new FormControl(undefined, lowValidations),
+        high: new FormControl(undefined, highValidations)
+      }),
+      new FormGroup<InputField>({
+        ...this.buildCorePointFormCtrl(PointTypeEnum.THREE),
+        low: new FormControl(undefined, lowValidations),
+        high: new FormControl(undefined, highValidations)
+      }),
+      new FormGroup<InputField>({
+        ...this.buildCorePointFormCtrl(PointTypeEnum.FOUR),
+        low: new FormControl(undefined, lowValidations),
+        high: new FormControl(undefined, highValidations)
+      }),
+      new FormGroup<InputField>({
+        ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
+        low: new FormControl(undefined, lowValidations),
+        high: new FormControl(undefined, highValidations)
+      })
+    ];
+  }
+
   buildMultiChoiceForm(): FormGroup<MultipleChoiceField>[] {
     const answerValidation = [
       RxwebValidators.required(),
@@ -391,41 +430,10 @@ export class TestCreateComponent implements OnInit {
         operator: '<'
       })
     ];
-    return [
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ZERO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ONE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.TWO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.THREE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FOUR),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      })
-    ];
+    return this.buildInputFieldsForm(lowValidations, highValidations);
   }
 
-  buildDistanceOrWeightForm(): FormGroup<InputField>[] {
+  buildDistanceOrWeightOrRepsForm(): FormGroup<InputField>[] {
     const lowValidations = [
       RxwebValidators.required(),
       RxwebValidators.notEmpty(),
@@ -448,38 +456,7 @@ export class TestCreateComponent implements OnInit {
         fieldName: 'low'
       })
     ];
-    return [
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ZERO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ONE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.TWO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.THREE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FOUR),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      })
-    ];
+    return this.buildInputFieldsForm(lowValidations, highValidations);
   }
 
   buildOneRemForm(): FormGroup<OneRMField>[] {

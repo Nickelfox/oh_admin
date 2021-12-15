@@ -58,13 +58,14 @@ export class ImageCropperComponent {
     switch (this.data.aspectRatio) {
       case AspectRatio.CUBE:
         return 1 / 1;
-        break;
       case AspectRatio.WIDE:
         return 16 / 9;
-        break;
+      case AspectRatio.STANDARD:
+        return 4 / 3;
+      case AspectRatio.POSTER:
+        return 3 / 4;
       default:
         return 1 / 1;
-        break;
     }
   }
 }

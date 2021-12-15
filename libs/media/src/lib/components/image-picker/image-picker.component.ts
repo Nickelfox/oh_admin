@@ -67,7 +67,8 @@ export class ImagePickerComponent implements OnInit {
           round: false
         };
         const dialogRef = this.matDialog.open(ImageCropperComponent, {
-          data: cropperObj
+          data: cropperObj,
+          maxWidth: '768px',
         });
         dialogRef.afterClosed().subscribe((cropperResult: any) => {
           if (cropperResult) {
