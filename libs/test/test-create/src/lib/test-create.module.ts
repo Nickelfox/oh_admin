@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { TestCreateComponent } from './test-create.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
@@ -14,6 +14,7 @@ import { CommonFormFieldTagAutocompleteModule } from '@hidden-innovation/shared/
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
 import { MTX_DATETIME_FORMATS } from '@ng-matero/extensions/core';
+import { FormFieldErrorsModule } from '@hidden-innovation/shared/ui/form-field-errors';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { MTX_DATETIME_FORMATS } from '@ng-matero/extensions/core';
     TagsDataAccessModule,
     CommonFormFieldTextareaModule,
     CommonFormFieldVideoModule,
+    FormFieldErrorsModule,
     CommonFormFieldTagAutocompleteModule,
     MediaModule,
     RouterModule.forChild([
@@ -39,6 +41,9 @@ import { MTX_DATETIME_FORMATS } from '@ng-matero/extensions/core';
   ],
   declarations: [
     TestCreateComponent
+  ],
+  providers: [
+    TitleCasePipe
   ]
 })
 export class TestCreateModule {
