@@ -85,7 +85,7 @@ export class TestStore extends ComponentStore<TestState> {
                 type: 'success',
                 duration: 300
               });
-              this.router.navigate(['/test', 'listing', this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex]);
+              this.router.navigate(['/tests', 'listing', this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex]);
             },
             error => {
               this.patchState({
