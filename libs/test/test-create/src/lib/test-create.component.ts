@@ -1,9 +1,12 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   DifficultyEnum,
   DistanceTypeEnum,
-  PointTypeEnum,
+  ProfileInputEnum,
+  ProfileInputTypeEnum,
+  ProfileInputTypeUnitEnum,
+  RatioTestTypeEnum,
   TagCategoryEnum,
   TagTypeEnum,
   TestInputTypeEnum,
@@ -15,14 +18,16 @@ import {
   InputField,
   MultipleChoiceField,
   OneRMField,
-  TestStore
+  RatioSubObject,
+  RelativeProfileObject,
+  TestStore,
+  TestUtilitiesService
 } from '@hidden-innovation/test/data-access';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { AspectRatio } from '@hidden-innovation/media';
 import { HotToastService } from '@ngneat/hot-toast';
 import { DateTime } from 'luxon';
-
 
 @Component({
   selector: 'hidden-innovation-test-create',
@@ -32,27 +37,29 @@ import { DateTime } from 'luxon';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TestCreateComponent implements OnInit {
-  testTags: Tag[] = [];
-
+export class TestCreateComponent {
   testInputTypeEnum = TestInputTypeEnum;
   tagTypeEnum = TagTypeEnum;
   aspectRatio = AspectRatio;
   tagCategoryEnum = TagCategoryEnum;
   distanceTypeEnum = DistanceTypeEnum;
   weightTypeEnum = WeightTypeEnum;
+  ratioTestTypeEnum = RatioTestTypeEnum;
 
   testInputTypeIte = Object.values(TestInputTypeEnum).map(value => value.toString());
   testCatTypeIte = Object.values(TagCategoryEnum).map(value => value.toString());
   diffTypeIte = Object.values(DifficultyEnum).map(value => value.toString());
+  ratioTestTypeIte = Object.values(RatioTestTypeEnum).map(value => value.toString());
+  weightTypeIte = Object.values(WeightTypeEnum).map(value => value.toString());
+  distTypeIte = Object.values(DistanceTypeEnum).map(value => value.toString());
+  profileInputIte = Object.values(ProfileInputEnum).map(value => value.toString());
+  profileInputTypeIte = Object.values(ProfileInputTypeEnum).map(value => value.toString());
+  profileInputTypeUnitIte = Object.values(ProfileInputTypeUnitEnum).map(value => value.toString());
 
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
-    name: new FormControl('', [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    name: new FormControl('', [...this.utilities.requiredFieldValidation]),
     category: new FormControl(undefined),
     videoId: new FormControl(undefined, [
       RxwebValidators.required(),
@@ -75,37 +82,19 @@ export class TestCreateComponent implements OnInit {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    label: new FormControl('', [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
-    description: new FormControl('', [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
-    outcomes: new FormControl('', [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
-    procedure: new FormControl('', [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    label: new FormControl('', [...this.utilities.requiredFieldValidation]),
+    description: new FormControl('', [...this.utilities.requiredFieldValidation]),
+    outcomes: new FormControl('', [...this.utilities.requiredFieldValidation]),
+    procedure: new FormControl('', [...this.utilities.requiredFieldValidation]),
     needEquipment: new FormControl(false),
-    equipment: new FormControl({ value: '', disabled: true }, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    equipment: new FormControl({ value: '', disabled: true }, [...this.utilities.requiredFieldValidation]),
     tags: new FormControl([]),
-    difficulty: new FormControl(DifficultyEnum.BEGINNER, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    difficulty: new FormControl(DifficultyEnum.BEGINNER, [...this.utilities.requiredFieldValidation]),
     inputType: new FormControl('NONE'),
-    resultExplanation: new FormControl({ value: '', disabled: true }, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    resultExplanation: new FormControl({
+      value: '',
+      disabled: true
+    }, [...this.utilities.requiredFieldValidation]),
     isPublished: new FormControl(false),
     oneRMInputFields: new FormArray<OneRMField>([], [
       this.formValidationService.greaterPointValidator()
@@ -114,35 +103,100 @@ export class TestCreateComponent implements OnInit {
       oneRep: new FormControl<boolean>(false),
       threeRep: new FormControl<boolean>(false),
       fiveRep: new FormControl<boolean>(false)
-    }, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
-    multipleChoiceQuestion: new FormControl<string>({ value: '', disabled: true }, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    }, [...this.utilities.requiredFieldValidation]),
+    multipleChoiceQuestion: new FormControl<string>({
+      value: '',
+      disabled: true
+    }, [...this.utilities.requiredFieldValidation]),
     multipleChoiceInputFields: new FormArray<MultipleChoiceField>([]),
-    distanceUnit: new FormControl({ value: undefined, disabled: true }, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
-    weightUnit: new FormControl({ value: undefined, disabled: true }, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ]),
+    distanceUnit: new FormControl({
+      value: undefined,
+      disabled: true
+    }, [...this.utilities.requiredFieldValidation]),
+    weightUnit: new FormControl({
+      value: undefined,
+      disabled: true
+    }, [...this.utilities.requiredFieldValidation]),
     inputFields: new FormArray<InputField>([]),
-    customNumericLabel: new FormControl({ value: '', disabled: true }, [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ])
+    customNumericLabel: new FormControl({
+      value: '',
+      disabled: true
+    }, [...this.utilities.requiredFieldValidation]),
+    ratioVariable: new FormGroup<RatioSubObject>({
+      xType: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      yType: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      xLabel: new FormControl({ value: '', disabled: true }, [
+        ...this.utilities.requiredFieldValidation,
+        RxwebValidators.minLength({
+          value: 1
+        }),
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        })
+      ]),
+      yLabel: new FormControl({ value: '', disabled: true }, [
+        ...this.utilities.requiredFieldValidation,
+        RxwebValidators.minLength({
+          value: 1
+        }),
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        })
+      ]),
+      xWeightUnit: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      yWeightUnit: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      xDistanceUnit: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      yDistanceUnit: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation])
+    }),
+    relativeProfile: new FormGroup<RelativeProfileObject>({
+      profileInput: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      inputType: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      unit: new FormControl({
+        value: undefined,
+        disabled: true
+      }, [...this.utilities.requiredFieldValidation]),
+      label: new FormControl({ value: '', disabled: true }, [
+        ...this.utilities.requiredFieldValidation,
+        RxwebValidators.minLength({
+          value: 1
+        }),
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        })
+      ])
+    })
   });
 
   constructor(
     public formValidationService: FormValidationService,
     public constantDataService: ConstantDataService,
     private hotToastService: HotToastService,
-    private store: TestStore
+    private store: TestStore,
+    public utilities: TestUtilitiesService
   ) {
     const {
       needEquipment,
@@ -157,12 +211,16 @@ export class TestCreateComponent implements OnInit {
       multipleChoiceInputFields,
       inputFields,
       weightUnit,
-      customNumericLabel
+      customNumericLabel,
+      ratioVariable,
+      relativeProfile
     } = this.testGroup.controls;
     needEquipment.valueChanges.subscribe(isActive => isActive ? equipment.enable() : equipment.disable());
     oneRMInputFields.valueChanges.subscribe(_ => this.validatePublishedState());
     inputFields.valueChanges.subscribe(_ => this.validatePublishedState());
     multipleChoiceInputFields.valueChanges.subscribe(_ => this.validatePublishedState());
+    const ratioGroup: FormGroup<RatioSubObject> = ratioVariable as FormGroup<RatioSubObject>;
+    const relativeGroup: FormGroup<RelativeProfileObject> = relativeProfile as FormGroup<RelativeProfileObject>;
     inputType.valueChanges.subscribe(type => {
       const oneRMFArray: FormArray<OneRMField> = oneRMInputFields as FormArray<OneRMField>;
       const mCArray: FormArray<MultipleChoiceField> = multipleChoiceInputFields as FormArray<MultipleChoiceField>;
@@ -177,47 +235,112 @@ export class TestCreateComponent implements OnInit {
       weightUnit.disable();
       customNumericLabel.disable();
       multipleChoiceQuestion.disable();
+      ratioGroup.disable();
+      relativeGroup.disable();
       this.validatePublishedState();
       switch (type) {
         case TestInputTypeEnum.DISTANCE:
-          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           distanceUnit.enable();
           break;
         case TestInputTypeEnum.CUSTOM_NUMERIC:
-          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           customNumericLabel.enable();
           break;
         case TestInputTypeEnum.WEIGHT:
-          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           weightUnit.enable();
           break;
         case TestInputTypeEnum.ONE_RM:
-          this.buildOneRemForm().map(fg => oneRMFArray.push(fg));
+          this.utilities.buildOneRemForm().map(fg => oneRMFArray.push(fg));
           reps.enable();
           resultExplanation.enable();
           break;
         case TestInputTypeEnum.MULTIPLE_CHOICE:
-          this.buildMultiChoiceForm().map(fg => mCArray.push(fg));
+          this.utilities.buildMultiChoiceForm().map(fg => mCArray.push(fg));
           multipleChoiceQuestion.enable();
           break;
         case TestInputTypeEnum.TIME:
-          this.buildTimeForm().map(fg => inputFArray.push(fg));
+          this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterTimeValidator()]);
           break;
         case TestInputTypeEnum.REPS:
-          this.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          break;
+        case TestInputTypeEnum.RATIO:
+          ratioGroup.enable();
+          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          break;
+        case TestInputTypeEnum.RELATIVE_PROFILE:
+          relativeGroup.enable();
+          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           break;
       }
     });
     category.valueChanges.subscribe(_ => {
-      this.testTags = [
-        ...this.testTags.filter(t => t.tagType !== TagTypeEnum.SUB_CATEGORY)
-      ];
-      this.updateTagControl(this.testTags);
+      this.utilities.removeTypeTags(TagTypeEnum.SUB_CATEGORY);
+      this.updateTagControl();
+    });
+    const { xWeightUnit, xDistanceUnit, yWeightUnit, yDistanceUnit, xType, yType } = ratioGroup.controls;
+    xType.valueChanges.subscribe((type) => {
+      switch (type) {
+        case RatioTestTypeEnum.DISTANCE_LENGTH:
+          xWeightUnit.disable({
+            emitEvent: false
+          });
+          xDistanceUnit.enable({
+            emitEvent: false
+          });
+          break;
+        case RatioTestTypeEnum.WEIGHT:
+          xDistanceUnit.disable({
+            emitEvent: false
+          });
+          xWeightUnit.enable({
+            emitEvent: false
+          });
+          break;
+        default:
+          xDistanceUnit.disable({
+            emitEvent: false
+          });
+          xWeightUnit.disable({
+            emitEvent: false
+          });
+      }
+    });
+    yType.valueChanges.subscribe((type) => {
+      switch (type) {
+        case RatioTestTypeEnum.DISTANCE_LENGTH:
+          yWeightUnit.disable({
+            emitEvent: false
+          });
+          yDistanceUnit.enable({
+            emitEvent: false
+          });
+          break;
+        case RatioTestTypeEnum.WEIGHT:
+          yDistanceUnit.disable({
+            emitEvent: false
+          });
+          yWeightUnit.enable({
+            emitEvent: false
+          });
+          break;
+        default:
+          yDistanceUnit.disable({
+            emitEvent: false
+          });
+          yWeightUnit.disable({
+            emitEvent: false
+          });
+      }
     });
   }
 
@@ -231,6 +354,14 @@ export class TestCreateComponent implements OnInit {
 
   get inputFieldFormArray(): FormArray<InputField> {
     return this.testGroup.controls.inputFields as FormArray<InputField>;
+  }
+
+  get ratioVariableFormGroup(): FormGroup<RatioSubObject> | undefined {
+    return this.testGroup.controls.ratioVariable as FormGroup<RatioSubObject>;
+  }
+
+  get profileInputFormGroup(): FormGroup<RelativeProfileObject> | undefined {
+    return this.testGroup.controls.relativeProfile as FormGroup<RelativeProfileObject>;
   }
 
   validatePublishedState(): void {
@@ -288,237 +419,20 @@ export class TestCreateComponent implements OnInit {
     return this.inputFieldFormArray.controls[i] as FormGroup<InputField>;
   }
 
-  ngOnInit(): void {
-  }
-
-  updateTagControl(tags: Tag[]): void {
+  updateTagControl(): void {
     this.testGroup.controls.tags.setValue(
-      [...tags.map(t => t.id)]
+      [...this.utilities.testTags.map(t => t.id)]
     );
   }
 
   updateTestTags(cat: TagTypeEnum, newTag: Tag) {
-    this.testTags = [
-      ...this.testTags,
-      newTag
-    ];
-    this.updateTagControl(this.testTags);
+    this.utilities.updateTestTags(cat, newTag);
+    this.updateTagControl();
   }
 
   removeTag(tag: Tag) {
-    if (this.testTags.includes(tag)) {
-      this.testTags = [
-        ...this.testTags.filter(t => t.id !== tag.id)
-      ];
-      this.updateTagControl(this.testTags);
-    }
-  }
-
-  buildCorePointFormCtrl(type: PointTypeEnum): { pointType: FormControl<PointTypeEnum>; point: FormControl<number | string> } {
-    let pointVal;
-    switch (type) {
-      case PointTypeEnum.ZERO:
-        pointVal = 0;
-        break;
-      case PointTypeEnum.ONE:
-        pointVal = 1;
-        break;
-      case PointTypeEnum.TWO:
-        pointVal = 2;
-        break;
-      case PointTypeEnum.THREE:
-        pointVal = 3;
-        break;
-      case PointTypeEnum.FOUR:
-        pointVal = 4;
-        break;
-      case PointTypeEnum.FIVE:
-        pointVal = 5;
-        break;
-      case PointTypeEnum.HP:
-        pointVal = 6;
-        break;
-    }
-    return {
-      pointType: new FormControl<PointTypeEnum>(type),
-      point: new FormControl(pointVal)
-    };
-  }
-
-  buildInputFieldsForm(lowValidations: ValidatorFn[], highValidations: ValidatorFn[]): FormGroup<InputField>[] {
-    return [
-      new FormGroup<InputField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ZERO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<InputField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ONE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<InputField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.TWO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<InputField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.THREE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<InputField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FOUR),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<InputField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      })
-    ];
-  }
-
-  buildMultiChoiceForm(): FormGroup<MultipleChoiceField>[] {
-    const answerValidation = [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty()
-    ];
-    return [
-      new FormGroup<MultipleChoiceField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ZERO),
-        answer: new FormControl<string>('', answerValidation)
-      }),
-      new FormGroup<MultipleChoiceField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ONE),
-        answer: new FormControl<string>('', answerValidation)
-      }),
-      new FormGroup<MultipleChoiceField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.TWO),
-        answer: new FormControl<string>('', answerValidation)
-      }),
-      new FormGroup<MultipleChoiceField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.THREE),
-        answer: new FormControl<string>('', answerValidation)
-      }),
-      new FormGroup<MultipleChoiceField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FOUR),
-        answer: new FormControl<string>('', answerValidation)
-      }),
-      new FormGroup<MultipleChoiceField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        answer: new FormControl<string>('', answerValidation)
-      })
-    ];
-  }
-
-  buildTimeForm(): FormGroup<InputField>[] {
-    const lowValidations = [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.minDate({
-        fieldName: 'high',
-        operator: '>'
-      })
-    ];
-    const highValidations = [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.maxDate({
-        fieldName: 'low',
-        operator: '<'
-      })
-    ];
-    return this.buildInputFieldsForm(lowValidations, highValidations);
-  }
-
-  buildDistanceOrWeightOrRepsForm(): FormGroup<InputField>[] {
-    const lowValidations = [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.numeric({
-        allowDecimal: true,
-        acceptValue: NumericValueType.PositiveNumber
-      }),
-      RxwebValidators.lessThan({
-        fieldName: 'high'
-      })
-    ];
-    const highValidations = [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.numeric({
-        allowDecimal: true,
-        acceptValue: NumericValueType.PositiveNumber
-      }),
-      RxwebValidators.greaterThan({
-        fieldName: 'low'
-      })
-    ];
-    return this.buildInputFieldsForm(lowValidations, highValidations);
-  }
-
-  buildOneRemForm(): FormGroup<OneRMField>[] {
-    const lowValidations = [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.numeric({
-        allowDecimal: true,
-        acceptValue: NumericValueType.PositiveNumber
-      }),
-      RxwebValidators.lessThan({
-        fieldName: 'high'
-      })
-    ];
-    const highValidations = [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.numeric({
-        allowDecimal: true,
-        acceptValue: NumericValueType.PositiveNumber
-      }),
-      RxwebValidators.greaterThan({
-        fieldName: 'low'
-      })
-    ];
-    return [
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ZERO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.ONE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.TWO),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.THREE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FOUR),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      }),
-      new FormGroup<OneRMField>({
-        ...this.buildCorePointFormCtrl(PointTypeEnum.HP),
-        low: new FormControl(undefined, lowValidations),
-        high: new FormControl(undefined, highValidations)
-      })
-    ];
+    this.utilities.removeTag(tag);
+    this.updateTagControl();
   }
 
   submit(): void {
@@ -547,5 +461,4 @@ export class TestCreateComponent implements OnInit {
       this.store.createTest$(this.testGroup.value);
     }
   }
-
 }

@@ -9,7 +9,7 @@ import {
 } from '@hidden-innovation/shared/models';
 import { Media } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
-import { InputField, MultipleChoiceField, OneRMField } from './input.interface';
+import { InputField, MultipleChoiceField, OneRMField, RatioSubObject, RelativeProfileObject } from './input.interface';
 
 export interface Test {
   category: TagCategoryEnum;
@@ -67,6 +67,14 @@ export interface CreateTest {
   // WeightType Start
   weightUnit: WeightTypeEnum | undefined;
   // WeightType End
+
+  //Ratio Start
+  ratioVariable: RatioSubObject | undefined;
+  //Ratio End
+
+  //Relative Profile Start
+  relativeProfile: RelativeProfileObject | undefined;
+  //Relative Profile End
 
   //Custom Numeric Start
   customNumericLabel: string;

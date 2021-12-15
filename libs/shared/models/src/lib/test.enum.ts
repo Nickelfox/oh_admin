@@ -19,3 +19,26 @@ export enum PointTypeEnum {
   FIVE = 'FIVE',
   HP = 'HP'
 }
+
+export enum RatioTestTypeEnum {
+  WEIGHT = 'WEIGHT',
+  DISTANCE_LENGTH = 'DISTANCE_LENGTH',
+  BIOMETRIC = 'BIOMETRIC'
+}
+
+export enum ProfileInputEnum {
+  HEIGHT = 'HEIGHT',
+  BODY_WEIGHT = 'BODY_WEIGHT',
+  AGE = 'AGE',
+}
+
+export enum ProfileInputTypeEnum {
+  WEIGHT = 'WEIGHT',
+  LENGTH = 'LENGTH',
+}
+
+export enum ProfileInputTypeUnitEnum {
+  KILOGRAM = 'KILOGRAM',
+  METRE = 'METRE',
+  YEAR = 'YEAR',
+}
