@@ -59,6 +59,10 @@ export class FormValidationService {
     minLength: 'Minimum of 2 answers are required to create a question'
   };
 
+  testSelectionValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 tests are required to publish a test group'
+  }
+
   formSubmitError = 'Invalid Submission! Please fill all valid details';
 
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
