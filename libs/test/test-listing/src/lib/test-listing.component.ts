@@ -12,7 +12,7 @@ import {
   TestInputTypeEnum
 } from '@hidden-innovation/shared/models';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { Test, TestListingFilters, TestStore } from '@hidden-innovation/test/data-access';
+import { Test, TestDeleteRequest, TestListingFilters, TestStore } from '@hidden-innovation/test/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { isEqual } from 'lodash-es';
@@ -121,15 +121,15 @@ export class TestListingComponent implements OnInit {
       (tests) => {
         this.tests = new MatTableDataSource<Test>(tests);
         this.noData = this.tests.connect().pipe(map(data => data.length === 0));
+        if (!tests?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+          this.resetRoute();
+        }
         this.cdr.markForCheck();
       }
     );
     this.filters.valueChanges.pipe(
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
-    ).subscribe();
-    this.filters.controls.search.valueChanges.pipe(
-      tap(_ => this.resetRoute())
     ).subscribe();
   }
 
@@ -168,7 +168,6 @@ export class TestListingComponent implements OnInit {
       category.setValue(undefined);
       category.disable();
     }
-    this.resetRoute();
   }
 
   difficultyFilterChange(matSelection: MatSelectionListChange): void {
@@ -181,7 +180,6 @@ export class TestListingComponent implements OnInit {
       level.setValue(undefined);
       level.disable();
     }
-    this.resetRoute();
   }
 
   typeFilterChange(matSelection: MatSelectionListChange): void {
@@ -194,7 +192,6 @@ export class TestListingComponent implements OnInit {
       type.setValue(undefined);
       type.disable();
     }
-    this.resetRoute();
   }
 
   updateFilterChange(matSelection: MatSelectionListChange, ctrl: FormControl): void {
@@ -212,7 +209,23 @@ export class TestListingComponent implements OnInit {
       ctrl.setValue(undefined);
       ctrl.disable();
     }
-    this.resetRoute();
+  }
+
+  deleteQuestionnaire(id: number) {
+    const { category, level, type, published, dateSort, nameSort, search } = this.filters.value;
+    const deleteObj: TestDeleteRequest = {
+      id,
+      dateSort,
+      nameSort,
+      search,
+      published,
+      level,
+      type,
+      category,
+      pageSize: this.pageSize,
+      pageIndex: this.pageIndex
+    };
+    this.store.deleteTest(deleteObj);
   }
 
 }

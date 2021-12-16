@@ -5,7 +5,8 @@
         <button mat-stroked-button color='primary'
                 type='button'>
           <mat-icon color='warn' class='mr-1'>movie</mat-icon>
-          <span matTooltip='{{fileName ?? "--"}}'>{{(fileName | maxStringLimit: 10) ?? '--'}}</span>
+          <a *ngIf='fileUrl' href='{{fileUrl}}' target='_blank' matTooltip='{{fileName ?? "--"}}'>{{(fileName | maxStringLimit: 10) ?? '--'}}</a>
+          <a *ngIf='!fileUrl' matTooltip='{{fileName ?? "--"}}'>{{(fileName | maxStringLimit: 10) ?? '--'}}</a>
           <mat-icon matTooltip='Remove File' (click)='removeVideo()' class='ml-2'>close</mat-icon>
         </button>
       </div>

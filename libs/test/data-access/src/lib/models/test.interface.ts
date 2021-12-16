@@ -9,26 +9,57 @@ import {
 } from '@hidden-innovation/shared/models';
 import { Media } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
-import { InputField, MultipleChoiceField, OneRMField, RatioSubObject, RelativeProfileObject } from './input.interface';
+import {
+  InputField,
+  InputFieldExtended,
+  MultipleChoiceField,
+  MultipleChoiceFieldExtended,
+  OneRMField,
+  OneRMFieldExtended,
+  RatioSubObject,
+  RatioSubObjectExtended,
+  RelativeProfileObject,
+  RelativeProfileObjectExtended
+} from './input.interface';
 
 export interface Test {
+  id: number;
   category: TagCategoryEnum;
   difficulty: DifficultyEnum;
+  inputType: TestInputTypeEnum;
   name: string;
+  isPublished: boolean;
+  updated_at: string;
+  created_at: string;
+  label: string;
   poster: Media;
   thumbnail: Media;
   video: Media;
   reps: Reps;
   tags: Tag[];
-  inputType: TestInputTypeEnum;
-  oneRMInputFields: OneRMField[];
-  multipleChoiceInputFields: any[];
-  inputFields: InputField[];
-  ratioVariable?: any;
-  id: number;
-  isPublished: boolean;
-  updated_at: string;
-  created_at: string;
+  needEquipment: boolean;
+  equipment: string;
+  outcomes: string;
+  procedure: string;
+  // DistanceType Start
+  distanceUnit: DistanceTypeEnum | undefined;
+  // DistanceType End  procedure: string;
+  //Custom Numeric Start
+  customNumericLabel: string;
+  //Custom Numeric End
+  // WeightType Start
+  weightUnit: WeightTypeEnum | undefined;
+  // WeightType End
+  description: string;
+  resultExplanation: string;
+  oneRMInputFields: OneRMFieldExtended[];
+  multipleChoiceInputFields: MultipleChoiceFieldExtended[];
+  multipleChoiceQuestion: string;
+  inputFields: InputFieldExtended[];
+  //Ratio Start
+  ratioVariable: RatioSubObjectExtended | undefined;
+  //Ratio End
+  relativeProfile: RelativeProfileObjectExtended | null;
 }
 
 export interface CreateTest {
@@ -50,11 +81,7 @@ export interface CreateTest {
   // OneRemType Start
   resultExplanation: string;
   oneRMInputFields: OneRMField[];
-  reps: {
-    oneRep: boolean;
-    threeRep: boolean;
-    fiveRep: boolean;
-  }
+  reps: RepsCore;
   // OneRemType End
   // MultipleChoiceType Start
   multipleChoiceQuestion: string;
@@ -114,12 +141,32 @@ export interface TestListingResponseData {
   total: number;
 }
 
-export interface Reps {
-  id: number;
+export interface TestResponse extends CustomApiResponse {
+  data: {
+    test: Test;
+  };
+}
+
+export interface RepsCore {
   oneRep: boolean;
   threeRep: boolean;
   fiveRep: boolean;
+}
+
+export interface Reps extends RepsCore {
+  id: number;
   deletedAt: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface TestPublishToggleRequest {
+  newState: boolean;
+  id: number;
+}
+
+export interface TestDeleteRequest extends TestListingFilters {
+  id: number;
+  pageIndex: number;
+  pageSize: number;
 }

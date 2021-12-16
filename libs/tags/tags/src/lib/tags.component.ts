@@ -94,15 +94,15 @@ export class TagsComponent implements OnInit {
       ({ tags }) => {
         this.tags = new MatTableDataSource<Tag>(tags);
         this.noData = this.tags.connect().pipe(map(data => data.length === 0));
+        if (!tags?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+          this.resetRoute();
+        }
         this.cdr.markForCheck();
       }
     );
     this.filters.valueChanges.pipe(
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
-    ).subscribe();
-    this.filters.controls.search.valueChanges.pipe(
-      tap(_ => this.resetRoute())
     ).subscribe();
   }
 
@@ -232,7 +232,6 @@ export class TagsComponent implements OnInit {
       type.setValue(undefined);
       type.disable();
     }
-    this.resetRoute();
   }
 
   categoryFilterChange(matSelection: MatSelectionListChange): void {
@@ -245,7 +244,6 @@ export class TagsComponent implements OnInit {
       category.setValue(undefined);
       category.disable();
     }
-    this.resetRoute();
   }
 
   deleteTag(id: number) {

@@ -212,7 +212,7 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test/test-create').then(
                 (m) => m.TestCreateModule
               ),
-            data: { breadcrumb: 'Add Test' }
+            data: { breadcrumb: 'Add Test', type: OperationTypeEnum.CREATE }
           },
           {
             path: 'edit/:id',
@@ -220,7 +220,7 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test/test-create').then(
                 (m) => m.TestCreateModule
               ),
-            data: { breadcrumb: 'Add Test' }
+            data: { breadcrumb: 'Edit Test', type: OperationTypeEnum.EDIT }
           }
         ]
       },

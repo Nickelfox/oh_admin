@@ -196,15 +196,15 @@
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #testListMenu='matMenu'>
-                        <button mat-menu-item [routerLink]='["/tests", "edit", "01"]'>
+                        <button mat-menu-item [routerLink]='["/tests", "edit", row.id]'>
                           <mat-icon>create</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>
-                        <button mat-menu-item>
-                          <mat-icon>{{row.isActive ? "block" : "check_circle_outline"}}</mat-icon>
-                          <span>{{(row.isActive ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
+                        <button (click)='store.toggleActive(row.id, row.isPublished)' mat-menu-item>
+                          <mat-icon>{{row.isPublished ? "block" : "check_circle_outline"}}</mat-icon>
+                          <span>{{(row.isPublished ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
                         </button>
-                        <button mat-menu-item>
+                        <button mat-menu-item (click)='deleteQuestionnaire(row.id)'>
                           <mat-icon>delete</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</span>
                         </button>
