@@ -1,16 +1,18 @@
 import { CustomApiResponse, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { Media } from '@hidden-innovation/media';
 import { Test } from '@hidden-innovation/test/data-access';
+import { Tag } from '@hidden-innovation/tags/data-access';
 
 export interface TestGroupCore {
   name: string;
-  category: TagCategoryEnum;
-  subCategory: string;
-  thumbnailId: number;
-  imageId: number;
+  category: TagCategoryEnum | undefined;
+  subCategory: string | Tag;
+  thumbnailId: number | undefined;
+  imageId: number | undefined;
+  videoId: number | undefined;
   description: string;
   is_visible: boolean;
-  tests: Test[];
+  tests: Test[] | number[];
 }
 
 export interface TestGroup extends TestGroupCore {

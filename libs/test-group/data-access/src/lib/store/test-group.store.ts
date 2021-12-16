@@ -5,10 +5,12 @@ import { EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { TestGroupService } from '../services/test-group.service';
 import { CreateHotToastRef } from '@ngneat/hot-toast';
+import { Test } from '@hidden-innovation/test/data-access';
 
 export interface TestGroupState {
   testGroups: TestGroup[];
   selectedGroup?: TestGroup;
+  selectedTests?: Test[];
   total: number;
   isLoading?: boolean;
   isActing?: boolean;
@@ -31,6 +33,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly testGroups$: Observable<TestGroup[]> = this.select(state => state.testGroups || []);
+  readonly selectedTests$: Observable<Test[]> = this.select(state => state.selectedTests || []);
 
   getTestGroups$ = this.effect<TestGroupListingRequest>(params$ =>
     params$.pipe(
@@ -63,7 +66,6 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
   );
 
   private toastRef: CreateHotToastRef<unknown> | undefined;
-
 
   constructor(
     private testGroupService: TestGroupService
