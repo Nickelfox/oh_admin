@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   DifficultyEnum,
   DistanceTypeEnum,
+  OperationTypeEnum,
   ProfileInputEnum,
   ProfileInputTypeEnum,
   ProfileInputTypeUnitEnum,
@@ -20,14 +21,18 @@ import {
   OneRMField,
   RatioSubObject,
   RelativeProfileObject,
+  RepsCore,
+  Test,
   TestStore,
   TestUtilitiesService
 } from '@hidden-innovation/test/data-access';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { AspectRatio } from '@hidden-innovation/media';
+import { AspectRatio, Media } from '@hidden-innovation/media';
 import { HotToastService } from '@ngneat/hot-toast';
 import { DateTime } from 'luxon';
+import { ActivatedRoute } from '@angular/router';
+import { filter, switchMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'hidden-innovation-test-create',
@@ -37,7 +42,7 @@ import { DateTime } from 'luxon';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TestCreateComponent {
+export class TestCreateComponent implements OnDestroy {
   testInputTypeEnum = TestInputTypeEnum;
   tagTypeEnum = TagTypeEnum;
   aspectRatio = AspectRatio;
@@ -45,6 +50,13 @@ export class TestCreateComponent {
   distanceTypeEnum = DistanceTypeEnum;
   weightTypeEnum = WeightTypeEnum;
   ratioTestTypeEnum = RatioTestTypeEnum;
+  opTypeEnum = OperationTypeEnum;
+
+  selectedMedia?: {
+    poster: Media;
+    thumbnail: Media;
+    video: Media;
+  };
 
   testInputTypeIte = Object.values(TestInputTypeEnum).map(value => value.toString());
   testCatTypeIte = Object.values(TagCategoryEnum).map(value => value.toString());
@@ -56,8 +68,8 @@ export class TestCreateComponent {
   profileInputTypeIte = Object.values(ProfileInputTypeEnum).map(value => value.toString());
   profileInputTypeUnitIte = Object.values(ProfileInputTypeUnitEnum).map(value => value.toString());
 
+  opType?: OperationTypeEnum;
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
-
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
     name: new FormControl('', [...this.utilities.requiredFieldValidation]),
     category: new FormControl(undefined),
@@ -190,14 +202,45 @@ export class TestCreateComponent {
       ])
     })
   });
+  loaded = false;
+  selectedTest: Test | undefined;
+  private testID?: number;
 
   constructor(
     public formValidationService: FormValidationService,
     public constantDataService: ConstantDataService,
     private hotToastService: HotToastService,
     private store: TestStore,
-    public utilities: TestUtilitiesService
+    public utilities: TestUtilitiesService,
+    private route: ActivatedRoute
   ) {
+    this.route.data.pipe(
+      filter(data => data?.type !== undefined),
+      tap((data) => {
+        this.opType = data.type as OperationTypeEnum;
+      }),
+      switchMap(_ => this.route.params)
+    ).subscribe((res) => {
+      if (this.opType === OperationTypeEnum.EDIT) {
+        this.testID = res['id'];
+        if (!this.testID) {
+          this.hotToastService.error('Error occurred while fetching details');
+          return;
+        }
+        this.store.getTestDetails$({
+          id: this.testID
+        });
+        this.store.selectedTest$.subscribe((test) => {
+          if (test) {
+            this.populateTest(test);
+          }
+        });
+      }
+    });
+    this.store.loaded$.pipe(
+      tap(res => this.loaded = res)
+    ).subscribe();
+
     const {
       needEquipment,
       equipment,
@@ -240,45 +283,112 @@ export class TestCreateComponent {
       this.validatePublishedState();
       switch (type) {
         case TestInputTypeEnum.DISTANCE:
-          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            distanceUnit.setValue(this.selectedTest.distanceUnit);
+          } else {
+            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           distanceUnit.enable();
           break;
         case TestInputTypeEnum.CUSTOM_NUMERIC:
-          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            customNumericLabel.setValue(this.selectedTest.customNumericLabel);
+          } else {
+            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           customNumericLabel.enable();
           break;
         case TestInputTypeEnum.WEIGHT:
-          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            weightUnit.setValue(this.selectedTest.weightUnit);
+          } else {
+            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           weightUnit.enable();
           break;
         case TestInputTypeEnum.ONE_RM:
-          this.utilities.buildOneRemForm().map(fg => oneRMFArray.push(fg));
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildOneRemForm(this.selectedTest.oneRMInputFields).map(fg => oneRMFArray.push(fg));
+            const repsGroup = reps as FormGroup<RepsCore>;
+            const { oneRep, threeRep, fiveRep } = this.selectedTest.reps;
+            repsGroup.setValue({
+              oneRep,
+              fiveRep,
+              threeRep
+            });
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
+          } else {
+            this.utilities.buildOneRemForm().map(fg => oneRMFArray.push(fg));
+          }
           reps.enable();
           resultExplanation.enable();
           break;
         case TestInputTypeEnum.MULTIPLE_CHOICE:
-          this.utilities.buildMultiChoiceForm().map(fg => mCArray.push(fg));
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildMultiChoiceForm(this.selectedTest.multipleChoiceInputFields).map(fg => mCArray.push(fg));
+            multipleChoiceQuestion.setValue(this.selectedTest.multipleChoiceQuestion);
+          } else {
+            this.utilities.buildMultiChoiceForm().map(fg => mCArray.push(fg));
+          }
           multipleChoiceQuestion.enable();
           break;
         case TestInputTypeEnum.TIME:
-          this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildTimeForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+          } else {
+            this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
+          }
           inputFArray.addValidators([this.formValidationService.greaterTimeValidator()]);
           break;
         case TestInputTypeEnum.REPS:
-          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+          } else {
+            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           break;
         case TestInputTypeEnum.RATIO:
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            const ratioTypeFormGroup: FormGroup<RatioSubObject> = this.testGroup.controls.ratioVariable as FormGroup<RatioSubObject>;
+            ratioTypeFormGroup.patchValue({
+              xLabel: this.selectedTest.ratioVariable?.xLabel,
+              yLabel: this.selectedTest.ratioVariable?.yLabel,
+              xWeightUnit: this.selectedTest.ratioVariable?.xWeightUnit,
+              yWeightUnit: this.selectedTest.ratioVariable?.yWeightUnit,
+              xDistanceUnit: this.selectedTest.ratioVariable?.xDistanceUnit,
+              yDistanceUnit: this.selectedTest.ratioVariable?.yDistanceUnit
+            });
+            ratioTypeFormGroup.patchValue({
+              xType: this.selectedTest.ratioVariable?.xType,
+              yType: this.selectedTest.ratioVariable?.yType
+            });
+          } else {
+            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          }
           ratioGroup.enable();
-          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           break;
         case TestInputTypeEnum.RELATIVE_PROFILE:
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            relativeGroup.patchValue({
+              unit: this.selectedTest.relativeProfile?.unit,
+              label: this.selectedTest.relativeProfile?.label,
+              inputType: this.selectedTest.relativeProfile?.inputType,
+              profileInput: this.selectedTest.relativeProfile?.profileInput
+            });
+          } else {
+            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+          }
           relativeGroup.enable();
-          this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           break;
       }
@@ -362,6 +472,12 @@ export class TestCreateComponent {
 
   get profileInputFormGroup(): FormGroup<RelativeProfileObject> | undefined {
     return this.testGroup.controls.relativeProfile as FormGroup<RelativeProfileObject>;
+  }
+
+  ngOnDestroy(): void {
+    this.store.patchState({
+      selectedTest: undefined
+    });
   }
 
   validatePublishedState(): void {
@@ -456,9 +572,74 @@ export class TestCreateComponent {
           };
         })
       };
-      this.store.createTest$({ ...testObj });
+      if (this.opType === OperationTypeEnum.CREATE) {
+        this.store.createTest$({ ...testObj });
+      } else if (this.opType === OperationTypeEnum.EDIT) {
+        if (!this.testID) {
+          this.hotToastService.error('Error occurred while submitting details');
+          return;
+        }
+        this.store.updateTest$({
+          id: this.testID,
+          test: { ...testObj }
+        });
+      }
     } else {
-      this.store.createTest$(this.testGroup.value);
+      if (this.opType === OperationTypeEnum.CREATE) {
+        this.store.createTest$(this.testGroup.value);
+      } else if (this.opType === OperationTypeEnum.EDIT) {
+        if (!this.testID) {
+          this.hotToastService.error('Error occurred while submitting details');
+          return;
+        }
+        this.store.updateTest$({
+          id: this.testID,
+          test: this.testGroup.value
+        });
+      }
     }
+  }
+
+  private populateTest(test: Test): void {
+    const {
+      name,
+      inputType,
+      equipment,
+      needEquipment,
+      difficulty,
+      isPublished,
+      category,
+      label,
+      poster,
+      thumbnail,
+      video,
+      tags,
+      outcomes,
+      procedure,
+      description
+    } = test;
+    this.utilities.testTags = [];
+    this.updateTagControl();
+    this.selectedTest = test;
+    this.testGroup.patchValue({
+      name,
+      inputType,
+      difficulty,
+      isPublished,
+      label,
+      equipment,
+      needEquipment,
+      description,
+      outcomes,
+      procedure,
+      videoId: video?.id,
+      thumbnailId: thumbnail?.id,
+      posterId: poster?.id
+    });
+    this.testGroup.controls.category.setValue(category);
+    tags.forEach(t => {
+      this.utilities.updateTestTags(t.tagType, t);
+      this.updateTagControl();
+    });
   }
 }

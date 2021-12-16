@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
-import { AspectRatio, ImageCropperResponseData } from '@hidden-innovation/media';
+import { AspectRatio, ImageCropperResponseData, Media } from '@hidden-innovation/media';
 
 @Component({
   selector: 'hidden-innovation-common-form-field-image',
@@ -34,6 +34,16 @@ export class CommonFormFieldImageComponent implements OnInit {
   constructor(
     private fgd: FormGroupDirective
   ) {
+  }
+
+  @Input() set setImageData(media: Media | undefined) {
+    if (media) {
+      this.imageData = {
+        croppedImage: media.url,
+        attachmentId: media.id,
+        fileName: media.fileName
+      };
+    }
   }
 
   ngOnInit(): void {

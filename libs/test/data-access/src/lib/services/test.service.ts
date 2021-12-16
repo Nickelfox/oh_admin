@@ -7,10 +7,12 @@ import {
   Test,
   TestListingRequest,
   TestListingResponse,
-  TestListingResponseData
+  TestListingResponseData,
+  TestResponse
 } from '../models/test.interface';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { CustomApiResponse } from '@hidden-innovation/shared/models';
 
 @Injectable()
 export class TestService {
@@ -54,6 +56,32 @@ export class TestService {
   createTest(testObj: CreateTest): Observable<Test> {
     return this.http.post<CreateTestResponse>(`${this.env.baseURL}/v1/admin/create-test`, testObj).pipe(
       map(res => res.data.test),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  getTest(id: number): Observable<Test> {
+    return this.http.get<TestResponse>(`${this.env.baseURL}/v1/admin/test/${id}`).pipe(
+      map(res => res.data.test),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  updateTest(testObj: CreateTest, id: number): Observable<Test> {
+    return this.http.patch<TestResponse>(`${this.env.baseURL}/v1/admin/update-test/${id}`, testObj).pipe(
+      map(res => res.data.test),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  toggleTestPublishStatus(id: number): Observable<CustomApiResponse> {
+    return this.http.patch<CustomApiResponse>(`${this.env.baseURL}/v1/admin/publish-test/${id}`, {}).pipe(
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  deleteTest(id: number): Observable<CustomApiResponse> {
+    return this.http.delete<CustomApiResponse>(`${this.env.baseURL}/v1/admin/delete-test/${id}`).pipe(
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }

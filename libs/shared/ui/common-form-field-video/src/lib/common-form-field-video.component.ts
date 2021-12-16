@@ -1,5 +1,6 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -9,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
-import { VideoPickedResponseData } from '@hidden-innovation/media';
+import { Media, VideoPickedResponseData } from '@hidden-innovation/media';
 
 @Component({
   selector: 'hidden-innovation-common-form-field-video',
@@ -29,6 +30,7 @@ export class CommonFormFieldVideoComponent implements OnInit {
   control = new FormControl();
 
   fileName: string | undefined;
+  fileUrl: string | undefined;
 
   constructor(
     private fgd: FormGroupDirective,
@@ -41,6 +43,13 @@ export class CommonFormFieldVideoComponent implements OnInit {
       this.controlPath
     ) as FormControl;
     this.control.valueChanges.subscribe(_ => this.cdr.markForCheck());
+  }
+
+  @Input() set videoData(media: Media | undefined) {
+    if(media) {
+      this.fileName = media.fileName;
+      this.fileUrl = media.url;
+    }
   }
 
   removeVideo() {
