@@ -1,14 +1,25 @@
 import { CustomApiResponse, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { Media } from '@hidden-innovation/media';
+import { Test } from '@hidden-innovation/test/data-access';
 
-export interface TestGroup {
-  id: number;
+export interface TestGroupCore {
   name: string;
+  category: TagCategoryEnum;
+  subCategory: string;
+  thumbnailId: number;
+  imageId: number;
+  description: string;
+  is_visible: boolean;
+  tests: Test[];
+}
+
+export interface TestGroup extends TestGroupCore {
+  id: number;
   deleted_at: string;
   created_at: string;
   updated_at: string;
-  category: TagCategoryEnum;
-  options: number;
-  status: boolean;
+  thumbnail: Media;
+  image: Media;
 }
 
 export interface TestGroupListingFilters {
@@ -29,6 +40,6 @@ export interface TestGroupListingResponse extends CustomApiResponse {
 }
 
 export interface TestGroupListingResponseData {
-  testGroup: TestGroup[];
-  total: number;
+  test_groups: TestGroup[];
+  count: number;
 }
