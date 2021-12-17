@@ -4,6 +4,20 @@ import { DateTime } from 'luxon';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 
+export enum FeaturedType  {
+  SPOTLIGHT = 'SPOTLIGHT',
+  FEATURED_PACKS = 'FEATURED_PACKS',
+  FEATURED_TESTS = 'FEATURED_TESTS',
+  PACKS = 'PACKS'
+}
+
+export enum ScreenType  {
+  HOME = 'HOME',
+  CARDIO = 'CARDIO',
+  LIFESTYLE = 'LIFESTYLE',
+  FUNCTION = 'FUNCTION',
+  MOVEMENT = 'MOVEMENT'
+}
 
 export const dummyFeatured: FeaturedCore[] = [
   {
@@ -47,7 +61,7 @@ export class FeaturedListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(dummyFeatured);
+
   }
 
 }
