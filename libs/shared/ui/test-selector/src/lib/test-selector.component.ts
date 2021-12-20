@@ -17,9 +17,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
 import { ActivatedRoute } from '@angular/router';
-import { isEqual } from 'lodash-es';
+import { difference, isEqual } from 'lodash-es';
 import { TestGroupStore } from '@hidden-innovation/test-group/data-access';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-test-selector',
   templateUrl: './test-selector.component.html',
@@ -122,6 +124,8 @@ export class TestSelectorComponent implements OnInit {
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
     ).subscribe();
+    this.updateSorting('nameSort');
+    this.updateSorting('nameSort');
   }
 
   onPaginateChange($event: PageEvent): void {
@@ -140,18 +144,14 @@ export class TestSelectorComponent implements OnInit {
 
   addToList(test: Test): void {
     if (!this.selectedTests.find(value => value.id === test.id)) {
-      this.groupStore.patchState({
-        selectedTests: [
-          ...this.selectedTests,
-          test
-        ]
-      });
+      this.selectedTests = [
+        ...this.selectedTests,
+        test
+      ];
     } else {
-      this.groupStore.patchState({
-        selectedTests: [
-          ...this.selectedTests.filter(t => t.id !== test.id)
-        ]
-      });
+      this.selectedTests = [
+        ...this.selectedTests.filter(t => t.id !== test.id)
+      ];
     }
   }
 
@@ -233,4 +233,12 @@ export class TestSelectorComponent implements OnInit {
     }
   }
 
+  saveSelectedTests(): void {
+    this.groupStore.patchState({
+      selectedTests: [
+        ...this.selectedTests
+      ]
+    });
+    this.matDialogRef.close();
+  }
 }

@@ -44,7 +44,7 @@ import { FormValidationService, GenericErrorMessage } from '@hidden-innovation/s
 })
 export class FormFieldErrorsComponent {
   @Input() error: any;
-  @Input() label = '';
+  @Input() label? = '';
   @Input() errorMessage: Partial<GenericErrorMessage> = this.formValidationService.fieldValidationMessage;
 
   constructor(

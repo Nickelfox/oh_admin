@@ -204,7 +204,7 @@
                           <mat-icon>{{row.isPublished ? "block" : "check_circle_outline"}}</mat-icon>
                           <span>{{(row.isPublished ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
                         </button>
-                        <button mat-menu-item (click)='deleteQuestionnaire(row.id)'>
+                        <button mat-menu-item (click)='deleteTest(row.id)'>
                           <mat-icon>delete</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</span>
                         </button>

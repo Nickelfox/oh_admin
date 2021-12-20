@@ -11,7 +11,12 @@ import {
 } from '@hidden-innovation/shared/models';
 import { MatTableDataSource } from '@angular/material/table';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { TestGroup, TestGroupListingFilters, TestGroupStore } from '@hidden-innovation/test-group/data-access';
+import {
+  TestGroup,
+  TestGroupDeleteRequest,
+  TestGroupListingFilters,
+  TestGroupStore
+} from '@hidden-innovation/test-group/data-access';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
@@ -176,6 +181,21 @@ export class TestGroupListingComponent implements OnInit {
       ctrl.setValue(undefined);
       ctrl.disable();
     }
+  }
+
+  deleteTestGroup(id: number) {
+    const { category, published, dateSort, nameSort, search } = this.filters.value;
+    const deleteObj: TestGroupDeleteRequest = {
+      id,
+      dateSort,
+      nameSort,
+      search,
+      published,
+      category,
+      pageSize: this.pageSize,
+      pageIndex: this.pageIndex
+    };
+    this.store.deleteTestGroup(deleteObj);
   }
 
 }

@@ -1,15 +1,27 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
-import { TestGroupCore, TestGroupStore } from '@hidden-innovation/test-group/data-access';
+import { TestGroup, TestGroupCore, TestGroupStore } from '@hidden-innovation/test-group/data-access';
 import { FormArray, FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
+import { OperationTypeEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
 import { AspectRatio } from '@hidden-innovation/media';
 import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
-import { paginatorData } from '@hidden-innovation/user/data-access';
+import { HotToastService } from '@ngneat/hot-toast';
+import { filter, switchMap, tap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { Test, TestDeleteRequest } from '@hidden-innovation/test/data-access';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-test-group-create',
   templateUrl: './test-group-create.component.html',
@@ -17,18 +29,20 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TestGroupCreateComponent implements OnInit {
-
-  testTags: Tag[] = [];
+export class TestGroupCreateComponent implements OnInit, OnDestroy {
 
   requiredFieldValidation: ValidatorFn[] = [
     RxwebValidators.required(),
     RxwebValidators.notEmpty()
   ];
 
+  selectedTestGroup?: TestGroup;
+
   testCatTypeIte = Object.values(TagCategoryEnum).map(value => value.toString());
 
   aspectRatio = AspectRatio;
+
+  tagTypeEnum = TagTypeEnum;
 
   testGroup: FormGroup<TestGroupCore> = new FormGroup<TestGroupCore>({
     name: new FormControl('', [
@@ -43,13 +57,7 @@ export class TestGroupCreateComponent implements OnInit {
     category: new FormControl(undefined, [
       ...this.requiredFieldValidation
     ]),
-    videoId: new FormControl(undefined, [
-      RxwebValidators.required(),
-      RxwebValidators.numeric({
-        allowDecimal: false,
-        acceptValue: NumericValueType.PositiveNumber
-      })
-    ]),
+    subCategory: new FormControl(''),
     thumbnailId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
@@ -64,40 +72,100 @@ export class TestGroupCreateComponent implements OnInit {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    is_visible: new FormControl(false),
-    subCategory: new FormControl(''),
+    isVisible: new FormControl(false),
     tests: new FormArray<number>([])
   });
+
+  opType?: OperationTypeEnum;
+  private testGroupID?: number;
 
   constructor(
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private hotToastService: HotToastService,
     public store: TestGroupStore,
     public constantDataService: ConstantDataService,
     public formValidationService: FormValidationService,
-    public tagsStore: TagsStore
+    public tagsStore: TagsStore,
+    private route: ActivatedRoute
   ) {
-    const { category, subCategory, tests } = this.testGroup.controls;
+    this.route.data.pipe(
+      filter(data => data?.type !== undefined),
+      tap((data) => {
+        this.opType = data.type as OperationTypeEnum;
+      }),
+      switchMap(_ => this.route.params)
+    ).subscribe((res) => {
+      if (this.opType === OperationTypeEnum.EDIT) {
+        this.restoreSelectedState();
+        this.testGroupID = res['id'];
+        if (!this.testGroupID) {
+          this.hotToastService.error('Error occurred while fetching details');
+          return;
+        }
+        this.store.getTestGroupDetails$({
+          id: this.testGroupID
+        });
+        this.store.selectedTestGroup$.subscribe((tg) => {
+          if (tg) {
+            this.populateTest(tg);
+          }
+        });
+      }
+    });
+    const { category, subCategory, tests, isVisible } = this.testGroup.controls;
     const testFormArray: FormArray<number> = tests as FormArray<number>;
     this.store.selectedTests$.subscribe(newTests => {
       testFormArray.clear();
       newTests.forEach(t => {
-        testFormArray.push(new FormControl<number>(t.id));
+        testFormArray.push(new FormControl<number>(t.id, [RxwebValidators.required()]));
+        testFormArray.updateValueAndValidity();
       });
     });
     category.valueChanges.subscribe(_ => {
       subCategory.reset();
     });
+    tests.valueChanges.subscribe(_ => {
+      this.testsIsValid ? isVisible.setValue(true) : isVisible.setValue(false);
+      this.testGroup.updateValueAndValidity();
+    });
+  }
+
+  get testsIsValid(): boolean {
+    return this.testGroup.controls.tests.value?.length >= 2;
+  }
+
+  get getSubCategoryValue(): string {
+    const subCatCtrl = this.testGroup.controls.subCategory as FormControl<Tag | string>;
+    return typeof subCatCtrl.value === 'string' ? subCatCtrl.value : subCatCtrl.value.name;
   }
 
   ngOnInit(): void {
-    this.getTags();
   }
 
   submit(): void {
-    const subCat: Tag = this.testGroup.controls.subCategory.value as Tag;
     this.testGroup.markAllAsTouched();
     this.testGroup.markAllAsDirty();
+    if (this.testGroup.invalid) {
+      this.hotToastService.error(this.formValidationService.formSubmitError);
+      return;
+    }
+    const testGroupObj: TestGroupCore = {
+      ...this.testGroup.value,
+      subCategory: this.getSubCategoryValue
+    };
+    if (this.opType === OperationTypeEnum.CREATE) {
+      this.store.createTestGroup$(testGroupObj);
+    } else if (this.opType === OperationTypeEnum.EDIT) {
+      if (!this.testGroupID) {
+        this.hotToastService.error('Error occurred while submitting details');
+        return;
+      }
+      this.store.updateTestGroup$({
+        testGroup: testGroupObj,
+        id: this.testGroupID
+      });
+    }
   }
 
   openTestSelector(): void {
@@ -110,28 +178,36 @@ export class TestGroupCreateComponent implements OnInit {
     });
   }
 
-  getTags(search?: string) {
-    this.tagsStore.getTags$({
-      page: paginatorData.pageIndex,
-      limit: paginatorData.pageSize,
-      type: [TagTypeEnum.SUB_CATEGORY],
-      search: search ?? undefined,
-      dateSort: undefined,
-      category: (this.testGroup.value.category) ? [this.testGroup.value.category] : [],
-      nameSort: undefined
+  restoreSelectedState(): void {
+    this.store.patchState({
+      selectedTests: [],
+      selectedGroup: undefined
     });
   }
 
-  displayFn(tag: Tag): string {
-    return tag && tag.name ? tag.name : '';
+  ngOnDestroy(): void {
+    this.restoreSelectedState();
   }
 
-  isExistingTag(tag: Tag): boolean {
-    if (this.testTags) {
-      return !!this.testTags.find(t => t.id === tag.id);
-    } else {
-      return false;
-    }
+  private populateTest(testGroup: TestGroup): void {
+    const { isVisible, category, imageId, thumbnailId, subCategory, name, description } = testGroup;
+    this.selectedTestGroup = testGroup;
+    const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];
+    this.store.patchState({
+      selectedTests
+    });
+    this.testGroup.controls.category.setValue(category);
+    this.testGroup.patchValue({
+      isVisible,
+      imageId,
+      thumbnailId,
+      subCategory,
+      name,
+      description
+    });
+    this.testGroup.updateValueAndValidity();
+    this.cdr.markForCheck();
   }
+
 
 }

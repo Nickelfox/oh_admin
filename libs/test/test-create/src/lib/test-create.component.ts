@@ -33,7 +33,9 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { DateTime } from 'luxon';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs/operators';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-test-create',
   templateUrl: './test-create.component.html',
@@ -237,9 +239,6 @@ export class TestCreateComponent implements OnDestroy {
         });
       }
     });
-    this.store.loaded$.pipe(
-      tap(res => this.loaded = res)
-    ).subscribe();
 
     const {
       needEquipment,

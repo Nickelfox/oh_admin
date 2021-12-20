@@ -12,6 +12,7 @@ import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/comm
 import { CommonFormFieldImageModule } from '@hidden-innovation/shared/ui/common-form-field-image';
 import { TagsDataAccessModule } from '@hidden-innovation/tags/data-access';
 import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-form-field-video';
+import { CommonFormFieldTagAutocompleteModule } from '@hidden-innovation/shared/ui/common-form-field-tag-autocomplete';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { CommonFormFieldVideoModule } from '@hidden-innovation/shared/ui/common-
     CommonFormFieldTextareaModule,
     CommonFormFieldImageModule,
     CommonFormFieldVideoModule,
+    CommonFormFieldTagAutocompleteModule,
     TagsDataAccessModule,
     RouterModule.forChild([
       {
