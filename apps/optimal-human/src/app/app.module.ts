@@ -185,7 +185,15 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test-group/test-group-create').then(
                 (m) => m.TestGroupCreateModule
               ),
-            data: { breadcrumb: 'Add Test Group' }
+            data: { breadcrumb: 'Add Test Group', type: OperationTypeEnum.CREATE }
+          },
+          {
+            path: 'edit/:id',
+            loadChildren: () =>
+              import('@hidden-innovation/test-group/test-group-create').then(
+                (m) => m.TestGroupCreateModule
+              ),
+            data: { breadcrumb: 'Edit Test Group', type: OperationTypeEnum.EDIT }
           }
         ]
       },
@@ -212,7 +220,7 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test/test-create').then(
                 (m) => m.TestCreateModule
               ),
-            data: { breadcrumb: 'Add Test' }
+            data: { breadcrumb: 'Add Test', type: OperationTypeEnum.CREATE }
           },
           {
             path: 'edit/:id',
@@ -220,7 +228,7 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test/test-create').then(
                 (m) => m.TestCreateModule
               ),
-            data: { breadcrumb: 'Add Test' }
+            data: { breadcrumb: 'Edit Test', type: OperationTypeEnum.EDIT }
           }
         ]
       },

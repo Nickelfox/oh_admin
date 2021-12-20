@@ -4,6 +4,7 @@ import { ImageCropperComponent } from './components/image-cropper/image-cropper.
 import { MaterialModule } from '@hidden-innovation/material';
 import { MediaUploadService } from './services/media-upload.service';
 import { ImagePickerComponent } from './components/image-picker/image-picker.component';
+import { VideoPickerComponent } from './components/video-picker/video-picker.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { ImagePickerComponent } from './components/image-picker/image-picker.com
   declarations: [
     ImageCropperComponent,
     ImagePickerComponent,
+    VideoPickerComponent,
   ],
   providers: [
     MediaUploadService
@@ -20,6 +22,7 @@ import { ImagePickerComponent } from './components/image-picker/image-picker.com
   exports: [
     ImageCropperComponent,
     ImagePickerComponent,
+    VideoPickerComponent
   ]
 })
 export class MediaModule {}

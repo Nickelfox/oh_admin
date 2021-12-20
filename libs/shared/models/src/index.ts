@@ -10,3 +10,5 @@ export * from './lib/generic.enum';
 export * from './lib/tags.enum';
 export * from './lib/difficulty.enum';
 export * from './lib/test.enum';
+export * from './lib/distance-type.enum';
+export * from './lib/weight-type.enum';

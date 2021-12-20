@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/common-form-field-video",
+  "sourceRoot": "libs/shared/ui/common-form-field-video/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/common-form-field-video"],
+      "options": {
+        "project": "libs/shared/ui/common-form-field-video/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/common-form-field-video/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/common-form-field-video/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/common-form-field-video"],
+      "options": {
+        "jestConfig": "libs/shared/ui/common-form-field-video/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/common-form-field-video/src/**/*.ts",
+          "libs/shared/ui/common-form-field-video/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

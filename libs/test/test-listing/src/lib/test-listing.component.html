@@ -5,17 +5,18 @@
       <div class='col-3'>
         <mat-form-field class='w-100'>
           <mat-label>Search</mat-label>
-          <input matInput>
-          <button mat-icon-button matSuffix *ngIf='false'>
+          <input matInput autocomplete='off' [formControl]='filters.controls.search'>
+          <button mat-icon-button matSuffix *ngIf='filters.controls.search.value'
+                  (click)='filters.controls.search.setValue("")'>
             <mat-icon style='font-size: 14px'>close</mat-icon>
           </button>
         </mat-form-field>
       </div>
       <div class='col d-flex align-items-center justify-content-end'>
-        <mat-spinner class='mr-4' [diameter]='20' *ngIf='true'></mat-spinner>
+        <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
         <button mat-flat-button color='primary' class='ml-2' [routerLink]='["/tests", "create"]'>
           <mat-icon class='mr-2'>add</mat-icon>
-          {{"Add Test"}}
+          {{"Create Test"}}
         </button>
       </div>
     </div>
@@ -25,7 +26,7 @@
           <div class='container-fluid p-0'>
             <div class='row'>
               <div class='col-12'>
-                <table mat-table [dataSource]='tests' class='w-100'>
+                <table mat-table [dataSource]='tests' [trackBy]='trackById' class='w-100'>
 
                   <ng-container matColumnDef='id'>
                     <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
@@ -34,18 +35,13 @@
 
                   <ng-container matColumnDef='name'>
                     <th mat-header-cell *matHeaderCellDef>
-                      <div class='d-flex align-items-center justify-content-between'>
-                  <span>
-                    {{constantDataService.FIELD_NAME.NAME | titlecase}}
-                  </span>
-                        <div class='d-flex align-items-center'>
-                          <mat-icon
-                            style='font-size: 16px; margin-bottom: -8px; width: 16px;'>{{true ? "keyboard_arrow_up" : "keyboard_arrow_down"}}</mat-icon>
-                          <button mat-icon-button class='mr-3'>
-                            <mat-icon style='font-size: 20px'>sort_by_alpha</mat-icon>
-                          </button>
-                        </div>
-                      </div>
+                      <hidden-innovation-sorting-header-name
+                        [title]='constantDataService.FIELD_NAME.NAME | titlecase'
+                        [ctrlEnabled]='filters.controls.nameSort?.enabled'
+                        [ctrlValue]='filters.controls.nameSort?.value'
+                        [isDisabled]='(store.isActing$ | async)'
+                        (emitSorting)='updateSorting("nameSort")'
+                      ></hidden-innovation-sorting-header-name>
                     </th>
                     <td mat-cell *matCellDef='let element'
                         [matTooltip]='element.name'> {{(element.name | maxStringLimit) || '--'}} </td>
@@ -53,20 +49,15 @@
 
                   <ng-container matColumnDef='updated_at'>
                     <th mat-header-cell *matHeaderCellDef>
-                      <div class='d-flex align-items-center justify-content-between'>
-                  <span>
-                    {{constantDataService.FIELD_NAME.DATE_ADDED | titlecase}}
-                  </span>
-                        <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3'>
-                            <mat-icon
-                              style='font-size: 20px;'>{{true ? "arrow_upward" : "arrow_downward"}}</mat-icon>
-                          </button>
-                        </div>
-                      </div>
-
+                      <hidden-innovation-sorting-header-date
+                        [title]='constantDataService.FIELD_NAME.DATE_ADDED | titlecase'
+                        [ctrlEnabled]='filters.controls.dateSort?.enabled'
+                        [ctrlValue]='filters.controls.dateSort?.value'
+                        [isDisabled]='(store.isActing$ | async)'
+                        (emitSorting)='updateSorting("dateSort")'
+                      ></hidden-innovation-sorting-header-date>
                     </th>
-                    <td mat-cell *matCellDef='let element'> {{(element.updated_at | date: 'shortDate') || '--'}}</td>
+                    <td mat-cell *matCellDef='let element'> {{(element.created_at | date: 'shortDate') || '--'}}</td>
                   </ng-container>
 
                   <ng-container matColumnDef='category'>
@@ -77,11 +68,13 @@
                     {{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'>
+                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
+                                  [disabled]='(store.isActing$ | async)'
+                                  color='{{filters.controls.category?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #typeMenu='matMenu'>
-                            <mat-selection-list color='primary'
+                            <mat-selection-list color='primary' (selectionChange)='categoryFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
                               <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
                                 <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>
@@ -102,11 +95,14 @@
                     {{constantDataService.FIELD_NAME.DIFFICULTY | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='difficultyMenu'>
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.level?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='difficultyMenu'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #difficultyMenu='matMenu'>
                             <mat-selection-list color='primary'
+                                                (selectionChange)='difficultyFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
                               <mat-list-option *ngFor='let diffType of difficultyIte' [value]='diffType'>
                                 <h6 class='mat-h6'>{{diffType | replaceUnderscore | titlecase}}</h6>
@@ -127,21 +123,27 @@
                     {{constantDataService.FIELD_NAME.INPUTS | slice: 0: 5 | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='inputTypeMenu'>
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.type?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='inputTypeMenu'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #inputTypeMenu='matMenu'>
                             <mat-selection-list color='primary'
+                                                (selectionChange)='typeFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
-                              <mat-list-option *ngFor='let type of testInputTypeIte' [value]='type'>
-                                <h6 class='mat-h6'>{{type | replaceUnderscore | titlecase}}</h6>
-                              </mat-list-option>
+                              <ng-template ngFor [ngForOf]='testInputTypeIte' let-type>
+                                <mat-list-option [value]='type'>
+                                  <h6
+                                    class='mat-h6'>{{type | replaceUnderscore | titlecase}}</h6>
+                                </mat-list-option>
+                              </ng-template>
                             </mat-selection-list>
                           </mat-menu>
                         </div>
                       </div>
                     </th>
-                    <td mat-cell *matCellDef='let element'> {{(element.input || '--')}} </td>
+                    <td mat-cell *matCellDef='let element'> {{(element.inputType || '--')}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef='status'>
@@ -152,17 +154,26 @@
                     {{constantDataService.FIELD_NAME.STATUS | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='statusMenu'>
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='statusMenu'
+                                  [disabled]='(store.isActing$ | async)'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #statusMenu='matMenu'>
+
                             <mat-selection-list color='primary'
+                                                (selectionChange)='updateFilterChange($event, filters.controls.published)'
                                                 [multiple]='false' class='pt-0'>
-                              <mat-list-option [value]='true'>
-                                <h6 class='mat-h6'>{{publishStatusEnum.PUBLISHED | titlecase}}</h6>
+                              <mat-list-option [value]='"TRUE"'>
+                                {{publishStatusEnum.PUBLISHED | titlecase}}
                               </mat-list-option>
-                              <mat-list-option [value]='false'>
-                                <h6 class='mat-h6'>{{publishStatusEnum.UNPUBLISHED | titlecase}}</h6>
+                              <mat-list-option [value]='"FALSE"'>
+                                {{publishStatusEnum.UNPUBLISHED | titlecase}}
+                              </mat-list-option>
+                              <mat-list-option [value]='undefined'>
+                                Clear
                               </mat-list-option>
                             </mat-selection-list>
                           </mat-menu>
@@ -171,8 +182,8 @@
                     </th>
                     <td mat-cell *matCellDef='let element'>
                       <hidden-innovation-common-data-field-status
-                        [chipType]='element.status ? statusChipType.SUCCESS : statusChipType.WARNING'
-                        [text]='((element.status ? publishStatusEnum.PUBLISHED : publishStatusEnum.UNPUBLISHED)  | titlecase)'
+                        [chipType]='element.isPublished ? statusChipType.SUCCESS : statusChipType.WARNING'
+                        [text]='((element.isPublished ? publishStatusEnum.PUBLISHED : publishStatusEnum.UNPUBLISHED)  | titlecase)'
                       ></hidden-innovation-common-data-field-status>
                     </td>
                   </ng-container>
@@ -185,15 +196,15 @@
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #testListMenu='matMenu'>
-                        <button mat-menu-item [routerLink]='["/tests", "edit", "01"]'>
+                        <button mat-menu-item [routerLink]='["/tests", "edit", row.id]'>
                           <mat-icon>create</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>
-                        <button mat-menu-item>
-                          <mat-icon>{{row.isActive ? "block" : "check_circle_outline"}}</mat-icon>
-                          <span>{{(row.isActive ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
+                        <button (click)='store.toggleActive(row.id, row.isPublished)' mat-menu-item>
+                          <mat-icon>{{row.isPublished ? "block" : "check_circle_outline"}}</mat-icon>
+                          <span>{{(row.isPublished ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
                         </button>
-                        <button mat-menu-item>
+                        <button mat-menu-item (click)='deleteTest(row.id)'>
                           <mat-icon>delete</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.DELETE | titlecase}}</span>
                         </button>
@@ -206,7 +217,7 @@
                 </table>
               </div>
             </div>
-            <ng-template [ngIf]='true' [ngIfElse]='noDataElse'></ng-template>
+            <ng-template [ngIf]='store.isLoading$ | async' [ngIfElse]='noDataElse'></ng-template>
             <ng-template #noDataElse>
               <div class='row'>
                 <div class='col-12 d-flex align-items-center justify-content-center'>
@@ -218,8 +229,13 @@
               <div class='col'></div>
               <div class='col-6'>
                 <mat-paginator
-                  [pageSize]='pageSize' [length]='5' [pageIndex]='paginatorIndex'
-                  [pageSizeOptions]='pageSizeOptions'></mat-paginator>
+                  [disabled]='store.isLoading$ | async'
+                  [pageSize]='pageSize'
+                  [length]='store.count$ | async'
+                  [pageIndex]='paginatorIndex'
+                  [pageSizeOptions]='pageSizeOptions'
+                  (page)='pageEvent = $event; onPaginateChange($event)'
+                ></mat-paginator>
               </div>
             </div>
           </div>

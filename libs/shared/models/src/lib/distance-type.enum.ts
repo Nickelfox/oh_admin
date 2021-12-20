@@ -1,0 +1,6 @@
+export enum DistanceTypeEnum {
+  MILLIMETRE = 'MILLIMETRE',
+  CENTIMETRE = 'CENTIMETRE',
+  METRE = 'METRE',
+  KILOMETRE = 'KILOMETRE',
+}

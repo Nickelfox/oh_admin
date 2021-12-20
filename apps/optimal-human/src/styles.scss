@@ -1,6 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '~@angular/material' as mat;
+@use '~@ng-matero/extensions' as mtx;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -259,6 +260,9 @@ $altTheme: (
 @include mat.chips-typography($sf-typography-config);
 @include mat.button-toggle-typography($sf-typography-config);
 
+@include mtx.all-component-themes($theme);
+@include mtx.all-experimental-component-themes($theme);
+
 .theme-alternate {
   @include mat.all-component-themes($altTheme);
 }
@@ -412,4 +416,13 @@ table.mat-table {
 
 .mat-select-arrow {
   margin-top: 6px !important;
+}
+
+.row-react {
+  transition: all .4s cubic-bezier(.17,.67,.83,.67);
+
+  &:hover
+  {
+    background-color: #e0e0e0;
+  }
 }

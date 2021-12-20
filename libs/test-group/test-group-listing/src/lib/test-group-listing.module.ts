@@ -7,6 +7,9 @@ import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-
 import { TestTabGroupModule } from '@hidden-innovation/shared/ui/test-tab-group';
 import { RouterModule } from '@angular/router';
 import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common-data-field-status';
+import { TestGroupDataAccessModule } from '@hidden-innovation/test-group/data-access';
+import { SortingHeaderNameModule } from '@hidden-innovation/shared/ui/sorting-header-name';
+import { SortingHeaderDateModule } from '@hidden-innovation/shared/ui/sorting-header-date';
 
 @NgModule({
   imports: [
@@ -16,6 +19,9 @@ import { CommonDataFieldStatusModule } from '@hidden-innovation/shared/ui/common
     CommonFormFieldModule,
     CommonDataFieldStatusModule,
     TestTabGroupModule,
+    SortingHeaderNameModule,
+    SortingHeaderDateModule,
+    TestGroupDataAccessModule,
     RouterModule.forChild([
       {
         path: '',

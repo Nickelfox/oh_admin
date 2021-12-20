@@ -71,6 +71,14 @@ export class QuestionnaireListingComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  resetRoute(): void {
+    this.router.navigate([
+      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
+    ], {
+      relativeTo: this.route
+    });
+  }
+
   refreshList(): void {
     const { nameSort, dateSort, scoring, active, search } = this.filters.value;
     this.store.getQuestionnaires$({
@@ -89,6 +97,9 @@ export class QuestionnaireListingComponent implements OnInit {
       ({ questionnaires }) => {
         this.questionnaires = new MatTableDataSource<Questionnaire>(questionnaires);
         this.noData = this.questionnaires.connect().pipe(map(data => data.length === 0));
+        if (!questionnaires?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+          this.resetRoute();
+        }
         this.cdr.markForCheck();
       }
     );

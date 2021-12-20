@@ -90,11 +90,13 @@ export class TagsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.catFilter);
     this.store.state$.subscribe(
       ({ tags }) => {
         this.tags = new MatTableDataSource<Tag>(tags);
         this.noData = this.tags.connect().pipe(map(data => data.length === 0));
+        if (!tags?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+          this.resetRoute();
+        }
         this.cdr.markForCheck();
       }
     );
@@ -117,6 +119,14 @@ export class TagsComponent implements OnInit {
     });
   }
 
+  resetRoute(): void {
+    this.router.navigate([
+      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
+    ], {
+      relativeTo: this.route
+    });
+  }
+
   onPaginateChange($event: PageEvent): void {
     this.router.navigate([
       this.listingRoute, $event.pageSize, $event.pageIndex + 1
@@ -130,11 +140,7 @@ export class TagsComponent implements OnInit {
   }
 
   resetFilters(): void {
-    this.router.navigate([
-      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
-    ], {
-      relativeTo: this.route
-    });
+    this.resetRoute();
     this.filters.enable();
     this.filters.reset({
       dateSort: SortingEnum.DESC,
