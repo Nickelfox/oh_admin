@@ -417,3 +417,12 @@ table.mat-table {
 .mat-select-arrow {
   margin-top: 6px !important;
 }
+
+.row-react {
+  transition: all .4s cubic-bezier(.17,.67,.83,.67);
+
+  &:hover
+  {
+    background-color: #e0e0e0;
+  }
+}

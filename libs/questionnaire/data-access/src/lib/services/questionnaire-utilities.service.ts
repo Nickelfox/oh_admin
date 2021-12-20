@@ -36,12 +36,19 @@ export class QuestionnaireUtilitiesService {
     const question: FormGroup<Question> = new FormGroup<Question>({
       name: new FormControl<string>(questionData?.name ?? '', [
         RxwebValidators.required(),
-        RxwebValidators.notEmpty()
+        RxwebValidators.notEmpty(),
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.QUESTION_NAME_LENGTH
+        })
       ]),
       questionType: new FormControl<QuestionTypeEnum>(type, [
         Validators.required
       ]),
-      description: new FormControl<string>(questionData?.description ?? ''),
+      description: new FormControl<string>(questionData?.description ?? '', [
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.QUESTION_DESC_LENGTH
+        })
+      ]),
       whyAreWeAsking: new FormControl<boolean>(questionData?.whyAreWeAsking ?? false),
       whyAreWeAskingQuestion: new FormControl<string>({
         value: questionData?.whyAreWeAskingQuestion ?? '',

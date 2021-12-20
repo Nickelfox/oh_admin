@@ -63,39 +63,12 @@
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Sub Category</mat-label>
-                    <input
-                      autocomplete='no'
-                      #input
-                      (keyup)='getTags(input.value)'
-                      (focusin)='getTags(input.value)'
-                      type='text' matInput formControlName='subCategory' [matAutocomplete]='auto'>
-                    <mat-autocomplete #auto='matAutocomplete' [displayWith]='displayFn'>
-                      <ng-template [ngIf]='(tagsStore.isLoading$ | async)' [ngIfElse]='exElse'>
-                        <mat-option disabled>
-                          <div class='w-100 d-flex align-items-center justify-content-center'>
-                            <mat-spinner [diameter]='18'></mat-spinner>
-                          </div>
-                        </mat-option>
-                      </ng-template>
-                      <ng-template #exElse>
-                        <ng-template [ngIf]='(tagsStore.count$ | async)' [ngIfElse]='exCountElse'>
-                          <ng-template ngFor [ngForOf]='(tagsStore.tags$ | async)' let-tag>
-                            <mat-option *ngIf='isExistingTag(tag)' [value]='tag'>
-                              {{tag.name}}
-                            </mat-option>
-                          </ng-template>
-                        </ng-template>
-                        <ng-template #exCountElse>
-                          <mat-option disabled>No Results Found</mat-option>
-                        </ng-template>
-                      </ng-template>
-                      <mat-option *ngFor='let option of (tagsStore.tags$) | async' [value]='option'>
-                        {{option.name}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
+                  <hidden-innovation-common-form-field-tag-autocomplete
+                    controlPath='subCategory'
+                    fieldType='INPUT'
+                    label='Sub Category'
+                    [tagCategory]='testGroup.controls.category.value'
+                  ></hidden-innovation-common-form-field-tag-autocomplete>
                 </div>
               </div>
               <div class='row mb-2'>
@@ -116,31 +89,10 @@
               </div>
               <div class='row mb-3'>
                 <div class='col-12'>
-                  <p class='text-muted mb-2'>Video File</p>
-                  <div class='d-flex align-items-center'>
-                    <hidden-innovation-common-form-field-video
-                      controlPath='videoId'
-                      [parentCtrl]='testGroup.controls.videoId'
-                      (emitVideoCtrlData)='testGroup.controls.videoId?.setValue($event)'
-                      (emitRemoveVideo)='testGroup.controls.videoId?.reset($event)'
-                    ></hidden-innovation-common-form-field-video>
-                    <div class='ml-2'>
-                      <mat-hint>
-                        <small>({{constantDataService.FIZE_SIZE_DATA.videoFormatMessage}})</small>
-                      </mat-hint>
-                      <br>
-                      <mat-hint>
-                        <small>({{constantDataService.FIZE_SIZE_DATA.videoRatioMessage}})</small>
-                      </mat-hint>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class='row mb-3'>
-                <div class='col-12'>
                   <p class='text-muted mb-2'>Thumbnail</p>
                   <hidden-innovation-common-form-field-image
                     controlPath='thumbnailId'
+                    [setImageData]='selectedTestGroup?.thumbnail'
                     [aspectRatio]='aspectRatio.STANDARD'
                     [parentCtrl]='testGroup.controls.thumbnailId'
                     (emitImageCtrlData)='testGroup.controls.thumbnailId?.setValue($event)'
@@ -153,6 +105,7 @@
                   <p class='text-muted mb-2'>Poster</p>
                   <hidden-innovation-common-form-field-image
                     controlPath='imageId'
+                    [setImageData]='selectedTestGroup?.image'
                     [aspectRatio]='aspectRatio.CUBE'
                     [parentCtrl]='testGroup.controls.imageId'
                     (emitImageCtrlData)='testGroup.controls.imageId?.setValue($event)'
@@ -173,9 +126,26 @@
           <mat-card-content>
             <mat-card class='mat-elevation-z3 p-3 mb-3' [ngClass]='{"mt-4" : isFirst, "mb-0": isLast }'
                       *ngFor='let test of (store.selectedTests$ | async); first as isFirst; last as isLast'>
-              <h4 class='mat-h4 mb-0 font-weight-bold'>{{test.name || '--'}}</h4>
-              <h5
-                class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>{{(test.category | titlecase) || '--'}}</h5>
+              <div class='container-fluid p-0'>
+                <div class='row'>
+                  <div class='col-10'>
+                    <h4 class='mat-h4 mb-0 font-weight-bold'>{{test.name || '--'}}</h4>
+                    <h5
+                      class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>{{(test.category | titlecase) || '--'}}</h5>
+                  </div>
+                  <div class='col-2 d-flex justify-content-end'>
+                    <button type='button' mat-icon-button [matMenuTriggerFor]='testOption'>
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #testOption='matMenu'>
+                      <button type='button' mat-menu-item>
+                        <mat-icon>delete</mat-icon>
+                        <span>Delete</span>
+                      </button>
+                    </mat-menu>
+                  </div>
+                </div>
+              </div>
             </mat-card>
           </mat-card-content>
           <mat-card-actions>
@@ -188,7 +158,14 @@
             </button>
           </mat-card-actions>
         </mat-card>
-        <mat-hint><small>{{formValidationService.testSelectionValidationMessage.minLength}}</small></mat-hint>
+        <ng-template
+          [ngIf]='!testsIsValid && ((testGroup.controls.tests.touch$ | async) || (testGroup.controls.tests.dirty$ | async))'
+          [ngIfElse]='minTetsLengthElse'>
+          <mat-error><small>{{formValidationService.testSelectionValidationMessage.minLength}}</small></mat-error>
+        </ng-template>
+        <ng-template #minTetsLengthElse>
+          <mat-hint><small>{{formValidationService.testSelectionValidationMessage.minLength}}</small></mat-hint>
+        </ng-template>
       </div>
     </div>
   </div>

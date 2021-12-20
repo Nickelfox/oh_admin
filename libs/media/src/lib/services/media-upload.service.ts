@@ -21,6 +21,7 @@ export class MediaUploadService {
   uploadMedia(file: Blob | File, fileName: string, token?: string): Observable<MediaUpload> {
     const formData: FormData = new FormData();
     formData.append('file', file, fileName);
+    formData.append('type', file.type.split('/')[0]);
     return this.httpClient.post<MediaUploadResponse>(`${this.env.baseURL}/v1/users/upload`, formData, {
       headers: {
         'Accept': 'application/json',

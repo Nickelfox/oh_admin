@@ -9,9 +9,8 @@ export interface TestGroupCore {
   subCategory: string | Tag;
   thumbnailId: number | undefined;
   imageId: number | undefined;
-  videoId: number | undefined;
   description: string;
-  is_visible: boolean;
+  isVisible: boolean;
   tests: Test[] | number[];
 }
 
@@ -44,4 +43,25 @@ export interface TestGroupListingResponse extends CustomApiResponse {
 export interface TestGroupListingResponseData {
   test_groups: TestGroup[];
   count: number;
+}
+
+export interface CreateTestGroupResponse extends CustomApiResponse {
+  data: {
+    testGroup: TestGroup;
+  }
+}
+
+export interface TestGroupDetailsResponse extends CustomApiResponse {
+  data: TestGroup;
+}
+
+export interface TestGroupPublishToggleRequest {
+  newState: boolean;
+  id: number;
+}
+
+export interface TestGroupDeleteRequest extends TestGroupListingFilters {
+  id: number;
+  pageIndex: number;
+  pageSize: number;
 }

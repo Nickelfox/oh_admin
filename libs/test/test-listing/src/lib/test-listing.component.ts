@@ -211,7 +211,7 @@ export class TestListingComponent implements OnInit {
     }
   }
 
-  deleteQuestionnaire(id: number) {
+  deleteTest(id: number) {
     const { category, level, type, published, dateSort, nameSort, search } = this.filters.value;
     const deleteObj: TestDeleteRequest = {
       id,
