@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import {
   DifficultyEnum,
+  GenericDialogPrompt,
   PublishStatusEnum,
   SortingEnum,
   StatusChipType,
@@ -13,13 +14,14 @@ import {
 } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
 import { ActivatedRoute } from '@angular/router';
-import { difference, isEqual } from 'lodash-es';
+import { differenceBy, isEqual } from 'lodash-es';
 import { TestGroupStore } from '@hidden-innovation/test-group/data-access';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -62,9 +64,11 @@ export class TestSelectorComponent implements OnInit {
   selectedTests: Test[] = [];
 
   initialised = false;
+  dummyTests: Test[] = [];
 
   constructor(
     public matDialogRef: MatDialogRef<Test[]>,
+    private matDialog: MatDialog,
     public constantDataService: ConstantDataService,
     public store: TestStore,
     private groupStore: TestGroupStore,
@@ -74,6 +78,7 @@ export class TestSelectorComponent implements OnInit {
     this.noData = this.tests.connect().pipe(map(data => data.length === 0));
     this.groupStore.selectedTests$.subscribe(tests => {
       this.selectedTests = tests;
+      this.dummyTests = tests;
     });
     if (!this.initialised) {
       this.groupStore.patchState({
@@ -240,5 +245,35 @@ export class TestSelectorComponent implements OnInit {
       ]
     });
     this.matDialogRef.close();
+  }
+
+  closeDialog(): void {
+    const isDifferent = differenceBy(this.selectedTests, [...this.dummyTests], 'id');
+    if (isDifferent.length) {
+      const dialogData: GenericDialogPrompt = {
+        title: 'Review Changes',
+        desc: `You have made changes. Do you want to save them?`,
+        action: {
+          posTitle: 'Save',
+          negTitle: 'Discard',
+          type: 'mat-primary'
+        }
+      };
+      const dialogRef = this.matDialog.open(PromptDialogComponent, {
+        data: dialogData,
+        minWidth: '25rem'
+      });
+      dialogRef.afterClosed().subscribe((proceed: boolean) => {
+        if (proceed === true) {
+          this.saveSelectedTests();
+        } else if (proceed === false) {
+          this.matDialogRef.close();
+        } else {
+          dialogRef.close();
+        }
+      });
+    } else {
+      this.matDialogRef.close();
+    }
   }
 }
