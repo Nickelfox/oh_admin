@@ -2,7 +2,7 @@
   <div class='d-flex align-items-center justify-content-between'>
     <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
       ADD TEST OPTIONS TO GROUP</h4>
-    <button mat-icon-button mat-dialog-close>
+    <button mat-icon-button (click)='closeDialog()'>
       <mat-icon>close</mat-icon>
     </button>
   </div>
@@ -240,6 +240,6 @@
   </div>
 </div>
 <div mat-dialog-actions align='end'>
-  <button mat-button mat-dialog-close cdkFocusInitial>Cancel</button>
+  <button mat-button (click)='closeDialog()' cdkFocusInitial>Cancel</button>
   <button mat-flat-button color='primary' (click)='saveSelectedTests()'>Save</button>
 </div>
