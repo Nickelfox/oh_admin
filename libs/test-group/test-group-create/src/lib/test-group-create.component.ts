@@ -19,7 +19,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Test, TestDeleteRequest } from '@hidden-innovation/test/data-access';
+import { Test } from '@hidden-innovation/test/data-access';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -77,6 +77,7 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
   });
 
   opType?: OperationTypeEnum;
+  selectedTests: Test[] = [];
   private testGroupID?: number;
 
   constructor(
@@ -116,6 +117,7 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
     const { category, subCategory, tests, isVisible } = this.testGroup.controls;
     const testFormArray: FormArray<number> = tests as FormArray<number>;
     this.store.selectedTests$.subscribe(newTests => {
+      this.selectedTests = newTests;
       testFormArray.clear();
       newTests.forEach(t => {
         testFormArray.push(new FormControl<number>(t.id, [RxwebValidators.required()]));
@@ -141,6 +143,20 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+  }
+
+  trackByFn(index: number, test: Test): number {
+    return test.id;
+  }
+
+  deleteSelectedTest(test: Test): void {
+    if (this.selectedTests.find(value => value.id === test.id)) {
+      this.store.patchState({
+        selectedTests: [
+          ...this.selectedTests.filter(t => t.id !== test.id)
+        ]
+      });
+    }
   }
 
   submit(): void {
