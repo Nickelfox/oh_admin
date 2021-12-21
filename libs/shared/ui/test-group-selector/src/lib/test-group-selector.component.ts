@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
 import { PageEvent } from '@angular/material/paginator';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { MatDialogRef } from '@angular/material/dialog';
-import { PackCore } from '@hidden-innovation/pack/data-access';
+import { Pack } from '@hidden-innovation/pack/data-access';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { SelectionModel } from '@angular/cdk/collections';
@@ -36,7 +36,7 @@ export class TestGroupSelectorComponent implements OnInit {
 
   constructor(
     public constantDataService: ConstantDataService,
-    public matDialogRef: MatDialogRef<PackCore[]>
+    public matDialogRef: MatDialogRef<Pack[]>
   ) {
     this.noData = this.testGroup.connect().pipe(map(data => data.length === 0));
   }

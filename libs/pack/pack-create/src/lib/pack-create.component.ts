@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
-import { PackCore } from '@hidden-innovation/pack/data-access';
+import { Pack } from '@hidden-innovation/pack/data-access';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
 import { TestGroupSelectorComponent } from '@hidden-innovation/shared/ui/test-group-selector';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -42,7 +42,7 @@ export class PackCreateComponent implements OnInit {
       data: lessonCreateReqObj,
       minWidth: '25rem'
     });
-    dialogRef.afterClosed().subscribe( (pack: PackCore[]) => {
+    dialogRef.afterClosed().subscribe( (pack: Pack[]) => {
       if (pack) {
         return;
       }
@@ -58,7 +58,7 @@ export class PackCreateComponent implements OnInit {
       maxWidth: '100%',
       role: 'dialog'
     });
-    dialogRef.afterClosed().subscribe((pack: PackCore[] | undefined) => {
+    dialogRef.afterClosed().subscribe((pack: Pack[] | undefined) => {
       if (pack) {
         return;
       }

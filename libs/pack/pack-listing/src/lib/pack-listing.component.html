@@ -4,14 +4,15 @@
       <div class='col-3'>
         <mat-form-field class='w-100'>
           <mat-label>Search</mat-label>
-          <input matInput>
-          <button mat-icon-button matSuffix *ngIf='false'>
+          <input matInput autocomplete='off' [formControl]='filters.controls.search'>
+          <button mat-icon-button matSuffix *ngIf='filters.controls.search.value'
+                  (click)='filters.controls.search.setValue("")'>
             <mat-icon style='font-size: 14px'>close</mat-icon>
           </button>
         </mat-form-field>
       </div>
       <div class='col d-flex align-items-center justify-content-end'>
-        <mat-spinner class='mr-4' [diameter]='20' *ngIf='true'></mat-spinner>
+        <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
         <button mat-flat-button color='primary' class='ml-2' [routerLink]='["/packs", "create"]' >
           <mat-icon class='mr-2'>add</mat-icon>
           {{"Add Pack"}}
@@ -97,17 +98,25 @@
                     {{constantDataService.FIELD_NAME.STATUS | titlecase}}
                   </span>
                         <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='statusMenu'>
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='statusMenu'
+                                  [disabled]='(store.isActing$ | async)'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #statusMenu='matMenu'>
                             <mat-selection-list color='primary'
+                                                (selectionChange)='updateFilterChange($event, filters.controls.published)'
                                                 [multiple]='false' class='pt-0'>
-                              <mat-list-option [value]='true'>
-                                <h6 class='mat-h6'>Published</h6>
+                              <mat-list-option [value]='"TRUE"'>
+                                {{publishStatusEnum.PUBLISHED | titlecase}}
                               </mat-list-option>
-                              <mat-list-option [value]='false'>
-                                <h6 class='mat-h6'>Unpulished</h6>
+                              <mat-list-option [value]='"FALSE"'>
+                                {{publishStatusEnum.UNPUBLISHED | titlecase}}
+                              </mat-list-option>
+                              <mat-list-option [value]='undefined'>
+                                Clear
                               </mat-list-option>
                             </mat-selection-list>
                           </mat-menu>
@@ -116,8 +125,8 @@
                     </th>
                     <td mat-cell *matCellDef='let element'>
                       <hidden-innovation-common-data-field-status
-                        [chipType]='element.status ? statusChipType.SUCCESS : statusChipType.WARNING'
-                        [text]='((element.status ? publishStatusEnum.PUBLISHED : publishStatusEnum.UNPUBLISHED)  | titlecase)'
+                        [chipType]='element.isPublished ? statusChipType.SUCCESS : statusChipType.WARNING'
+                        [text]='((element.isPublished ? publishStatusEnum.PUBLISHED : publishStatusEnum.UNPUBLISHED)  | titlecase)'
                       ></hidden-innovation-common-data-field-status>
                     </td>
                   </ng-container>
@@ -134,8 +143,8 @@
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>
                         <button mat-menu-item>
-                          <mat-icon>{{row.isActive ? "block" : "check_circle_outline"}}</mat-icon>
-                          <span>{{(row.isActive ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
+                          <mat-icon>{{row.isPublished ? "block" : "check_circle_outline"}}</mat-icon>
+                          <span>{{(row.isPublished ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
                         </button>
                         <button mat-menu-item>
                           <mat-icon>delete</mat-icon>
