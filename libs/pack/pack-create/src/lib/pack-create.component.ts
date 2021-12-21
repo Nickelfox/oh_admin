@@ -3,11 +3,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
 import { PackCore } from '@hidden-innovation/pack/data-access';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
-import { TestCore } from '@hidden-innovation/test/data-access';
 import { TestGroupSelectorComponent } from '@hidden-innovation/shared/ui/test-group-selector';
 import { SelectionModel } from '@angular/cdk/collections';
 import { QuestionnaireSelectorComponent } from '@hidden-innovation/shared/ui/questionnaire-selector';
 import { Questionnaire } from '@hidden-innovation/questionnaire/data-access';
+import { TestGroupCore } from '@hidden-innovation/test-group/data-access';
 
 export interface LessonDialogReq {
   isNew: boolean;
@@ -23,7 +23,7 @@ export interface LessonDialogReq {
 })
 export class PackCreateComponent implements OnInit {
 
-  selection = new SelectionModel<TestCore>(true, []);
+  selection = new SelectionModel<TestGroupCore>(true, []);
 
   constructor(
     private matDialog: MatDialog,
@@ -73,7 +73,7 @@ export class PackCreateComponent implements OnInit {
       maxWidth: '100%',
       role: 'dialog'
     });
-    dialogRef.afterClosed().subscribe((tests: TestCore[] | undefined) => {
+    dialogRef.afterClosed().subscribe((tests: TestGroupCore[] | undefined) => {
       if (tests) {
         return;
       }
