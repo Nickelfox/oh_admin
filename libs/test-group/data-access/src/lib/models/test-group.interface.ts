@@ -19,6 +19,7 @@ export interface TestGroup extends TestGroupCore {
   deleted_at: string;
   created_at: string;
   updated_at: string;
+  category: TagCategoryEnum;
   thumbnail: Media;
   image: Media;
 }

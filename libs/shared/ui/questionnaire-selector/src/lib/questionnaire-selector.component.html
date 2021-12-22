@@ -1,0 +1,40 @@
+<div mat-dialog-title>
+  <div class='d-flex align-items-center justify-content-between'>
+    <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
+      ADD QUESTIONNAIRE OPTIONS TO GROUP</h4>
+    <button mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<div class='container-fluid p-0'>
+  <div class='row'>
+    <div class='col-3'>
+      <mat-form-field class='w-100'>
+        <mat-label>Search</mat-label>
+        <input matInput>
+        <button mat-icon-button matSuffix *ngIf='false'>
+          <mat-icon style='font-size: 14px'>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class='col d-flex align-items-center justify-content-end'>
+      <mat-spinner class='mr-2' [diameter]='20' *ngIf='true'></mat-spinner>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-12'>
+      <mat-card class='p-0'>
+        <mat-paginator
+          [pageSize]='pageSize' [length]='5' [pageIndex]='paginatorIndex'
+          [pageSizeOptions]='pageSizeOptions'></mat-paginator>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+
+<div mat-dialog-actions align='end'>
+  <button mat-button mat-dialog-close cdkFocusInitial>Cancel</button>
+  <button mat-flat-button color='primary'>Save</button>
+</div>
