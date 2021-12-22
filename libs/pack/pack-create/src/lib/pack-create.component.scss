@@ -6,3 +6,10 @@
   }
 }
 
+
+.content-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 0 0.4rem;
+  margin: 0.55rem 0 0;
+}

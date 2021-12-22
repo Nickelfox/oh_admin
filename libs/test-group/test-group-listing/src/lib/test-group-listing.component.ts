@@ -129,7 +129,7 @@ export class TestGroupListingComponent implements OnInit {
     });
   }
 
-  updateSorting(fieldName: 'type' | 'category' | 'dateSort' | 'nameSort'): void {
+  updateSorting(fieldName: 'dateSort' | 'nameSort'): void {
     const { nameSort, dateSort } = this.filters.controls;
 
     const updateSortingCtrl = (ctrl: FormControl) => {

@@ -90,6 +90,10 @@ export class FormValidationService {
       acceptValue: NumericValueType.Both
     })
   ];
+  requiredFieldValidation: ValidatorFn[] = [
+    RxwebValidators.required(),
+    RxwebValidators.notEmpty()
+  ];
   // Reference: https://regex101.com/r/0bH043/1
   private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
 

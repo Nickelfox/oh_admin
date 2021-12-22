@@ -1,12 +1,13 @@
 import { Media } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
+import { TagCategoryEnum } from '@hidden-innovation/shared/models';
 
 export interface LessonCore {
   name: string;
-  category: string;
+  category: TagCategoryEnum | undefined;
   videoId: number;
   thumbnailId: number;
-  tagIds: number[];
+  tagIds: number[] | Tag[];
 }
 
 export interface Lesson extends LessonCore {

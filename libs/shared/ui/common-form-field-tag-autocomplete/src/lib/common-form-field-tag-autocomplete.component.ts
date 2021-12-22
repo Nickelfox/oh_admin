@@ -10,8 +10,7 @@ import {
 import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
-import { paginatorData } from '@hidden-innovation/user/data-access';
-import { FormValidationService, GenericErrorMessage } from '@hidden-innovation/shared/form-config';
+import { ConstantDataService, FormValidationService, GenericErrorMessage } from '@hidden-innovation/shared/form-config';
 import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
 
@@ -133,14 +132,16 @@ export class CommonFormFieldTagAutocompleteComponent implements OnInit {
   constructor(
     public store: TagsStore,
     private fgd: FormGroupDirective,
-    public formValidationService: FormValidationService
+    public formValidationService: FormValidationService,
+    public constantDataService: ConstantDataService
   ) {
+    console.log(this.tagTypeEnum);
   }
 
   getTags(cat: TagTypeEnum, search?: string) {
     this.store.getTags$({
-      page: paginatorData.pageIndex,
-      limit: paginatorData.pageSize,
+      page: this.constantDataService.PaginatorData.pageIndex,
+      limit: this.constantDataService.PaginatorData.pageSize,
       type: [cat],
       search: search ?? undefined,
       dateSort: undefined,
@@ -151,8 +152,8 @@ export class CommonFormFieldTagAutocompleteComponent implements OnInit {
 
   getTagsTypeSingle(search?: string) {
     this.store.getTags$({
-      page: paginatorData.pageIndex,
-      limit: paginatorData.pageSize,
+      page: this.constantDataService.PaginatorData.pageIndex,
+      limit: this.constantDataService.PaginatorData.pageSize,
       type: [TagTypeEnum.SUB_CATEGORY],
       search: search ?? undefined,
       dateSort: undefined,

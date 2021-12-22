@@ -17,11 +17,10 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { ActivatedRoute } from '@angular/router';
 import { differenceBy, isEqual } from 'lodash-es';
-import { TestGroupStore } from '@hidden-innovation/test-group/data-access';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { UiStore } from '@hidden-innovation/shared/store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -71,17 +70,16 @@ export class TestSelectorComponent implements OnInit {
     private matDialog: MatDialog,
     public constantDataService: ConstantDataService,
     public store: TestStore,
-    private groupStore: TestGroupStore,
-    private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public uiStore: UiStore
   ) {
     this.noData = this.tests.connect().pipe(map(data => data.length === 0));
-    this.groupStore.selectedTests$.subscribe(tests => {
+    this.uiStore.selectedTests$.subscribe(tests => {
       this.selectedTests = tests;
       this.dummyTests = tests;
     });
     if (!this.initialised) {
-      this.groupStore.patchState({
+      this.uiStore.patchState({
         selectedTests: this.selectedTests
       });
       this.initialised = true;
@@ -239,7 +237,7 @@ export class TestSelectorComponent implements OnInit {
   }
 
   saveSelectedTests(): void {
-    this.groupStore.patchState({
+    this.uiStore.patchState({
       selectedTests: [
         ...this.selectedTests
       ]

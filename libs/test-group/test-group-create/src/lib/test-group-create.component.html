@@ -125,7 +125,7 @@
           <mat-divider></mat-divider>
           <mat-card-content>
             <mat-card class='mat-elevation-z3 p-3 mb-3' [ngClass]='{"mt-4" : isFirst, "mb-0": isLast }'
-                      *ngFor='let test of (store.selectedTests$ | async); first as isFirst; last as isLast; trackBy: trackByFn'>
+                      *ngFor='let test of (uiStore.selectedTests$ | async); first as isFirst; last as isLast; trackBy: trackByFn'>
               <div class='container-fluid p-0'>
                 <div class='row'>
                   <div class='col-10'>

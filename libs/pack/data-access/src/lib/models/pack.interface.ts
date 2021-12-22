@@ -10,7 +10,7 @@ export interface PackCore {
   description: string;
   thumbnailId: number;
   isPublished: boolean;
-  imageId: number;
+  // imageId: number;
   urls: string[];
   posterId: number;
   lessons: LessonCore[];
@@ -24,7 +24,7 @@ export interface Pack extends PackCore {
   lessons: Lesson[];
   tests: Test[];
   testGroups: TestGroup[];
-  image: Media;
+  // image: Media;
   thumbnail: Media;
   questionnaires: QuestionnaireExtended[];
   poster: Media;
@@ -52,4 +52,8 @@ export interface PackListingResponse extends CustomApiResponse {
 export interface PackListingResponseData {
   packs: Pack[],
   count: number;
+}
+
+export interface PackMutationResponse extends CustomApiResponse {
+  data: Pack;
 }

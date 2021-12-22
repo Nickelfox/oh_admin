@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Pack, PackListingRequest } from '../models/pack.interface';
+import { Pack, PackCore, PackListingRequest } from '../models/pack.interface';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { PackService } from '../services/pack.service';
+import { Router } from '@angular/router';
+import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
+import { MatDialog } from '@angular/material/dialog';
+import { Test } from '@hidden-innovation/test/data-access';
+import { TestGroup } from '@hidden-innovation/test-group/data-access';
+import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
+import { Lesson } from '../models/lesson.interface';
 
 export interface PackState {
   packs: Pack[];
@@ -60,8 +67,53 @@ export class PackStore extends ComponentStore<PackState> {
     )
   );
 
+  private toastRef: CreateHotToastRef<unknown> | undefined;
+
+  createPack$ = this.effect<PackCore>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Creating new Pack...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap((pack) =>
+        this.packService.createPack(pack).pipe(
+          tapResponse(
+            (_) => {
+              this.patchState({
+                isActing: false,
+                loaded: true
+              });
+              this.toastRef?.updateMessage('Pack Created!');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success',
+                duration: 300
+              });
+              this.router.navigate(['/packs']);
+            },
+            _ => {
+              this.patchState({
+                isActing: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
   constructor(
-    private packService: PackService
+    private packService: PackService,
+    private router: Router,
+    private hotToastService: HotToastService,
+    private matDialog: MatDialog
   ) {
     super(initialState);
   }

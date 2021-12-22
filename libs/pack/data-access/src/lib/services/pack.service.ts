@@ -1,5 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
-import { PackListingRequest, PackListingResponse, PackListingResponseData } from '../models/pack.interface';
+import {
+  Pack,
+  PackCore,
+  PackListingRequest,
+  PackListingResponse,
+  PackListingResponseData,
+  PackMutationResponse
+} from '../models/pack.interface';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { catchError, map } from 'rxjs/operators';
@@ -37,6 +44,11 @@ export class PackService {
     );
   }
 
-
+  createPack(obj: PackCore): Observable<Pack> {
+    return this.http.post<PackMutationResponse>(`${this.env.baseURL}/v1/admin/get-all-pack`, obj).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
 
 }
