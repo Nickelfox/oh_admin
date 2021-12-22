@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { PackListingRequest, PackListingResponse, PackListingResponseData } from '@hidden-innovation/pack/data-access';
+import { PackListingRequest, PackListingResponse, PackListingResponseData } from '../models/pack.interface';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { catchError, map } from 'rxjs/operators';

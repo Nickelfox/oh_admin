@@ -14,8 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Test } from '@hidden-innovation/test/data-access';
-import { PackStore } from '../../../../../pack/data-access/src/lib/store/pack.store';
+import { PackStore } from '@hidden-innovation/pack/data-access';
 
 @UntilDestroy({ checkProperties: true })
 @Component({

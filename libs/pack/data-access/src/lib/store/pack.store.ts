@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Pack, PackListingRequest } from '@hidden-innovation/pack/data-access';
+import { Pack, PackListingRequest } from '../models/pack.interface';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { PackService } from '../services/pack.service';
