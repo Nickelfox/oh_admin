@@ -1,14 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Pack, PackListingFilters } from '@hidden-innovation/pack/data-access';
+import { Pack, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { PageEvent } from '@angular/material/paginator';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { TestGroup, TestGroupListingFilters } from '@hidden-innovation/test-group/data-access';
-import { PackStore } from '../../../data-access/src/lib/store/pack.store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
@@ -40,7 +38,7 @@ export class PackListingComponent implements OnInit {
     dateSort: new FormControl(SortingEnum.DESC),
     nameSort: new FormControl({ value: undefined, disabled: true }),
     search: new FormControl(undefined),
-    published: new FormControl(undefined),
+    published: new FormControl(undefined)
   });
 
   listingRoute = '/packs/listing/';
