@@ -65,7 +65,7 @@
                         </span>
                       </div>
                     </th>
-                    <td mat-cell *matCellDef='let element'> {{((element.lessons) || '--')}} </td>
+                    <td mat-cell *matCellDef='let element'> {{((element.lessons?.length) || 0)}} </td>
                   </ng-container>
                   <ng-container matColumnDef='tests'>
                     <th mat-header-cell
@@ -76,7 +76,29 @@
                         </span>
                       </div>
                     </th>
-                    <td mat-cell *matCellDef='let element'> {{((element.tests) || '--')}} </td>
+                    <td mat-cell *matCellDef='let element'> {{((element.tests?.length) || 0)}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='testGroups'>
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                        <span>
+                        Test Groups
+                        </span>
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'> {{((element.testGroups?.length) || 0)}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='questionnaires'>
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                        <span>
+                        Questionnaires
+                        </span>
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'> {{((element.questionnaires?.length) || 0)}} </td>
                   </ng-container>
                   <ng-container matColumnDef='status'>
                     <th mat-header-cell
