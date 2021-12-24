@@ -7,7 +7,7 @@ import { MediaUpload, MediaUploadResponse } from '../models/media.interface';
 import { AuthFacade } from '@hidden-innovation/auth';
 
 @Injectable()
-export class MediaUploadService {
+export class MediaService {
 
   private httpClient: HttpClient;
 
@@ -30,6 +30,12 @@ export class MediaUploadService {
     }).pipe(
       map(res => res.data)
     );
+  }
+
+  removeExtension(filename: string): string {
+    const lastDotPosition = filename.lastIndexOf('.');
+    if (lastDotPosition === -1) return filename;
+    else return filename.substr(0, lastDotPosition);
   }
 
 }

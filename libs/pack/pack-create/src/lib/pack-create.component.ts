@@ -20,11 +20,13 @@ import { Test } from '@hidden-innovation/test/data-access';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { AspectRatio } from '@hidden-innovation/media';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 export interface LessonDialogReq {
   isNew: boolean;
 }
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-pack-create',
   templateUrl: './pack-create.component.html',
@@ -110,14 +112,15 @@ export class PackCreateComponent implements OnInit, OnDestroy {
       });
     });
     selectedLessons$.subscribe(newLessons => {
+      console.log(newLessons);
       this.selectedLessons = newLessons;
       questionnaireFromArray.clear();
       lessons.setValue(newLessons ?? []);
     });
   }
 
-  get lessonFormArray(): FormArray<LessonCore> {
-    return this.packForm.controls.lessons as FormArray<LessonCore>;
+  get urlFormArray(): FormArray<string> {
+    return this.packForm.controls.urls as FormArray<string>;
   }
 
   ngOnInit(): void {
@@ -133,21 +136,6 @@ export class PackCreateComponent implements OnInit, OnDestroy {
 
   buildQuestionnaireForm(q: QuestionnaireExtended): FormControl<number> {
     return this.fb.control<number>(q.id, [...this.formValidationService.requiredFieldValidation]);
-  }
-
-  openCreateLessonDialog(): void {
-    const lessonCreateReqObj: LessonDialogReq = {
-      isNew: true
-    };
-    const dialogRef = this.matDialog.open(LessonCreateComponent, {
-      data: lessonCreateReqObj,
-      minWidth: '25rem'
-    });
-    dialogRef.afterClosed().subscribe((pack: Pack[]) => {
-      if (pack) {
-        return;
-      }
-    });
   }
 
   trackTestByFn(index: number, test: Test): number {
@@ -196,14 +184,12 @@ export class PackCreateComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteSelectedLesson(lesson: Lesson): void {
-    if (this.selectedLessons.find(value => value.id === lesson.id)) {
-      this.uiStore.patchState({
-        selectedLessons: [
-          ...this.selectedLessons.filter(l => l.id !== lesson.id)
-        ]
-      });
-    }
+  deleteSelectedLesson(i: number): void {
+    this.uiStore.patchState({
+      selectedLessons: [
+        ...this.selectedLessons.filter((value, index) => i !== index)
+      ]
+    });
   }
 
   openTestGroupDialog(): void {
@@ -246,6 +232,34 @@ export class PackCreateComponent implements OnInit, OnDestroy {
     });
     // dialogRef.afterClosed().subscribe((questions: Questionnaire[] | undefined) => {
     // });
+  }
+
+  openCreateLessonDialog(): void {
+    const dialogRef = this.matDialog.open(LessonCreateComponent, {
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
+      if (lesson) {
+        const newLesson: Lesson = lesson as Lesson;
+        this.uiStore.patchState({
+          selectedLessons: [
+            ...this.selectedLessons,
+            newLesson
+          ]
+        });
+      }
+    });
+  }
+
+  addUrlCtrl(): void {
+    this.urlFormArray.push(new FormControl<string>('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.url()
+    ]));
+  }
+
+  removeUrlCtrl(i: number): void {
+    this.urlFormArray.removeAt(i);
   }
 
   ngOnDestroy(): void {

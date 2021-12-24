@@ -89,20 +89,47 @@
               <div class='row mb-3'>
                 <div class='col-12'>
                   <p class='text-muted mb-2'>PDFs and Images</p>
-                  <button
-                    mat-stroked-button
-                    color='primary' type='button'>
-                    Upload
-                  </button>
+                  <hidden-innovation-common-form-field-file
+                    controlPath='posterId'
+                    [parentCtrl]='packForm.controls.posterId'
+                    (emitFileCtrlData)='packForm.controls.posterId?.setValue($event)'
+                    (emitRemoveFile)='packForm.controls.posterId?.reset($event)'
+                  ></hidden-innovation-common-form-field-file>
                 </div>
               </div>
               <div class='row mb-4'>
-                <div class='col-12'>
+                <div class='col-12' formArrayName='urls'>
                   <p class='text-muted mb-2'>URLs</p>
+                  <div class='container-fluid p-0'>
+                    <div class='row mb-2' *ngFor='let url of urlFormArray.controls; let i=index'>
+                      <div class='col-10'>
+                        <mat-form-field class='w-100'>
+                          <mat-label>Enter URL</mat-label>
+                          <input matInput autocomplete='no' formControlName='{{i}}' type='text'>
+                          <mat-error>
+                            <ng-template
+                              [ngIf]='((urlFormArray.controls[i].touch$ | async) || (urlFormArray.controls[i].dirty$ | async)) && (urlFormArray.controls[i].errors$ | async)'
+                              let-error>
+                              <hidden-innovation-form-field-errors
+                                label='URL'
+                                [error]='error'
+                              ></hidden-innovation-form-field-errors>
+                            </ng-template>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class='col-2 d-flex justify-content-end'>
+                        <button type='button' mat-icon-button color='warn' (click)='removeUrlCtrl(i)'>
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                   <button
+                    (click)='addUrlCtrl()'
                     mat-stroked-button
                     color='primary' type='button'>
-                    Upload
+                    Add
                   </button>
                 </div>
               </div>
@@ -201,11 +228,11 @@
               <ng-template [ngIf]='uiStore.lessonsExists$ | async' [ngIfElse]='lessonLengthElse'>
                 <hidden-innovation-pack-content-card
                   class='mb-3'
-                  *ngFor='let lesson of (uiStore.selectedLessons$ | async); first as isFirst; last as isLast; trackBy: trackLessonGroupByFn'
+                  *ngFor='let lesson of (uiStore.selectedLessons$ | async); index as i; first as isFirst; last as isLast; trackBy: trackLessonGroupByFn'
                   [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
                   [name]='lesson.name'
                   [category]='lesson.category'
-                  (emitDeleteEvent)='deleteSelectedLesson(lesson)'
+                  (emitDeleteEvent)='deleteSelectedLesson(i)'
                 ></hidden-innovation-pack-content-card>
               </ng-template>
               <ng-template #lessonLengthElse>

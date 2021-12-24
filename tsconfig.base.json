@@ -80,6 +80,9 @@
       "@hidden-innovation/shared/ui/common-form-field-date-range": [
         "libs/shared/ui/common-form-field-date-range/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/common-form-field-file": [
+        "libs/shared/ui/common-form-field-file/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/common-form-field-image": [
         "libs/shared/ui/common-form-field-image/src/index.ts"
       ],
@@ -106,6 +109,9 @@
       ],
       "@hidden-innovation/shared/ui/dashboard-user-demographic": [
         "libs/shared/ui/dashboard-user-demographic/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/file-name-dialog": [
+        "libs/shared/ui/file-name-dialog/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/form-field-errors": [
         "libs/shared/ui/form-field-errors/src/index.ts"

@@ -28,7 +28,7 @@ export class LessonCreateComponent {
 
   lessonFrom: FormGroup<LessonCore> = new FormGroup<LessonCore>({
     name: new FormControl<string>('', [
-      ...this.formValidationService.nameValidations
+      ...this.formValidationService.requiredFieldValidation
     ]),
     category: new FormControl<TagCategoryEnum>(undefined, [
       ...this.formValidationService.requiredFieldValidation
@@ -108,6 +108,6 @@ export class LessonCreateComponent {
       this.hotToastService.error(this.formValidationService.formSubmitError);
       return;
     }
-    console.log(this.lessonFrom.value);
+    this.dialogRef.close(this.lessonFrom.value);
   }
 }

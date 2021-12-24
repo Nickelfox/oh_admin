@@ -12,7 +12,7 @@ import { AspectRatio, ImageCropperReq, ImageCropperResponseData } from '../../mo
 import { ImageCropperComponent } from '../image-cropper/image-cropper.component';
 import { base64ToFile } from 'ngx-image-cropper';
 import { MatDialog } from '@angular/material/dialog';
-import { MediaUploadService } from '../../services/media-upload.service';
+import { MediaService } from '../../services/media.service';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { filter, switchMap } from 'rxjs/operators';
 import { AuthFacade } from '@hidden-innovation/auth';
@@ -36,7 +36,7 @@ export class ImagePickerComponent implements OnInit {
 
   constructor(
     private matDialog: MatDialog,
-    private mediaUploadService: MediaUploadService,
+    private mediaUploadService: MediaService,
     private hotToastService: HotToastService,
     private cdr: ChangeDetectorRef,
     private authFacade: AuthFacade
@@ -74,7 +74,7 @@ export class ImagePickerComponent implements OnInit {
           if (cropperResult) {
             coverPicker.value = '';
             coverPicker.removeAttribute('src');
-            this.upload(base64ToFile(cropperResult), cropperResult, file.name);
+            this.upload(base64ToFile(cropperResult), cropperResult, this.mediaUploadService.removeExtension(file.name));
           }
         });
       };

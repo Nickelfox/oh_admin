@@ -11,7 +11,9 @@ import {
 import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
 import { Media, VideoPickedResponseData } from '@hidden-innovation/media';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-common-form-field-video',
   templateUrl: './common-form-field-video.component.html',

@@ -30,6 +30,10 @@ export interface VideoPickedResponseData extends MediaUpload {
   fileName: string;
 }
 
+export interface FilePickedResponseData extends MediaUpload {
+  fileName: string;
+}
+
 export interface Media {
   id: number;
   type: string;
