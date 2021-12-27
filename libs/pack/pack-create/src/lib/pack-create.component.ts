@@ -8,7 +8,11 @@ import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validato
 import { UiStore } from '@hidden-innovation/shared/store';
 import { AspectRatio } from '@hidden-innovation/media';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { ContentSelectorComponent } from '../../../../shared/ui/content-selector/src/lib/content-selector.component';
+import { filter, switchMap, tap } from 'rxjs/operators';
+import { OperationTypeEnum } from '@hidden-innovation/shared/models';
+import { ActivatedRoute } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
+import { ContentSelectorComponent } from '@hidden-innovation/shared/ui/content-selector';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -47,9 +51,12 @@ export class PackCreateComponent implements OnDestroy {
     imagesAndPdfsIds: new FormArray<number>([])
   });
 
-  selectedList: ContentCore[] | LessonCore[] = [];
-
   aspectRatio = AspectRatio;
+  opType?: OperationTypeEnum;
+
+  private packID?: number;
+
+  private selectedContents: ContentCore[] | LessonCore[] = [];
 
   constructor(
     private matDialog: MatDialog,
@@ -58,8 +65,55 @@ export class PackCreateComponent implements OnDestroy {
     public formValidationService: FormValidationService,
     public store: PackStore,
     private fb: FormBuilder,
-    public uiStore: UiStore
+    public uiStore: UiStore,
+    private hotToastService: HotToastService,
+    private route: ActivatedRoute
   ) {
+    this.route.data.pipe(
+      filter(data => data?.type !== undefined),
+      tap((data) => {
+        this.opType = data.type as OperationTypeEnum;
+      }),
+      switchMap(_ => this.route.params)
+    ).subscribe((res) => {
+      if (this.opType === OperationTypeEnum.EDIT) {
+        this.packID = res['id'];
+        if (!this.packID) {
+          this.hotToastService.error('Error occurred while fetching details');
+          return;
+        }
+        // this.store.getTestDetails$({
+        //   id: this.packID
+        // });
+        this.store.selectedPack$.subscribe((pack) => {
+          if (pack) {
+            // this.populateTest(test);
+          }
+        });
+      }
+    });
+    this.uiStore.selectedContent$.subscribe((contents) => {
+      this.selectedContents = contents.map((c, i) => {
+        return {
+          ...c,
+          order: i + 1
+        };
+      });
+      console.log(this.selectedContents);
+      this.contentArrayCtrl.setValue(this.selectedContents);
+      this.packForm.updateValueAndValidity();
+      this.cdr.markForCheck();
+    });
+    const { isPublished, content } = this.packForm.controls;
+    content.valueChanges.subscribe(_ => {
+      this.contentIsValid ? isPublished.setValue(true) : isPublished.setValue(false);
+      this.packForm.updateValueAndValidity();
+      this.cdr.markForCheck();
+    });
+  }
+
+  get contentIsValid(): boolean {
+    return this.packForm.controls.content.value?.length >= 2;
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[] | LessonCore[]> {
@@ -76,10 +130,6 @@ export class PackCreateComponent implements OnDestroy {
 
   get imagesAndPdfsArrayCtrl(): FormArray<number> {
     return this.packForm.controls.imagesAndPdfsIds as FormArray<number>;
-  }
-
-  get imagesAndPdfsArrayCtrlExists(): boolean {
-    return this.imagesAndPdfsArrayCtrl.value?.length > 0;
   }
 
   buildResourceFormCtrl(): FormControl<number> {
@@ -100,10 +150,15 @@ export class PackCreateComponent implements OnDestroy {
     this.imagesAndPdfsArrayCtrl.removeAt(index);
   }
 
-  deleteSelectedContent(contentIndex: number): void {
-    this.contentArrayCtrl.setValue([
-      ...this.contentArrayCtrl.value.filter((c, i) => contentIndex !== i)
-    ]);
+  deleteSelectedContent(content: ContentCore | LessonCore): void {
+    const selectedContent = this.selectedContents.find(value => value.content_id === content.content_id && value.type === content.type);
+    if (selectedContent) {
+      this.uiStore.patchState({
+        selectedContent: [
+          ...this.selectedContents.filter(c => c.content_id !== content.content_id || c.type !== content.type)
+        ]
+      });
+    }
   }
 
   openContentSelectorDialog(): void {
@@ -125,13 +180,12 @@ export class PackCreateComponent implements OnDestroy {
     dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
       if (lesson) {
         const newLesson: LessonCore = lesson as LessonCore;
-        this.contentArrayCtrl.setValue([
-          ...this.contentArrayCtrl.value,
-          {
-            ...newLesson,
-            order: this.contentArrayCtrl.value.length + 1
-          }
-        ]);
+        this.uiStore.patchState({
+          selectedContent: [
+            ...this.selectedContents,
+            newLesson
+          ]
+        });
       }
     });
   }

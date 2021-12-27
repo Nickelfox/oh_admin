@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 export interface PackState {
   packs: Pack[];
   packContents?: PackContent[];
+  selectedPack?: Pack;
   total: number;
   isLoading?: boolean;
   isContentLoading?: boolean;
@@ -37,6 +38,7 @@ export class PackStore extends ComponentStore<PackState> {
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly packs$: Observable<Pack[]> = this.select(state => state.packs || []);
   readonly packContents$: Observable<PackContent[]> = this.select(state => state.packContents || []);
+  readonly selectedPack$: Observable<Pack | undefined> = this.select(state => state.selectedPack);
 
   getPacks$ = this.effect<PackListingRequest>(params$ =>
     params$.pipe(

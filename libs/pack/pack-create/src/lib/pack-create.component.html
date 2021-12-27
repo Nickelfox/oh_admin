@@ -183,7 +183,7 @@
                 [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
                 [name]='content.name'
                 [category]='content.type'
-                (emitDeleteEvent)='deleteSelectedContent(i)'
+                (emitDeleteEvent)='deleteSelectedContent(content)'
               ></hidden-innovation-pack-content-card>
             </ng-template>
             <ng-template #contentElse>
@@ -193,6 +193,14 @@
             </ng-template>
           </mat-card-content>
         </mat-card>
+        <ng-template
+          [ngIf]='!contentIsValid && ((packForm.controls.content.touch$ | async) || (packForm.controls.content.dirty$ | async))'
+          [ngIfElse]='minContentLengthElse'>
+          <mat-error><small>{{formValidationService.testSelectionValidationMessage.minLength}}</small></mat-error>
+        </ng-template>
+        <ng-template #minContentLengthElse>
+          <mat-hint><small>{{formValidationService.testSelectionValidationMessage.minLength}}</small></mat-hint>
+        </ng-template>
       </div>
     </div>
   </div>

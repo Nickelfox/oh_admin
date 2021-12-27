@@ -6,7 +6,7 @@ import { Test } from '@hidden-innovation/test/data-access';
 import { Observable } from 'rxjs';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
-import { Lesson, PackContent } from '@hidden-innovation/pack/data-access';
+import { ContentCore, Lesson, LessonCore } from '@hidden-innovation/pack/data-access';
 
 export interface UiState {
   navData: {
@@ -18,7 +18,7 @@ export interface UiState {
   selectedTestGroups?: TestGroup[];
   selectedQuestionnaires?: QuestionnaireExtended[];
   selectedLessons?: Lesson[];
-  selectedContent?: PackContent[];
+  selectedContent?: ContentCore[] | LessonCore[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -33,10 +33,8 @@ export class UiStore extends ComponentStore<UiState> {
   readonly questionnairesExists$: Observable<boolean> = this.select(state => !!state.selectedQuestionnaires?.length);
   readonly selectedLessons$: Observable<Lesson[]> = this.select(state => state.selectedLessons || []);
   readonly lessonsExists$: Observable<boolean> = this.select(state => !!state.selectedLessons?.length);
-
-  readonly selectedPackContents$: Observable<PackContent[]> = this.select(state => state.selectedContent || []);
-  readonly packContentsExists$: Observable<boolean> = this.select(state => !!state.selectedContent?.length);
-
+  readonly selectedContent$: Observable<ContentCore[] | LessonCore[]> = this.select(state => state.selectedContent || []);
+  readonly contentsExists$: Observable<boolean> = this.select(state => !!state.selectedContent?.length);
 
   updateSelectedTest$ = this.effect<Test[]>(params$ =>
     params$.pipe(

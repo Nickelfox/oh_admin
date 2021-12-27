@@ -24,9 +24,12 @@ export interface ContentCore {
   type: PackContentTypeEnum;
 }
 
-export interface PackContent extends ContentCore {
+export interface PackContent {
   id: number;
   created_at: string;
+  name: string;
+  type: PackContentTypeEnum;
+  inputType: string;
 }
 
 export interface PackContentListingRequest {

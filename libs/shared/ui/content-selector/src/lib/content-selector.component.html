@@ -2,19 +2,18 @@
   <div class='d-flex align-items-center justify-content-between'>
     <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
       ADD PACK CONTENT</h4>
-    <button mat-icon-button (click)='closeDialog()'>
-      <mat-icon>close</mat-icon>
-    </button>
+    <div class='d-flex align-items-center'>
+      <div class='d-flex align-items-center text-muted mt-1 mr-3'>
+        <mat-icon class='mr-2'>autorenew</mat-icon>
+        <h4 class='mat-h4 mb-0'>Selection Auto-Save</h4>
+      </div>
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
 <div class='container-fluid p-0'>
-  <div class='row'>
-    <div class='col-3'>
-    </div>
-    <div class='col d-flex align-items-center justify-content-end'>
-      <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isContentLoading$ | async'></mat-spinner>
-    </div>
-  </div>
   <div class='row'>
     <div class='col-12'>
       <div mat-dialog-content>
@@ -95,20 +94,24 @@
   <div class='row'>
     <div class='col-12'>
       <mat-card class='p-0'>
-        <mat-paginator
-          [disabled]='store.isContentLoading$ | async'
-          [pageSize]='pageSize'
-          [length]='store.count$ | async'
-          [pageIndex]='paginatorIndex'
-          [pageSizeOptions]='pageSizeOptions'
-          (page)='pageEvent = $event; onPaginateChange($event)'
-        ></mat-paginator>
+        <div class=' d-flex align-items-center justify-content-between'>
+          <div class='pl-3'>
+            <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isContentLoading$ | async'></mat-spinner>
+          </div>
+          <mat-paginator
+            [disabled]='store.isContentLoading$ | async'
+            [pageSize]='pageSize'
+            [length]='store.count$ | async'
+            [pageIndex]='paginatorIndex'
+            [pageSizeOptions]='pageSizeOptions'
+            (page)='pageEvent = $event; onPaginateChange($event)'
+          ></mat-paginator>
+        </div>
       </mat-card>
     </div>
   </div>
 </div>
 <div mat-dialog-actions align='end'>
-  <button mat-button (click)='closeDialog()' cdkFocusInitial>Cancel</button>
-  <button mat-flat-button color='primary' (click)='saveSelectedContents()'>Save</button>
+  <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
 </div>
 
