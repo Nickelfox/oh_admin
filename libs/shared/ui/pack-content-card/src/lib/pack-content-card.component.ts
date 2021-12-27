@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { PackContentTypeEnum } from '@hidden-innovation/shared/models';
 
 @Component({
   selector: 'hidden-innovation-pack-content-card',
@@ -34,7 +35,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEn
 export class PackContentCardComponent {
 
   @Input() name: string | undefined;
-  @Input() category: string | undefined;
+  @Input() category: PackContentTypeEnum | undefined;
 
   @Output() emitDeleteEvent: EventEmitter<void> = new EventEmitter<void>();
 

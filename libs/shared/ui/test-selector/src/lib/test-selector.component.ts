@@ -242,7 +242,7 @@ export class TestSelectorComponent implements OnInit {
         ...this.selectedTests
       ]
     });
-    this.matDialogRef.close();
+    this.matDialogRef.close(this.selectedTests);
   }
 
   closeDialog(): void {

@@ -88,7 +88,7 @@ export class ConstantDataService {
     video_mp4: 'video/mp4',
     video_mov: 'video/quicktime',
     // Application Type
-    pdf: 'application',
+    application: 'application',
     audio: 'audio',
     image: 'image',
     text: 'text',

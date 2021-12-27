@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Pack, PackCore, PackListingRequest } from '../models/pack.interface';
+import { Pack, PackContent, PackContentListingRequest, PackCore, PackListingRequest } from '../models/pack.interface';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { PackService } from '../services/pack.service';
 import { Router } from '@angular/router';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
-import { Test } from '@hidden-innovation/test/data-access';
-import { TestGroup } from '@hidden-innovation/test-group/data-access';
-import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
-import { Lesson } from '../models/lesson.interface';
 
 export interface PackState {
   packs: Pack[];
+  packContents?: PackContent[];
   total: number;
   isLoading?: boolean;
+  isContentLoading?: boolean;
   isActing?: boolean;
   loaded?: boolean;
 };
 
 const initialState: PackState = {
   packs: [],
+  packContents: [],
   total: 0,
   isLoading: false,
   isActing: false,
@@ -32,10 +31,12 @@ const initialState: PackState = {
 export class PackStore extends ComponentStore<PackState> {
 
   readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
+  readonly isContentLoading$: Observable<boolean> = this.select(state => !!state.isContentLoading);
   readonly loaded$: Observable<boolean> = this.select(state => !!state.loaded);
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly packs$: Observable<Pack[]> = this.select(state => state.packs || []);
+  readonly packContents$: Observable<PackContent[]> = this.select(state => state.packContents || []);
 
   getPacks$ = this.effect<PackListingRequest>(params$ =>
     params$.pipe(
@@ -58,6 +59,35 @@ export class PackStore extends ComponentStore<PackState> {
             _ => {
               this.patchState({
                 isLoading: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+  getPackContent$ = this.effect<PackContentListingRequest>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isContentLoading: true
+        });
+      }),
+      switchMap((reqObj) =>
+        this.packService.getContentPack(reqObj).pipe(
+          tapResponse(
+            ({ allPack, count }) => {
+              this.patchState({
+                isContentLoading: false,
+                packContents: allPack,
+                total: count
+              });
+            },
+            _ => {
+              this.patchState({
+                isContentLoading: false
               });
             }
           ),

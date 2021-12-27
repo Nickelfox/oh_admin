@@ -89,12 +89,29 @@
               <div class='row mb-3'>
                 <div class='col-12'>
                   <p class='text-muted mb-2'>PDFs and Images</p>
-                  <hidden-innovation-common-form-field-file
-                    controlPath='posterId'
-                    [parentCtrl]='packForm.controls.posterId'
-                    (emitFileCtrlData)='packForm.controls.posterId?.setValue($event)'
-                    (emitRemoveFile)='packForm.controls.posterId?.reset($event)'
-                  ></hidden-innovation-common-form-field-file>
+                  <div class='container-fluid p-0'>
+                    <div class='row mb-2' *ngFor='let res of imagesAndPdfsArrayCtrl.controls; let i=index;'>
+                      <div class='col-12'>
+                        <hidden-innovation-common-form-field-file
+                          controlPath='posterId'
+                          [parentCtrl]='imagesAndPdfsArrayCtrl.controls[i]'
+                          (emitFileCtrlData)='imagesAndPdfsArrayCtrl.controls[i].setValue($event)'
+                          (emitRemoveFile)='imagesAndPdfsArrayCtrl.controls[i].reset($event)'
+                        ></hidden-innovation-common-form-field-file>
+                        <button mat-icon-button color='warn' (click)='deleteResourceCtrl(i)'>
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <button mat-stroked-button type='button' (click)='addResourceCtrl()'>
+                          <mat-icon>add</mat-icon>
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class='row mb-4'>
@@ -149,98 +166,31 @@
               Add
             </button>
             <mat-menu #menuPack='matMenu'>
-              <button mat-menu-item (click)='openTestSelector()'>
-                <span>Test</span>
-              </button>
-              <button mat-menu-item (click)='openTestGroupDialog()'>
-                <span>Test Group</span>
+              <button mat-menu-item (click)='openContentSelectorDialog()'>
+                <span>Content (Test/Test-Group/Questionnaire)</span>
               </button>
               <button mat-menu-item (click)='openCreateLessonDialog()'>
                 <span>Lessons</span>
-              </button>
-              <button mat-menu-item (click)='openQuestionnaireDialog()'>
-                <span>Questionnaire</span>
               </button>
             </mat-menu>
           </mat-card-title>
           <mat-divider></mat-divider>
           <mat-card-content class='content-container'>
-            <div class='d-flex flex-column'>
-              <h5 class='mat-h5 text-uppercase mb-0 mt-2 font-calibri' style='color: #FFC107;'>
-                Tests</h5>
-              <ng-template [ngIf]='uiStore.testsExists$ | async' [ngIfElse]='testLengthElse'>
-                <hidden-innovation-pack-content-card
-                  class='mb-3'
-                  *ngFor='let test of (uiStore.selectedTests$ | async); first as isFirst; last as isLast; trackBy: trackTestByFn'
-                  [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
-                  [name]='test.name'
-                  [category]='test.category'
-                  (emitDeleteEvent)='deleteSelectedTest(test)'
-                ></hidden-innovation-pack-content-card>
-              </ng-template>
-              <ng-template #testLengthElse>
-                <div class='d-flex align-items-center justify-content-center w-100'>
-                  <h4 class='mat-h4 mb-0 my-2 font-calibri text-muted'>--</h4>
-                </div>
-              </ng-template>
-            </div>
-            <div class='d-flex flex-column'>
-              <h5 class='mat-h5 text-uppercase mb-0 mt-2 font-calibri' style='color: #FFC107;'>
-                Test Groups</h5>
-              <ng-template [ngIf]='uiStore.testGroupsExists$ | async' [ngIfElse]='testGroupLengthElse'>
-                <hidden-innovation-pack-content-card
-                  class='mb-3'
-                  *ngFor='let testGroup of (uiStore.selectedTestGroups$ | async); first as isFirst; last as isLast; trackBy: trackTestGroupByFn'
-                  [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
-                  [name]='testGroup.name'
-                  [category]='testGroup.category'
-                  (emitDeleteEvent)='deleteSelectedTestGroup(testGroup)'
-                ></hidden-innovation-pack-content-card>
-              </ng-template>
-              <ng-template #testGroupLengthElse>
-                <div class='d-flex align-items-center justify-content-center w-100'>
-                  <h4 class='mat-h4 mb-0 my-2 font-calibri text-muted'>--</h4>
-                </div>
-              </ng-template>
-            </div>
-            <div class='d-flex flex-column'>
-              <h5 class='mat-h5 text-uppercase mb-0 mt-2 font-calibri' style='color: #4DB6AC;'>
-                Questionnaires</h5>
-              <ng-template [ngIf]='uiStore.questionnairesExists$ | async' [ngIfElse]='questionnairesLengthElse'>
-                <hidden-innovation-pack-content-card
-                  class='mb-3'
-                  *ngFor='let questionnaire of (uiStore.selectedQuestionnaires$ | async); first as isFirst; last as isLast; trackBy: trackQuestionnaireGroupByFn'
-                  [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
-                  [name]='questionnaire.name'
-                  category='--'
-                  (emitDeleteEvent)='deleteSelectedQuestionnaire(questionnaire)'
-                ></hidden-innovation-pack-content-card>
-              </ng-template>
-              <ng-template #questionnairesLengthElse>
-                <div class='d-flex align-items-center justify-content-center w-100'>
-                  <h4 class='mat-h4 mb-0 my-2 font-calibri text-muted'>--</h4>
-                </div>
-              </ng-template>
-            </div>
-            <div class='d-flex flex-column'>
-              <h5 class='mat-h5 text-uppercase mb-0 mt-2 font-calibri' style='color: #6394E2;'>
-                Lessons</h5>
-              <ng-template [ngIf]='uiStore.lessonsExists$ | async' [ngIfElse]='lessonLengthElse'>
-                <hidden-innovation-pack-content-card
-                  class='mb-3'
-                  *ngFor='let lesson of (uiStore.selectedLessons$ | async); index as i; first as isFirst; last as isLast; trackBy: trackLessonGroupByFn'
-                  [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
-                  [name]='lesson.name'
-                  [category]='lesson.category'
-                  (emitDeleteEvent)='deleteSelectedLesson(i)'
-                ></hidden-innovation-pack-content-card>
-              </ng-template>
-              <ng-template #lessonLengthElse>
-                <div class='d-flex align-items-center justify-content-center w-100'>
-                  <h4 class='mat-h4 mb-0 my-2 font-calibri text-muted'>--</h4>
-                </div>
-              </ng-template>
-            </div>
+            <ng-template [ngIf]='contentArrayExists' [ngIfElse]='contentElse'>
+              <hidden-innovation-pack-content-card
+                class='mb-3'
+                *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
+                [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                [name]='content.name'
+                [category]='content.type'
+                (emitDeleteEvent)='deleteSelectedContent(i)'
+              ></hidden-innovation-pack-content-card>
+            </ng-template>
+            <ng-template #contentElse>
+              <div class='d-flex align-items-center justify-content-center w-100'>
+                <h4 class='mat-h4 mb-0 my-2 font-calibri text-muted'>--</h4>
+              </div>
+            </ng-template>
           </mat-card-content>
         </mat-card>
       </div>

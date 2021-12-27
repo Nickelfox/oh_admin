@@ -104,6 +104,9 @@
       "@hidden-innovation/shared/ui/common-form-field-week": [
         "libs/shared/ui/common-form-field-week/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/content-selector": [
+        "libs/shared/ui/content-selector/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/dashboard-count-card": [
         "libs/shared/ui/dashboard-count-card/src/index.ts"
       ],

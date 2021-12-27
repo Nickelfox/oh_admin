@@ -1,7 +1,7 @@
 import { Media } from '@hidden-innovation/media';
 import { Test } from '@hidden-innovation/test/data-access';
 import { Lesson, LessonCore } from './lesson.interface';
-import { CustomApiResponse, SortingEnum } from '@hidden-innovation/shared/models';
+import { CustomApiResponse, PackContentTypeEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
 
@@ -11,12 +11,36 @@ export interface PackCore {
   thumbnailId: number;
   isPublished: boolean;
   // imageId: number;
+  imagesAndPdfsIds: number[];
   urls: string[];
   posterId: number;
-  lessons: LessonCore[];
-  testGroupIds: number[];
-  questionnaireIds: number[];
-  testIds: number[];
+  content: ContentCore[] | LessonCore[];
+}
+
+export interface ContentCore {
+  order: number | undefined;
+  content_id: number | null;
+  name: string;
+  type: PackContentTypeEnum;
+}
+
+export interface PackContent extends ContentCore {
+  id: number;
+  created_at: string;
+}
+
+export interface PackContentListingRequest {
+  limit: number;
+  page: number;
+}
+
+export interface PackContentListingResponse extends CustomApiResponse {
+  data: PackContentListingResponseData;
+}
+
+export interface PackContentListingResponseData {
+  allPack: PackContent[];
+  count: number;
 }
 
 export interface Pack extends PackCore {
@@ -27,6 +51,7 @@ export interface Pack extends PackCore {
   // image: Media;
   thumbnail: Media;
   questionnaires: QuestionnaireExtended[];
+  resources: Media[];
   poster: Media;
   deleted_at: string;
   created_at: string;

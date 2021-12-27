@@ -4,7 +4,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   ViewEncapsulation
 } from '@angular/core';
@@ -15,7 +14,7 @@ import { MediaService } from '../../services/media.service';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { filter, switchMap } from 'rxjs/operators';
-import { FileNameDialogComponent } from '../../../../../shared/ui/file-name-dialog/src';
+import { FileNameDialogComponent } from '@hidden-innovation/shared/ui/file-name-dialog';
 
 @Component({
   selector: 'hidden-innovation-file-picker',
@@ -33,7 +32,7 @@ import { FileNameDialogComponent } from '../../../../../shared/ui/file-name-dial
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FilePickerComponent implements OnInit {
+export class FilePickerComponent {
 
   @Input() isInvalid = false;
 
@@ -52,9 +51,6 @@ export class FilePickerComponent implements OnInit {
     private authFacade: AuthFacade,
     private constantDataService: ConstantDataService
   ) {
-  }
-
-  ngOnInit(): void {
   }
 
   clearPicker(filePicker: HTMLInputElement): void {
@@ -80,7 +76,7 @@ export class FilePickerComponent implements OnInit {
           return;
         }
         const fileNameArray: string[] = file.type.split('/');
-        if (fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.pdf) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.audio) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.image) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.text) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.video)) {
+        if (fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.application) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.audio) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.image) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.text) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.video)) {
           // Video Format validation
           this.toastRef?.close();
           this.clearPicker(filePicker);
@@ -140,7 +136,8 @@ export class FilePickerComponent implements OnInit {
         this.isUploading = false;
         this.emitFile.emit({
           fileName,
-          attachmentId
+          attachmentId,
+          icon: this.mediaUploadService.getFileIcon(file)
         });
         this.cdr.markForCheck();
       },

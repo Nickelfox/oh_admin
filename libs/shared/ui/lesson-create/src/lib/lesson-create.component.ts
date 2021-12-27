@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, ViewEncapsulation } from '@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Lesson, LessonCore } from '@hidden-innovation/pack/data-access';
-import { TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
+import { PackContentTypeEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { AspectRatio } from '@hidden-innovation/media';
@@ -47,7 +47,10 @@ export class LessonCreateComponent {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    tagIds: new FormControl<number[]>([])
+    tagIds: new FormControl<number[]>([]),
+    type: new FormControl<PackContentTypeEnum>(PackContentTypeEnum.LESSON),
+    order: new FormControl<number>(undefined),
+    content_id: new FormControl<number | null>(null)
   });
 
   existingLesson?: Lesson;

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MediaUpload, MediaUploadResponse } from '../models/media.interface';
 import { AuthFacade } from '@hidden-innovation/auth';
+import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 
 @Injectable()
 export class MediaService {
@@ -14,6 +15,7 @@ export class MediaService {
   constructor(
     private authFacade: AuthFacade,
     private handler: HttpBackend,
+    private constantDataService: ConstantDataService,
     @Inject(ENVIRONMENT) private env: Environment) {
     this.httpClient = new HttpClient(handler);
   }
@@ -36,6 +38,21 @@ export class MediaService {
     const lastDotPosition = filename.lastIndexOf('.');
     if (lastDotPosition === -1) return filename;
     else return filename.substr(0, lastDotPosition);
+  }
+
+  getFileIcon(file: File): string {
+    switch (file.type.split('/')[0]) {
+      case this.constantDataService.FILE_FORMAT_DATA.audio:
+        return 'audio_file';
+      case this.constantDataService.FILE_FORMAT_DATA.video:
+        return 'video_file';
+      case this.constantDataService.FILE_FORMAT_DATA.image:
+        return 'image';
+      case this.constantDataService.FILE_FORMAT_DATA.text:
+        return 'description';
+      default:
+        return 'attach_file';
+    }
   }
 
 }

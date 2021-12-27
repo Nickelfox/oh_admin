@@ -1,30 +1,14 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
-import { Lesson, LessonCore, Pack, PackCore, PackStore } from '@hidden-innovation/pack/data-access';
-import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
-import { TestGroupSelectorComponent } from '@hidden-innovation/shared/ui/test-group-selector';
-import { QuestionnaireSelectorComponent } from '@hidden-innovation/shared/ui/questionnaire-selector';
-import { TestGroup, TestGroupCore } from '@hidden-innovation/test-group/data-access';
+import { ContentCore, LessonCore, PackCore, PackStore } from '@hidden-innovation/pack/data-access';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { Test } from '@hidden-innovation/test/data-access';
-import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { AspectRatio } from '@hidden-innovation/media';
 import { UntilDestroy } from '@ngneat/until-destroy';
-
-export interface LessonDialogReq {
-  isNew: boolean;
-}
+import { ContentSelectorComponent } from '../../../../shared/ui/content-selector/src/lib/content-selector.component';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -34,7 +18,7 @@ export interface LessonDialogReq {
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PackCreateComponent implements OnInit, OnDestroy {
+export class PackCreateComponent implements OnDestroy {
 
   packForm: FormGroup<PackCore> = new FormGroup<PackCore>({
     name: new FormControl<string>('', [
@@ -59,16 +43,11 @@ export class PackCreateComponent implements OnInit, OnDestroy {
       })
     ]),
     urls: new FormArray<string>([]),
-    lessons: new FormControl<LessonCore[]>([]),
-    questionnaireIds: new FormArray<number>([]),
-    testIds: new FormArray<number>([]),
-    testGroupIds: new FormArray<number>([])
+    content: new FormControl<ContentCore[] | LessonCore[]>([]),
+    imagesAndPdfsIds: new FormArray<number>([])
   });
 
-  selectedTests: Test[] = [];
-  selectedQuestionnaires: QuestionnaireExtended[] = [];
-  selectedTestGroups: TestGroup[] = [];
-  selectedLessons: Lesson[] = [];
+  selectedList: ContentCore[] | LessonCore[] = [];
 
   aspectRatio = AspectRatio;
 
@@ -81,156 +60,61 @@ export class PackCreateComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     public uiStore: UiStore
   ) {
-    const { testIds, testGroupIds, questionnaireIds, lessons } = this.packForm.controls;
-    const testFromArray: FormArray<number> = testIds as FormArray<number>;
-    const testGroupFromArray: FormArray<number> = testGroupIds as FormArray<number>;
-    const questionnaireFromArray: FormArray<number> = questionnaireIds as FormArray<number>;
-    // Store methods
-    const { selectedTests$, selectedQuestionnaires$, selectedTestGroups$, selectedLessons$ } = this.uiStore;
-    selectedTests$.subscribe(newTests => {
-      this.selectedTests = newTests;
-      testFromArray.clear();
-      newTests.forEach(t => {
-        testFromArray.push(this.buildTestForm(t));
-        testFromArray.updateValueAndValidity();
-      });
-    });
-    selectedTestGroups$.subscribe(newTG => {
-      this.selectedTestGroups = newTG;
-      testGroupFromArray.clear();
-      newTG.forEach(tg => {
-        testGroupFromArray.push(this.buildTestGroupForm(tg));
-        testGroupFromArray.updateValueAndValidity();
-      });
-    });
-    selectedQuestionnaires$.subscribe(questionnaires => {
-      this.selectedQuestionnaires = questionnaires;
-      questionnaireFromArray.clear();
-      questionnaires.forEach(q => {
-        questionnaireFromArray.push(this.buildQuestionnaireForm(q));
-        questionnaireFromArray.updateValueAndValidity();
-      });
-    });
-    selectedLessons$.subscribe(newLessons => {
-      console.log(newLessons);
-      this.selectedLessons = newLessons;
-      questionnaireFromArray.clear();
-      lessons.setValue(newLessons ?? []);
-    });
+  }
+
+  get contentArrayCtrl(): FormControl<ContentCore[] | LessonCore[]> {
+    return this.packForm.controls.content as FormControl<ContentCore[] | LessonCore[]>;
+  }
+
+  get contentArrayExists(): boolean {
+    return this.contentArrayCtrl.value?.length > 0;
   }
 
   get urlFormArray(): FormArray<string> {
     return this.packForm.controls.urls as FormArray<string>;
   }
 
-  ngOnInit(): void {
+  get imagesAndPdfsArrayCtrl(): FormArray<number> {
+    return this.packForm.controls.imagesAndPdfsIds as FormArray<number>;
   }
 
-  buildTestForm(test: Test): FormControl<number> {
-    return this.fb.control<number>(test.id, [...this.formValidationService.requiredFieldValidation]);
+  get imagesAndPdfsArrayCtrlExists(): boolean {
+    return this.imagesAndPdfsArrayCtrl.value?.length > 0;
   }
 
-  buildTestGroupForm(tg: TestGroup): FormControl<number> {
-    return this.fb.control<number>(tg.id, [...this.formValidationService.requiredFieldValidation]);
+  buildResourceFormCtrl(): FormControl<number> {
+    return new FormControl<number>(undefined, [
+      RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]);
   }
 
-  buildQuestionnaireForm(q: QuestionnaireExtended): FormControl<number> {
-    return this.fb.control<number>(q.id, [...this.formValidationService.requiredFieldValidation]);
+  addResourceCtrl(): void {
+    this.imagesAndPdfsArrayCtrl.push(this.buildResourceFormCtrl());
   }
 
-  trackTestByFn(index: number, test: Test): number {
-    return test.id;
+  deleteResourceCtrl(index: number): void {
+    this.imagesAndPdfsArrayCtrl.removeAt(index);
   }
 
-  trackTestGroupByFn(index: number, tg: TestGroup): number {
-    return tg.id;
+  deleteSelectedContent(contentIndex: number): void {
+    this.contentArrayCtrl.setValue([
+      ...this.contentArrayCtrl.value.filter((c, i) => contentIndex !== i)
+    ]);
   }
 
-  trackQuestionnaireGroupByFn(index: number, q: QuestionnaireExtended): number {
-    return q.id;
-  }
-
-  trackLessonGroupByFn(index: number, lesson: Lesson): number {
-    return lesson.id;
-  }
-
-  deleteSelectedTest(test: Test): void {
-    if (this.selectedTests.find(value => value.id === test.id)) {
-      this.uiStore.patchState({
-        selectedTests: [
-          ...this.selectedTests.filter(t => t.id !== test.id)
-        ]
-      });
-    }
-  }
-
-  deleteSelectedTestGroup(tg: TestGroup): void {
-    if (this.selectedTestGroups.find(value => value.id === tg.id)) {
-      this.uiStore.patchState({
-        selectedTestGroups: [
-          ...this.selectedTestGroups.filter(t => t.id !== tg.id)
-        ]
-      });
-    }
-  }
-
-  deleteSelectedQuestionnaire(q: QuestionnaireExtended): void {
-    if (this.selectedQuestionnaires.find(value => value.id === q.id)) {
-      this.uiStore.patchState({
-        selectedQuestionnaires: [
-          ...this.selectedQuestionnaires.filter(t => t.id !== q.id)
-        ]
-      });
-    }
-  }
-
-  deleteSelectedLesson(i: number): void {
-    this.uiStore.patchState({
-      selectedLessons: [
-        ...this.selectedLessons.filter((value, index) => i !== index)
-      ]
-    });
-  }
-
-  openTestGroupDialog(): void {
-    const dialogRef = this.matDialog.open(TestGroupSelectorComponent, {
+  openContentSelectorDialog(): void {
+    this.matDialog.open(ContentSelectorComponent, {
       height: '100%',
       width: '100%',
       maxHeight: '100%',
       maxWidth: '100%',
       role: 'dialog'
     });
-    dialogRef.afterClosed().subscribe((pack: Pack[] | undefined) => {
-      if (pack) {
-        return;
-      }
-    });
-  }
-
-  openTestSelector(): void {
-    const dialogRef = this.matDialog.open(TestSelectorComponent, {
-      height: '100%',
-      width: '100%',
-      maxHeight: '100%',
-      maxWidth: '100%',
-      role: 'dialog'
-    });
-    dialogRef.afterClosed().subscribe((tests: TestGroupCore[] | undefined) => {
-      if (tests) {
-        return;
-      }
-    });
-  }
-
-  openQuestionnaireDialog(): void {
-    const dialogRef = this.matDialog.open(QuestionnaireSelectorComponent, {
-      height: '100%',
-      width: '100%',
-      maxHeight: '100%',
-      maxWidth: '100%',
-      role: 'dialog'
-    });
-    // dialogRef.afterClosed().subscribe((questions: Questionnaire[] | undefined) => {
+    // testGroupDialog.afterClosed().subscribe((tgs: TestGroup[] | undefined) => {
     // });
   }
 
@@ -240,13 +124,14 @@ export class PackCreateComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
       if (lesson) {
-        const newLesson: Lesson = lesson as Lesson;
-        this.uiStore.patchState({
-          selectedLessons: [
-            ...this.selectedLessons,
-            newLesson
-          ]
-        });
+        const newLesson: LessonCore = lesson as LessonCore;
+        this.contentArrayCtrl.setValue([
+          ...this.contentArrayCtrl.value,
+          {
+            ...newLesson,
+            order: this.contentArrayCtrl.value.length + 1
+          }
+        ]);
       }
     });
   }

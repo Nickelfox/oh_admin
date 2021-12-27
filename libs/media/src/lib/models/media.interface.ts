@@ -32,6 +32,7 @@ export interface VideoPickedResponseData extends MediaUpload {
 
 export interface FilePickedResponseData extends MediaUpload {
   fileName: string;
+  icon: string;
 }
 
 export interface Media {

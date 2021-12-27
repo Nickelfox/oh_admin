@@ -216,7 +216,7 @@ export class TestGroupSelectorComponent implements OnInit {
         ...this.selectedTestGroups
       ]
     });
-    this.matDialogRef.close();
+    this.matDialogRef.close(this.selectedTestGroups);
   }
 
   onPaginateChange($event: PageEvent): void {

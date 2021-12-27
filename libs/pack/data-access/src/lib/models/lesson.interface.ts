@@ -1,9 +1,9 @@
 import { Media } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
 import { TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { ContentCore } from './pack.interface';
 
-export interface LessonCore {
-  name: string;
+export interface LessonCore extends ContentCore {
   category: TagCategoryEnum | undefined;
   videoId: number;
   thumbnailId: number;

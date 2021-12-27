@@ -23,8 +23,9 @@ import { FilePickedResponseData, Media } from '@hidden-innovation/media';
           <div class='col'>
             <button mat-stroked-button color='primary'
                     type='button'>
-              <mat-icon color='warn' class='mr-1'>file</mat-icon>
-              <a *ngIf='fileUrl' href='{{fileUrl}}' target='_blank' matTooltip='{{fileName ?? "--"}}'>{{(fileName | maxStringLimit: 10) ?? '--'}}</a>
+              <mat-icon color='warn' class='mr-1'>{{fileIcon ?? 'attach_file'}}</mat-icon>
+              <a *ngIf='fileUrl' href='{{fileUrl}}' target='_blank'
+                 matTooltip='{{fileName ?? "--"}}'>{{(fileName | maxStringLimit: 10) ?? '--'}}</a>
               <a *ngIf='!fileUrl' matTooltip='{{fileName ?? "--"}}'>{{(fileName | maxStringLimit: 10) ?? '--'}}</a>
               <mat-icon matTooltip='Remove File' (click)='removeFile()' class='ml-2'>close</mat-icon>
             </button>
@@ -60,7 +61,7 @@ export class CommonFormFieldFileComponent implements OnInit {
 
   fileName: string | undefined;
   fileUrl: string | undefined;
-
+  fileIcon: string | undefined;
 
   constructor(
     private fgd: FormGroupDirective,
@@ -89,6 +90,7 @@ export class CommonFormFieldFileComponent implements OnInit {
 
   mapFile($event: FilePickedResponseData) {
     this.fileName = $event.fileName;
+    this.fileIcon = $event.icon;
     this.emitFileCtrlData.emit($event.attachmentId);
   }
 

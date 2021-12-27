@@ -1,6 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
 import {
   Pack,
+  PackContentListingRequest,
+  PackContentListingResponse, PackContentListingResponseData,
   PackCore,
   PackListingRequest,
   PackListingResponse,
@@ -46,6 +48,18 @@ export class PackService {
 
   createPack(obj: PackCore): Observable<Pack> {
     return this.http.post<PackMutationResponse>(`${this.env.baseURL}/v1/admin/get-all-pack`, obj).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  getContentPack(reqObj: PackContentListingRequest): Observable<PackContentListingResponseData> {
+    let params = new HttpParams();
+    params = params.appendAll({
+      'page': reqObj.page.toString(),
+      'limit': reqObj.limit.toString()
+    });
+    return this.http.get<PackContentListingResponse>(`${this.env.baseURL}/v1/admin/combined-pack`, { params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
