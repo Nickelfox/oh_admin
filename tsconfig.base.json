@@ -98,6 +98,9 @@
       "@hidden-innovation/shared/ui/line-chart": [
         "libs/shared/ui/line-chart/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/pack-selector": [
+        "libs/shared/ui/pack-selector/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
       ],

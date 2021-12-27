@@ -249,6 +249,14 @@ import { MatCardModule } from '@angular/material/card';
               ),
             data: { breadcrumb: 'Add Featured' }
           },
+          {
+            path: 'pack-selector',
+            loadChildren: () =>
+              import('@hidden-innovation/shared/ui/pack-selector').then(
+                (m) => m.PackSelectorModule
+              ),
+            data: { breadcrumb: 'Pack Selector'}
+          }
         ]
       },
 
