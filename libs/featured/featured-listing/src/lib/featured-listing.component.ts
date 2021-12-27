@@ -63,5 +63,8 @@ export class FeaturedListingComponent implements OnInit {
   ngOnInit(): void {
 
   }
-
+  hello(abc:any)
+  {
+    alert(abc);
+  }
 }
