@@ -92,7 +92,7 @@
                         [matTooltip]='element.items'> {{(element.items | maxStringLimit) || '--'}} </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef='displayedColumns' ></tr>
-                  <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react' (click)='hello(row.screen)'></tr>
+                  <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react'></tr>
                 </table>
               </div>
             </div>
