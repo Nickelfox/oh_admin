@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { TestCore } from '@hidden-innovation/test/data-access';
 
 @Component({
   selector: 'hidden-innovation-pack-selector',

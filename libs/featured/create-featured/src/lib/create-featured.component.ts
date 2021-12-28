@@ -3,7 +3,7 @@ import { FeaturedCore } from '@hidden-innovation/featured/data-access';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
-import { TestCore } from '@hidden-innovation/test/data-access';
+import { TestStore } from '@hidden-innovation/test/data-access';
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -30,7 +30,7 @@ export class CreateFeaturedComponent implements OnInit {
       maxWidth: '100%',
       role: 'dialog'
     });
-    dialogRef.afterClosed().subscribe((tests: TestCore[] | undefined) => {
+    dialogRef.afterClosed().subscribe((tests: TestStore[] | undefined) => {
       if (tests) {
         return;
       }
