@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Pack, PackContent, PackContentListingRequest, PackCore, PackListingRequest } from '../models/pack.interface';
+import {
+  Pack,
+  PackContent,
+  PackContentListingRequest,
+  PackCore,
+  PackDeleteRequest,
+  PackListingRequest,
+  PackPublishToggleRequest
+} from '../models/pack.interface';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { PackService } from '../services/pack.service';
 import { Router } from '@angular/router';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
+import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 
 export interface PackState {
   packs: Pack[];
@@ -137,7 +147,7 @@ export class PackStore extends ComponentStore<PackState> {
           catchError(() => EMPTY)
         )
       )
-    ),
+    )
   );
 
   createPack$ = this.effect<PackCore>(params$ =>
@@ -213,6 +223,105 @@ export class PackStore extends ComponentStore<PackState> {
     )
   );
 
+  private togglePublishState$ = this.effect<PackPublishToggleRequest>(params$ =>
+    params$.pipe(
+      tap((state) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading(state.newState ? 'Publishing Test...' : 'Un-publishing Test...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap(({ id, newState }) =>
+        this.packService.togglePackPublishStatus(id).pipe(
+          tapResponse(
+            _ => {
+              const packs: Pack[] | undefined = this.get().packs;
+              this.patchState({
+                isActing: false,
+                loaded: true,
+                packs: packs.map(p => {
+                  if (p.id === id) {
+                    return {
+                      ...p,
+                      isPublished: newState
+                    };
+                  } else {
+                    return p;
+                  }
+                })
+              });
+              this.toastRef?.updateMessage(newState ? 'Success! Pack Published' : 'Success! Pack Un-published');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success'
+              });
+            },
+            _ => {
+              this.toastRef?.close();
+              this.patchState({
+                isActing: false
+              });
+            }
+          )
+        )
+      )
+    )
+  );
+
+  private deletePack$ = this.effect<PackDeleteRequest>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Deleting Pack...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap(({ id, pageSize, pageIndex, nameSort, dateSort, search, published }) =>
+        this.packService.deletePack(id).pipe(
+          tapResponse(
+            _ => {
+              const packs: Pack[] = this.get().packs;
+              this.patchState({
+                isActing: false,
+                loaded: true,
+                packs: packs.filter(p => p.id !== id)
+              });
+              this.toastRef?.updateMessage('Success! Pack deleted');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success'
+              });
+              this.getPacks$({
+                page: pageIndex,
+                limit: pageSize,
+                nameSort,
+                dateSort,
+                search,
+                published
+              });
+            },
+            _ => {
+              this.toastRef?.close();
+              this.patchState({
+                isActing: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
+
   constructor(
     private packService: PackService,
     private router: Router,
@@ -220,5 +329,51 @@ export class PackStore extends ComponentStore<PackState> {
     private matDialog: MatDialog
   ) {
     super(initialState);
+  }
+
+  toggleActive(id: number, currentState: boolean): void {
+    const newState = !currentState;
+    const dialogData: GenericDialogPrompt = {
+      title: newState ? 'Publish Pack?' : 'Un-publish Pack?',
+      desc: `Are you sure you want to ${newState ? 'publish this Pack' : 'un-publish this Pack'}?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.togglePublishState$({
+          id,
+          newState
+        });
+      }
+    });
+  }
+
+  deletePack(deleteObj: PackDeleteRequest): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Delete Pack?',
+      desc: `Are you sure you want to delete this Pack?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.deletePack$(deleteObj);
+      }
+    });
   }
 }

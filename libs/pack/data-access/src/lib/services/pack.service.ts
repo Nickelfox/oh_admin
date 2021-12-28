@@ -15,6 +15,7 @@ import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http'
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { CustomApiResponse } from '@hidden-innovation/shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -77,6 +78,18 @@ export class PackService {
   updatePackDetails(id: number, reqObj: PackCore): Observable<Pack> {
     return this.http.patch<PackMutationResponse>(`${this.env.baseURL}/v1/admin/update-pack-new/${id}`, reqObj).pipe(
       map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  togglePackPublishStatus(id: number): Observable<CustomApiResponse> {
+    return this.http.patch<CustomApiResponse>(`${this.env.baseURL}/v1/admin/toggle-pack/${id}`, {}).pipe(
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  deletePack(id: number): Observable<CustomApiResponse> {
+    return this.http.delete<CustomApiResponse>(`${this.env.baseURL}/v1/admin/delete-pack/${id}`).pipe(
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
