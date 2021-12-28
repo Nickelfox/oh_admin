@@ -1,5 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
-import { PackListingRequest, PackListingResponse, PackListingResponseData } from '../models/pack.interface';
+import {
+  Pack,
+  PackContentListingRequest,
+  PackContentListingResponse,
+  PackContentListingResponseData,
+  PackCore,
+  PackDetailsResponse,
+  PackListingRequest,
+  PackListingResponse,
+  PackListingResponseData,
+  PackMutationResponse
+} from '../models/pack.interface';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { catchError, map } from 'rxjs/operators';
@@ -37,6 +48,37 @@ export class PackService {
     );
   }
 
+  createPack(obj: PackCore): Observable<Pack> {
+    return this.http.post<PackMutationResponse>(`${this.env.baseURL}/v1/admin/create-pack-new`, obj).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
 
+  getContentPack(reqObj: PackContentListingRequest): Observable<PackContentListingResponseData> {
+    let params = new HttpParams();
+    params = params.appendAll({
+      'page': reqObj.page.toString(),
+      'limit': reqObj.limit.toString()
+    });
+    return this.http.get<PackContentListingResponse>(`${this.env.baseURL}/v1/admin/combined-pack`, { params }).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  getPackDetails(id: number): Observable<Pack> {
+    return this.http.get<PackDetailsResponse>(`${this.env.baseURL}/v1/admin/get-pack-new/${id}`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  updatePackDetails(id: number, reqObj: PackCore): Observable<Pack> {
+    return this.http.patch<PackMutationResponse>(`${this.env.baseURL}/v1/admin/update-pack-new/${id}`, reqObj).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
 
 }

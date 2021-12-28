@@ -1,4 +1,4 @@
-<div class='p-4'>
+<form class='p-4' [formGroup]='packForm'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -9,6 +9,8 @@
           Cancel
         </button>
         <button
+          [disabled]='(store.isActing$ | async) || (store.isLoading$ | async) || (store.isContentLoading$ | async)'
+          (click)='submit()'
           mat-flat-button
           class='ml-3'
           color='primary' type='submit'>
@@ -31,73 +33,149 @@
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Pack Name</mat-label>
-                    <input matInput autocomplete='no' type='text'>
-                  </mat-form-field>
+                  <hidden-innovation-common-form-field
+                    label='Pack Name'
+                    controlPath='name'
+                  ></hidden-innovation-common-form-field>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Description</mat-label>
-                    <textarea matInput></textarea>
-                  </mat-form-field>
+                  <hidden-innovation-common-form-field-textarea
+                    [label]='constantDataService.FIELD_NAME.DESC | titlecase'
+                    controlPath='description'
+                  ></hidden-innovation-common-form-field-textarea>
                 </div>
               </div>
             </div>
             <div class='container-fluid p-0 '>
               <div class='row mb-3'>
                 <div class='col-12'>
-                  <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                  <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
                     Media</h5>
                 </div>
               </div>
               <div class='row mb-3'>
                 <div class='col-12'>
                   <p class='text-muted mb-2'>Thumbnail</p>
-                  <button
-                    mat-stroked-button
-                    color='primary' type='submit'>
-                    Upload
-                  </button>
+                  <hidden-innovation-common-form-field-image
+                    controlPath='thumbnailId'
+                    [setImageData]='selectedPack?.thumbnail'
+                    [aspectRatio]='aspectRatio.STANDARD'
+                    [parentCtrl]='packForm.controls.thumbnailId'
+                    (emitImageCtrlData)='packForm.controls.thumbnailId?.setValue($event)'
+                    (emitRemoveImage)='packForm.controls.thumbnailId?.reset($event)'
+                  ></hidden-innovation-common-form-field-image>
                 </div>
               </div>
               <div class='row mb-4'>
                 <div class='col-12'>
                   <p class='text-muted mb-2'>Poster</p>
-                  <button
-                    mat-stroked-button
-                    color='primary' type='submit'>
-                    Upload
-                  </button>
+                  <hidden-innovation-common-form-field-image
+                    controlPath='posterId'
+                    [setImageData]='selectedPack?.poster'
+                    [aspectRatio]='aspectRatio.CUBE'
+                    [parentCtrl]='packForm.controls.posterId'
+                    (emitImageCtrlData)='packForm.controls.posterId?.setValue($event)'
+                    (emitRemoveImage)='packForm.controls.posterId?.reset($event)'
+                  ></hidden-innovation-common-form-field-image>
                 </div>
               </div>
             </div>
             <div class='container-fluid p-0 '>
               <div class='row mb-3'>
                 <div class='col-12'>
-                  <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                  <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
                     Resources</h5>
                 </div>
               </div>
               <div class='row mb-3'>
                 <div class='col-12'>
                   <p class='text-muted mb-2'>PDFs and Images</p>
-                  <button
-                    mat-stroked-button
-                    color='primary' type='submit'>
-                    Upload
-                  </button>
+                  <div class='container-fluid p-0'>
+                    <div class='row mb-2' *ngFor='let res of imagesAndPdfsArrayCtrl.controls; let i=index;'>
+                      <div class='col-12 d-flex '>
+                        <hidden-innovation-common-form-field-file
+                          controlPath='posterId'
+                          [fileData]='selectedResource(i)'
+                          [parentCtrl]='imagesAndPdfsArrayCtrl.controls[i]'
+                          (emitFileCtrlData)='imagesAndPdfsArrayCtrl.controls[i].setValue($event)'
+                          (emitRemoveFile)='imagesAndPdfsArrayCtrl.controls[i].reset($event)'
+                        ></hidden-innovation-common-form-field-file>
+                        <button type='button' [disabled]='(store.isActing$ | async)' mat-icon-button color='warn' class='ml-2' (click)='deleteResourceCtrl(i)'>
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <button mat-stroked-button [disabled]='(store.isActing$ | async)' type='button' (click)='addResourceCtrl()'>
+                          <mat-icon>add</mat-icon>
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class='row mb-4'>
-                <div class='col-12'>
+                <div class='col-12' formArrayName='urls'>
                   <p class='text-muted mb-2'>URLs</p>
+                  <div class='container-fluid p-0'>
+                    <div class='row mb-2' *ngFor='let url of urlFormArray.controls; let i=index'>
+                      <div class='col-12'>
+                        <div class='container-fluid p-0' formGroupName='{{i}}'>
+                          <div class='row'>
+                            <div class='col-10'>
+                              <mat-form-field class='w-100'>
+                                <mat-label>Enter URL</mat-label>
+                                <input matInput autocomplete='no' formControlName='url' type='text'>
+                                <mat-error>
+                                  <ng-template
+                                    [ngIf]='((urlFormControl(i).controls.url.touch$ | async) || (urlFormControl(i).controls.url.dirty$ | async)) && (urlFormControl(i).controls.url.errors$ | async)'
+                                    let-error>
+                                    <hidden-innovation-form-field-errors
+                                      label='URL'
+                                      [error]='error'
+                                    ></hidden-innovation-form-field-errors>
+                                  </ng-template>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class='col-2 d-flex justify-content-end'>
+                              <button type='button' [disabled]='(store.isActing$ | async)' mat-icon-button color='warn' (click)='removeUrlCtrl(i)'>
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                          <div class='row'>
+                            <div class='col-12'>
+                              <mat-form-field class='w-100'>
+                                <mat-label>{{constantDataService.FIELD_NAME.DESC | titlecase}}</mat-label>
+                                <input matInput autocomplete='no' formControlName='description' type='text'>
+                                <mat-error>
+                                  <ng-template
+                                    [ngIf]='((urlFormControl(i).controls.description.touch$ | async) || (urlFormControl(i).controls.description.dirty$ | async)) && (urlFormControl(i).controls.description.errors$ | async)'
+                                    let-error>
+                                    <hidden-innovation-form-field-errors
+                                      [label]='constantDataService.FIELD_NAME.DESC | titlecase'
+                                      [error]='error'
+                                    ></hidden-innovation-form-field-errors>
+                                  </ng-template>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <button
+                    [disabled]='(store.isActing$ | async)'
+                    (click)='addUrlCtrl()'
                     mat-stroked-button
-                    color='primary' type='submit'>
-                    Upload
+                    color='primary' type='button'>
+                    Add
                   </button>
                 </div>
               </div>
@@ -110,60 +188,50 @@
           <mat-card-title class='d-flex justify-content-between align-items-center'>
             <h3 class='mat-h3 mb-0 font-sf-pro'>Contents</h3>
             <button
+              [disabled]='(store.isActing$ | async)'
               mat-flat-button
               class='ml-3'
-              [matMenuTriggerFor]="menuPack"
-              color='primary' type='submit'>
+              [matMenuTriggerFor]='menuPack'
+              color='primary' type='button'>
               Add
             </button>
-            <mat-menu #menuPack="matMenu">
-              <button mat-menu-item (click)='openTestSelector()' >
-                <span>Test</span>
+            <mat-menu #menuPack='matMenu'>
+              <button type='button' mat-menu-item (click)='openContentSelectorDialog()'>
+                <span>Content (Test/Test-Group/Questionnaire)</span>
               </button>
-              <button mat-menu-item (click)='openTestGroupDialog()' >
-                <span>Test Group</span>
-              </button>
-              <button mat-menu-item (click)='openCreateLessonDialog()'  >
+              <button type='button' mat-menu-item (click)='openCreateLessonDialog()'>
                 <span>Lessons</span>
-              </button>
-              <button mat-menu-item (click)='openQuestionnaireDialog()' >
-                <span>Questionnaire</span>
               </button>
             </mat-menu>
           </mat-card-title>
           <mat-divider></mat-divider>
-          <mat-card-content >
-
-              <div class='pt-3' cdkDrag>
-                <mat-card class='question-card mat-elevation-z3 pt-1 pr-1'>
-                  <div class='d-flex align-items-center justify-content-between'>
-                    <h4 class='mat-h4 mb-0 font-weight-bold'>Introduction to high performance training</h4>
-                    <div>
-                      <button type='button' mat-icon-button [matMenuTriggerFor]='menu'>
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #menu='matMenu'>
-                        <button type='button'  mat-menu-item>
-                          <mat-icon>create</mat-icon>
-                          <span>Edit</span>
-                        </button>
-                        <button type='button'  mat-menu-item>
-                          <mat-icon>delete</mat-icon>
-                          <span>Delete</span>
-                        </button>
-                      </mat-menu>
-                    </div>
-                  </div>
-                  <h5
-                    class='mat-h5 d-flex align-items-center text-color__primary mb-0 mr-2 type-icon font-calibri'>
-                    <mat-icon class='d-flex align-items-center'  aria-hidden="false" aria-label="fiber manual record">fiber_manual_record</mat-icon>
-                    <span>Lesson</span>
-                  </h5>
-                </mat-card>
+          <mat-card-content class='content-container'>
+            <ng-template [ngIf]='contentArrayExists' [ngIfElse]='contentElse'>
+              <hidden-innovation-pack-content-card
+                class='mb-3'
+                *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
+                [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                [name]='content.name'
+                [category]='content.type'
+                (emitDeleteEvent)='deleteSelectedContent(content)'
+              ></hidden-innovation-pack-content-card>
+            </ng-template>
+            <ng-template #contentElse>
+              <div class='d-flex align-items-center justify-content-center w-100'>
+                <h4 class='mat-h4 mb-0 my-2 font-calibri text-muted'>--</h4>
               </div>
-
+            </ng-template>
           </mat-card-content>
-          </mat-card>
+        </mat-card>
+        <ng-template
+          [ngIf]='!contentIsValid && ((packForm.controls.content.touch$ | async) || (packForm.controls.content.dirty$ | async))'
+          [ngIfElse]='minContentLengthElse'>
+          <mat-error><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-error>
+        </ng-template>
+        <ng-template #minContentLengthElse>
+          <mat-hint><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-hint>
+        </ng-template>
       </div>
     </div>
   </div>
+</form>

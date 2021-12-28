@@ -16,6 +16,9 @@ import { FormValidationService, GenericErrorMessage } from '@hidden-innovation/s
     <ng-container *ngIf='(error?.alpha || error?.pattern)'>
       {{errorMessage.invalid}} <br>
     </ng-container>
+    <ng-container *ngIf='(error?.url)'>
+      Invalid URL! Enter a valid url i.e https://www.google.com<br>
+    </ng-container>
     <ng-container *ngIf='error?.maxLength'>
       Must not exceed {{error?.maxLength?.refValues[1]}} character limit <br>
     </ng-container>

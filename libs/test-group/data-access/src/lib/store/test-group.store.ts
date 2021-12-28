@@ -11,7 +11,6 @@ import { EMPTY, Observable } from 'rxjs';
 import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { TestGroupService } from '../services/test-group.service';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
-import { Test, TestDeleteRequest } from '@hidden-innovation/test/data-access';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
@@ -21,7 +20,6 @@ import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialo
 export interface TestGroupState {
   testGroups: TestGroup[];
   selectedGroup?: TestGroup;
-  selectedTests?: Test[];
   total: number;
   isLoading?: boolean;
   isActing?: boolean;
@@ -45,7 +43,6 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly testGroups$: Observable<TestGroup[]> = this.select(state => state.testGroups || []);
   readonly selectedTestGroup$: Observable<TestGroup | undefined> = this.select(state => state.selectedGroup);
-  readonly selectedTests$: Observable<Test[]> = this.select(state => state.selectedTests || []);
 
   getTestGroups$ = this.effect<TestGroupListingRequest>(params$ =>
     params$.pipe(

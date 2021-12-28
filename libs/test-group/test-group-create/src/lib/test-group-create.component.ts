@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
 import { TestGroup, TestGroupCore, TestGroupStore } from '@hidden-innovation/test-group/data-access';
@@ -20,6 +13,7 @@ import { filter, switchMap, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Test } from '@hidden-innovation/test/data-access';
+import { UiStore } from '@hidden-innovation/shared/store';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -29,7 +23,7 @@ import { Test } from '@hidden-innovation/test/data-access';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TestGroupCreateComponent implements OnInit, OnDestroy {
+export class TestGroupCreateComponent implements OnDestroy {
 
   requiredFieldValidation: ValidatorFn[] = [
     RxwebValidators.required(),
@@ -88,7 +82,8 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
     public constantDataService: ConstantDataService,
     public formValidationService: FormValidationService,
     public tagsStore: TagsStore,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public uiStore: UiStore
   ) {
     this.route.data.pipe(
       filter(data => data?.type !== undefined),
@@ -116,7 +111,7 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
     });
     const { category, subCategory, tests, isVisible } = this.testGroup.controls;
     const testFormArray: FormArray<number> = tests as FormArray<number>;
-    this.store.selectedTests$.subscribe(newTests => {
+    this.uiStore.selectedTests$.subscribe(newTests => {
       this.selectedTests = newTests;
       testFormArray.clear();
       newTests.forEach(t => {
@@ -142,16 +137,13 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
     return typeof subCatCtrl.value === 'string' ? subCatCtrl.value : subCatCtrl.value.name;
   }
 
-  ngOnInit(): void {
-  }
-
   trackByFn(index: number, test: Test): number {
     return test.id;
   }
 
   deleteSelectedTest(test: Test): void {
     if (this.selectedTests.find(value => value.id === test.id)) {
-      this.store.patchState({
+      this.uiStore.patchState({
         selectedTests: [
           ...this.selectedTests.filter(t => t.id !== test.id)
         ]
@@ -195,8 +187,10 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
   }
 
   restoreSelectedState(): void {
+    this.uiStore.patchState({
+      selectedTests: []
+    });
     this.store.patchState({
-      selectedTests: [],
       selectedGroup: undefined
     });
   }
@@ -209,7 +203,7 @@ export class TestGroupCreateComponent implements OnInit, OnDestroy {
     const { isVisible, category, imageId, thumbnailId, subCategory, name, description } = testGroup;
     this.selectedTestGroup = testGroup;
     const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];
-    this.store.patchState({
+    this.uiStore.patchState({
       selectedTests
     });
     this.testGroup.controls.category.setValue(category);

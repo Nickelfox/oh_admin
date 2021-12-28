@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
-import { MediaUploadService } from '../../services/media-upload.service';
+import { MediaService } from '../../services/media.service';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { filter, switchMap } from 'rxjs/operators';
@@ -34,13 +34,11 @@ export class VideoPickerComponent {
   isUploading = false;
   toastRef: CreateHotToastRef<unknown> | undefined;
 
-  @ViewChild('videoElement') videoElement?: ElementRef<HTMLVideoElement>;
-
   file?: File;
 
   constructor(
     private matDialog: MatDialog,
-    private mediaUploadService: MediaUploadService,
+    private mediaUploadService: MediaService,
     private hotToastService: HotToastService,
     private cdr: ChangeDetectorRef,
     private authFacade: AuthFacade,
@@ -93,7 +91,7 @@ export class VideoPickerComponent {
           return;
         }
         // Upload after it passed all the validation here.
-        this.upload(file, file.name);
+        this.upload(file, this.mediaUploadService.removeExtension(file.name));
       };
       reader.onloadend = _ => {
         this.toastRef?.close();

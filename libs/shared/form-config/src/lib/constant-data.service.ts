@@ -10,6 +10,7 @@ export class ConstantDataService {
     TEST_NAME: 'test name',
     TYPE: 'type',
     FIRST_NAME: 'first name',
+    FILE_NAME: 'file name',
     EMAIL_ID: 'email id',
     EQUIPMENT: 'equipment',
     COUNTRY: 'country',
@@ -79,12 +80,19 @@ export class ConstantDataService {
     limit: 52428800,
     limitMessage: 'File must be smaller than 50MB.',
     videoFormatMessage: 'Only MOV & MP4 formats are allowed',
-    videoRatioMessage: 'Video file must be in 16:9 aspect ratio'
+    videoRatioMessage: 'Video file must be in 16:9 aspect ratio',
+    fileFormatMessage: 'Invalid File! Please select an appropriate file to upload'
   };
 
   public FILE_FORMAT_DATA = {
     video_mp4: 'video/mp4',
-    video_mov: 'video/quicktime'
+    video_mov: 'video/quicktime',
+    // Application Type
+    application: 'application',
+    audio: 'audio',
+    image: 'image',
+    text: 'text',
+    video: 'video'
   }
 
 }

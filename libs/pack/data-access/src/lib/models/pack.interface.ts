@@ -1,7 +1,7 @@
 import { Media } from '@hidden-innovation/media';
 import { Test } from '@hidden-innovation/test/data-access';
 import { Lesson, LessonCore } from './lesson.interface';
-import { CustomApiResponse, SortingEnum } from '@hidden-innovation/shared/models';
+import { CustomApiResponse, PackContentTypeEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
 
@@ -10,13 +10,51 @@ export interface PackCore {
   description: string;
   thumbnailId: number;
   isPublished: boolean;
-  imageId: number;
-  urls: string[];
+  // imageId: number;
+  imagesAndPdfsIds: number[];
+  urls: ContentUrl[];
   posterId: number;
-  lessons: LessonCore[];
-  testGroupIds: number[];
-  questionnaireIds: number[];
-  testIds: number[];
+  content: ContentCore[] | LessonCore[];
+}
+
+export interface ContentCore {
+  order: number | undefined;
+  content_id: number | null;
+  name: string;
+  type: PackContentTypeEnum;
+}
+
+export interface Content extends ContentCore {
+  id: number;
+  contentOrder: number;
+  packId: number;
+  name: string;
+  deletedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  contentId: number;
+}
+
+export interface PackContent {
+  id: number;
+  created_at: string;
+  name: string;
+  type: PackContentTypeEnum;
+  inputType: string;
+}
+
+export interface PackContentListingRequest {
+  limit: number;
+  page: number;
+}
+
+export interface PackContentListingResponse extends CustomApiResponse {
+  data: PackContentListingResponseData;
+}
+
+export interface PackContentListingResponseData {
+  allPack: PackContent[];
+  count: number;
 }
 
 export interface Pack extends PackCore {
@@ -24,10 +62,13 @@ export interface Pack extends PackCore {
   lessons: Lesson[];
   tests: Test[];
   testGroups: TestGroup[];
-  image: Media;
+  // image: Media;
   thumbnail: Media;
   questionnaires: QuestionnaireExtended[];
+  imagesAndPdfs: Media[];
   poster: Media;
+  urls: ContentUrl[];
+  content: Content[] | Lesson[];
   deleted_at: string;
   created_at: string;
   updated_at: string;
@@ -52,4 +93,17 @@ export interface PackListingResponse extends CustomApiResponse {
 export interface PackListingResponseData {
   packs: Pack[],
   count: number;
+}
+
+export interface PackDetailsResponse extends CustomApiResponse {
+  data: Pack;
+}
+
+export interface PackMutationResponse extends CustomApiResponse {
+  data: Pack;
+}
+
+export interface ContentUrl {
+  url: string;
+  description: string;
 }

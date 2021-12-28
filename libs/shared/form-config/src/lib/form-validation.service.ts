@@ -65,6 +65,10 @@ export class FormValidationService {
     minLength: 'Minimum of 2 tests are required to publish a test group'
   }
 
+  contentSelectionValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 contents are required to publish a pack'
+  }
+
   formSubmitError = 'Invalid Submission! Please fill all valid details';
 
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
@@ -89,6 +93,10 @@ export class FormValidationService {
       allowDecimal: false,
       acceptValue: NumericValueType.Both
     })
+  ];
+  requiredFieldValidation: ValidatorFn[] = [
+    RxwebValidators.required(),
+    RxwebValidators.notEmpty()
   ];
   // Reference: https://regex101.com/r/0bH043/1
   private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
