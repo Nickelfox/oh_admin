@@ -7,7 +7,7 @@ import {
   Output,
   ViewEncapsulation
 } from '@angular/core';
-import { FilePickedResponseData } from '@hidden-innovation/media';
+import { FilePickedResponseData } from '../../models/media.interface';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { MediaService } from '../../services/media.service';
