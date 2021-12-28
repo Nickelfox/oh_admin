@@ -11,18 +11,19 @@ export enum FeaturedType  {
   PACKS = 'PACKS'
 }
 
-export enum ScreenType  {
+export enum PackType  {
   HOME = 'HOME',
   CARDIO = 'CARDIO',
   LIFESTYLE = 'LIFESTYLE',
   FUNCTION = 'FUNCTION',
-  MOVEMENT = 'MOVEMENT'
+  MOVEMENT = 'MOVEMENT',
+  STRENGTH = 'STRENGTH'
 }
 
 export const dummyFeatured: FeaturedCore[] = [
   {
     name: 'Spotlight',
-    screen: 'Home',
+    screen: PackType.HOME,
     items: 2,
     created_at: DateTime.now().toISODate(),
     deleted_at: DateTime.now().toISODate(),
@@ -30,12 +31,61 @@ export const dummyFeatured: FeaturedCore[] = [
   },
   {
     name: 'Feature Packs',
-    screen: 'Cardio(Library)',
+    screen: PackType.HOME,
     items: 2,
     created_at: DateTime.now().toISODate(),
     deleted_at: DateTime.now().toISODate(),
     updated_at: DateTime.now().toISODate()
-  }
+  },
+  {
+    name: 'Feature Tests',
+    screen: PackType.HOME,
+    items: 2,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
+  },
+  {
+    name: 'Packs',
+    screen: PackType.CARDIO,
+    items: 2,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
+  },
+  {
+    name: 'Packs',
+    screen: PackType.LIFESTYLE,
+    items: 2,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
+  },
+  {
+    name: 'Packs',
+    screen: PackType.FUNCTION,
+    items: 2,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
+  },
+  {
+    name: 'Packs',
+    screen: PackType.MOVEMENT,
+    items: 2,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
+  },
+  {
+    name: 'Packs',
+    screen: PackType.STRENGTH,
+    items: 2,
+    created_at: DateTime.now().toISODate(),
+    deleted_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
+  },
+
 ];
 
 @Component({
