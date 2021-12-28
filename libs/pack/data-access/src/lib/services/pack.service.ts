@@ -2,8 +2,10 @@ import { Inject, Injectable } from '@angular/core';
 import {
   Pack,
   PackContentListingRequest,
-  PackContentListingResponse, PackContentListingResponseData,
+  PackContentListingResponse,
+  PackContentListingResponseData,
   PackCore,
+  PackDetailsResponse,
   PackListingRequest,
   PackListingResponse,
   PackListingResponseData,
@@ -47,7 +49,7 @@ export class PackService {
   }
 
   createPack(obj: PackCore): Observable<Pack> {
-    return this.http.post<PackMutationResponse>(`${this.env.baseURL}/v1/admin/get-all-pack`, obj).pipe(
+    return this.http.post<PackMutationResponse>(`${this.env.baseURL}/v1/admin/create-pack-new`, obj).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
@@ -60,6 +62,20 @@ export class PackService {
       'limit': reqObj.limit.toString()
     });
     return this.http.get<PackContentListingResponse>(`${this.env.baseURL}/v1/admin/combined-pack`, { params }).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  getPackDetails(id: number): Observable<Pack> {
+    return this.http.get<PackDetailsResponse>(`${this.env.baseURL}/v1/admin/get-pack-new/${id}`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  updatePackDetails(id: number, reqObj: PackCore): Observable<Pack> {
+    return this.http.patch<PackMutationResponse>(`${this.env.baseURL}/v1/admin/update-pack-new/${id}`, reqObj).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );

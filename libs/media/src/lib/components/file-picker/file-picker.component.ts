@@ -125,7 +125,7 @@ export class FilePickerComponent {
     this.cdr.markForCheck();
     this.authFacade.token$.pipe(
       filter((value) => value !== undefined),
-      switchMap((token) => this.mediaUploadService.uploadMedia(file, fileName, token))
+      switchMap((token) => this.mediaUploadService.uploadFile(file, this.mediaUploadService.getFileType(file), fileName, token))
     ).subscribe(
       ({ attachmentId }) => {
         this.toastRef?.updateMessage('Success! File Uploaded');
@@ -134,6 +134,7 @@ export class FilePickerComponent {
           type: 'success'
         });
         this.isUploading = false;
+        console.log();
         this.emitFile.emit({
           fileName,
           attachmentId,

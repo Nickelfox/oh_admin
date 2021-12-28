@@ -255,8 +255,16 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/pack/pack-create').then(
                 (m) => m.PackCreateModule
               ),
-            data: { breadcrumb: 'Add Pack' }
+            data: { breadcrumb: 'Add Pack', type: OperationTypeEnum.CREATE }
           },
+          {
+            path: 'edit/:id',
+            loadChildren: () =>
+              import('@hidden-innovation/pack/pack-create').then(
+                (m) => m.PackCreateModule
+              ),
+            data: { breadcrumb: 'Edit Pack', type: OperationTypeEnum.EDIT }
+          }
         ]
       },
 

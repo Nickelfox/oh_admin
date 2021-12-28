@@ -7,6 +7,7 @@ import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { map } from 'rxjs/operators';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'hidden-innovation-content-selector',
@@ -39,19 +40,21 @@ export class ContentSelectorComponent implements OnInit {
     private matDialog: MatDialog,
     public matDialogRef: MatDialogRef<PackContent[]>,
     public uiStore: UiStore,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private titleCasePipe: TitleCasePipe,
   ) {
     this.noData = this.contents.connect().pipe(map(data => data.length === 0));
     this.uiStore.selectedContent$.subscribe(contents => {
       this.selectedContents = contents;
       this.dummyContents = contents;
     });
-    // if (!this.initialised) {
-    //   this.uiStore.patchState({
-    //     selectedContent: this.selectedContents
-    //   });
-    //   this.initialised = true;
-    // }
+    if (!this.initialised) {
+      this.uiStore.patchState({
+        selectedContent: this.selectedContents
+      });
+      this.initialised = true;
+      this.cdr.markForCheck();
+    }
     this.refreshList();
   }
 
@@ -95,7 +98,7 @@ export class ContentSelectorComponent implements OnInit {
   }
 
   isSelected(content: PackContent): boolean {
-    return !!this.selectedContents.find(value => (value.content_id === content.id) && (value.type === content.type));
+    return !!this.selectedContents.find(value => (value.content_id === content.id) && (this.titleCasePipe.transform(value.type) === content.type));
   }
 
   addToList(content: PackContent): void {

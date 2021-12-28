@@ -98,8 +98,47 @@ export class PackStore extends ComponentStore<PackState> {
       )
     )
   );
-
   private toastRef: CreateHotToastRef<unknown> | undefined;
+  updatePack$ = this.effect<{ pack: PackCore, id: number }>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Updating Pack...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap(({ pack, id }) =>
+        this.packService.updatePackDetails(id, pack).pipe(
+          tapResponse(
+            (selectedPack) => {
+              this.patchState({
+                isActing: false,
+                loaded: true,
+                selectedPack
+              });
+              this.toastRef?.updateMessage('Pack Updated!');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success',
+                duration: 300
+              });
+              this.router.navigate(['/packs']);
+            },
+            error => {
+              this.patchState({
+                isActing: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    ),
+  );
 
   createPack$ = this.effect<PackCore>(params$ =>
     params$.pipe(
@@ -132,6 +171,39 @@ export class PackStore extends ComponentStore<PackState> {
             _ => {
               this.patchState({
                 isActing: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+  getPackDetails$ = this.effect<{ id: number }>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isLoading: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Populating Details...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      switchMap(({ id }) =>
+        this.packService.getPackDetails(id).pipe(
+          tapResponse(
+            (selectedPack) => {
+              this.patchState({
+                isLoading: false,
+                selectedPack
+              });
+              this.toastRef?.close();
+            },
+            (_) => {
+              this.patchState({
+                isLoading: false
               });
             }
           ),

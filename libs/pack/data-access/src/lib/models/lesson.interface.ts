@@ -19,4 +19,5 @@ export interface Lesson extends LessonCore {
   thumbnail: Media;
   video: Media;
   tags: Tag[];
+  contentId: number;
 }

@@ -12,7 +12,7 @@ export interface PackCore {
   isPublished: boolean;
   // imageId: number;
   imagesAndPdfsIds: number[];
-  urls: string[];
+  urls: ContentUrl[];
   posterId: number;
   content: ContentCore[] | LessonCore[];
 }
@@ -22,6 +22,17 @@ export interface ContentCore {
   content_id: number | null;
   name: string;
   type: PackContentTypeEnum;
+}
+
+export interface Content extends ContentCore {
+  id: number;
+  contentOrder: number;
+  packId: number;
+  name: string;
+  deletedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  contentId: number;
 }
 
 export interface PackContent {
@@ -54,8 +65,10 @@ export interface Pack extends PackCore {
   // image: Media;
   thumbnail: Media;
   questionnaires: QuestionnaireExtended[];
-  resources: Media[];
+  imagesAndPdfs: Media[];
   poster: Media;
+  urls: ContentUrl[];
+  content: Content[] | Lesson[];
   deleted_at: string;
   created_at: string;
   updated_at: string;
@@ -82,6 +95,15 @@ export interface PackListingResponseData {
   count: number;
 }
 
+export interface PackDetailsResponse extends CustomApiResponse {
+  data: Pack;
+}
+
 export interface PackMutationResponse extends CustomApiResponse {
   data: Pack;
+}
+
+export interface ContentUrl {
+  url: string;
+  description: string;
 }

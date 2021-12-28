@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { PackCreateComponent } from './pack-create.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
@@ -40,6 +40,10 @@ import { ContentSelectorModule } from '@hidden-innovation/shared/ui/content-sele
   ],
   declarations: [
     PackCreateComponent
+  ],
+  providers: [
+    UpperCasePipe,
+    TitleCasePipe
   ]
 })
 export class PackCreateModule {

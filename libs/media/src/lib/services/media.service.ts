@@ -34,6 +34,20 @@ export class MediaService {
     );
   }
 
+  uploadFile(file: Blob | File, fileType: string, fileName: string, token?: string): Observable<MediaUpload> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, fileName);
+    formData.append('type', fileType);
+    return this.httpClient.post<MediaUploadResponse>(`${this.env.baseURL}/v1/users/upload`, formData, {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    }).pipe(
+      map(res => res.data)
+    );
+  }
+
   removeExtension(filename: string): string {
     const lastDotPosition = filename.lastIndexOf('.');
     if (lastDotPosition === -1) return filename;
@@ -41,18 +55,36 @@ export class MediaService {
   }
 
   getFileIcon(file: File): string {
-    switch (file.type.split('/')[0]) {
-      case this.constantDataService.FILE_FORMAT_DATA.audio:
+    switch (this.getFileType(file)) {
+      case 'audio':
         return 'audio_file';
-      case this.constantDataService.FILE_FORMAT_DATA.video:
+      case 'video':
         return 'video_file';
-      case this.constantDataService.FILE_FORMAT_DATA.image:
+      case 'image':
         return 'image';
-      case this.constantDataService.FILE_FORMAT_DATA.text:
+      case 'pdf':
+        return 'picture_as_pdf';
+      case 'doc':
         return 'description';
       default:
         return 'attach_file';
     }
+  }
+
+  getFileType(file: File): string {
+    if(file.type.startsWith('video')) {
+     return 'video';
+    }
+    if(file.type.startsWith('audio')) {
+     return 'audio';
+    }
+    if(file.type.startsWith('image')) {
+      return 'image';
+    }
+    if(file.type.includes('pdf')) {
+      return 'pdf';
+    }
+    return 'doc';
   }
 
 }

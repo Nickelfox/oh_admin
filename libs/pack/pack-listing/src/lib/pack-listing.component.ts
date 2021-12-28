@@ -19,7 +19,7 @@ import { MatSelectionListChange } from '@angular/material/list';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PackListingComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'updated_at', 'lessons', 'tests', 'testGroups', 'questionnaires', 'status', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'updated_at', 'lessons', 'content', 'status', 'action'];
   packs: MatTableDataSource<Pack> = new MatTableDataSource<Pack>();
 
   noData: Observable<boolean>;
