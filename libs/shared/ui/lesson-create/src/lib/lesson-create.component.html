@@ -1,0 +1,92 @@
+<div>
+  <h2 mat-dialog-title
+      class='font-calibri--bold'>Add Lesson</h2>
+</div>
+<mat-dialog-content>
+  <form [formGroup]='lessonFrom'>
+    <div class='container-fluid p-0'>
+      <div class='row mb-2'>
+        <div class='col-12'>
+          <hidden-innovation-common-form-field
+            label='Lesson Name'
+            controlPath='name'
+          ></hidden-innovation-common-form-field>
+        </div>
+      </div>
+      <div class='row mb-2'>
+        <div class='col-12'>
+          <mat-form-field class='w-100' appearance='fill'>
+            <mat-label>Category</mat-label>
+            <mat-select formControlName='category'>
+              <mat-option [value]='"NONE"'>None</mat-option>
+              <mat-option [value]=type
+                          *ngFor='let type of testCatTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
+            </mat-select>
+            <mat-error>
+              <ng-template
+                [ngIf]='((lessonFrom.controls.category.touch$ | async) || (lessonFrom.controls.category.dirty$ | async)) && (lessonFrom.controls.category.errors$ | async)'
+                let-error>
+                <hidden-innovation-form-field-errors
+                  label='Category'
+                  [error]='error'
+                ></hidden-innovation-form-field-errors>
+              </ng-template>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class='row mb-2'>
+        <div class='col-12'>
+          <hidden-innovation-common-form-field-tag-autocomplete
+            label='Subcategory(s)'
+            [testTags]='testTags'
+            [tagTypeEnum]='tagTypeEnum.SUB_CATEGORY'
+            [tagCategory]='lessonFrom.controls.category.value'
+            (updateTags)='updateTestTags($event)'
+            (removeTag)='removeTag($event)'
+          ></hidden-innovation-common-form-field-tag-autocomplete>
+        </div>
+      </div>
+      <div class='row mb-3'>
+        <div class='col-12'>
+          <p class='text-muted mb-2'>Video File</p>
+          <div class='d-flex align-items-center'>
+            <hidden-innovation-common-form-field-video
+              controlPath='videoId'
+              [videoData]='existingLesson?.video'
+              [parentCtrl]='lessonFrom.controls.videoId'
+              (emitVideoCtrlData)='lessonFrom.controls.videoId?.setValue($event)'
+              (emitRemoveVideo)='lessonFrom.controls.videoId?.reset($event)'
+            ></hidden-innovation-common-form-field-video>
+            <div class='ml-2'>
+              <mat-hint>
+                <small>({{constantDataService.FIZE_SIZE_DATA.videoFormatMessage}})</small>
+              </mat-hint>
+              <br>
+              <mat-hint>
+                <small>({{constantDataService.FIZE_SIZE_DATA.videoRatioMessage}})</small>
+              </mat-hint>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='row mb-4'>
+        <div class='col-12'>
+          <p class='text-muted mb-2'>Thumbnail</p>
+          <hidden-innovation-common-form-field-image
+            controlPath='thumbnailId'
+            [setImageData]='existingLesson?.thumbnail'
+            [aspectRatio]='aspectRatio.STANDARD'
+            [parentCtrl]='lessonFrom.controls.thumbnailId'
+            (emitImageCtrlData)='lessonFrom.controls.thumbnailId?.setValue($event)'
+            (emitRemoveImage)='lessonFrom.controls.thumbnailId?.reset($event)'
+          ></hidden-innovation-common-form-field-image>
+        </div>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align='end'>
+  <button mat-stroked-button mat-dialog-close>cancel</button>
+  <button mat-flat-button color='primary' (click)='submitLesson()'>Save</button>
+</mat-dialog-actions>

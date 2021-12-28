@@ -4,14 +4,15 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewEncapsulation
 } from '@angular/core';
-import { ImageCropperReq, ImageCropperResponseData } from '../../models/media.interface';
+import { AspectRatio, ImageCropperReq, ImageCropperResponseData } from '../../models/media.interface';
 import { ImageCropperComponent } from '../image-cropper/image-cropper.component';
 import { base64ToFile } from 'ngx-image-cropper';
 import { MatDialog } from '@angular/material/dialog';
-import { MediaUploadService } from '../../services/media-upload.service';
+import { MediaService } from '../../services/media.service';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { filter, switchMap } from 'rxjs/operators';
 import { AuthFacade } from '@hidden-innovation/auth';
@@ -23,22 +24,28 @@ import { AuthFacade } from '@hidden-innovation/auth';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImagePickerComponent {
+export class ImagePickerComponent implements OnInit {
 
   isUploading = false;
   toastRef: CreateHotToastRef<unknown> | undefined;
 
   @Input() isInvalid = false;
+  @Input() aspectRatio: AspectRatio | undefined;
 
   @Output() imageUploadRes: EventEmitter<ImageCropperResponseData> = new EventEmitter<ImageCropperResponseData>();
 
   constructor(
     private matDialog: MatDialog,
-    private mediaUploadService: MediaUploadService,
+    private mediaUploadService: MediaService,
     private hotToastService: HotToastService,
     private cdr: ChangeDetectorRef,
     private authFacade: AuthFacade
   ) {
+    this.aspectRatio = AspectRatio.CUBE;
+  }
+
+  ngOnInit() {
+    // console.log(this.aspectRatio);
   }
 
   openImageCropper(
@@ -56,17 +63,18 @@ export class ImagePickerComponent {
       reader.onload = (e: any) => {
         const cropperObj: ImageCropperReq = {
           file: file,
-          aspectRatio: 'cube',
+          aspectRatio: this.aspectRatio,
           round: false
         };
         const dialogRef = this.matDialog.open(ImageCropperComponent, {
-          data: cropperObj
+          data: cropperObj,
+          maxWidth: '768px',
         });
         dialogRef.afterClosed().subscribe((cropperResult: any) => {
           if (cropperResult) {
             coverPicker.value = '';
             coverPicker.removeAttribute('src');
-            this.upload(base64ToFile(cropperResult), cropperResult, file.name);
+            this.upload(base64ToFile(cropperResult), cropperResult, this.mediaUploadService.removeExtension(file.name));
           }
         });
       };

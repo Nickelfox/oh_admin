@@ -179,7 +179,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 isActing: false
               });
             }
-          )
+          ),
+          catchError(() => EMPTY)
         )
       )
     )
@@ -228,7 +229,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 isActing: false
               });
             }
-          )
+          ),
+          catchError(() => EMPTY)
         )
       )
     )
@@ -277,7 +279,8 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 isActing: false
               });
             }
-          )
+          ),
+          catchError(() => EMPTY)
         )
       )
     )

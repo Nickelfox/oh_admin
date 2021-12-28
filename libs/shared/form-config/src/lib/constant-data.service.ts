@@ -7,13 +7,18 @@ export class ConstantDataService {
 
   FIELD_NAME = {
     NAME: 'name',
+    TEST_NAME: 'test name',
     TYPE: 'type',
     FIRST_NAME: 'first name',
+    FILE_NAME: 'file name',
     EMAIL_ID: 'email id',
+    EQUIPMENT: 'equipment',
     COUNTRY: 'country',
     LOCATION: 'location',
+    LABEL: 'label',
     DATE_OF_JOINING: 'date of joining',
     DATE_ADDED: 'date added',
+    DESC: 'description',
     DATE_MODIFIED: 'date modified',
     OPTIONS: 'options',
     QUESTIONS: 'questions',
@@ -30,6 +35,8 @@ export class ConstantDataService {
     DIFFICULTY: 'difficulty',
     UPDATED_AT: 'updated at',
     HEIGHT: 'height',
+    OUTCOME: 'outcome',
+    PROCEDURE: 'procedure',
     WEIGHT: 'weight',
     SEX: 'sex',
     SKIN_COLOUR: 'skin colour',
@@ -41,7 +48,8 @@ export class ConstantDataService {
     OCS: 'ocs',
     OOS: 'oos',
     AGE: 'age',
-    GENDER: 'gender'
+    GENDER: 'gender',
+    RESULT_EXPLANATION: 'result explanation'
   };
 
   BUTTON_NAME = {
@@ -71,6 +79,20 @@ export class ConstantDataService {
   public FIZE_SIZE_DATA = {
     limit: 52428800,
     limitMessage: 'File must be smaller than 50MB.',
+    videoFormatMessage: 'Only MOV & MP4 formats are allowed',
+    videoRatioMessage: 'Video file must be in 16:9 aspect ratio',
+    fileFormatMessage: 'Invalid File! Please select an appropriate file to upload'
   };
+
+  public FILE_FORMAT_DATA = {
+    video_mp4: 'video/mp4',
+    video_mov: 'video/quicktime',
+    // Application Type
+    application: 'application',
+    audio: 'audio',
+    image: 'image',
+    text: 'text',
+    video: 'video'
+  }
 
 }

@@ -185,7 +185,15 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test-group/test-group-create').then(
                 (m) => m.TestGroupCreateModule
               ),
-            data: { breadcrumb: 'Add Test Group' }
+            data: { breadcrumb: 'Add Test Group', type: OperationTypeEnum.CREATE }
+          },
+          {
+            path: 'edit/:id',
+            loadChildren: () =>
+              import('@hidden-innovation/test-group/test-group-create').then(
+                (m) => m.TestGroupCreateModule
+              ),
+            data: { breadcrumb: 'Edit Test Group', type: OperationTypeEnum.EDIT }
           }
         ]
       },
@@ -212,7 +220,7 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test/test-create').then(
                 (m) => m.TestCreateModule
               ),
-            data: { breadcrumb: 'Add Test' }
+            data: { breadcrumb: 'Add Test', type: OperationTypeEnum.CREATE }
           },
           {
             path: 'edit/:id',
@@ -220,7 +228,42 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/test/test-create').then(
                 (m) => m.TestCreateModule
               ),
-            data: { breadcrumb: 'Add Test' }
+            data: { breadcrumb: 'Edit Test', type: OperationTypeEnum.EDIT }
+          }
+        ]
+      },
+      {
+        path: 'packs',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/pack/pack-listing').then(
+                (m) => m.PackListingModule
+              ),
+            data: { breadcrumb: 'Packs' }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/pack/pack-create').then(
+                (m) => m.PackCreateModule
+              ),
+            data: { breadcrumb: 'Add Pack', type: OperationTypeEnum.CREATE }
+          },
+          {
+            path: 'edit/:id',
+            loadChildren: () =>
+              import('@hidden-innovation/pack/pack-create').then(
+                (m) => m.PackCreateModule
+              ),
+            data: { breadcrumb: 'Edit Pack', type: OperationTypeEnum.EDIT }
           }
         ]
       },
@@ -259,6 +302,7 @@ import { MatCardModule } from '@angular/material/card';
           }
         ]
       },
+
 
       // {
       //   path: 'users/edit/:id',

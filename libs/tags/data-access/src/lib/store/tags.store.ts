@@ -35,6 +35,7 @@ export class TagsStore extends ComponentStore<TagsState> {
   getTags$ = this.effect<TagsListingRequest>(params$ =>
     params$.pipe(
       tap((_) => {
+        console.log(_);
         this.patchState({
           isLoading: true
         });

@@ -1,0 +1,7 @@
+<input hidden type="file" accept="video/mp4" (change)='filePicked($event, videoPicker)'   #videoPicker>
+
+<button [disabled]='isUploading' mat-stroked-button color='{{isInvalid ? "warn" : "primary"}}' (click)='videoPicker.click()'
+        type='button'>
+  <mat-icon class='mr-2'>upload</mat-icon>
+  Upload
+</button>

@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-import { ImageCropperReq } from '../../models/media.interface';
+import { AspectRatio, ImageCropperReq } from '../../models/media.interface';
 
 @Component({
   selector: 'hidden-innovation-image-cropper',
@@ -56,15 +56,16 @@ export class ImageCropperComponent {
 
   ratioParser(): number {
     switch (this.data.aspectRatio) {
-      case 'cube':
+      case AspectRatio.CUBE:
         return 1 / 1;
-        break;
-      case 'wide':
+      case AspectRatio.WIDE:
         return 16 / 9;
-        break;
+      case AspectRatio.STANDARD:
+        return 4 / 3;
+      case AspectRatio.POSTER:
+        return 3 / 4;
       default:
         return 1 / 1;
-        break;
     }
   }
 }

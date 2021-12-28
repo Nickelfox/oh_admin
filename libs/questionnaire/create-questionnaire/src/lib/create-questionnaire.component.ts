@@ -47,9 +47,6 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       RxwebValidators.minLength({
         value: 1
       }),
-      RxwebValidators.maxLength({
-        value: this.formValidationService.FIELD_VALIDATION_VALUES.QUESTIONNAIRE_LENGTH
-      })
     ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
@@ -252,12 +249,15 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
           name: new FormControl<string>(multipleChoice?.name ?? '', [
             RxwebValidators.required(),
             RxwebValidators.notEmpty(),
-            RxwebValidators.unique()
+            RxwebValidators.unique(),
+            RxwebValidators.maxLength({
+              value: this.formValidationService.FIELD_VALIDATION_VALUES.ANSWER_LENGTH
+            })
           ]),
           point: new FormControl<number>(multipleChoice?.point ?? undefined, this.formValidationService.pointValidations),
           iconName: new FormControl<string>({
             value: multipleChoice?.iconName ?? '',
-            disabled: !question.showIcon
+            disabled: question.showIcon
           }, [
             RxwebValidators.required(),
             RxwebValidators.notEmpty()
@@ -301,6 +301,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     }
     answerFormArray.push(answer);
     this.questionnaireUtilitiesService.minMaxPoints(this.questionsFormArray);
+    this.cdr.markForCheck();
   }
 
   triggerQuestionType(type: QuestionTypeEnum): void {

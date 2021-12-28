@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { TestService } from './services/test.service';
 import { TestStore } from './store/test.store';
+import { TestUtilitiesService } from './services/test-utilities.service';
 
 @NgModule({
   imports: [CommonModule],
   providers: [
     TestService,
-    TestStore
+    TestStore,
+    TitleCasePipe,
+    TestUtilitiesService,
   ]
 })
-export class DataAccessModule {}
+export class TestDataAccessModule {}
