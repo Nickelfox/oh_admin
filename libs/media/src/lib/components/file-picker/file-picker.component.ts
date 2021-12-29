@@ -19,7 +19,7 @@ import { FileNameDialogComponent } from '@hidden-innovation/shared/ui/file-name-
 @Component({
   selector: 'hidden-innovation-file-picker',
   template: `
-    <input hidden type='file' accept='application/*,audio/*,image/*,text/*' (change)='filePicked($event, filePicker)'
+    <input hidden type='file' accept='application/*,audio/*,image/*,text/*,video/*' (change)='filePicked($event, filePicker)'
            #filePicker>
     <button [disabled]='isUploading' mat-stroked-button color='{{isInvalid ? "warn" : "primary"}}'
             (click)='filePicker.click()'

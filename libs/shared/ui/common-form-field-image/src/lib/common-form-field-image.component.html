@@ -3,6 +3,7 @@
     <ng-template [ngIf]='parentCtrl.valid && imageData' [ngIfElse]='imageSelectedElse'>
       <div class='col-auto'>
         <img class='img-fluid'
+             hiddenInnovationImagePreloader
              src='{{imageData?.croppedImage}}'
              [ngStyle]='{"maxHeight": "51px"}'>
       </div>

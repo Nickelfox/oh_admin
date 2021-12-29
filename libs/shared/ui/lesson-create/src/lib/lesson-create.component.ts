@@ -50,7 +50,7 @@ export class LessonCreateComponent {
     tagIds: new FormControl<number[]>([]),
     type: new FormControl<PackContentTypeEnum>(PackContentTypeEnum.LESSON),
     order: new FormControl<number>(undefined),
-    content_id: new FormControl<number | null>(null)
+    contentId: new FormControl<number | null>(null)
   });
 
   existingLesson?: Lesson;

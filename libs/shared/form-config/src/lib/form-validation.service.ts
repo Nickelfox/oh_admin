@@ -13,6 +13,8 @@ export class FormValidationService {
 
   public readonly FIELD_VALIDATION_VALUES = {
     NAME_LENGTH: 45,
+    SUB_TITLE_LENGTH: 100,
+    PACK_NAME_LENGTH: 40,
     USERNAME_LENGTH: 30,
     QUESTION_NAME_LENGTH: 36,
     QUESTION_DESC_LENGTH: 50,
