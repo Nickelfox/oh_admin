@@ -267,6 +267,25 @@ import { MatCardModule } from '@angular/material/card';
           }
         ]
       },
+      {
+        path: 'assessments',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/assessment/assessment-listing').then(
+                (m) => m.AssessmentListingModule
+              ),
+            data: { breadcrumb: 'Assessments' }
+          }
+        ]
+      },
 
       // {
       //   path: 'users/edit/:id',

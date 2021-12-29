@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@hidden-innovation/assessment/assessment-listing": [
+        "libs/assessment/assessment-listing/src/index.ts"
+      ],
       "@hidden-innovation/auth": ["libs/auth/src/index.ts"],
       "@hidden-innovation/change-password": [
         "libs/change-password/src/index.ts"
