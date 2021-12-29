@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Pack, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
+import { Pack, PackDeleteRequest, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
 import { Observable } from 'rxjs';
@@ -10,6 +10,7 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
+import { TestDeleteRequest } from '@hidden-innovation/test/data-access';
 
 @Component({
   selector: 'hidden-innovation-pack-listing',
@@ -153,5 +154,18 @@ export class PackListingComponent implements OnInit {
     }
   }
 
+  deletePack(id: number) {
+    const {published, dateSort, nameSort, search } = this.filters.value;
+    const deleteObj: PackDeleteRequest = {
+      id,
+      dateSort,
+      nameSort,
+      search,
+      published,
+      pageSize: this.pageSize,
+      pageIndex: this.pageIndex
+    };
+    this.store.deletePack(deleteObj);
+  }
 
 }

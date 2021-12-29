@@ -277,8 +277,8 @@ export class PackCreateComponent implements OnDestroy {
     const { name, description, thumbnailId, posterId } = pack;
     this.selectedPack = pack;
     const selectedContent: Content[] | Lesson[] = (this.selectedPack.content as (Content[] | Lesson[])) ?? [];
-    const resources: Media[] = this.selectedPack.imagesAndPdfs as Media[];
-    const urls: ContentUrl[] = this.selectedPack.urls as ContentUrl[];
+    const resources: Media[] = this.selectedPack.imagesAndPdfs as Media[] ?? [];
+    const urls: ContentUrl[] = this.selectedPack.urls as ContentUrl[] ?? [];
     this.packForm.patchValue({
       name,
       description,

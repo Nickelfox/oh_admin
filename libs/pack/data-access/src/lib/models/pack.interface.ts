@@ -1,5 +1,5 @@
 import { Media } from '@hidden-innovation/media';
-import { Test } from '@hidden-innovation/test/data-access';
+import { Test, TestListingFilters } from '@hidden-innovation/test/data-access';
 import { Lesson, LessonCore } from './lesson.interface';
 import { CustomApiResponse, PackContentTypeEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
@@ -106,4 +106,15 @@ export interface PackMutationResponse extends CustomApiResponse {
 export interface ContentUrl {
   url: string;
   description: string;
+}
+
+export interface PackPublishToggleRequest {
+  newState: boolean;
+  id: number;
+}
+
+export interface PackDeleteRequest extends PackListingFilters {
+  id: number;
+  pageIndex: number;
+  pageSize: number;
 }
