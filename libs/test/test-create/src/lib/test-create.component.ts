@@ -96,10 +96,10 @@ export class TestCreateComponent implements OnDestroy {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    label: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    description: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    outcomes: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    procedure: new FormControl('', [...this.utilities.requiredFieldValidation]),
+    label: new FormControl(''),
+    description: new FormControl(''),
+    outcomes: new FormControl(''),
+    procedure: new FormControl(''),
     needEquipment: new FormControl(false),
     equipment: new FormControl({ value: '', disabled: true }, [...this.utilities.requiredFieldValidation]),
     tags: new FormControl([]),
