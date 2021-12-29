@@ -17,6 +17,73 @@
           <div class='container-fluid p-0'>
             <div class='row'>
               <div class='col-12'>
+                <table mat-table [dataSource]='assessments' class='w-100'>
+                  <ng-container matColumnDef='category'>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
+                  </span>
+
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.category'> {{(element.category) || '--'}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef='test'>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{'Test'}}
+                  </span>
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.test'> {{(element.test) || '--'}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef='worstCase'>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{'Worst Case'}}
+                  </span>
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.worstCase'> {{(element.worstCase) || '--'}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef='bestCase'>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{'Best Case'}}
+                  </span>
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.bestCase'> {{(element.bestCase) || '--'}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef='lockout'>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{'Lockout (days)'}}
+                  </span>
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.lockout'> {{(element.lockout) || '--'}} </td>
+                  </ng-container>
+
+
+
+                  <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+                  <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react'></tr>
+                </table>
               </div>
             </div>
           </div>
