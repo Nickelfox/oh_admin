@@ -68,14 +68,14 @@ export class VideoPickerComponent {
         height = metadata.height;
         width *= 1;
         const valHeight = width != 0 ? Math.round((width / 16) * 9) : 0;
-        // End metadata gathering
-        if (file.size > this.constantDataService.FIZE_SIZE_DATA.limit) {
-          // Video size validation
-          this.toastRef?.close();
-          this.clearPicker(videoPicker);
-          this.hotToastService.error(this.constantDataService.FIZE_SIZE_DATA.limitMessage);
-          return;
-        }
+        // // End metadata gathering
+        // if (file.size > this.constantDataService.FIZE_SIZE_DATA.limit) {
+        //   // Video size validation
+        //   this.toastRef?.close();
+        //   this.clearPicker(videoPicker);
+        //   this.hotToastService.error(this.constantDataService.FIZE_SIZE_DATA.limitMessage);
+        //   return;
+        // }
         if (file.type !== this.constantDataService.FILE_FORMAT_DATA.video_mp4 && file.type !== this.constantDataService.FILE_FORMAT_DATA.video_mov) {
           // Video Format validation
           this.toastRef?.close();

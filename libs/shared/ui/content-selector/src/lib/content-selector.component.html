@@ -5,7 +5,7 @@
     <div class='d-flex align-items-center'>
       <div class='d-flex align-items-center text-muted mt-1 mr-3'>
         <mat-icon class='mr-2'>autorenew</mat-icon>
-        <h4 class='mat-h4 mb-0'>Selection Auto-Save</h4>
+        <h4 class='mat-h4 mb-0'>Selection Auto-Saved</h4>
       </div>
       <button mat-icon-button mat-dialog-close>
         <mat-icon>close</mat-icon>
@@ -74,7 +74,7 @@
 
                   <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumns;' (click)='addToList(row)'
-                      class='row-react'></tr>
+                      class='row-react' [ngClass]='{"active":isSelected(row)}'></tr>
                 </table>
               </div>
             </div>
