@@ -562,12 +562,16 @@ export class TestCreateComponent implements OnDestroy {
       testObj = {
         ...testObj,
         inputFields: testObj.inputFields.map(fields => {
-          const low = DateTime.fromJSDate(fields.low as Date).toSeconds();
-          const high = DateTime.fromJSDate(fields.high as Date).toSeconds();
+          const lHours = DateTime.fromJSDate(fields.low as Date).hour;
+          const lMinutes = DateTime.fromJSDate(fields.low as Date).minute;
+          const lSeconds = DateTime.fromJSDate(fields.low as Date).second;
+          const hHours = DateTime.fromJSDate(fields.high as Date).hour;
+          const hMinutes = DateTime.fromJSDate(fields.high as Date).minute;
+          const hSeconds = DateTime.fromJSDate(fields.high as Date).second;
           return {
             ...fields,
-            low,
-            high
+            low: (lHours * 3600) + (lMinutes * 60) + lSeconds ?? 0,
+            high: (hHours * 3600) + (hMinutes * 60) + hSeconds ?? 0
           };
         })
       };
