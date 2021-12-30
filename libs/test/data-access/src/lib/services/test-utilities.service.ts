@@ -18,7 +18,6 @@ import {
 } from '../models/input.interface';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { Tag } from '@hidden-innovation/tags/data-access';
-import { DateTime } from 'luxon';
 
 interface FiveInputFields {
   zero: InputFieldExtended;
@@ -48,6 +47,12 @@ export class TestUtilitiesService {
     this.testTags = [
       ...this.testTags.filter(t => t.tagType !== cat)
     ];
+  }
+
+  toDateTime(secs: number) {
+    const t = new Date(1970, 0, 1);
+    t.setSeconds(secs);
+    return t;
   }
 
   removeTag(tag: Tag): void {
@@ -218,12 +223,13 @@ export class TestUtilitiesService {
     let editObj: FiveInputFields | undefined;
     let timeParsedData: InputFieldExtended[] = [];
     if (data && data.length) {
+
       timeParsedData = [
         ...data.map(f => {
           return {
             ...f,
-            low: DateTime.fromSeconds(f.low as number).toJSDate(),
-            high: DateTime.fromSeconds(f.high as number).toJSDate()
+            low: this.toDateTime((f.low as number) ?? 0),
+            high: this.toDateTime((f.high as number) ?? 0)
           };
         })
       ];
