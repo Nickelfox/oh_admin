@@ -47,7 +47,7 @@
                         [matTooltip]='element.name'> {{(element.name | maxStringLimit) || '--'}} </td>
                   </ng-container>
 
-                  <ng-container matColumnDef='updated_at'>
+                  <ng-container matColumnDef='created_at'>
                     <th mat-header-cell *matHeaderCellDef>
                       <hidden-innovation-sorting-header-date
                         [title]='constantDataService.FIELD_NAME.DATE_ADDED | titlecase'

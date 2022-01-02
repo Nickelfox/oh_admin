@@ -196,6 +196,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   submit(): void {
     this.questionnaire.markAllAsDirty();
     this.questionnaire.markAllAsTouched();
+    console.log(this.questionnaire);
     if (this.questionnaire.invalid) {
       if (this.questionnaire.controls.name.invalid || this.questionnaire.controls.isScoring.invalid) {
         return;
@@ -257,7 +258,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
           point: new FormControl<number>(multipleChoice?.point ?? undefined, this.formValidationService.pointValidations),
           iconName: new FormControl<string>({
             value: multipleChoice?.iconName ?? '',
-            disabled: question.showIcon
+            disabled: !question.showIcon
           }, [
             RxwebValidators.required(),
             RxwebValidators.notEmpty()

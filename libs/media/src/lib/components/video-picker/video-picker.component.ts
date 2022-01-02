@@ -2,11 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   Output,
-  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
@@ -17,6 +15,7 @@ import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { filter, switchMap } from 'rxjs/operators';
 import { VideoPickedResponseData } from '../../models/media.interface';
 import { getMetadata } from 'video-metadata-thumbnails';
+import { delay } from 'lodash-es';
 
 @Component({
   selector: 'hidden-innovation-video-picker',
@@ -129,6 +128,7 @@ export class VideoPickerComponent {
           type: 'success'
         });
         this.isUploading = false;
+        delay(_ => this.toastRef?.close(), 3000);
         this.emitVideoFile.emit({
           fileName,
           attachmentId

@@ -16,6 +16,7 @@ import { MediaService } from '../../services/media.service';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { filter, switchMap } from 'rxjs/operators';
 import { AuthFacade } from '@hidden-innovation/auth';
+import { delay } from 'lodash-es';
 
 @Component({
   selector: 'hidden-innovation-image-picker',
@@ -115,8 +116,9 @@ export class ImagePickerComponent implements OnInit {
         this.toastRef?.updateMessage('Success! Media Uploaded');
         this.toastRef?.updateToast({
           dismissible: true,
-          type: 'success'
+          type: 'success',
         });
+        delay(_ => this.toastRef?.close(), 3000);
         this.imageUploadRes.emit({
           croppedImage: imageBase,
           attachmentId: res.attachmentId,
