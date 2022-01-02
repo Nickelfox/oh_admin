@@ -14,13 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import {
-  MAT_DATE_LOCALE,
-  MatNativeDateModule,
-  MatOptionModule,
-  MatRippleModule,
-  NativeDateModule
-} from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule, MatRippleModule, NativeDateModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
@@ -34,12 +28,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import {
-  NgxMatDateAdapter,
   NgxMatDatetimePickerModule,
   NgxMatNativeDateModule,
   NgxMatTimepickerModule
 } from '@angular-material-components/datetime-picker';
-import { LuxonDateAdapter, MAT_LUXON_DATE_ADAPTER_OPTIONS } from '@angular/material-luxon-adapter';
 
 export const MY_FORMATS = {
   parse: {
@@ -135,7 +127,7 @@ export const MY_FORMATS = {
   ],
   providers: [
     FormGroupDirective,
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } }
     // {provide: MAT_DATE_FORMATS, useValue: MY_NATIVE_DATE_FORMATS},
     // {
     //   provide: DateAdapter, useClass: LuxonDateAdapter, deps: [MAT_DATE_LOCALE, MAT_LUXON_DATE_ADAPTER_OPTIONS]

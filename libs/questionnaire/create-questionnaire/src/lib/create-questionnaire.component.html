@@ -46,7 +46,7 @@
                 <mat-card-content cdkDropList (cdkDropListDropped)='moveItemInFormArray(questionsFormArray, $event.previousIndex, $event.currentIndex)'>
                   <ng-template ngFor [ngForOf]='questionsFormArray.controls' let-i='index'>
                     <div class='pt-3' cdkDrag>
-                      <mat-card class='question-card mat-elevation-z3 pt-1 pr-1'>
+                      <mat-card class='question-card mat-elevation-z3 pt-1 pr-1' [ngClass]='{"invalid": questionFormGroup(i).invalid}'>
                         <div class='d-flex align-items-center justify-content-between'>
                           <h4 class='mat-h4 mb-0 font-weight-bold'>Question {{i + 1}}</h4>
                           <div>

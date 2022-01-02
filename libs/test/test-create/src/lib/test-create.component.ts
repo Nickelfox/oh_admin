@@ -74,7 +74,7 @@ export class TestCreateComponent implements OnDestroy {
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
     name: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    category: new FormControl(undefined),
+    category: new FormControl(undefined, [...this.utilities.requiredFieldValidation]),
     videoId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({

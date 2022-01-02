@@ -4,7 +4,7 @@
   }
 
   &--error {
-    color: #E53935;
+    color: var(--warn-darker-color);
   }
 }
 
@@ -13,5 +13,9 @@
 
   &:hover {
     background-color: #F2F9FE;
+  }
+
+  &.invalid {
+    border: 1px solid var(--warn-darker-color);
   }
 }

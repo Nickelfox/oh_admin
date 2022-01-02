@@ -289,6 +289,9 @@ import { MatCardModule } from '@angular/material/card';
       theme: 'snackbar',
       position: 'bottom-right',
       autoClose: true,
+      /**
+       * While Updating the duration, also update media upload toast duration in upload operations
+       */
       duration: 3000
     }),
     MatButtonModule,
