@@ -97,6 +97,16 @@
       <mat-card class='p-0'>
         <div class=' d-flex align-items-center justify-content-between'>
           <div class='pl-3'>
+            <ng-template [ngIf]='(uiStore.selectedContent$ | async)' let-storeContents>
+            <span *ngIf='!!storeContents.length'>
+              <h3
+                class='mat-h3 text-primary mb-0 mr-4 font-calibri font-weight-normal'>
+                <small>
+                  {{storeContents.length <= 1 ? (storeContents.length + " Content") : (storeContents.length + " Contents")}}&nbsp;Selected
+                </small>
+              </h3>
+            </span>
+            </ng-template>
             <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isContentLoading$ | async'></mat-spinner>
           </div>
           <mat-paginator
