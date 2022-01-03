@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   DifficultyEnum,
@@ -34,6 +42,7 @@ import { DateTime } from 'luxon';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -44,7 +53,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TestCreateComponent implements OnDestroy {
+export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   testInputTypeEnum = TestInputTypeEnum;
   tagTypeEnum = TagTypeEnum;
   aspectRatio = AspectRatio;
@@ -451,6 +460,9 @@ export class TestCreateComponent implements OnDestroy {
           });
       }
     });
+    this.store.loaded$.pipe(
+      tap(res => this.loaded = res)
+    ).subscribe();
   }
 
   get oneRMInputFieldFormArray(): FormArray<OneRMField> {
@@ -644,5 +656,10 @@ export class TestCreateComponent implements OnDestroy {
       this.utilities.updateTestTags(t.tagType, t);
       this.updateTagControl();
     });
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    return this.testGroup.dirty ? this.loaded : true;
   }
 }
