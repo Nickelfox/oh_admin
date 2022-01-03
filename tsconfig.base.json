@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@hidden-innovation/assessment/assessment-create": [
+        "libs/assessment/assessment-create/src/index.ts"
+      ],
       "@hidden-innovation/assessment/assessment-listing": [
         "libs/assessment/assessment-listing/src/index.ts"
       ],

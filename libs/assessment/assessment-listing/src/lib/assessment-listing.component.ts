@@ -35,14 +35,14 @@ export const dummyAssessments:AssessmentCore[] = [
   {
     category: 'Function',
     test: 4,
-    worstCase: 0,
+    worstCase: 1,
     bestCase: 61,
     lockout: 28
   },
   {
     category: 'Mobility',
     test: 8,
-    worstCase: 0,
+    worstCase: 1,
     bestCase: 61,
     lockout: 28
   },

@@ -283,6 +283,14 @@ import { MatCardModule } from '@angular/material/card';
                 (m) => m.AssessmentListingModule
               ),
             data: { breadcrumb: 'Assessments' }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/assessment/assessment-create').then(
+                (m) => m.AssessmentCreateModule
+              ),
+            data: { breadcrumb: 'Add Assessment'}
           }
         ]
       },

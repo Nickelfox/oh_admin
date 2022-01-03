@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
+    "assessment-assessment-create": "libs/assessment/assessment-create",
     "assessment-assessment-listing": "libs/assessment/assessment-listing",
     "auth": "libs/auth",
     "change-password": "libs/change-password",
