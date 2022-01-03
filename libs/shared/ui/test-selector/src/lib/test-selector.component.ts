@@ -32,7 +32,7 @@ import { UiStore } from '@hidden-innovation/shared/store';
 })
 export class TestSelectorComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'difficulty', 'input', 'status'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'difficulty', 'input'];
   tests: MatTableDataSource<Test> = new MatTableDataSource<Test>();
 
   noData: Observable<boolean>;
@@ -54,7 +54,7 @@ export class TestSelectorComponent implements OnInit {
     nameSort: new FormControl({ value: undefined, disabled: true }),
     search: new FormControl(undefined),
     level: new FormControl(undefined),
-    published: new FormControl(undefined)
+    published: new FormControl('TRUE')
   });
 
   tagCategoryIte = Object.values(TagCategoryEnum);
