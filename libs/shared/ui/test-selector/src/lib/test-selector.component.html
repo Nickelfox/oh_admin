@@ -46,7 +46,8 @@
                   </ng-container>
 
                   <ng-container matColumnDef='id'>
-                    <th mat-header-cell [width]='30'
+                    <th mat-header-cell
+                        [width]='55'
                         *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'> {{element.id ?? '--'}} </td>
                   </ng-container>
