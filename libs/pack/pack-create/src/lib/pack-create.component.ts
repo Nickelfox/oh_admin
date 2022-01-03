@@ -280,7 +280,7 @@ export class PackCreateComponent implements OnDestroy {
   }
 
   private populatePack(pack: Pack): void {
-    const { name, description, thumbnailId, posterId } = pack;
+    const { name, description, thumbnailId, posterId, subTitle } = pack;
     this.selectedPack = pack;
     const selectedContent: Content[] | Lesson[] = (this.selectedPack.content as (Content[] | Lesson[])) ?? [];
     const resources: Media[] = this.selectedPack.imagesAndPdfs as Media[] ?? [];
@@ -289,7 +289,8 @@ export class PackCreateComponent implements OnDestroy {
       name,
       description,
       thumbnailId,
-      posterId
+      posterId,
+      subTitle
     });
     urls.forEach(u => this.addUrlCtrl(u));
     resources.forEach(r => this.addResourceCtrl(r.id));
