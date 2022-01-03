@@ -8,7 +8,7 @@
       <div class='row mb-2'>
         <div class='col-12'>
           <hidden-innovation-common-form-field
-            label='Lesson Name'
+            [label]='(constantDataService.FIELD_NAME.LESSON + " " + constantDataService.FIELD_NAME.NAME) | titlecase'
             controlPath='name'
           ></hidden-innovation-common-form-field>
         </div>
@@ -16,7 +16,7 @@
       <div class='row mb-2'>
         <div class='col-12'>
           <mat-form-field class='w-100' appearance='fill'>
-            <mat-label>Category</mat-label>
+            <mat-label>{{constantDataService.FIELD_NAME.CATEGORY | titlecase}}</mat-label>
             <mat-select formControlName='category'>
               <mat-option [value]='"NONE"'>None</mat-option>
               <mat-option [value]=type
@@ -27,7 +27,7 @@
                 [ngIf]='((lessonFrom.controls.category.touch$ | async) || (lessonFrom.controls.category.dirty$ | async)) && (lessonFrom.controls.category.errors$ | async)'
                 let-error>
                 <hidden-innovation-form-field-errors
-                  label='Category'
+                  [label]='constantDataService.FIELD_NAME.CATEGORY | titlecase'
                   [error]='error'
                 ></hidden-innovation-form-field-errors>
               </ng-template>
@@ -38,7 +38,7 @@
       <div class='row mb-2'>
         <div class='col-12'>
           <hidden-innovation-common-form-field-tag-autocomplete
-            label='Subcategory(s)'
+            [label]='constantDataService.FIELD_NAME.SUBCATEGORIE_S | titlecase'
             [testTags]='testTags'
             [tagTypeEnum]='tagTypeEnum.SUB_CATEGORY'
             [tagCategory]='lessonFrom.controls.category.value'
@@ -49,7 +49,7 @@
       </div>
       <div class='row mb-3'>
         <div class='col-12'>
-          <p class='text-muted mb-2'>Video File</p>
+          <p class='text-muted mb-2'>{{constantDataService.FIELD_NAME.VIDEO_FILE}}</p>
           <div class='d-flex align-items-center'>
             <hidden-innovation-common-form-field-video
               controlPath='videoId'
@@ -72,7 +72,7 @@
       </div>
       <div class='row mb-4'>
         <div class='col-12'>
-          <p class='text-muted mb-2'>Thumbnail</p>
+          <p class='text-muted mb-2'>{{constantDataService.FIELD_NAME.THUMBNAIL}}</p>
           <hidden-innovation-common-form-field-image
             controlPath='thumbnailId'
             [setImageData]='existingLesson?.thumbnail'
@@ -87,6 +87,6 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align='end'>
-  <button mat-stroked-button mat-dialog-close>cancel</button>
-  <button mat-flat-button color='primary' (click)='submitLesson()'>Save</button>
+  <button mat-stroked-button mat-dialog-close>{{constantDataService.BUTTON_NAME.CANCEL | titlecase}}</button>
+  <button mat-flat-button color='primary' (click)='submitLesson()'>{{constantDataService.BUTTON_NAME.SAVE | titlecase}}</button>
 </mat-dialog-actions>
