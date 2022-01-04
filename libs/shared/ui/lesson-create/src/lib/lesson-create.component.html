@@ -18,7 +18,6 @@
           <mat-form-field class='w-100' appearance='fill'>
             <mat-label>{{constantDataService.FIELD_NAME.CATEGORY | titlecase}}</mat-label>
             <mat-select formControlName='category'>
-              <mat-option [value]='"NONE"'>None</mat-option>
               <mat-option [value]=type
                           *ngFor='let type of testCatTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
             </mat-select>
@@ -38,6 +37,7 @@
       <div class='row mb-2'>
         <div class='col-12'>
           <hidden-innovation-common-form-field-tag-autocomplete
+            [isDisabled]='lessonFrom.controls.category.invalid'
             [label]='constantDataService.FIELD_NAME.SUBCATEGORIE_S | titlecase'
             [testTags]='testTags'
             [tagTypeEnum]='tagTypeEnum.SUB_CATEGORY'
