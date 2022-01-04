@@ -78,7 +78,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
     name: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    category: new FormControl(undefined, [...this.utilities.requiredFieldValidation]),
+    category: new FormControl('NONE', [...this.utilities.requiredFieldValidation]),
     videoId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
@@ -286,7 +286,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       this.validatePublishedState();
       switch (type) {
         case TestInputTypeEnum.DISTANCE:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.DISTANCE) {
             this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             distanceUnit.setValue(this.selectedTest.distanceUnit);
           } else {
@@ -296,7 +296,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           distanceUnit.enable();
           break;
         case TestInputTypeEnum.CUSTOM_NUMERIC:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.CUSTOM_NUMERIC) {
             this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             customNumericLabel.setValue(this.selectedTest.customNumericLabel);
           } else {
@@ -306,7 +306,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           customNumericLabel.enable();
           break;
         case TestInputTypeEnum.WEIGHT:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.WEIGHT) {
             this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             weightUnit.setValue(this.selectedTest.weightUnit);
           } else {
@@ -316,7 +316,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           weightUnit.enable();
           break;
         case TestInputTypeEnum.ONE_RM:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.ONE_RM) {
             this.utilities.buildOneRemForm(this.selectedTest.oneRMInputFields).map(fg => oneRMFArray.push(fg));
             const repsGroup = reps as FormGroup<RepsCore>;
             const { oneRep, threeRep, fiveRep } = this.selectedTest.reps;
@@ -333,7 +333,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           resultExplanation.enable();
           break;
         case TestInputTypeEnum.MULTIPLE_CHOICE:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.MULTIPLE_CHOICE) {
             this.utilities.buildMultiChoiceForm(this.selectedTest.multipleChoiceInputFields).map(fg => mCArray.push(fg));
             multipleChoiceQuestion.setValue(this.selectedTest.multipleChoiceQuestion);
           } else {
@@ -342,7 +342,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           multipleChoiceQuestion.enable();
           break;
         case TestInputTypeEnum.TIME:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.ONE_RM) {
             this.utilities.buildTimeForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
           } else {
             this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
@@ -350,7 +350,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           inputFArray.addValidators([this.formValidationService.greaterTimeValidator()]);
           break;
         case TestInputTypeEnum.REPS:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.REPS) {
             this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
           } else {
             this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
@@ -358,7 +358,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           break;
         case TestInputTypeEnum.RATIO:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.RATIO) {
             this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             const ratioTypeFormGroup: FormGroup<RatioSubObject> = this.testGroup.controls.ratioVariable as FormGroup<RatioSubObject>;
             ratioTypeFormGroup.patchValue({
@@ -380,7 +380,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
           break;
         case TestInputTypeEnum.RELATIVE_PROFILE:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.RELATIVE_PROFILE) {
             this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             relativeGroup.patchValue({
               unit: this.selectedTest.relativeProfile?.unit,
@@ -399,6 +399,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     category.valueChanges.subscribe(_ => {
       this.utilities.removeTypeTags(TagTypeEnum.SUB_CATEGORY);
       this.updateTagControl();
+      this.validatePublishedState();
     });
     const { xWeightUnit, xDistanceUnit, yWeightUnit, yDistanceUnit, xType, yType } = ratioGroup.controls;
     xType.valueChanges.subscribe((type) => {
@@ -480,6 +481,11 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     return this.testGroup.controls.relativeProfile as FormGroup<RelativeProfileObject>;
   }
 
+  get isCategoryValid(): boolean {
+    const { category } = this.testGroup.controls;
+    return (category.valid && category.value !== 'NONE');
+  }
+
   ngOnDestroy(): void {
     this.store.patchState({
       selectedTest: undefined
@@ -499,6 +505,12 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     const isOneRemValid = (oneRMInputFields.valid && !!(oneRMInputFields.value?.length)) || oneRMInputFields.disabled;
     const isInputValid = (inputFields.valid && !!(inputFields.value?.length)) || inputFields.disabled;
     const isMChoiceValid = (multipleChoiceInputFields.valid && !!(multipleChoiceInputFields.value?.length)) || multipleChoiceInputFields.disabled;
+    if (this.isCategoryValid) {
+      isPublished.setValue(true);
+    } else {
+      isPublished.setValue(false);
+      return;
+    }
     if (isInputTypeValid) {
       isPublished.setValue(true);
     } else {

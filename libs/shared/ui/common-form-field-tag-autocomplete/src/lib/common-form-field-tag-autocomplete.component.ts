@@ -20,7 +20,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   selector: 'hidden-innovation-common-form-field-tag-autocomplete',
   template: `
     <mat-form-field class='w-100' *ngIf='fieldType === "CHIP"'>
-      <mat-label>{{label || "--"}}</mat-label>
+      <mat-label>{{(isDisabled ? "Select Category First" : label) || "--"}}</mat-label>
       <mat-chip-list #list aria-label='tag selection'>
         <ng-template ngFor [ngForOf]='testTags' let-tag>
           <mat-chip
@@ -34,6 +34,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
           </mat-chip>
         </ng-template>
         <input
+          [disabled]='isDisabled'
           (keyup)='getTags(tagTypeEnum, input.value)'
           (focusin)='getTags(tagTypeEnum)'
           placeholder='New tag...'
@@ -120,6 +121,7 @@ export class CommonFormFieldTagAutocompleteComponent implements OnInit {
   @Input() tagCategory?: TagCategoryEnum | 'NONE';
   @Input() testTags: Tag[] = [];
   @Input() label?: string;
+  @Input() isDisabled = false;
 
   @Input() controlPath: any;
   @Input() errorMessage: Partial<GenericErrorMessage> = this.formValidationService.fieldValidationMessage;

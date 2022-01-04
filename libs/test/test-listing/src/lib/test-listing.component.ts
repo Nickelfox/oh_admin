@@ -29,7 +29,7 @@ import { MatSelectionListChange } from '@angular/material/list';
 })
 export class TestListingComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'created_at', 'category', 'difficulty', 'input', 'status', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'updated_at', 'category', 'difficulty', 'input', 'status', 'action'];
   tests: MatTableDataSource<Test> = new MatTableDataSource<Test>();
 
   noData: Observable<boolean>;

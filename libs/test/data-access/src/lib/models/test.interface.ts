@@ -64,7 +64,7 @@ export interface Test {
 
 export interface CreateTest {
   name: string;
-  category: TagCategoryEnum | undefined;
+  category: TagCategoryEnum | 'NONE';
   difficulty: DifficultyEnum;
   inputType: TestInputTypeEnum | 'NONE',
   needEquipment: boolean;
