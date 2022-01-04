@@ -1,0 +1,115 @@
+<div class='p-4'>
+  <div mat-dialog-title>
+    <div class='d-flex align-items-center justify-content-between'>
+      <h4 class='mat-h4 text-uppercase text-color__primary mb-3 mr-4 font-calibri font-weight-normal'>
+        PACK LISTING</h4>
+    </div>
+  </div>
+  <div class='container-fluid p-0'>
+    <div class='row'>
+      <div class='col-3'>
+        <mat-form-field class='w-100'>
+          <mat-label>Search</mat-label>
+          <input matInput>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class='row'>
+      <div class='col-12'>
+        <div mat-dialog-content>
+          <mat-card class='p-0 mt-2'>
+            <div class='container-fluid p-0'>
+              <div class='row'>
+                <div class='col-12'>
+                  <table mat-table [dataSource]='packSelector' class='w-100'>
+                    <ng-container matColumnDef='select'>
+                      <th mat-header-cell *matHeaderCellDef>
+                      </th>
+                      <td mat-cell *matCellDef='let test'>
+                        <mat-checkbox
+                          color='primary'
+                          (click)='$event.stopPropagation()'>
+                        </mat-checkbox>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef='name'>
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.NAME | titlecase}}
+                  </span>
+                          <div class='d-flex align-items-center'>
+                            <mat-icon
+                              style='font-size: 16px; margin-bottom: -8px; width: 16px;'>{{true ? "keyboard_arrow_up" : "keyboard_arrow_down"}}</mat-icon>
+                            <button mat-icon-button class='mr-3'>
+                              <mat-icon style='font-size: 20px'>sort_by_alpha</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </th>
+                      <td mat-cell *matCellDef='let element'
+                          [matTooltip]='element.name'> {{(element.name | maxStringLimit) || '--'}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef='category'>
+                      <th mat-header-cell
+                          *matHeaderCellDef>
+                        <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
+                  </span>
+                          <div class='d-flex align-items-center'>
+                            <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
+
+                                    color='{{filters.controls.category?.value ? "primary" : ""}}'>
+                              <mat-icon style='font-size: 20px'>filter_list</mat-icon>
+                            </button>
+                            <mat-menu #typeMenu='matMenu'>
+                              <mat-selection-list color='primary'
+                                                  [multiple]='true' class='pt-0'>
+                                <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
+                                  <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>
+                                </mat-list-option>
+                              </mat-selection-list>
+                            </mat-menu>
+                          </div>
+                        </div>
+                      </th>
+                      <td mat-cell *matCellDef='let element'> {{((element.category | titlecase) || '--')}} </td>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef='updated_at'>
+                      <th mat-header-cell *matHeaderCellDef>
+                        <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.DATE_MODIFIED| titlecase}}
+                  </span>
+                          <div class='d-flex align-items-center'>
+                            <button mat-icon-button class='mr-3'>
+                              <mat-icon
+                                style='font-size: 20px;'>{{true ? "arrow_upward" : "arrow_downward"}}</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+
+                      </th>
+                      <td mat-cell *matCellDef='let element'> {{(element.updated_at | date: 'shortDate') || '--'}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef='displayedColumns' ></tr>
+                    <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react'></tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

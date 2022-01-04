@@ -24,6 +24,15 @@
         "libs/edit-admin-profile/src/index.ts"
       ],
       "@hidden-innovation/environment": ["libs/environment/src/index.ts"],
+      "@hidden-innovation/featured/create-featured": [
+        "libs/featured/create-featured/src/index.ts"
+      ],
+      "@hidden-innovation/featured/data-access": [
+        "libs/featured/data-access/src/index.ts"
+      ],
+      "@hidden-innovation/featured/featured-listing": [
+        "libs/featured/featured-listing/src/index.ts"
+      ],
       "@hidden-innovation/forgot-password": [
         "libs/forgot-password/src/index.ts"
       ],
@@ -127,6 +136,9 @@
       ],
       "@hidden-innovation/shared/ui/pack-content-card": [
         "libs/shared/ui/pack-content-card/src/index.ts"
+      ],
+      "@hidden-innovation/shared/ui/pack-selector": [
+        "libs/shared/ui/pack-selector/src/index.ts"
       ],
       "@hidden-innovation/shared/ui/prompt-dialog": [
         "libs/shared/ui/prompt-dialog/src/index.ts"
