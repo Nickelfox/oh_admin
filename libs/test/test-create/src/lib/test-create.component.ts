@@ -36,7 +36,7 @@ import {
 } from '@hidden-innovation/test/data-access';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { AspectRatio, Media } from '@hidden-innovation/media';
+import { AspectRatio } from '@hidden-innovation/media';
 import { HotToastService } from '@ngneat/hot-toast';
 import { DateTime } from 'luxon';
 import { ActivatedRoute } from '@angular/router';
@@ -63,12 +63,6 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   ratioTestTypeEnum = RatioTestTypeEnum;
   opTypeEnum = OperationTypeEnum;
 
-  selectedMedia?: {
-    poster: Media;
-    thumbnail: Media;
-    video: Media;
-  };
-
   testInputTypeIte = Object.values(TestInputTypeEnum).map(value => value.toString());
   testCatTypeIte = Object.values(TagCategoryEnum).map(value => value.toString());
   diffTypeIte = Object.values(DifficultyEnum).map(value => value.toString());
@@ -81,6 +75,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   opType?: OperationTypeEnum;
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
+
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
     name: new FormControl('', [...this.utilities.requiredFieldValidation]),
     category: new FormControl(undefined, [...this.utilities.requiredFieldValidation]),
@@ -489,6 +484,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     this.store.patchState({
       selectedTest: undefined
     });
+    this.utilities.resetTagsState();
   }
 
   validatePublishedState(): void {
@@ -615,6 +611,11 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     }
   }
 
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    return this.testGroup.dirty ? this.loaded : true;
+  }
+
   private populateTest(test: Test): void {
     const {
       name,
@@ -656,10 +657,5 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       this.utilities.updateTestTags(t.tagType, t);
       this.updateTagControl();
     });
-  }
-
-  @HostListener('window:beforeunload')
-  canDeactivate(): boolean {
-    return this.testGroup.dirty ? this.loaded : true;
   }
 }

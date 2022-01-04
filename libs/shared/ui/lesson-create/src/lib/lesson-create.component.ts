@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Lesson, LessonCore } from '@hidden-innovation/pack/data-access';
@@ -8,7 +8,9 @@ import { ConstantDataService, FormValidationService } from '@hidden-innovation/s
 import { AspectRatio } from '@hidden-innovation/media';
 import { Tag } from '@hidden-innovation/tags/data-access';
 import { HotToastService } from '@ngneat/hot-toast';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-lesson-create',
   templateUrl: './lesson-create.component.html',
@@ -16,7 +18,7 @@ import { HotToastService } from '@ngneat/hot-toast';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LessonCreateComponent {
+export class LessonCreateComponent implements OnDestroy {
 
   testTags: Tag[] = [];
 
@@ -79,6 +81,10 @@ export class LessonCreateComponent {
       const tags: Tag[] = tagIds as Tag[];
       tags?.forEach(t => this.updateTestTags(t));
     }
+  }
+
+  ngOnDestroy(): void {
+    this.testTags = [];
   }
 
   removeTag(tag: Tag): void {
