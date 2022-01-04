@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/assessment/assessment-create",
+  "sourceRoot": "libs/assessment/assessment-create/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/assessment/assessment-create"],
+      "options": {
+        "project": "libs/assessment/assessment-create/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/assessment/assessment-create/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/assessment/assessment-create/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/assessment/assessment-create"],
+      "options": {
+        "jestConfig": "libs/assessment/assessment-create/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/assessment/assessment-create/src/**/*.ts",
+          "libs/assessment/assessment-create/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

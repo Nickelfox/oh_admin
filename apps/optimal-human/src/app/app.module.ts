@@ -268,6 +268,33 @@ import { MatCardModule } from '@angular/material/card';
         ]
       },
       {
+        path: 'assessments',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/assessment/assessment-listing').then(
+                (m) => m.AssessmentListingModule
+              ),
+            data: { breadcrumb: 'Assessments' }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/assessment/assessment-create').then(
+                (m) => m.AssessmentCreateModule
+              ),
+            data: { breadcrumb: 'Add Assessment'}
+          }
+        ]
+      },
+      {
         path: 'featured',
         canActivate: [AuthGuard],
         children: [
@@ -325,9 +352,6 @@ import { MatCardModule } from '@angular/material/card';
       theme: 'snackbar',
       position: 'bottom-right',
       autoClose: true,
-      /**
-       * While Updating the duration, also update media upload toast duration in upload operations
-       */
       duration: 3000
     }),
     MatButtonModule,
