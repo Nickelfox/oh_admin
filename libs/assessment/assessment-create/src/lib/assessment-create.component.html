@@ -131,10 +131,17 @@
             <mat-card-actions>
               <button
                 color='accent' class='w-100' mat-flat-button
-                type='button'>
+                type='button'
+                [matMenuTriggerFor]='menuPack'
+              >
                 <mat-icon class='mr-2 mb-1'>add</mat-icon>
                 Add
               </button>
+              <mat-menu #menuPack='matMenu'>
+                <button type='button' mat-menu-item (click)='openContentSelectorDialog()'>
+                  <span>Content (Test/Test-Group/Questionnaire)</span>
+                </button>
+              </mat-menu>
             </mat-card-actions>
           </mat-card>
         </div>
