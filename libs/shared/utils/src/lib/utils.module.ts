@@ -4,6 +4,7 @@ import { DisableCopyPasteDirective } from './directives/disable-copy-paste.direc
 import { MaxStringLimitPipe } from './pipes/max-string-limit.pipe';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
 import { PendingChangesGuard } from './guards/pending-changes.guard';
+import { ImagePreloaderDirective } from './directives/image-preloader.directive';
 
 @NgModule({
   imports: [CommonModule],
@@ -11,11 +12,13 @@ import { PendingChangesGuard } from './guards/pending-changes.guard';
     DisableCopyPasteDirective,
     MaxStringLimitPipe,
     ReplaceUnderscorePipe,
+    ImagePreloaderDirective,
   ],
   exports: [
     DisableCopyPasteDirective,
     MaxStringLimitPipe,
     ReplaceUnderscorePipe,
+    ImagePreloaderDirective
   ],
   providers:[
     PendingChangesGuard

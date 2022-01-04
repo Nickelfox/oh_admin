@@ -41,7 +41,7 @@ export class ContentSelectorComponent implements OnInit {
     public matDialogRef: MatDialogRef<PackContent[]>,
     public uiStore: UiStore,
     private cdr: ChangeDetectorRef,
-    private titleCasePipe: TitleCasePipe,
+    private titleCasePipe: TitleCasePipe
   ) {
     this.noData = this.contents.connect().pipe(map(data => data.length === 0));
     this.uiStore.selectedContent$.subscribe(contents => {
@@ -98,14 +98,14 @@ export class ContentSelectorComponent implements OnInit {
   }
 
   isSelected(content: PackContent): boolean {
-    return !!this.selectedContents.find(value => (value.content_id === content.id) && (this.titleCasePipe.transform(value.type) === content.type));
+    return !!this.selectedContents.find(value => (value.contentId === content.id) && (value.type === content.type));
   }
 
-  addToList(content: PackContent): void {
-    if (this.selectedContents.find(value => value.content_id === content.id && value.type === content.type)) {
+  addToList(selectedContent: PackContent): void {
+    if (this.selectedContents.find(value => value.contentId === selectedContent.id && value.type === selectedContent.type)) {
       this.uiStore.patchState({
         selectedContent: [
-          ...this.selectedContents.filter(c => c.content_id !== content.id || c.type !== content.type)
+          ...this.selectedContents.filter(c => c.contentId !== selectedContent.id || c.type !== selectedContent.type)
         ]
       });
     } else {
@@ -113,9 +113,9 @@ export class ContentSelectorComponent implements OnInit {
         selectedContent: [
           ...this.selectedContents,
           {
-            content_id: content.id,
-            type: content.type,
-            name: content.name
+            contentId: selectedContent.id,
+            type: selectedContent.type,
+            name: selectedContent.name
           } as ContentCore
         ]
       });

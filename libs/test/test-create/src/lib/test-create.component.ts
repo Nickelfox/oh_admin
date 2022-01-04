@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   DifficultyEnum,
@@ -34,6 +42,7 @@ import { DateTime } from 'luxon';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -44,7 +53,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TestCreateComponent implements OnDestroy {
+export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   testInputTypeEnum = TestInputTypeEnum;
   tagTypeEnum = TagTypeEnum;
   aspectRatio = AspectRatio;
@@ -74,7 +83,7 @@ export class TestCreateComponent implements OnDestroy {
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
     name: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    category: new FormControl(undefined),
+    category: new FormControl(undefined, [...this.utilities.requiredFieldValidation]),
     videoId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
@@ -96,10 +105,10 @@ export class TestCreateComponent implements OnDestroy {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    label: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    description: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    outcomes: new FormControl('', [...this.utilities.requiredFieldValidation]),
-    procedure: new FormControl('', [...this.utilities.requiredFieldValidation]),
+    label: new FormControl(''),
+    description: new FormControl(''),
+    outcomes: new FormControl(''),
+    procedure: new FormControl(''),
     needEquipment: new FormControl(false),
     equipment: new FormControl({ value: '', disabled: true }, [...this.utilities.requiredFieldValidation]),
     tags: new FormControl([]),
@@ -451,6 +460,9 @@ export class TestCreateComponent implements OnDestroy {
           });
       }
     });
+    this.store.loaded$.pipe(
+      tap(res => this.loaded = res)
+    ).subscribe();
   }
 
   get oneRMInputFieldFormArray(): FormArray<OneRMField> {
@@ -562,12 +574,16 @@ export class TestCreateComponent implements OnDestroy {
       testObj = {
         ...testObj,
         inputFields: testObj.inputFields.map(fields => {
-          const low = DateTime.fromJSDate(fields.low as Date).toSeconds();
-          const high = DateTime.fromJSDate(fields.high as Date).toSeconds();
+          const lHours = DateTime.fromJSDate(fields.low as Date).hour;
+          const lMinutes = DateTime.fromJSDate(fields.low as Date).minute;
+          const lSeconds = DateTime.fromJSDate(fields.low as Date).second;
+          const hHours = DateTime.fromJSDate(fields.high as Date).hour;
+          const hMinutes = DateTime.fromJSDate(fields.high as Date).minute;
+          const hSeconds = DateTime.fromJSDate(fields.high as Date).second;
           return {
             ...fields,
-            low,
-            high
+            low: (lHours * 3600) + (lMinutes * 60) + lSeconds ?? 0,
+            high: (hHours * 3600) + (hMinutes * 60) + hSeconds ?? 0
           };
         })
       };
@@ -640,5 +656,10 @@ export class TestCreateComponent implements OnDestroy {
       this.utilities.updateTestTags(t.tagType, t);
       this.updateTagControl();
     });
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    return this.testGroup.dirty ? this.loaded : true;
   }
 }

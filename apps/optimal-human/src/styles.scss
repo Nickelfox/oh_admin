@@ -421,7 +421,7 @@ table.mat-table {
 .row-react {
   transition: all .4s cubic-bezier(.17,.67,.83,.67);
 
-  &:hover
+  &:hover, &.active
   {
     background-color: #e0e0e0;
   }

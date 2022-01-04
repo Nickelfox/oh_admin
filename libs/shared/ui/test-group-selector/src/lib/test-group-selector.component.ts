@@ -36,7 +36,7 @@ import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialo
 })
 export class TestGroupSelectorComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'options', 'status'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'options'];
 
   testGroup: MatTableDataSource<TestGroup> = new MatTableDataSource<TestGroup>([]);
   noData: Observable<boolean>;
@@ -61,7 +61,7 @@ export class TestGroupSelectorComponent implements OnInit {
     dateSort: new FormControl(SortingEnum.DESC),
     nameSort: new FormControl({ value: undefined, disabled: true }),
     search: new FormControl(undefined),
-    published: new FormControl(undefined)
+    published: new FormControl('TRUE')
   });
 
 

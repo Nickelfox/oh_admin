@@ -16,6 +16,7 @@ export class ConstantDataService {
     COUNTRY: 'country',
     LOCATION: 'location',
     LABEL: 'label',
+    LESSON: 'lesson',
     DATE_OF_JOINING: 'date of joining',
     DATE_ADDED: 'date added',
     DESC: 'description',
@@ -28,6 +29,7 @@ export class ConstantDataService {
     ACTION: 'action',
     ID: 'id',
     USER_NAME: 'user name',
+    THUMBNAIL: 'thumbnail',
     LANGUAGE_DETAIL: 'language detail',
     ROLE: 'role',
     CREATED_AT: 'created at',
@@ -38,6 +40,7 @@ export class ConstantDataService {
     OUTCOME: 'outcome',
     PROCEDURE: 'procedure',
     WEIGHT: 'weight',
+    SUBCATEGORIE_S: 'subcategories(s)',
     SEX: 'sex',
     SKIN_COLOUR: 'skin colour',
     WATCHED: 'watched',
@@ -49,6 +52,7 @@ export class ConstantDataService {
     OOS: 'oos',
     AGE: 'age',
     GENDER: 'gender',
+    VIDEO_FILE: 'video file',
     RESULT_EXPLANATION: 'result explanation'
   };
 

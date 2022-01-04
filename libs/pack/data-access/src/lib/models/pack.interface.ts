@@ -12,6 +12,7 @@ export interface PackCore {
   isPublished: boolean;
   // imageId: number;
   imagesAndPdfsIds: number[];
+  subTitle: string;
   urls: ContentUrl[];
   posterId: number;
   content: ContentCore[] | LessonCore[];
@@ -19,7 +20,7 @@ export interface PackCore {
 
 export interface ContentCore {
   order: number | undefined;
-  content_id: number | null;
+  contentId: number | null;
   name: string;
   type: PackContentTypeEnum;
 }
@@ -32,7 +33,6 @@ export interface Content extends ContentCore {
   deletedAt: string;
   createdAt: string;
   updatedAt: string;
-  contentId: number;
 }
 
 export interface PackContent {

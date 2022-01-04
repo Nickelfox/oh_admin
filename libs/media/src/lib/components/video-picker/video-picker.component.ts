@@ -2,11 +2,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   Output,
-  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
@@ -17,6 +15,7 @@ import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { filter, switchMap } from 'rxjs/operators';
 import { VideoPickedResponseData } from '../../models/media.interface';
 import { getMetadata } from 'video-metadata-thumbnails';
+import { delay } from 'lodash-es';
 
 @Component({
   selector: 'hidden-innovation-video-picker',
@@ -68,14 +67,14 @@ export class VideoPickerComponent {
         height = metadata.height;
         width *= 1;
         const valHeight = width != 0 ? Math.round((width / 16) * 9) : 0;
-        // End metadata gathering
-        if (file.size > this.constantDataService.FIZE_SIZE_DATA.limit) {
-          // Video size validation
-          this.toastRef?.close();
-          this.clearPicker(videoPicker);
-          this.hotToastService.error(this.constantDataService.FIZE_SIZE_DATA.limitMessage);
-          return;
-        }
+        // // End metadata gathering
+        // if (file.size > this.constantDataService.FIZE_SIZE_DATA.limit) {
+        //   // Video size validation
+        //   this.toastRef?.close();
+        //   this.clearPicker(videoPicker);
+        //   this.hotToastService.error(this.constantDataService.FIZE_SIZE_DATA.limitMessage);
+        //   return;
+        // }
         if (file.type !== this.constantDataService.FILE_FORMAT_DATA.video_mp4 && file.type !== this.constantDataService.FILE_FORMAT_DATA.video_mov) {
           // Video Format validation
           this.toastRef?.close();
@@ -129,6 +128,7 @@ export class VideoPickerComponent {
           type: 'success'
         });
         this.isUploading = false;
+        delay(_ => this.toastRef?.close(), 3000);
         this.emitVideoFile.emit({
           fileName,
           attachmentId

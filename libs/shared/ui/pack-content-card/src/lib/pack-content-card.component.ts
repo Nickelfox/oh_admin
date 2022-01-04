@@ -11,7 +11,8 @@ import { PackContentTypeEnum } from '@hidden-innovation/shared/models';
             <h4 matTooltip='{{name}}'
                 class='mat-h4 mb-0 font-weight-bold'>{{name ? (name | maxStringLimit : 35) : '--'}}</h4>
             <h5
-              class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>{{(category | titlecase) || '--'}}</h5>
+              class='mat-h5 mb-0 mr-4 font-calibri'
+              [ngStyle]='{"color": getTypeColor(category)}'>{{(category | titlecase) || '--'}}</h5>
           </div>
           <div class='col-2 d-flex justify-content-end'>
             <button type='button' mat-icon-button [matMenuTriggerFor]='testOption'>
@@ -39,4 +40,18 @@ export class PackContentCardComponent {
 
   @Output() emitDeleteEvent: EventEmitter<void> = new EventEmitter<void>();
 
+  getTypeColor(type: PackContentTypeEnum | undefined): string {
+    switch (type) {
+      case PackContentTypeEnum.LESSON:
+        return '#6394E2';
+      case PackContentTypeEnum.SINGLE:
+        return '#FFC107';
+      case PackContentTypeEnum.GROUP:
+        return '#FFC107';
+      case PackContentTypeEnum.QUESTIONNAIRE:
+        return '#4DB6AC';
+      default:
+        return '#c4c6cc';
+    }
+  }
 }

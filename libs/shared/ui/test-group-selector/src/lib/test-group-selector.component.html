@@ -46,7 +46,9 @@
                   </ng-container>
 
                   <ng-container matColumnDef='id'>
-                    <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
+                    <th mat-header-cell
+                        [width]='55'
+                        *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'> {{element.id ?? '--'}} </td>
                   </ng-container>
 
@@ -109,47 +111,6 @@
                       {{constantDataService.FIELD_NAME.OPTIONS | titlecase}}
                     </th>
                     <td mat-cell *matCellDef='let element'>{{element.tests?.length ?? 0}}</td>
-                  </ng-container>
-
-                  <ng-container matColumnDef='status'>
-                    <th mat-header-cell
-                        *matHeaderCellDef>
-                      <div class='d-flex align-items-center justify-content-between'>
-                  <span>
-                    {{constantDataService.FIELD_NAME.STATUS | titlecase}}
-                  </span>
-                        <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3'
-                                  color='{{filters.controls.published?.value ? "primary" : ""}}'
-                                  [matMenuTriggerFor]='statusMenu'
-                                  [disabled]='(store.isActing$ | async)'
-                                  color='{{filters.controls.published?.value ? "primary" : ""}}'>
-                            <mat-icon style='font-size: 20px'>filter_list</mat-icon>
-                          </button>
-                          <mat-menu #statusMenu='matMenu'>
-                            <mat-selection-list color='primary'
-                                                (selectionChange)='updateFilterChange($event, filters.controls.published)'
-                                                [multiple]='false' class='pt-0'>
-                              <mat-list-option [value]='"TRUE"'>
-                                {{publishStatusEnum.PUBLISHED | titlecase}}
-                              </mat-list-option>
-                              <mat-list-option [value]='"FALSE"'>
-                                {{publishStatusEnum.UNPUBLISHED | titlecase}}
-                              </mat-list-option>
-                              <mat-list-option [value]='undefined'>
-                                Clear
-                              </mat-list-option>
-                            </mat-selection-list>
-                          </mat-menu>
-                        </div>
-                      </div>
-                    </th>
-                    <td mat-cell *matCellDef='let element'>
-                      <hidden-innovation-common-data-field-status
-                        [chipType]='element.isVisible ? statusChipType.SUCCESS : statusChipType.WARNING'
-                        [text]='((element.isVisible ? publishStatusEnum.PUBLISHED : publishStatusEnum.UNPUBLISHED)  | titlecase)'
-                      ></hidden-innovation-common-data-field-status>
-                    </td>
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>

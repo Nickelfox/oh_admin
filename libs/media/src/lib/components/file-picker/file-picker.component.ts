@@ -15,11 +15,13 @@ import { AuthFacade } from '@hidden-innovation/auth';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { filter, switchMap } from 'rxjs/operators';
 import { FileNameDialogComponent } from '@hidden-innovation/shared/ui/file-name-dialog';
+import { delay } from 'lodash-es';
 
 @Component({
   selector: 'hidden-innovation-file-picker',
   template: `
-    <input hidden type='file' accept='application/*,audio/*,image/*,text/*' (change)='filePicked($event, filePicker)'
+    <input hidden type='file' accept='application/*,audio/*,image/*,text/*,video/*'
+           (change)='filePicked($event, filePicker)'
            #filePicker>
     <button [disabled]='isUploading' mat-stroked-button color='{{isInvalid ? "warn" : "primary"}}'
             (click)='filePicker.click()'
@@ -134,7 +136,7 @@ export class FilePickerComponent {
           type: 'success'
         });
         this.isUploading = false;
-        console.log();
+        delay(_ => this.toastRef?.close(), 3000);
         this.emitFile.emit({
           fileName,
           attachmentId,
