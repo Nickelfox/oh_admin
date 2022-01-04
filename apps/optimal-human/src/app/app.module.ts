@@ -294,6 +294,42 @@ import { MatCardModule } from '@angular/material/card';
           }
         ]
       },
+      {
+        path: 'featured',
+        canActivate: [AuthGuard],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing/:size/:index',
+            loadChildren: () =>
+              import('@hidden-innovation/featured/featured-listing').then(
+                (m) => m.FeaturedListingModule
+              ),
+            data: { breadcrumb: 'Featured' }
+          },
+          {
+            path: 'create',
+            loadChildren: () =>
+              import('@hidden-innovation/featured/create-featured').then(
+                (m) => m.CreateFeaturedModule
+              ),
+            data: { breadcrumb: 'Add Featured' }
+          },
+          {
+            path: 'pack-selector',
+            loadChildren: () =>
+              import('@hidden-innovation/shared/ui/pack-selector').then(
+                (m) => m.PackSelectorModule
+              ),
+            data: { breadcrumb: 'Pack Selector'}
+          }
+        ]
+      },
+
 
       // {
       //   path: 'users/edit/:id',

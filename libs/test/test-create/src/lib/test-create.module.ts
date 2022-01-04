@@ -4,7 +4,7 @@ import { TestCreateComponent } from './test-create.component';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@hidden-innovation/material';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
-import { UtilsModule } from '@hidden-innovation/shared/utils';
+import { PendingChangesGuard, UtilsModule } from '@hidden-innovation/shared/utils';
 import { TagsDataAccessModule } from '@hidden-innovation/tags/data-access';
 import { MediaModule } from '@hidden-innovation/media';
 import { CommonFormFieldImageModule } from '@hidden-innovation/shared/ui/common-form-field-image';
@@ -33,7 +33,8 @@ import { FormFieldErrorsModule } from '@hidden-innovation/shared/ui/form-field-e
       {
         path: '',
         pathMatch: 'full',
-        component: TestCreateComponent
+        component: TestCreateComponent,
+        canDeactivate: [PendingChangesGuard]
       }
     ]),
     RxReactiveFormsModule,

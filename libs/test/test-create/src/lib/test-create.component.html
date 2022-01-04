@@ -52,6 +52,14 @@
                                   <mat-option [value]=type
                                               *ngFor='let type of testCatTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
                                 </mat-select>
+                                <mat-error>
+                                  <ng-template [ngIf]='((testGroup.controls.category.touch$ | async) || (testGroup.controls.category.dirty$ | async)) && (testGroup.controls.category.errors$ | async)' let-error>
+                                    <hidden-innovation-form-field-errors
+                                      [label]='"Category"'
+                                      [error]='error'
+                                    ></hidden-innovation-form-field-errors>
+                                  </ng-template>
+                                </mat-error>
                               </mat-form-field>
                             </div>
                           </div>

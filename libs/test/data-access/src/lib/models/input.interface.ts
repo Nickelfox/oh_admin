@@ -37,8 +37,8 @@ export interface MultipleChoiceFieldExtended extends MultipleChoiceField, Common
 }
 
 export interface InputField extends CoreInputField {
-  low: number | Date | undefined;
-  high: number | Date | undefined;
+  low: number | Date | undefined | string;
+  high: number | Date | undefined | string;
 }
 
 export interface InputFieldExtended extends InputField, CommonInputFieldResponse {

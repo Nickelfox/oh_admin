@@ -38,11 +38,17 @@ export class PackCreateComponent implements OnDestroy {
     name: new FormControl<string>('', [
       ...this.formValidationService.requiredFieldValidation,
       RxwebValidators.maxLength({
-        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.PACK_NAME_LENGTH
       })
     ]),
     description: new FormControl<string>('', [
       ...this.formValidationService.requiredFieldValidation
+    ]),
+    subTitle:  new FormControl<string>('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.SUB_TITLE_LENGTH
+      })
     ]),
     isPublished: new FormControl<boolean>(false),
     posterId: new FormControl<number>(undefined, [
@@ -173,11 +179,11 @@ export class PackCreateComponent implements OnDestroy {
   }
 
   deleteSelectedContent(content: ContentCore | LessonCore): void {
-    const selectedContent = this.selectedContents.find(value => value.content_id === content.content_id && value.type === content.type);
+    const selectedContent = this.selectedContents.find(value => value.contentId === content.contentId && value.type === content.type);
     if (selectedContent) {
       this.uiStore.patchState({
         selectedContent: [
-          ...this.selectedContents.filter(c => c.content_id !== content.content_id || c.type !== content.type)
+          ...this.selectedContents.filter(c => c.contentId !== content.contentId || c.type !== content.type)
         ]
       });
     }
@@ -274,7 +280,7 @@ export class PackCreateComponent implements OnDestroy {
   }
 
   private populatePack(pack: Pack): void {
-    const { name, description, thumbnailId, posterId } = pack;
+    const { name, description, thumbnailId, posterId, subTitle } = pack;
     this.selectedPack = pack;
     const selectedContent: Content[] | Lesson[] = (this.selectedPack.content as (Content[] | Lesson[])) ?? [];
     const resources: Media[] = this.selectedPack.imagesAndPdfs as Media[] ?? [];
@@ -283,7 +289,8 @@ export class PackCreateComponent implements OnDestroy {
       name,
       description,
       thumbnailId,
-      posterId
+      posterId,
+      subTitle
     });
     urls.forEach(u => this.addUrlCtrl(u));
     resources.forEach(r => this.addResourceCtrl(r.id));
@@ -293,7 +300,7 @@ export class PackCreateComponent implements OnDestroy {
           if (c.type === PackContentTypeEnum.LESSON) {
             const contentLesson: Lesson = c as Lesson;
             return {
-              content_id: contentLesson.contentId,
+              contentId: contentLesson.contentId,
               type: contentLesson.type,
               name: contentLesson.name,
               tagIds: contentLesson.tagIds,
@@ -303,7 +310,7 @@ export class PackCreateComponent implements OnDestroy {
             } as LessonCore;
           } else {
             return {
-              content_id: c.contentId,
+              contentId: c.contentId,
               type: c.type,
               name: c.name
             } as ContentCore;
