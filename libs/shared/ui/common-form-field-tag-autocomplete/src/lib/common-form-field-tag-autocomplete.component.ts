@@ -13,7 +13,9 @@ import { TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
 import { ConstantDataService, FormValidationService, GenericErrorMessage } from '@hidden-innovation/shared/form-config';
 import { FormControl } from '@ngneat/reactive-forms';
 import { FormGroupDirective } from '@angular/forms';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-common-form-field-tag-autocomplete',
   template: `
@@ -135,7 +137,6 @@ export class CommonFormFieldTagAutocompleteComponent implements OnInit {
     public formValidationService: FormValidationService,
     public constantDataService: ConstantDataService
   ) {
-    console.log(this.tagTypeEnum);
   }
 
   getTags(cat: TagTypeEnum, search?: string) {

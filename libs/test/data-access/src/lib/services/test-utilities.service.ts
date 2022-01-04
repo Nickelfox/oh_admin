@@ -43,6 +43,10 @@ export class TestUtilitiesService {
   ) {
   }
 
+  resetTagsState(): void {
+    this.testTags = [];
+  }
+
   removeTypeTags(cat: TagTypeEnum): void {
     this.testTags = [
       ...this.testTags.filter(t => t.tagType !== cat)
