@@ -37,7 +37,7 @@ export class ConstantDataService {
     DIFFICULTY: 'difficulty',
     UPDATED_AT: 'updated at',
     HEIGHT: 'height',
-    OUTCOME: 'outcome',
+    OUTCOMES: 'outcomes',
     PROCEDURE: 'procedure',
     WEIGHT: 'weight',
     SUBCATEGORIE_S: 'subcategories(s)',

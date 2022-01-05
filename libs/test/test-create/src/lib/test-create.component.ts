@@ -77,7 +77,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
-    name: new FormControl('', [...this.utilities.requiredFieldValidation]),
+    name: new FormControl('', [
+      ...this.utilities.requiredFieldValidation,
+      RxwebValidators.minLength({
+        value: 1
+      }),
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+      })
+    ]),
     category: new FormControl('NONE', [...this.utilities.requiredFieldValidation]),
     videoId: new FormControl(undefined, [
       RxwebValidators.required(),

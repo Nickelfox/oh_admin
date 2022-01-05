@@ -32,7 +32,7 @@ export class LessonCreateComponent implements OnDestroy {
     name: new FormControl<string>('', [
       ...this.formValidationService.requiredFieldValidation
     ]),
-    category: new FormControl<TagCategoryEnum>(undefined, [
+    category: new FormControl<TagCategoryEnum | 'NONE'>('NONE', [
       ...this.formValidationService.requiredFieldValidation
     ]),
     videoId: new FormControl<number>(undefined, [
