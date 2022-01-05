@@ -4,7 +4,7 @@ import { TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { ContentCore } from './pack.interface';
 
 export interface LessonCore extends ContentCore {
-  category: TagCategoryEnum | undefined;
+  category: TagCategoryEnum | 'NONE';
   videoId: number;
   thumbnailId: number;
   tagIds: number[] | Tag[];
