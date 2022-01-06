@@ -49,7 +49,7 @@ export class TestGroupCreateComponent implements OnDestroy {
     description: new FormControl('', [
       ...this.requiredFieldValidation
     ]),
-    category: new FormControl(undefined, [
+    category: new FormControl('NONE', [
       ...this.requiredFieldValidation
     ]),
     subCategory: new FormControl(''),
@@ -135,7 +135,15 @@ export class TestGroupCreateComponent implements OnDestroy {
 
   get getSubCategoryValue(): string {
     const subCatCtrl = this.testGroup.controls.subCategory as FormControl<Tag | string>;
+    if (subCatCtrl.disabled || !subCatCtrl.value) {
+      return '';
+    }
     return typeof subCatCtrl.value === 'string' ? subCatCtrl.value : subCatCtrl.value.name;
+  }
+
+  get isCategoryValid(): boolean {
+    const { category } = this.testGroup.controls;
+    return category.valid && category.value !== 'NONE';
   }
 
   trackByFn(index: number, test: Test): number {
@@ -168,7 +176,9 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   openTestSelector(): void {
+    const { category } = this.testGroup.controls;
     this.matDialog.open(TestSelectorComponent, {
+      data: category.value,
       height: '100%',
       width: '100%',
       maxHeight: '100%',
