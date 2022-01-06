@@ -8,13 +8,12 @@
              [ngStyle]='{"maxHeight": "51px"}'>
       </div>
       <div class='col'>
-        <button (click)='removeImage()'
-                matTooltip='{{imageData?.fileName}}'
-                mat-stroked-button color='primary'
-                type='button'>
+        <button
+          mat-stroked-button color='primary'
+          type='button'>
           <mat-icon color='warn' class='mr-1'>image</mat-icon>
-          {{(imageData?.fileName | maxStringLimit: 10) ?? '--'}}
-          <mat-icon class='ml-2'>close</mat-icon>
+          <span matTooltip='{{imageData?.fileName ?? "--"}}'>{{(imageData?.fileName | maxStringLimit: 10) ?? '--'}}</span>
+          <mat-icon (click)='removeImage()' matTooltip='Remove File' class='ml-2'>close</mat-icon>
         </button>
       </div>
     </ng-template>
