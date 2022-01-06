@@ -5,7 +5,7 @@ import { TestGroup, TestGroupCore, TestGroupStore } from '@hidden-innovation/tes
 import { FormArray, FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { OperationTypeEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, OperationTypeEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
 import { AspectRatio } from '@hidden-innovation/media';
 import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
 import { HotToastService } from '@ngneat/hot-toast';
@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Test } from '@hidden-innovation/test/data-access';
 import { UiStore } from '@hidden-innovation/shared/store';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -141,16 +142,6 @@ export class TestGroupCreateComponent implements OnDestroy {
     return test.id;
   }
 
-  deleteSelectedTest(test: Test): void {
-    if (this.selectedTests.find(value => value.id === test.id)) {
-      this.uiStore.patchState({
-        selectedTests: [
-          ...this.selectedTests.filter(t => t.id !== test.id)
-        ]
-      });
-    }
-  }
-
   submit(): void {
     this.testGroup.markAllAsTouched();
     this.testGroup.markAllAsDirty();
@@ -197,6 +188,33 @@ export class TestGroupCreateComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.restoreSelectedState();
+  }
+
+  deleteSelectedTestPrompt(test: Test): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Remove Test?',
+      desc: `Are you sure you want to remove this Test from Group?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        if (this.selectedTests.find(value => value.id === test.id)) {
+          this.uiStore.patchState({
+            selectedTests: [
+              ...this.selectedTests.filter(t => t.id !== test.id)
+            ]
+          });
+        }
+      }
+    });
   }
 
   private populateTest(testGroup: TestGroup): void {
