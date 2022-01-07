@@ -58,7 +58,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   ) {
     super(initialState);
     this.getStats({
-      totalUser: 0
+      totalUser: 0,
     });
   }
 }

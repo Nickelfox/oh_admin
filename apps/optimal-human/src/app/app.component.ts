@@ -1,28 +1,30 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { UiStore } from '@hidden-innovation/shared/store';
-import { BreadcrumbService } from 'xng-breadcrumb';
+import { BreadcrumbDefinition, BreadcrumbService } from 'xng-breadcrumb';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
 
   sideBarOpen = true;
   isLoading = false;
   isTablet = false;
   isSliding = false;
-  private readonly destroy$ = new Subject();
+  routerActiveLinkOptions = {
+    exact: true
+  };
 
   constructor(
     public breakpointObserver: BreakpointObserver,
@@ -49,6 +51,19 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
+  getPageTitle(breadCrumbThread: BreadcrumbDefinition[]): string {
+    if (!breadCrumbThread.length) {
+      return '--';
+    }
+    if (breadCrumbThread.length < 2) {
+      return <string>breadCrumbThread[0].label || 'N/A';
+    }
+    if (breadCrumbThread.length > 1) {
+      return <string>breadCrumbThread[1].label || 'N/A';
+    }
+    return 'N/A';
+  }
+
   logoutPrompt(): void {
     const dialogData: GenericDialogPrompt = {
       title: 'Log Out',
@@ -63,19 +78,11 @@ export class AppComponent implements OnInit, OnDestroy {
       data: dialogData,
       minWidth: '25rem'
     });
-    dialogRef.afterClosed().pipe(
-      takeUntil(this.destroy$)
-    ).subscribe((shouldUpdate: boolean) => {
+    dialogRef.afterClosed().subscribe((shouldUpdate: boolean) => {
       if (shouldUpdate) {
         this.authFacade.logoutLocal();
       }
     });
-  }
-
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   ngOnInit(): void {

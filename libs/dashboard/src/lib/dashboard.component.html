@@ -1,72 +1,261 @@
-<div class='p-4'>
+<div class='p-4 bg-white'>
   <div class='container-fluid p-0'>
     <div class='row'>
-      <div class='col-8'>
+      <div class='col-12'>
         <div class='container-fluid p-0'>
+          <form class='row mb-4' [formGroup]='rangeFilterGroup' (ngSubmit)='submit()'>
+            <div class='col-6 col-lg-3'>
+              <hidden-innovation-dashboard-count-card [count]='store.totalUsers$ | async'
+                [isLoading]='store.isChangeLoading$ | async' [change]='-89' cardTitle='Total Users' icon='people'>
+              </hidden-innovation-dashboard-count-card>
+            </div>
+            <div class='col-6 col-lg-3'>
+              <hidden-innovation-dashboard-count-card [isLoading]='store.isChangeLoading$ | async'
+                cardTitle='Total App Downloads' icon='file_download'></hidden-innovation-dashboard-count-card>
+            </div>
+            <div class='col-6'>
+              <mat-card class='bg-light h-100' style='padding: 10px'>
+                <div class='container-fluid p-0'>
+                  <div class='row'>
+                    <div class='col-6'>
+                      <hidden-innovation-common-form-field-date
+                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.DAILY' controlPath='start'
+                        [maxDate]='maxDate'></hidden-innovation-common-form-field-date>
+                      <hidden-innovation-common-form-field-month
+                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.MONTHLY' controlPath='start'
+                        [maxDate]='maxDate'></hidden-innovation-common-form-field-month>
+                      <hidden-innovation-common-form-field-week
+                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.WEEKLY' startControlPath='start'
+                        endControlPath='end' [maxDate]='maxDate'></hidden-innovation-common-form-field-week>
+                    </div>
+                    <div class='col-6'>
+                      <mat-form-field class='w-100'>
+                        <mat-label>Range Filter</mat-label>
+                        <mat-select formControlName='type'>
+                          <mat-option *ngFor='let op of dashboardRangeTypes' [value]='op'>{{op | titlecase}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </mat-card>
+            </div>
+          </form>
           <div class='row mb-4'>
-            <div class='col-6 col-lg-3'>
-              <hidden-innovation-dashboard-count-card
-                [count]='store.totalUsers$ | async'
-                [isLoading]='store.isChangeLoading$ | async'
-                cardTitle='Total Users'
-                icon='people'
-              ></hidden-innovation-dashboard-count-card>
+            <div class='col-6'>
+              <hidden-innovation-line-chart [chartData]='chartData' [chartLabels]='chartLabels' label='Registered Users'
+                icon='how_to_reg'></hidden-innovation-line-chart>
             </div>
-            <div class='col-6 col-lg-3'>
-              <hidden-innovation-dashboard-count-card
-                [count]='0'
-                [isLoading]='false'
-                cardTitle='Total Tests'
-                icon='task'
-              ></hidden-innovation-dashboard-count-card>
+            <div class='col-6'>
+              <hidden-innovation-line-chart [chartData]='chartData' [chartLabels]='chartLabels' label='Active Users'
+                icon='sports_martial_arts'></hidden-innovation-line-chart>
             </div>
+
           </div>
-<!--          <div class='row' *ngIf='false'>-->
-<!--            <div class='col-12'>-->
-<!--              <mat-card>-->
-<!--                <h1 class='card-header'>Statistics</h1>-->
-<!--                <mat-card-content>-->
-<!--                  <canvas baseChart-->
-<!--                          chartType='line'-->
-<!--                          [colors]='chartColors'-->
-<!--                          [datasets]='chartData'-->
-<!--                          [labels]='chartLabels'-->
-<!--                          [legend]='chartLegend'-->
-<!--                          [options]='chartOptions'>-->
-<!--                  </canvas>-->
-<!--                </mat-card-content>-->
-<!--              </mat-card>-->
-<!--            </div>-->
-<!--          </div>-->
         </div>
       </div>
-<!--      <div class='col-4' *ngIf='false'>-->
-<!--        <div class='container-fluid p-0'>-->
-<!--          <div class='row mb-4'>-->
-<!--            <div class='col-12'>-->
-<!--              <mat-card>-->
-<!--                <mat-calendar></mat-calendar>-->
-<!--              </mat-card>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <div class='row'>-->
-<!--            <div class='col-12'>-->
-<!--              <mat-card>-->
-<!--                <mat-card-content>-->
-<!--                  <canvas baseChart-->
-<!--                          chartType='bar'-->
-<!--                          [datasets]='chartData'-->
-<!--                          [labels]='chartLabels'-->
-<!--                          [legend]='chartLegend'-->
-<!--                          [options]='chartOptions'>-->
-<!--                  </canvas>-->
-<!--                </mat-card-content>-->
+    </div>
+    <div class='row'>
+      <div class='col-6'>
+        <hidden-innovation-dashboard-user-demographic [femaleBarData]='femaleData' [maleBarData]='maleData'
+          [ratioChartData]='ageRatioData'></hidden-innovation-dashboard-user-demographic>
+      </div>
+      <div class='col-6'>
+        <div class='row'>
+          <div class='col-6'>
+            <mat-card>
 
-<!--              </mat-card>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+              <div class='container-fluid p-0'>
+                <div class='row'>
+                  <div class='col-12'>
+                    <div class='d-flex align-items-center mb-3'>
+                      <mat-icon color='primary' class='mr-1 card-icon'>people_alt</mat-icon>
+                      <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Assessment Test Engagement</h4>
+                    </div>
+                  </div>
+                </div>
+                <div class='row justify-content-center'>
+                  <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>
+                    <canvas
+                    class='w-100'
+                    baseChart
+                    chartType='doughnut'
+                    [colors]='doughnutChartColorTest'
+                    [data]='assestTest'
+                    [labels]='doughnutChartLabelTest'
+                    [legend]='chartLegendTest'
+                  ></canvas>
+                  </div>
+                  <div class='col-12 d-flex flex-column justify-content-around'>
+                    <div class='container-fluid p-0 w-100'>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.cardio}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Cardio</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.cardio}'>20 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.strength}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Strength</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.strength}'>20 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.function}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Funtion</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.function}'>20 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+              </div>
+            </mat-card>
+          </div>
+          <div class='col-6'>
+            <mat-card>
+
+              <div class='container-fluid p-0'>
+                <div class='row'>
+                  <div class='col-12'>
+                    <div class='d-flex align-items-center mb-3'>
+                      <mat-icon color='primary' class='mr-1 card-icon'>people_alt</mat-icon>
+                      <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Complete Test Engagement</h4>
+                    </div>
+                  </div>
+                </div>
+                <div class='row justify-content-center'>
+                  <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>
+                    <canvas
+                    class='w-100'
+                    baseChart
+                    chartType='doughnut'
+                    [colors]='doughnutChartColorComplete'
+                    [data]='completeTest'
+                    [labels]='doughnutChartLabelComplete'
+                    [legend]='chartLegendComplete'
+                  ></canvas>
+                  </div>
+                  <div class='col-12 d-flex flex-column justify-content-around'>
+                    <div class='container-fluid p-0 w-100'>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.test1}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Test 1</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.test1}'>10 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.test2}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Test 2</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.test2}'>20 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.test3}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Test 3</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.test3}'>30 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.test4}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Test 4</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.test4}'>50 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.test5}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Test 5</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.test5}'>70 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class='row mb-2'>
+                        <div class='col-12'>
+                          <div class='w-100' mat-stroked-button [ngStyle]='{"color": colors.test6}'>
+                            <div class='d-flex align-items-center pt-1 py-0'>
+                              <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
+
+                              <div class='d-flex  align-items-center justify-content-between' [ngStyle]='{width: "calc(100% - 42px)"}'>
+                                <h3 class='mat-h4 m-0 ml-3'>Test 6</h3>
+                                <h3 class='mat-h1 m-0' [ngStyle]='{"color": colors.test6}'>20 %</h3>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+              </div>
+            </mat-card>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>

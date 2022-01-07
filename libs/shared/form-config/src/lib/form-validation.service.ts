@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { GenericErrorMessage } from './models/form-error-message.interface';
-import { AbstractControl, ValidatorFn } from '@angular/forms';
-import { FormGroup } from '@ngneat/reactive-forms';
+import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
+import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,12 @@ export class FormValidationService {
 
   public readonly FIELD_VALIDATION_VALUES = {
     NAME_LENGTH: 45,
-    USERNAME_LENGTH: 30
+    SUB_TITLE_LENGTH: 100,
+    PACK_NAME_LENGTH: 40,
+    USERNAME_LENGTH: 30,
+    QUESTION_NAME_LENGTH: 36,
+    QUESTION_DESC_LENGTH: 50,
+    ANSWER_LENGTH: 50,
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {
@@ -20,8 +27,15 @@ export class FormValidationService {
     maxLength: `Must not exceed 150 character limit`
   };
 
+  pointsValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'Point field is required',
+    invalid: 'Only numeric & non-floating point values allowed',
+    highField: 'Must be greater than the low field value',
+    lowField: 'Must be lower than the low field value'
+  };
+
   emailValidationMessage: Partial<GenericErrorMessage> = {
-    required: 'Email is required',
+    required: 'field is required',
     invalid: 'Invalid Email! Enter a valid Email Address'
   };
 
@@ -31,14 +45,63 @@ export class FormValidationService {
     mismatch: 'Passwords does not match'
   };
 
+  numericValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'field is required',
+    invalid: 'Invalid! Must be a number without any special character'
+  };
+
+  hexValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'field is required',
+    invalid: 'Invalid! Must be a HEX color code'
+  };
+
+  questionValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 questions are required to create a questionnaire'
+  };
+
+  answerValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 answers are required to create a question'
+  };
+
+  testSelectionValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 tests are required to publish a test group'
+  }
+
+  contentSelectionValidationMessage: Partial<GenericErrorMessage> = {
+    minLength: 'Minimum of 2 contents are required to publish a pack'
+  }
+
+  formSubmitError = 'Invalid Submission! Please fill all valid details';
+
   // public  readonly nameRegex = {onlyAlpha: /^[A-Za-z]+$/};
 
   // private readonly passwordRegex: RegExp = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/;
   // Updated regex not allowing white space now
+  readonly fieldRegex: RegExp = /^[^\s]+(\s+[^\s]+)*$/;
+  nameValidations = [
+    RxwebValidators.required(),
+    RxwebValidators.notEmpty(),
+    RxwebValidators.alpha({
+      allowWhiteSpace: true
+    }),
+    RxwebValidators.maxLength({
+      value: this.FIELD_VALIDATION_VALUES.NAME_LENGTH
+    }),
+    Validators.pattern(this.fieldRegex)
+  ];
+  pointValidations = [
+    RxwebValidators.required(),
+    RxwebValidators.numeric({
+      allowDecimal: false,
+      acceptValue: NumericValueType.Both
+    })
+  ];
+  requiredFieldValidation: ValidatorFn[] = [
+    RxwebValidators.required(),
+    RxwebValidators.notEmpty()
+  ];
   // Reference: https://regex101.com/r/0bH043/1
   private readonly passwordRegex: RegExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,}$/gm;
-
-  readonly fieldRegex: RegExp = /^[^\s]+(\s+[^\s]+)*$/;
 
   get validPassword(): ValidatorFn {
     return (control: AbstractControl) => {
@@ -52,12 +115,12 @@ export class FormValidationService {
   }
 
   noWhiteSpace(): ValidatorFn {
-    return (control: AbstractControl) : ValidationErrors | null => {
+    return (control: AbstractControl): ValidationErrors | null => {
       if ((control.value as string).indexOf('  ') >= 0) {
-        return { noWhiteSpace: true }
+        return { noWhiteSpace: true };
       }
       return null;
-    }
+    };
   }
 
   // Return FormGroup validator function to match both password fields
@@ -96,6 +159,55 @@ export class FormValidationService {
       } else {
         confirmPasswordControl.setErrors(null);
       }
+    };
+  }
+
+  greaterPointValidator(): ValidatorFn {
+    return (arr: AbstractControl) => {
+      if (!arr) {
+        return null;
+      }
+      const errors: any = {};
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const controls = arr.controls;
+      for (let i = 1; i < controls.length; i++) {
+        const previousValueControl = controls[i - 1].controls.high as FormControl<number>;
+        const valueControl = controls[i].controls.low as FormControl<number>;
+
+        // if error, set array error
+        if (previousValueControl.value >= valueControl.value) {
+          // array error (sum up of all errors)
+          errors[(i - 1) + 'lessThan' + (i)] = true;
+        }
+      }
+      // return array errors ({} is considered an error so return null if it is the case)
+      return errors;
+    };
+  }
+
+  greaterTimeValidator(): ValidatorFn {
+    return (arr: AbstractControl) => {
+      if (!arr) {
+        return null;
+      }
+      const errors: any = {};
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const controls = arr.controls;
+      for (let i = 1; i < controls.length; i++) {
+        const previousValueControl = controls[i - 1].controls.high as FormControl<Date>;
+        const valueControl = controls[i].controls.low as FormControl<Date>;
+        const prevVal = DateTime.fromJSDate(previousValueControl.value).toSeconds();
+        const currVal = DateTime.fromJSDate(valueControl.value).toSeconds();
+        // if error, set array error
+        if (Math.round(prevVal) <= Math.round(currVal)) {
+          // array error (sum up of all errors)
+          errors[(i - 1) + 'lessThan' + (i)] = true;
+        }
+      }
+      // return array errors ({} is considered an error so return null if it is the case)
+      return errors;
     };
   }
 }

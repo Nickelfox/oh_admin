@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, ViewEncapsulation} from '@angular/core';
 // import {AuthFacade} from "../state/auth.facade";
 import {Validators} from "@angular/forms";
-import {FormValidationService} from "@hidden-innovation/shared/form-config";
+import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import {RxwebValidators} from "@rxweb/reactive-form-validators";
 import {FormControl} from "@ngneat/reactive-forms";
 import {AuthFacade} from '@hidden-innovation/auth';
@@ -25,7 +25,7 @@ export class ForgotPasswordComponent {
   constructor(
     public store: ForgotPasswordStore,
     public authFacade: AuthFacade,
-    public formValidationService: FormValidationService
+    public formValidationService: FormValidationService,
   ) {
   }
 

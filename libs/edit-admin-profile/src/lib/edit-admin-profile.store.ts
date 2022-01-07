@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { EditAdminProfileRequest } from './models/edit-admin-profile.interface';
 import { EMPTY, Observable } from 'rxjs';
-import { HotToastService } from '@ngneat/hot-toast';
+import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
 import { EditAdminProfileService } from './services/edit-admin-profile.service';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { catchError, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { isEqual } from 'lodash-es';
 
 export interface EditAdminProfileState extends Partial<EditAdminProfileRequest> {
   isLoading?: boolean;
@@ -21,45 +22,48 @@ export class EditAdminProfileStore extends ComponentStore<EditAdminProfileState>
 
   readonly isEditLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
 
-  private readonly toastStateName = 'edit-admin-profile-loading-state';
+  private toastRef: CreateHotToastRef<unknown> | undefined;
 
   editAdminProfile = this.effect<EditAdminProfileState>(params$ =>
     params$.pipe(
       tap(() => {
-        console.log('Called');
         this.patchState({
           isLoading: true
         });
-        this.hotToastService.loading('Loading...', {
-          dismissible: false,
-          role: 'status',
-          id: this.toastStateName
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Loading...', {
+          dismissible: false
         });
       }),
       withLatestFrom(this.authFacade.authAdmin$),
-      switchMap(([requestObj, adminAuth]) =>
+      switchMap(([{ name, email }, adminAuth]) =>
         this.editAdminProfileService.editAdminProfile({
-          name: requestObj.name,
-          username: requestObj.username
+          name,
+          email
         }, adminAuth?.id).pipe(
           tap(
             (res) => {
-              this.hotToastService.close(this.toastStateName);
-              this.hotToastService.success(res.message, {
+              if (!isEqual(email, adminAuth?.email)) {
+                this.toastRef?.updateMessage('Success! Please re-login with updated email');
+                this.authFacade.logoutLocal();
+              } else {
+                this.authFacade.updateAdminAuth(res.data);
+                this.toastRef?.updateMessage('Success! Admin details updated');
+                this.router.navigate(['/']);
+              }
+              this.toastRef?.updateToast({
                 dismissible: true,
-                role: 'status'
+                type: 'success'
               });
               this.patchState({
                 isLoading: false
               });
-              this.authFacade.updateAdminAuth(res.data);
-
             },
             (_) => {
+              this.toastRef?.close();
               this.patchState({
                 isLoading: false
               });
-              this.hotToastService.close(this.toastStateName);
             }
           ),
           catchError(() => EMPTY)

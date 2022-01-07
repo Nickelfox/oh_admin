@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/media",
+  "sourceRoot": "libs/media/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/media"],
+      "options": {
+        "project": "libs/media/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/media/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/media/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/media"],
+      "options": {
+        "jestConfig": "libs/media/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/media/src/**/*.ts",
+          "libs/media/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

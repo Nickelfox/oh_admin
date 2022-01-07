@@ -1,0 +1,15 @@
+<div class='d-flex align-items-center justify-content-between'>
+  <span>
+    {{title}}
+  </span>
+  <div class='d-flex align-items-center'>
+    <mat-icon
+      style='font-size: 16px; margin-bottom: -8px; width: 16px;'>{{ctrlEnabled ? (ctrlValue === sortingEnum.ASC ? "keyboard_arrow_up" : "keyboard_arrow_down") : ""}}</mat-icon>
+    <button mat-icon-button class='mr-3'
+            [disabled]='isDisabled'
+            color='{{ctrlEnabled ? "primary" : ""}}'
+            (click)='emitSorting.emit("nameSort")'>
+      <mat-icon style='font-size: 20px'>sort_by_alpha</mat-icon>
+    </button>
+  </div>
+</div>

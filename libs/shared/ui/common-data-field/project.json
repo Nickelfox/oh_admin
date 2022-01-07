@@ -1,0 +1,43 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/common-data-field",
+  "sourceRoot": "libs/shared/ui/common-data-field/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/common-data-field"],
+      "options": {
+        "project": "libs/shared/ui/common-data-field/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/common-data-field/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/common-data-field/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/common-data-field"],
+      "options": {
+        "jestConfig": "libs/shared/ui/common-data-field/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/common-data-field/src/**/*.ts",
+          "libs/shared/ui/common-data-field/src/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

@@ -1,14 +1,33 @@
-<mat-card>
+<mat-card class='bg-light' matRipple>
   <mat-card-content class='text-center'>
-    <mat-icon class='card-icon' color='primary'>{{icon}}</mat-icon>
+    <div class='d-flex align-items-center'>
+      <mat-icon color='primary' class='mr-1 card-icon'>{{icon}}</mat-icon>
+      <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>{{cardTitle ? (cardTitle | titlecase | maxStringLimit) : '--'}}</h4>
+    </div>
     <ng-template [ngIf]='isLoading' [ngIfElse]='statsLoadingElse'>
-      <div class='d-flex justify-content-center mb-2'>
-        <mat-spinner color='accent' diameter='24'></mat-spinner>
-      </div>
+      <hidden-innovation-shimmer
+        [rounded]='true'
+        class='mb-2'
+        height='28px'
+      ></hidden-innovation-shimmer>
+      <hidden-innovation-shimmer
+        [rounded]='true'
+        height='16px'
+      ></hidden-innovation-shimmer>
     </ng-template>
     <ng-template #statsLoadingElse>
-      <h2 class='mat-h2 font-calibri m-0'>{{count}}</h2>
+      <div class='d-flex'>
+        <h1 class='mat-h1 mb-0 font-sf-pro--bold text-color__primary'>{{count ?? '--'}}</h1>
+      </div>
+      <div class='d-flex align-items-center'>
+        <h5 class='mat-h5 mb-0 text-color__primary font-calibri'>
+          <span class='text-color__success'
+                [ngClass]='{"text-color__success" : (isPositive === true), "text-color__error" : (isPositive === false)}'>
+            {{ change ?? '--'}}%
+          </span>
+          From Last
+          Week</h5>
+      </div>
     </ng-template>
-    <p class='mat-subtitle'>{{cardTitle}}</p>
   </mat-card-content>
 </mat-card>

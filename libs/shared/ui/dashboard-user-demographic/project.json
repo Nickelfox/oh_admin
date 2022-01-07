@@ -1,0 +1,43 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/dashboard-user-demographic",
+  "sourceRoot": "libs/shared/ui/dashboard-user-demographic/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/dashboard-user-demographic"],
+      "options": {
+        "project": "libs/shared/ui/dashboard-user-demographic/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/dashboard-user-demographic/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/dashboard-user-demographic/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/dashboard-user-demographic"],
+      "options": {
+        "jestConfig": "libs/shared/ui/dashboard-user-demographic/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/dashboard-user-demographic/src/**/*.ts",
+          "libs/shared/ui/dashboard-user-demographic/src/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

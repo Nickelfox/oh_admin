@@ -1,0 +1,11 @@
+.tab-border-button {
+  border-radius: 0 !important;
+
+  &.active ~ .tab-border-bottom {
+    border-top-color: var(--primary-darker-color);
+  }
+}
+.tab-border-bottom {
+  border-top: 2px transparent solid;
+  transition: all 0.3s ease-in-out;
+}

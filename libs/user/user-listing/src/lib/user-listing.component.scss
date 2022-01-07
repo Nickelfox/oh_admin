@@ -1,19 +1,9 @@
-.mat-chip
+.row-react
 {
-  padding: 6px 12px;
-  font-size: 14px;
-  line-height: 21px;
-  font-style: normal;
-  font-weight: normal;
-  letter-spacing: 0.25px;
+  transition: all .4s cubic-bezier(.17,.67,.83,.67);
 
-  &--success{
-    background: #ECF9F3;
-    color: #00C853;
-  }
-  &--danger
+  &:hover
   {
-    background: #FCE7E7;
-    color: #E53935;
+    background-color: #e0e0e0;
   }
 }

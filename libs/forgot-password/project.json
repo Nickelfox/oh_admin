@@ -35,7 +35,8 @@
           "libs/forgot-password/src/**/*.ts",
           "libs/forgot-password/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []
