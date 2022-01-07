@@ -784,7 +784,7 @@
                               <div class='row mb-2'>
                                 <div class='col-12'>
                                   <mat-form-field class='w-100'>
-                                    <mat-label>Variable(x) Type</mat-label>
+                                    <mat-label>Variable(y) Type</mat-label>
                                     <mat-select formControlName='yType'>
                                       <mat-option *ngFor='let ratioType of ratioTestTypeIte'
                                                   [value]='ratioType'>{{ratioType === ratioTestTypeEnum.DISTANCE_LENGTH ? "Distance/Length" : (ratioType | titlecase)}}</mat-option>
@@ -794,7 +794,7 @@
                                         [ngIf]='((ratioVariableFormGroup?.controls?.yType?.touch$ | async) || (ratioVariableFormGroup?.controls?.yType?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.yType?.errors$ | async)'
                                         let-error>
                                         <hidden-innovation-form-field-errors
-                                          [label]='"Variable(x) Type"'
+                                          [label]='"Variable(y) Type"'
                                           [error]='error'
                                         ></hidden-innovation-form-field-errors>
                                       </ng-template>
@@ -849,14 +849,14 @@
                               <div class='row mb-2'>
                                 <div class='col-12'>
                                   <mat-form-field class='w-100'>
-                                    <mat-label>Variable (x) - Label</mat-label>
+                                    <mat-label>Variable (y) - Label</mat-label>
                                     <input matInput formControlName='yLabel' autocomplete='no' type='text'>
                                     <mat-error>
                                       <ng-template
                                         [ngIf]='((ratioVariableFormGroup?.controls?.yLabel?.touch$ | async) || (ratioVariableFormGroup?.controls?.yLabel?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.yLabel?.errors$ | async)'
                                         let-error>
                                         <hidden-innovation-form-field-errors
-                                          [label]='"Variable (x) - Label"'
+                                          [label]='"Variable (y) - Label"'
                                           [error]='error'
                                         ></hidden-innovation-form-field-errors>
                                       </ng-template>
@@ -974,7 +974,7 @@
                               <div class='row mb-2'>
                                 <div class='col-12'>
                                   <mat-form-field class='w-100'>
-                                    <mat-label>Value y - Units</mat-label>
+                                    <mat-label>Value y - Unit</mat-label>
                                     <mat-select formControlName='unit'>
                                       <mat-option *ngFor='let unit of profileInputTypeUnitIte'
                                                   [value]='unit'>{{utilities.getUnitAbbreviation(unit)}}</mat-option>
@@ -984,7 +984,7 @@
                                         [ngIf]='((profileInputFormGroup?.controls?.unit?.touch$ | async) || (profileInputFormGroup?.controls?.unit?.dirty$ | async)) && (profileInputFormGroup?.controls?.unit?.errors$ | async)'
                                         let-error>
                                         <hidden-innovation-form-field-errors
-                                          [label]='"Value y - Units"'
+                                          [label]='"Value y - Unit"'
                                           [error]='error'
                                         ></hidden-innovation-form-field-errors>
                                       </ng-template>

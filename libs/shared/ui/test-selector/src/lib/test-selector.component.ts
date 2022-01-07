@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Test, TestListingFilters, TestStore } from '@hidden-innovation/test/data-access';
 import { Observable } from 'rxjs';
@@ -14,13 +21,14 @@ import {
 } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
 import { differenceBy, isEqual } from 'lodash-es';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { UiStore } from '@hidden-innovation/shared/store';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -68,11 +76,17 @@ export class TestSelectorComponent implements OnInit {
   constructor(
     public matDialogRef: MatDialogRef<Test[]>,
     private matDialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public category: TagCategoryEnum,
     public constantDataService: ConstantDataService,
     public store: TestStore,
     private cdr: ChangeDetectorRef,
-    public uiStore: UiStore
+    public uiStore: UiStore,
+    private hotToastService: HotToastService,
   ) {
+    if(!this.category) {
+      this.hotToastService.error('Application Error! Category needs to be selected before selecting any tests');
+      this.matDialogRef.close();
+    }
     this.noData = this.tests.connect().pipe(map(data => data.length === 0));
     this.uiStore.selectedTests$.subscribe(tests => {
       this.selectedTests = tests;
@@ -98,12 +112,12 @@ export class TestSelectorComponent implements OnInit {
   }
 
   refreshList(): void {
-    const { type, category, nameSort, dateSort, search, published, level } = this.filters.value;
+    const { type, nameSort, dateSort, search, published, level } = this.filters.value;
     this.store.getTests$({
       page: this.pageIndex,
       limit: this.pageSize,
       type,
-      category,
+      category: this.category ? [this.category] : [],
       dateSort,
       search,
       published,

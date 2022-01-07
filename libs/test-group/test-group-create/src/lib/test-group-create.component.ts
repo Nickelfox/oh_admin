@@ -5,15 +5,17 @@ import { TestGroup, TestGroupCore, TestGroupStore } from '@hidden-innovation/tes
 import { FormArray, FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { OperationTypeEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, OperationTypeEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
 import { AspectRatio } from '@hidden-innovation/media';
 import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
 import { HotToastService } from '@ngneat/hot-toast';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Test } from '@hidden-innovation/test/data-access';
 import { UiStore } from '@hidden-innovation/shared/store';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { isEqual } from 'lodash-es';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -48,7 +50,7 @@ export class TestGroupCreateComponent implements OnDestroy {
     description: new FormControl('', [
       ...this.requiredFieldValidation
     ]),
-    category: new FormControl(undefined, [
+    category: new FormControl('NONE', [
       ...this.requiredFieldValidation
     ]),
     subCategory: new FormControl(''),
@@ -109,7 +111,7 @@ export class TestGroupCreateComponent implements OnDestroy {
         });
       }
     });
-    const { category, subCategory, tests, isVisible } = this.testGroup.controls;
+    const { category, tests, subCategory, isVisible } = this.testGroup.controls;
     const testFormArray: FormArray<number> = tests as FormArray<number>;
     this.uiStore.selectedTests$.subscribe(newTests => {
       this.selectedTests = newTests;
@@ -119,8 +121,16 @@ export class TestGroupCreateComponent implements OnDestroy {
         testFormArray.updateValueAndValidity();
       });
     });
-    category.valueChanges.subscribe(_ => {
+    category.valueChanges.pipe(
+      distinctUntilChanged((oldCat, newCat) => {
+        return isEqual(oldCat, newCat) && !this.testsExists;
+      })
+      // pairwise()
+    ).subscribe((_) => {
       subCategory.reset();
+      this.uiStore.patchState({
+        selectedTests: []
+      });
     });
     tests.valueChanges.subscribe(_ => {
       this.testsIsValid ? isVisible.setValue(true) : isVisible.setValue(false);
@@ -132,23 +142,55 @@ export class TestGroupCreateComponent implements OnDestroy {
     return this.testGroup.controls.tests.value?.length >= 2;
   }
 
+  get testsExists(): boolean {
+    return this.testGroup.controls.tests.value?.length > 0;
+  }
+
   get getSubCategoryValue(): string {
     const subCatCtrl = this.testGroup.controls.subCategory as FormControl<Tag | string>;
+    if (subCatCtrl.disabled || !subCatCtrl.value) {
+      return '';
+    }
     return typeof subCatCtrl.value === 'string' ? subCatCtrl.value : subCatCtrl.value.name;
+  }
+
+  get isCategoryValid(): boolean {
+    const { category } = this.testGroup.controls;
+    return category.valid && category.value !== 'NONE';
+  }
+
+  categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
+    const oldCat = _[0];
+    const dialogData: GenericDialogPrompt = {
+      title: 'Change Category?',
+      desc: `This will reset the selected Test Single list. Are you sure?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((res) => {
+      const { category, subCategory } = this.testGroup.controls;
+      if (res) {
+        subCategory.reset();
+        this.uiStore.patchState({
+          selectedTests: []
+        });
+      } else {
+        category.setValue(oldCat, {
+          emitEvent: false
+        });
+      }
+    });
   }
 
   trackByFn(index: number, test: Test): number {
     return test.id;
-  }
-
-  deleteSelectedTest(test: Test): void {
-    if (this.selectedTests.find(value => value.id === test.id)) {
-      this.uiStore.patchState({
-        selectedTests: [
-          ...this.selectedTests.filter(t => t.id !== test.id)
-        ]
-      });
-    }
   }
 
   submit(): void {
@@ -177,7 +219,9 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   openTestSelector(): void {
+    const { category } = this.testGroup.controls;
     this.matDialog.open(TestSelectorComponent, {
+      data: category.value,
       height: '100%',
       width: '100%',
       maxHeight: '100%',
@@ -199,14 +243,41 @@ export class TestGroupCreateComponent implements OnDestroy {
     this.restoreSelectedState();
   }
 
+  deleteSelectedTestPrompt(test: Test): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Remove Test?',
+      desc: `Are you sure you want to remove this Test from Group?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        if (this.selectedTests.find(value => value.id === test.id)) {
+          this.uiStore.patchState({
+            selectedTests: [
+              ...this.selectedTests.filter(t => t.id !== test.id)
+            ]
+          });
+        }
+      }
+    });
+  }
+
   private populateTest(testGroup: TestGroup): void {
     const { isVisible, category, imageId, thumbnailId, subCategory, name, description } = testGroup;
     this.selectedTestGroup = testGroup;
     const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];
+    this.testGroup.controls.category.setValue(category);
     this.uiStore.patchState({
       selectedTests
     });
-    this.testGroup.controls.category.setValue(category);
     this.testGroup.patchValue({
       isVisible,
       imageId,
