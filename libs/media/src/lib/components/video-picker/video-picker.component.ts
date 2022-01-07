@@ -60,13 +60,6 @@ export class VideoPickerComponent {
         this.toastRef = this.hotToastService.loading('Loading Video...');
       };
       reader.onload = async _ => {
-        // Getting video meta data for validation
-        const metadata = await getMetadata(file);
-        let height = 0, width = 0;
-        width = metadata.width;
-        height = metadata.height;
-        width *= 1;
-        const valHeight = width != 0 ? Math.round((width / 16) * 9) : 0;
         // // End metadata gathering
         // if (file.size > this.constantDataService.FIZE_SIZE_DATA.limit) {
         //   // Video size validation
@@ -82,6 +75,13 @@ export class VideoPickerComponent {
           this.hotToastService.error(this.constantDataService.FIZE_SIZE_DATA.videoFormatMessage);
           return;
         }
+        // Getting video meta data for validation
+        const metadata = await getMetadata(file);
+        let height = 0, width = 0;
+        width = metadata.width;
+        height = metadata.height;
+        width *= 1;
+        const valHeight = width != 0 ? Math.round((width / 16) * 9) : 0;
         if (valHeight !== height) {
           // 16:9 ratio validation
           this.toastRef?.close();

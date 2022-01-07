@@ -20,7 +20,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   selector: 'hidden-innovation-common-form-field-tag-autocomplete',
   template: `
     <mat-form-field class='w-100' *ngIf='fieldType === "CHIP"'>
-      <mat-label>{{(disabled ? "Select Category First" : label) || "--"}}</mat-label>
+      <mat-label>{{(disabled ? "Select a Category" : label) || "--"}}</mat-label>
       <mat-chip-list #list aria-label='tag selection'>
         <ng-template ngFor [ngForOf]='testTags' let-tag>
           <mat-chip
@@ -69,7 +69,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
     </mat-form-field>
 
     <mat-form-field class='w-100' *ngIf='fieldType === "INPUT"'>
-      <mat-label>{{(disabled ? "Select Category First" : label) || "--"}}</mat-label>
+      <mat-label>{{(disabled ? "Select a Category" : label) || "--"}}</mat-label>
       <input
         [formControl]='control'
         autocomplete='off'
