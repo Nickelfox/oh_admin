@@ -9,12 +9,13 @@ import { GenericDialogPrompt, OperationTypeEnum, TagCategoryEnum, TagTypeEnum } 
 import { AspectRatio } from '@hidden-innovation/media';
 import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
 import { HotToastService } from '@ngneat/hot-toast';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Test } from '@hidden-innovation/test/data-access';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { isEqual } from 'lodash-es';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -110,7 +111,7 @@ export class TestGroupCreateComponent implements OnDestroy {
         });
       }
     });
-    const { category, subCategory, tests, isVisible } = this.testGroup.controls;
+    const { category, tests, subCategory, isVisible } = this.testGroup.controls;
     const testFormArray: FormArray<number> = tests as FormArray<number>;
     this.uiStore.selectedTests$.subscribe(newTests => {
       this.selectedTests = newTests;
@@ -120,8 +121,16 @@ export class TestGroupCreateComponent implements OnDestroy {
         testFormArray.updateValueAndValidity();
       });
     });
-    category.valueChanges.subscribe(_ => {
+    category.valueChanges.pipe(
+      distinctUntilChanged((oldCat, newCat) => {
+        return isEqual(oldCat, newCat) && !this.testsExists;
+      })
+      // pairwise()
+    ).subscribe((_) => {
       subCategory.reset();
+      this.uiStore.patchState({
+        selectedTests: []
+      });
     });
     tests.valueChanges.subscribe(_ => {
       this.testsIsValid ? isVisible.setValue(true) : isVisible.setValue(false);
@@ -131,6 +140,10 @@ export class TestGroupCreateComponent implements OnDestroy {
 
   get testsIsValid(): boolean {
     return this.testGroup.controls.tests.value?.length >= 2;
+  }
+
+  get testsExists(): boolean {
+    return this.testGroup.controls.tests.value?.length > 0;
   }
 
   get getSubCategoryValue(): string {
@@ -144,6 +157,36 @@ export class TestGroupCreateComponent implements OnDestroy {
   get isCategoryValid(): boolean {
     const { category } = this.testGroup.controls;
     return category.valid && category.value !== 'NONE';
+  }
+
+  categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
+    const oldCat = _[0];
+    const dialogData: GenericDialogPrompt = {
+      title: 'Change Category?',
+      desc: `This will reset the selected Test Single list. Are you sure?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((res) => {
+      const { category, subCategory } = this.testGroup.controls;
+      if (res) {
+        subCategory.reset();
+        this.uiStore.patchState({
+          selectedTests: []
+        });
+      } else {
+        category.setValue(oldCat, {
+          emitEvent: false
+        });
+      }
+    });
   }
 
   trackByFn(index: number, test: Test): number {
@@ -231,10 +274,10 @@ export class TestGroupCreateComponent implements OnDestroy {
     const { isVisible, category, imageId, thumbnailId, subCategory, name, description } = testGroup;
     this.selectedTestGroup = testGroup;
     const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];
+    this.testGroup.controls.category.setValue(category);
     this.uiStore.patchState({
       selectedTests
     });
-    this.testGroup.controls.category.setValue(category);
     this.testGroup.patchValue({
       isVisible,
       imageId,
