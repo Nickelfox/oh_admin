@@ -31,6 +31,6 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align='end'>
-  <button mat-stroked-button mat-dialog-close>{{constantDataService.BUTTON_NAME.CANCEL}}</button>
-  <button mat-flat-button color='primary' (click)='submitTag()'>{{data.isNew ? constantDataService.BUTTON_NAME.SAVE : constantDataService.BUTTON_NAME.UPDATE}}</button>
+  <button mat-stroked-button mat-dialog-close>{{constantDataService.BUTTON_NAME.CANCEL | titlecase}}</button>
+  <button mat-flat-button color='primary' (click)='submitTag()'>{{(data.isNew ? constantDataService.BUTTON_NAME.SAVE : constantDataService.BUTTON_NAME.UPDATE) | titlecase}}</button>
 </mat-dialog-actions>
