@@ -17,8 +17,6 @@ export interface FeaturedLocalState {
   name: FeaturedNameEnum;
   location: 'HOME' | TagCategoryEnum;
   items: number;
-  deleted_at: string;
-  created_at: string;
   updated_at: string;
 }
 
@@ -59,27 +57,18 @@ export interface Featured extends FeaturedCore {
   // content: Content[] | Lesson[];
   deleted_at: string;
   created_at: string;
-  updated_at: string;
+  updatedAt: string;
 }
 
 export interface FeaturedListingFilters {
   dateSort: SortingEnum | undefined;
-  nameSort: SortingEnum | undefined;
-  // published: 'TRUE' | 'FALSE' | undefined;
-  search: string | undefined;
 }
 
-export interface FeaturedListingRequest extends FeaturedListingFilters {
-  limit: number;
-  page: number;
-}
+
 
 export interface FeaturedListingResponse extends CustomApiResponse {
-  data: FeaturedListingResponseData;
+  data: Featured[];
 }
 
-export interface FeaturedListingResponseData {
-  featureds: Featured[],
-  count: number;
-}
+
 
