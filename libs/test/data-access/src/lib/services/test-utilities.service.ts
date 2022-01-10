@@ -100,6 +100,16 @@ export class TestUtilitiesService {
     }
   }
 
+  getPointLabel(point: number): string {
+    if(point === 6) {
+      return 'HP';
+    }
+    if(point === 5) {
+      return point + ' points (Optimal)';
+    }
+    return point + ' points';
+  }
+
   buildCorePointFormCtrl(type: PointTypeEnum): { pointType: FormControl<PointTypeEnum>; point: FormControl<number> } {
     let pointVal;
     switch (type) {
