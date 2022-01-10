@@ -6,6 +6,7 @@ import {ConstantDataService} from '@hidden-innovation/shared/form-config';
 import {FormControl, FormGroup} from "@ngneat/reactive-forms";
 import {FeaturedNameEnum, SortingEnum, TagCategoryEnum} from "@hidden-innovation/shared/models";
 import {Router} from "@angular/router";
+import {count} from "rxjs/operators";
 
 
 @Component({
@@ -28,7 +29,7 @@ export class FeaturedListingComponent implements OnInit {
     {
       name: FeaturedNameEnum.FEATURED_PACKS,
       location: "HOME",
-      items: 2,
+      items: 0,
       updated_at: ''
     },
     {
@@ -69,7 +70,7 @@ export class FeaturedListingComponent implements OnInit {
     },
 
   ];
-
+  count = 0;
 
   displayedColumns: string[] = ['name', 'location', 'updated_at', 'items'];
   featured: MatTableDataSource<FeaturedLocalState> = new MatTableDataSource<FeaturedLocalState>();
@@ -87,8 +88,6 @@ export class FeaturedListingComponent implements OnInit {
   ) {
     this.featured = new MatTableDataSource<FeaturedLocalState>(this.dummyFeatured);
     this.refreshList();
-
-
   }
 
 
@@ -107,20 +106,42 @@ export class FeaturedListingComponent implements OnInit {
         d.map(res => {
           if (FeaturedNameEnum[res.name]) {
             this.getLocalData().map(data => {
-              if ((data.name === FeaturedNameEnum[res.name]) && (res.name !== 'PACKS')) {
-                data.updated_at = res.updatedAt;
-              } else {
-                data.updated_at = TagCategoryEnum[res.location as TagCategoryEnum] ? res.updatedAt : '';
+                if ((data.name === FeaturedNameEnum[res.name]) && (res.name !== 'PACKS')) {
+                  data.updated_at = res.updatedAt;
+                  if (res.tests !== null && res.tests !== undefined ) {
+                    this.count += res.tests.length;
+                    data.items = this.count ;
+                  }
+                  if (res.packs !== null && res.packs !== undefined) {
+                    this.count += res.packs.length;
+                    data.items = this.count;
+                  }
+                  if (res.questionnaires !== null && res.questionnaires !== undefined) {
+                    this.count += res.questionnaires.length;
+                    data.items = this.count;
+                  }
+                  if (res.testGroups !== null && res.testGroups !== undefined) {
+                    this.count += res.testGroups.length;
+                    data.items = this.count;
+                  }
+                } else {
+                  data.updated_at = TagCategoryEnum[res.location as TagCategoryEnum] ? res.updatedAt : '';
+                }
               }
-            })
+            )
           }
+          if (res.tests !== null && res.tests !== undefined) {
+
+          }
+
         })
         this.cdr.markForCheck();
       }
     );
   }
 
-  getLocalData():FeaturedLocalState[] {
+
+  getLocalData(): FeaturedLocalState[] {
     return this.dummyFeatured.map(value => value);
   }
 
