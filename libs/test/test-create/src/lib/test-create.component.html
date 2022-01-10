@@ -308,7 +308,7 @@
                                   </div>
                                   <div class='col-5'>
 
-                                    <mat-form-field class='w-100 ' [ngClass]='{"text-muted": disableEditState}'>
+                                    <mat-form-field class='w-100' [ngClass]='{"text-muted": disableEditState}'>
                                       <mat-label>Low</mat-label>
                                       <input [disabled]='disableEditState' [readonly]='disableEditState' formControlName='low' matInput autocomplete='off' type='number'>
                                       <mat-error>
@@ -331,7 +331,7 @@
 
                                     <mat-form-field class='w-100' [ngClass]='{"text-muted": disableEditState}'>
                                       <mat-label>High</mat-label>
-                                      <input [disabled]='disableEditState' formControlName='high' matInput autocomplete='off' type='number'>
+                                      <input [disabled]='disableEditState' [readonly]='disableEditState' formControlName='high' matInput autocomplete='off' type='number'>
                                       <mat-error>
                                         <ng-template
                                           [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("required")'>
