@@ -53,7 +53,9 @@
                                               *ngFor='let type of testCatTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
                                 </mat-select>
                                 <mat-error>
-                                  <ng-template [ngIf]='((testGroup.controls.category.touch$ | async) || (testGroup.controls.category.dirty$ | async)) && (testGroup.controls.category.errors$ | async)' let-error>
+                                  <ng-template
+                                    [ngIf]='((testGroup.controls.category.touch$ | async) || (testGroup.controls.category.dirty$ | async)) && (testGroup.controls.category.errors$ | async)'
+                                    let-error>
                                     <hidden-innovation-form-field-errors
                                       [label]='"Category"'
                                       [error]='error'
@@ -303,15 +305,28 @@
                                   </h4>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>Low</mat-label>
-                                    <input formControlName='low' matInput autocomplete='no' type='number'>
-                                    <mat-error
-                                      *ngIf='getOneRMInputFieldGroup(i).controls.low.errors?.required && getOneRMInputFieldGroup(i).controls.low.errors?.notEmpty'>
-                                      Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                    <input formControlName='low' matInput autocomplete='off' type='number'>
+                                    <mat-error>
+                                      <ng-template
+                                        [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("required")'>
+                                        Low {{formValidationService.fieldValidationMessage.required}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("numeric")'>
+                                        Low must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("highThan")'>
+                                        Low must be less than high > value
+                                      </ng-template>
+                                    </mat-error>
                                   </mat-form-field>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>High</mat-label>
                                     <input formControlName='high' matInput autocomplete='off' type='number'>
@@ -323,6 +338,14 @@
                                       <ng-template
                                         [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("greaterThan")'>
                                         {{formValidationService.pointsValidationMessage?.highField}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("numeric")'>
+                                        High must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                        High must be higher than < low value
                                       </ng-template>
                                     </mat-error>
                                   </mat-form-field>
@@ -464,7 +487,7 @@
                                 <div class='col-5'>
                                   <mat-form-field class='w-100'>
                                     <mat-label>Low</mat-label>
-                                    <input formControlName='low' matInput autocomplete='no' type='number'>
+                                    <input formControlName='low' matInput autocomplete='off' type='number'>
                                     <mat-error
                                       *ngIf='inputFieldGroup(i).controls.low.errors?.required && inputFieldGroup(i).controls.low.errors?.notEmpty'>
                                       Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
@@ -513,7 +536,7 @@
                                 </div>
                                 <div class='col-5'>
                                   <div class='timePicker__container'
-                                       [ngClass]='{"error": inputFieldGroup(i).controls.low.hasError("minDate") && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))}'>
+                                       [ngClass]='{"error": inputFieldGroup(i).controls.low.hasError("highThan") && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))}'>
                                     <mat-label><small class='text-muted'>Low</small></mat-label>
                                     <ngx-mat-timepicker
                                       color='primary'
@@ -523,10 +546,14 @@
                                       [enableMeridian]='false'
                                       [showSpinners]='false'></ngx-mat-timepicker>
                                   </div>
+                                  <mat-error
+                                    *ngIf='inputFieldGroup(i).controls.low.hasError("highThan") && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))'>
+                                    <small>Must be greater than the high field value</small>
+                                  </mat-error>
                                 </div>
                                 <div class='col-5'>
                                   <div class='timePicker__container'
-                                       [ngClass]='{"error": inputFieldGroup(i).controls.high.hasError("maxDate") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))}'>
+                                       [ngClass]='{"error": inputFieldGroup(i).controls.high.hasError("lessThan") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))}'>
                                     <mat-label><small class='text-muted'>High</small></mat-label>
                                     <ngx-mat-timepicker
                                       color='primary'
@@ -537,7 +564,7 @@
                                       [showSpinners]='false'></ngx-mat-timepicker>
                                   </div>
                                   <mat-error
-                                    *ngIf='inputFieldGroup(i).controls.high.hasError("maxDate") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))'>
+                                    *ngIf='inputFieldGroup(i).controls.high.hasError("lessThan") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))'>
                                     <small>{{formValidationService.pointsValidationMessage?.lowField}}</small>
                                   </mat-error>
                                 </div>
@@ -584,15 +611,28 @@
                                   </h4>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>Low</mat-label>
-                                    <input formControlName='low' matInput autocomplete='no' type='number'>
-                                    <mat-error
-                                      *ngIf='inputFieldGroup(i).controls.low.errors?.required && inputFieldGroup(i).controls.low.errors?.notEmpty'>
-                                      Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                    <input formControlName='low' matInput autocomplete='off' type='number'>
+                                    <mat-error>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                        Low {{formValidationService.fieldValidationMessage.required}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                        Low must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                        Low must be less than high > value
+                                      </ng-template>
+                                    </mat-error>
                                   </mat-form-field>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>High</mat-label>
                                     <input formControlName='high' matInput autocomplete='off' type='number'>
@@ -604,6 +644,14 @@
                                       <ng-template
                                         [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
                                         {{formValidationService.pointsValidationMessage?.highField}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                        High must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                        High must be higher than < low value
                                       </ng-template>
                                     </mat-error>
                                   </mat-form-field>
@@ -642,15 +690,28 @@
                                   </h4>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>Low</mat-label>
-                                    <input formControlName='low' matInput autocomplete='no' type='number'>
-                                    <mat-error
-                                      *ngIf='inputFieldGroup(i).controls.low.errors?.required && inputFieldGroup(i).controls.low.errors?.notEmpty'>
-                                      Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                    <input formControlName='low' matInput autocomplete='off' type='number'>
+                                    <mat-error>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                        Low {{formValidationService.fieldValidationMessage.required}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                        Low must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                        Low must be less than high > value
+                                      </ng-template>
+                                    </mat-error>
                                   </mat-form-field>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>High</mat-label>
                                     <input formControlName='high' matInput autocomplete='off' type='number'>
@@ -662,6 +723,14 @@
                                       <ng-template
                                         [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
                                         {{formValidationService.pointsValidationMessage?.highField}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                        High must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                        High must be higher than < low value
                                       </ng-template>
                                     </mat-error>
                                   </mat-form-field>
@@ -874,15 +943,28 @@
                                   </h4>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>Low</mat-label>
-                                    <input formControlName='low' matInput autocomplete='no' type='number'>
-                                    <mat-error
-                                      *ngIf='inputFieldGroup(i).controls.low.errors?.required && inputFieldGroup(i).controls.low.errors?.notEmpty'>
-                                      Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                    <input formControlName='low' matInput autocomplete='off' type='number'>
+                                    <mat-error>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                        Low {{formValidationService.fieldValidationMessage.required}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                        Low must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                        Low must be less than high > value
+                                      </ng-template>
+                                    </mat-error>
                                   </mat-form-field>
                                 </div>
                                 <div class='col-5'>
+
                                   <mat-form-field class='w-100'>
                                     <mat-label>High</mat-label>
                                     <input formControlName='high' matInput autocomplete='off' type='number'>
@@ -894,6 +976,14 @@
                                       <ng-template
                                         [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
                                         {{formValidationService.pointsValidationMessage?.highField}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                        High must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                        High must be higher than < low value
                                       </ng-template>
                                     </mat-error>
                                   </mat-form-field>
@@ -1023,11 +1113,22 @@
                                 <div class='col-5'>
                                   <mat-form-field class='w-100'>
                                     <mat-label>Low</mat-label>
-                                    <input formControlName='low' matInput autocomplete='no' type='number'>
+                                    <input formControlName='low' matInput autocomplete='off' type='number'>
                                     <span matSuffix>%</span>
-                                    <mat-error
-                                      *ngIf='inputFieldGroup(i).controls.low.errors?.required && inputFieldGroup(i).controls.low.errors?.notEmpty'>
-                                      Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                    <mat-error>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                        Low {{formValidationService.fieldValidationMessage.required}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                        Low must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                        Low must be less than high > value
+                                      </ng-template>
+                                    </mat-error>
                                   </mat-form-field>
                                 </div>
                                 <div class='col-5'>
@@ -1043,6 +1144,14 @@
                                       <ng-template
                                         [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
                                         {{formValidationService.pointsValidationMessage?.highField}}
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                        High must be a valid positive number
+                                      </ng-template>
+                                      <ng-template
+                                        [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                        High must be higher than < low value
                                       </ng-template>
                                     </mat-error>
                                   </mat-form-field>
