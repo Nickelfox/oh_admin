@@ -109,7 +109,7 @@ export class FeaturedListingComponent implements OnInit {
     );
   }
 
-  getLocalData() {
+  getLocalData():FeaturedLocalState[] {
     return this.dummyFeatured.map(value => value);
   }
 
@@ -120,6 +120,7 @@ export class FeaturedListingComponent implements OnInit {
             this.getLocalData().map(data => {
               if ((data.name === FeaturedNameEnum[res.name]) && (res.name !== 'PACKS')) {
                 data.updated_at = res.updatedAt;
+
               } else {
                 switch (res.location) {
                   case TagCategoryEnum.CARDIO:
