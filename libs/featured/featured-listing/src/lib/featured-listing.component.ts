@@ -87,7 +87,7 @@ export class FeaturedListingComponent implements OnInit {
   ) {
     this.featured = new MatTableDataSource<FeaturedLocalState>(this.dummyFeatured);
     this.refreshList();
-    this.updateDate();
+
 
   }
 
@@ -103,7 +103,18 @@ export class FeaturedListingComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.featuredList$.subscribe(
-      () => {
+      (d) => {
+        d.map(res => {
+          if (FeaturedNameEnum[res.name]) {
+            this.getLocalData().map(data => {
+              if ((data.name === FeaturedNameEnum[res.name]) && (res.name !== 'PACKS')) {
+                data.updated_at = res.updatedAt;
+              } else {
+                data.updated_at = TagCategoryEnum[res.location as TagCategoryEnum] ? res.updatedAt : '';
+              }
+            })
+          }
+        })
         this.cdr.markForCheck();
       }
     );
@@ -112,26 +123,6 @@ export class FeaturedListingComponent implements OnInit {
   getLocalData():FeaturedLocalState[] {
     return this.dummyFeatured.map(value => value);
   }
-
-  updateDate() {
-    return (this.store.featuredList$.subscribe(
-      (d => d.map(res => {
-          if (FeaturedNameEnum[res.name]) {
-            this.getLocalData().map(data => {
-              if ((data.name === FeaturedNameEnum[res.name]) && (res.name !== 'PACKS')) {
-                data.updated_at = res.updatedAt;
-
-              } else {
-                switch (res.location) {
-                  case TagCategoryEnum.CARDIO:
-                    data.updated_at = res.updatedAt;
-                    break;
-                }
-              }
-            })
-          }
-        }))
-    ))}
 
 
 }
