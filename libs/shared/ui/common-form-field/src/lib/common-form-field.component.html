@@ -1,4 +1,4 @@
-<mat-form-field class='w-100'>
+<mat-form-field class='w-100' [ngClass]='{"text-muted": disabled}'>
   <mat-label>{{label}}</mat-label>
   <input matInput autocomplete='no' [disabled]='disabled' [readonly]='readonly' type='text'
          [placeholder]='placeholder || label'

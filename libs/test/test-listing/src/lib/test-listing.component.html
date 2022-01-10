@@ -135,6 +135,9 @@
                             <mat-selection-list color='primary'
                                                 (selectionChange)='typeFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
+                              <mat-list-option value='NONE'>
+                                <h6 class='mat-h6'>None</h6>
+                              </mat-list-option>
                               <ng-template ngFor [ngForOf]='testInputTypeIte' let-type>
                                 <mat-list-option [value]='type'>
                                   <h6

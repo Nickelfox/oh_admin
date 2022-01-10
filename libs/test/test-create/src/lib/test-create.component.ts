@@ -350,7 +350,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           multipleChoiceQuestion.enable();
           break;
         case TestInputTypeEnum.TIME:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.ONE_RM) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.TIME) {
             this.utilities.buildTimeForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
           } else {
             this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
@@ -492,6 +492,12 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   get isCategoryValid(): boolean {
     const { category } = this.testGroup.controls;
     return (category.valid && category.value !== 'NONE');
+  }
+
+  get disableEditState(): boolean {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return !!(this.opType === this.opTypeEnum.EDIT && this.selectedTest?.isPublished && this.selectedTest?.inputType !== 'NONE');
   }
 
   ngOnDestroy(): void {
