@@ -335,7 +335,7 @@ export class PackStore extends ComponentStore<PackState> {
     const newState = !currentState;
     const dialogData: GenericDialogPrompt = {
       title: newState ? 'Publish Pack?' : 'Un-publish Pack?',
-      desc: `Are you sure you want to ${newState ? 'publish this Pack' : 'un-publish this Pack'}?`,
+      desc: newState ? `Are you sure you want to publish this Pack?` : 'This might impact various other modules .i.e. Featured Screen etc.',
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
@@ -359,11 +359,11 @@ export class PackStore extends ComponentStore<PackState> {
   deletePack(deleteObj: PackDeleteRequest): void {
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Pack?',
-      desc: `Are you sure you want to delete this Pack?`,
+      desc: `This might impact various other modules .i.e. Featured Screen etc.`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
-        type: 'mat-primary'
+        type: 'mat-warn'
       }
     };
     const dialogRef = this.matDialog.open(PromptDialogComponent, {

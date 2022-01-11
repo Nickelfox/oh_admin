@@ -11,6 +11,8 @@ export interface GenericDialogPrompt {
 export interface GenericDialogInfo {
   title: string;
   desc: string;
-  actionText: string;
-  type: 'mat-error' | 'mat-warn' | 'mat-success' | 'mat-primary';
+  action: {
+    type: 'mat-error' | 'mat-warn' | 'mat-success' | 'mat-primary';
+    buttonText: string;
+  }
 }

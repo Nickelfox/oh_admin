@@ -134,6 +134,9 @@
       "@hidden-innovation/shared/ui/form-field-errors": [
         "libs/shared/ui/form-field-errors/src/index.ts"
       ],
+      "@hidden-innovation/shared/ui/info-dialog": [
+        "libs/shared/ui/info-dialog/src/index.ts"
+      ],
       "@hidden-innovation/shared/ui/lesson-create": [
         "libs/shared/ui/lesson-create/src/index.ts"
       ],
