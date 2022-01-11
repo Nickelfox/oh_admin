@@ -78,6 +78,10 @@ export class TestGroupListingComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  isPublishToggleAvailable(tg: TestGroup): boolean {
+    return tg.tests.length >= 2 || tg.isVisible;
+  }
+
   resetRoute(): void {
     this.router.navigate([
       this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex

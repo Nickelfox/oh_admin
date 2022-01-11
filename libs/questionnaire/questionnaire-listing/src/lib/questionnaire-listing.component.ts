@@ -6,7 +6,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Questionnaire,
-  QuestionnaireDeleteRequest,
+  QuestionnaireDeleteRequest, QuestionnaireExtended,
   QuestionnaireListingFilters,
   QuestionnaireStore
 } from '@hidden-innovation/questionnaire/data-access';
@@ -69,6 +69,10 @@ export class QuestionnaireListingComponent implements OnInit {
 
   get paginatorIndex() {
     return this.pageIndex - 1;
+  }
+
+  isPublishToggleAvailable(ques: QuestionnaireExtended): boolean {
+    return ques.questions.length >= 2;
   }
 
   resetRoute(): void {

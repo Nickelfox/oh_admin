@@ -48,7 +48,7 @@
                               <mat-form-field class='w-100' appearance='fill'>
                                 <mat-label>Category</mat-label>
                                 <mat-select formControlName='category'>
-                                  <mat-option [value]='"NONE"'>None</mat-option>
+                                  <mat-option [value]='"NONE"' *ngIf='opType !== opTypeEnum.EDIT && !selectedTest?.isPublished'>None</mat-option>
                                   <mat-option [value]=type
                                               *ngFor='let type of testCatTypeIte'>{{type  | replaceUnderscore | titlecase}}</mat-option>
                                 </mat-select>
