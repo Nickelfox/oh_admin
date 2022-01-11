@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEnca
 import { MatTableDataSource } from '@angular/material/table';
 import { Pack, PackDeleteRequest, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { PageEvent } from '@angular/material/paginator';
@@ -10,7 +10,8 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
-import { TestDeleteRequest } from '@hidden-innovation/test/data-access';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'hidden-innovation-pack-listing',
@@ -48,6 +49,7 @@ export class PackListingComponent implements OnInit {
     public constantDataService: ConstantDataService,
     public store: PackStore,
     private route: ActivatedRoute,
+    private matDialog: MatDialog,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {
@@ -159,7 +161,7 @@ export class PackListingComponent implements OnInit {
   }
 
   deletePack(id: number) {
-    const {published, dateSort, nameSort, search } = this.filters.value;
+    const { published, dateSort, nameSort, search } = this.filters.value;
     const deleteObj: PackDeleteRequest = {
       id,
       dateSort,
@@ -170,6 +172,33 @@ export class PackListingComponent implements OnInit {
       pageIndex: this.pageIndex
     };
     this.store.deletePack(deleteObj);
+  }
+
+  editPromptForPublished(pack: Pack): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (this.isPublishToggleAvailable(pack) && pack.isPublished) {
+      const dialogData: GenericDialogPrompt = {
+        title: 'Edit a Published Pack?',
+        desc: 'This might impact various other modules .i.e. Featured Screen etc.',
+        action: {
+          type: 'mat-warn',
+          posTitle: 'Confirm',
+          negTitle: 'Cancel'
+        }
+      };
+      const dialogRef = this.matDialog.open(PromptDialogComponent, {
+        data: dialogData,
+        minWidth: '25rem'
+      });
+      dialogRef.afterClosed().subscribe((proceed: boolean | undefined) => {
+        if (proceed) {
+          this.router.navigate(['/packs', 'edit', pack.id]);
+        }
+      });
+    } else {
+      this.router.navigate(['/packs', 'edit', pack.id]);
+    }
   }
 
 }
