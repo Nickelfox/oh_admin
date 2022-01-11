@@ -126,6 +126,7 @@ export class FeaturedListingComponent implements OnInit {
                   }
                 } else {
                   data.updated_at = TagCategoryEnum[res.location as TagCategoryEnum] ? res.updatedAt : '';
+
                 }
               }
             )

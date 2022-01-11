@@ -21,7 +21,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
 import { paginatorData } from '@hidden-innovation/user/data-access';
-import { OperationTypeEnum } from '@hidden-innovation/shared/models';
+import {FeaturedNameEnum, OperationTypeEnum} from '@hidden-innovation/shared/models';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 
@@ -312,7 +312,7 @@ import { MatCardModule } from '@angular/material/card';
             data: { breadcrumb: 'Featured' }
           },
           {
-            path: 'create',
+            path: `edit/${FeaturedNameEnum.SPOTLIGHT}/HOME`,
             loadChildren: () =>
               import('@hidden-innovation/featured/create-featured').then(
                 (m) => m.CreateFeaturedModule
@@ -320,13 +320,13 @@ import { MatCardModule } from '@angular/material/card';
             data: { breadcrumb: 'Add Featured' }
           },
           {
-            path: 'pack-selector',
+            path: `edit/:featured-name-enum/:screen`,
             loadChildren: () =>
-              import('@hidden-innovation/shared/ui/pack-selector').then(
-                (m) => m.PackSelectorModule
+              import('@hidden-innovation/featured/create-featured').then(
+                (m) => m.CreateFeaturedModule
               ),
-            data: { breadcrumb: 'Pack Selector'}
-          }
+            data: { breadcrumb: 'Add Featured' }
+          },
         ]
       },
 
