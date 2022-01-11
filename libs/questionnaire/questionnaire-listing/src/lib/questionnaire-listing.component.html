@@ -159,6 +159,7 @@
                     <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                   </button>
                   <button (click)='store.toggleActive(row.id, row.isActive)' mat-menu-item
+                          *ngIf='isPublishToggleAvailable(row)'
                           [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'>
                     <mat-icon>{{row.isActive ? "block" : "check_circle_outline"}}</mat-icon>
                     <span>{{(row.isActive ? constantDataService.BUTTON_NAME.DEACTIVATE : constantDataService.BUTTON_NAME.ACTIVATE) | titlecase}}</span>

@@ -63,6 +63,10 @@ export class PackListingComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  isPublishToggleAvailable(pack: Pack): boolean {
+    return pack.content.length >= 2;
+  }
+
   resetRoute(): void {
     this.router.navigate([
       this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex

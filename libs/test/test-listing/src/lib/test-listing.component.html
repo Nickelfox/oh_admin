@@ -168,7 +168,6 @@
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #statusMenu='matMenu'>
-
                             <mat-selection-list color='primary'
                                                 (selectionChange)='updateFilterChange($event, filters.controls.published)'
                                                 [multiple]='false' class='pt-0'>
@@ -206,7 +205,7 @@
                           <mat-icon>create</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>
-                        <button (click)='store.toggleActive(row.id, row.isPublished)' mat-menu-item>
+                        <button (click)='store.toggleActive(row.id, row.isPublished)' mat-menu-item *ngIf='isPublishToggleAvailable(row)'>
                           <mat-icon>{{row.isPublished ? "block" : "check_circle_outline"}}</mat-icon>
                           <span>{{(row.isPublished ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
                         </button>
