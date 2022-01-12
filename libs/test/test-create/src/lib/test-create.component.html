@@ -197,7 +197,7 @@
                             <div class='col-12'>
                               <hidden-innovation-common-form-field-tag-autocomplete
                                 label='Subcategory(s)'
-                                [isDisabled]='!isCategoryValid'
+                                [isDisabled]='this.testGroup.controls.category.invalid'
                                 [testTags]='utilities.testTags'
                                 [tagTypeEnum]='tagTypeEnum.SUB_CATEGORY'
                                 [tagCategory]='testGroup.controls.category.value'
@@ -420,15 +420,28 @@
                                     </h4>
                                   </div>
                                   <div class='col-5'>
+
                                     <mat-form-field class='w-100' [ngClass]='{"text-muted": disableEditState}'>
                                       <mat-label>Low</mat-label>
-                                      <input [disabled]='disableEditState' [readonly]='disableEditState' formControlName='low' matInput autocomplete='no' type='number'>
-                                      <mat-error
-                                        *ngIf='inputFieldGroup(i).controls.low.errors?.required && inputFieldGroup(i).controls.low.errors?.notEmpty'>
-                                        Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                      <input [disabled]='disableEditState' [readonly]='disableEditState' formControlName='low' matInput autocomplete='off' type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less than high > value
+                                        </ng-template>
+                                      </mat-error>
                                     </mat-form-field>
                                   </div>
                                   <div class='col-5'>
+
                                     <mat-form-field class='w-100' [ngClass]='{"text-muted": disableEditState}'>
                                       <mat-label>High</mat-label>
                                       <input [disabled]='disableEditState' [readonly]='disableEditState' formControlName='high' matInput autocomplete='off' type='number'>
@@ -440,6 +453,14 @@
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
                                           {{formValidationService.pointsValidationMessage?.highField}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                          High must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                          High must be higher than < low value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -491,15 +512,28 @@
                                     </h4>
                                   </div>
                                   <div class='col-5'>
+
                                     <mat-form-field class='w-100' [ngClass]='{"text-muted": disableEditState}'>
                                       <mat-label>Low</mat-label>
                                       <input [disabled]='disableEditState' [readonly]='disableEditState' formControlName='low' matInput autocomplete='off' type='number'>
-                                      <mat-error
-                                        *ngIf='inputFieldGroup(i).controls.low.errors?.required && inputFieldGroup(i).controls.low.errors?.notEmpty'>
-                                        Low {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less than high > value
+                                        </ng-template>
+                                      </mat-error>
                                     </mat-form-field>
                                   </div>
                                   <div class='col-5'>
+
                                     <mat-form-field class='w-100' [ngClass]='{"text-muted": disableEditState}'>
                                       <mat-label>High</mat-label>
                                       <input [disabled]='disableEditState' [readonly]='disableEditState' formControlName='high' matInput autocomplete='off' type='number'>
@@ -511,6 +545,14 @@
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
                                           {{formValidationService.pointsValidationMessage?.highField}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                          High must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                          High must be higher than < low value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>

@@ -77,8 +77,10 @@ export class FilePickerComponent {
           this.hotToastService.error(this.constantDataService.FIZE_SIZE_DATA.limitMessage);
           return;
         }
-        const fileNameArray: string[] = file.type.split('/');
-        if (fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.application) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.audio) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.image) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.text) && fileNameArray.includes(this.constantDataService.FILE_FORMAT_DATA.video)) {
+        if (file.type !== this.constantDataService.FILE_FORMAT_DATA.pdf &&
+          file.type !== this.constantDataService.FILE_FORMAT_DATA.image_jpeg &&
+          file.type !== this.constantDataService.FILE_FORMAT_DATA.image_jpg &&
+          file.type !== this.constantDataService.FILE_FORMAT_DATA.image_png) {
           // Video Format validation
           this.toastRef?.close();
           this.clearPicker(filePicker);

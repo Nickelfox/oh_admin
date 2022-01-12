@@ -24,6 +24,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { ContentSelectorComponent } from '@hidden-innovation/shared/ui/content-selector';
 import { UpperCasePipe } from '@angular/common';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { Validators } from '@angular/forms';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -67,7 +68,10 @@ export class PackCreateComponent implements OnDestroy {
       })
     ]),
     urls: new FormArray<ContentUrl>([]),
-    content: new FormControl<ContentCore[] | LessonCore[]>([]),
+    content: new FormControl<ContentCore[] | LessonCore[]>([], Validators.compose([
+      Validators.required,
+      Validators.minLength(2)
+    ])),
     imagesAndPdfsIds: new FormArray<number>([])
   });
 
@@ -124,16 +128,11 @@ export class PackCreateComponent implements OnDestroy {
       this.packForm.updateValueAndValidity();
       this.cdr.markForCheck();
     });
-    const { isPublished, content } = this.packForm.controls;
+    const { content } = this.packForm.controls;
     content.valueChanges.subscribe(_ => {
-      this.contentIsValid ? isPublished.setValue(true) : isPublished.setValue(false);
       this.packForm.updateValueAndValidity();
       this.cdr.markForCheck();
     });
-  }
-
-  get contentIsValid(): boolean {
-    return this.packForm.controls.content.value?.length >= 2;
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[] | LessonCore[]> {

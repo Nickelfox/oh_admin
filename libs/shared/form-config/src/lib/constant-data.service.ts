@@ -85,12 +85,16 @@ export class ConstantDataService {
     limitMessage: 'File must be smaller than 50MB.',
     videoFormatMessage: 'Only MOV & MP4 formats are allowed',
     videoRatioMessage: 'Video file must be in 16:9 aspect ratio',
-    fileFormatMessage: 'Invalid File! Please select an appropriate file to upload'
+    fileFormatMessage: 'Invalid File! Please select an appropriate file to upload .i.e. pdf, jpg, jpeg, png'
   };
 
   public FILE_FORMAT_DATA = {
     video_mp4: 'video/mp4',
     video_mov: 'video/quicktime',
+    image_png: 'image/png',
+    image_jpg: 'image/jpg',
+    image_jpeg: 'image/jpeg',
+    pdf: 'application/pdf',
     // Application Type
     application: 'application',
     audio: 'audio',
