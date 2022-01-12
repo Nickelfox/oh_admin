@@ -64,11 +64,11 @@ export class FormValidationService {
   };
 
   testSelectionValidationMessage: Partial<GenericErrorMessage> = {
-    minLength: 'Minimum of 2 tests are required to publish a test group'
+    minLength: 'Minimum of 2 tests are required to save a test group'
   };
 
   contentSelectionValidationMessage: Partial<GenericErrorMessage> = {
-    minLength: 'Minimum of 2 contents are required to publish a pack'
+    minLength: 'Minimum of 2 contents are required to save a pack'
   };
 
   formSubmitError = 'Invalid Submission! Please fill all valid details';

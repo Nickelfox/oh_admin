@@ -86,12 +86,6 @@ export class TestListingComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
-  isPublishToggleAvailable(test: Test): boolean {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return test.inputType !== 'NONE' && test.category !== 'NONE' && !test.isPublished;
-  }
-
   resetRoute(): void {
     this.router.navigate([
       this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
