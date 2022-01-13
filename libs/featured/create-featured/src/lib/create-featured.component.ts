@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { FeaturedCore } from '@hidden-innovation/featured/data-access';
-import { SelectionModel } from '@angular/cdk/collections';
-import { MatDialog } from '@angular/material/dialog';
-import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
-import { TestStore } from '@hidden-innovation/test/data-access';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {FeaturedCore} from '@hidden-innovation/featured/data-access';
+import {SelectionModel} from '@angular/cdk/collections';
+import {MatDialog} from '@angular/material/dialog';
+import {TestSelectorComponent} from '@hidden-innovation/shared/ui/test-selector';
+import {TestStore} from '@hidden-innovation/test/data-access';
+import {FeaturedNameEnum} from "@hidden-innovation/shared/models";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -13,14 +15,34 @@ import { TestStore } from '@hidden-innovation/test/data-access';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateFeaturedComponent implements OnInit {
+
+  name = '' ;
+  featuredType = FeaturedNameEnum;
   selection = new SelectionModel<FeaturedCore>(true, []);
+
   constructor(
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    private router: Router,
+    private route : ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    // console.log( this.route.snapshot.paramMap.get('name'));
+    if (this.router.url.includes(FeaturedNameEnum.SPOTLIGHT) ) {
+      this.name = FeaturedNameEnum.SPOTLIGHT
+    }
+    else if (this.router.url.includes(FeaturedNameEnum.FEATURED_PACKS))
+    {
+      this.name = FeaturedNameEnum.FEATURED_PACKS
+    }
+    else if (this.router.url.includes(FeaturedNameEnum.FEATURED_TESTS))
+    {
+      this.name = FeaturedNameEnum.FEATURED_TESTS;
+    }
+
   }
+
 
   openTestSelector(): void {
     const dialogRef = this.matDialog.open(TestSelectorComponent, {

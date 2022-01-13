@@ -23,7 +23,7 @@ export class FeaturedListingComponent implements OnInit {
     {
       name: FeaturedNameEnum.SPOTLIGHT,
       location: "HOME",
-      items: 2,
+      items: 0,
       updated_at: ''
     },
     {
@@ -72,7 +72,7 @@ export class FeaturedListingComponent implements OnInit {
   ];
   count = 0;
 
-  displayedColumns: string[] = ['name', 'location', 'updated_at', 'items'];
+  displayedColumns: string[] = ['name', 'location', 'updated_at', 'items','action'];
   featured: MatTableDataSource<FeaturedLocalState> = new MatTableDataSource<FeaturedLocalState>();
 
   filters: FormGroup<FeaturedListingFilters> = new FormGroup<FeaturedListingFilters>({
@@ -106,6 +106,7 @@ export class FeaturedListingComponent implements OnInit {
         d.map(res => {
           if (FeaturedNameEnum[res.name]) {
             this.getLocalData().map(data => {
+              this.count = 0;
                 if ((data.name === FeaturedNameEnum[res.name]) && (res.name !== 'PACKS')) {
                   data.updated_at = res.updatedAt;
                   if (res.tests !== null && res.tests !== undefined ) {
