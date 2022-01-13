@@ -4,9 +4,10 @@ import {SelectionModel} from '@angular/cdk/collections';
 import {MatDialog} from '@angular/material/dialog';
 import {TestSelectorComponent} from '@hidden-innovation/shared/ui/test-selector';
 import {TestStore} from '@hidden-innovation/test/data-access';
-import {FeaturedNameEnum, SortingEnum} from "@hidden-innovation/shared/models";
+import {FeaturedNameEnum, OperationTypeEnum, SortingEnum} from "@hidden-innovation/shared/models";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormControl, FormGroup} from "@ngneat/reactive-forms";
+import {filter, switchMap, tap} from "rxjs/operators";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -30,8 +31,8 @@ export class CreateFeaturedComponent implements OnInit {
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
     public store: FeaturedStore,
-    private router: Router,
-    private route : ActivatedRoute
+    public router: Router,
+    public route : ActivatedRoute
   ) {
 
   }

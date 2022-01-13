@@ -70,7 +70,6 @@ export interface FeaturedResponse extends CustomApiResponse {
 
 export interface FeaturedExtended extends Featured {
   featured: Featured[];
-  id: number;
 }
 
 

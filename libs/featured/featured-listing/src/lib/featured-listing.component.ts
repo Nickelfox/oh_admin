@@ -1,12 +1,10 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {FeaturedListingFilters, FeaturedLocalState, FeaturedStore} from '@hidden-innovation/featured/data-access';
-import {DateTime} from 'luxon';
 import {MatTableDataSource} from '@angular/material/table';
 import {ConstantDataService} from '@hidden-innovation/shared/form-config';
 import {FormControl, FormGroup} from "@ngneat/reactive-forms";
 import {FeaturedNameEnum, SortingEnum, TagCategoryEnum} from "@hidden-innovation/shared/models";
 import {Router} from "@angular/router";
-import {count} from "rxjs/operators";
 
 
 @Component({
@@ -19,7 +17,7 @@ import {count} from "rxjs/operators";
 
 
 export class FeaturedListingComponent implements OnInit {
-  dummyFeatured: FeaturedLocalState[] = [
+  _dummyFeatured: FeaturedLocalState[] = [
     {
       name: FeaturedNameEnum.SPOTLIGHT,
       location: "HOME",
@@ -70,10 +68,11 @@ export class FeaturedListingComponent implements OnInit {
     },
 
   ];
-  count?:number;
 
-  displayedColumns: string[] = ['name', 'location', 'updated_at', 'items','action'];
+
+  displayedColumns: string[] = ['name', 'location', 'updated_at', 'items', 'action'];
   featured: MatTableDataSource<FeaturedLocalState> = new MatTableDataSource<FeaturedLocalState>();
+
 
   filters: FormGroup<FeaturedListingFilters> = new FormGroup<FeaturedListingFilters>({
     dateSort: new FormControl(SortingEnum.DESC),
@@ -86,8 +85,9 @@ export class FeaturedListingComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
   ) {
-    this.featured = new MatTableDataSource<FeaturedLocalState>(this.dummyFeatured);
+    this.featured = new MatTableDataSource<FeaturedLocalState>(this._dummyFeatured);
     this.refreshList();
+
   }
 
 
@@ -102,37 +102,27 @@ export class FeaturedListingComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.featuredList$.subscribe(
-      (d) => {
-        d.map(res => {
-          if (FeaturedNameEnum[res.name]) {
-            this.getLocalData().map(data => {
-              this.count = 0;
-                if ((data.name === FeaturedNameEnum[res.name]) && (res.name !== 'PACKS')) {
-                  data.updated_at = res.updatedAt;
-                  if (res.tests !== null && res.tests !== undefined ) {
-                    this.count += res.tests.length;
-                    data.items = this.count ;
-                  }
-                  if (res.packs !== null && res.packs !== undefined) {
-                    this.count += res.packs.length;
-                    data.items = this.count;
-                  }
-                  if (res.questionnaires !== null && res.questionnaires !== undefined) {
-                    this.count += res.questionnaires.length;
-                    data.items = this.count;
-                  }
-                  if (res.testGroups !== null && res.testGroups !== undefined) {
-                    this.count += res.testGroups.length;
-                    data.items = this.count;
+      (res) => {
+        res.forEach(feature => {
+          if (FeaturedNameEnum[feature.name]) {
+            this.localData = this.localData.map(data => {
+
+                if ((data.name === FeaturedNameEnum[feature.name]) && (feature.name !== 'PACKS')) {
+                  //   data.updated_at = feature.updatedAt;
+                  return {
+                    ...data,
+                    updated_at: feature.updatedAt,
+
                   }
                 } else {
-                  data.updated_at = TagCategoryEnum[res.location as TagCategoryEnum] ? res.updatedAt : '';
-
+                  return {
+                    ...data,
+                    updated_at: TagCategoryEnum[feature.location as TagCategoryEnum] ? feature.updatedAt : ''
+                  }
                 }
               }
             )
           }
-
         })
         this.cdr.markForCheck();
       }
@@ -140,9 +130,31 @@ export class FeaturedListingComponent implements OnInit {
   }
 
 
-  getLocalData(): FeaturedLocalState[] {
-    return this.dummyFeatured.map(value => value);
+
+  get localData(): FeaturedLocalState[] {
+    return this._dummyFeatured;
+  }
+
+  set localData(featured: FeaturedLocalState[]) {
+    this._dummyFeatured = [...featured];
   }
 
 
 }
+
+//   if (feature.tests !== null && feature.tests !== undefined ) {
+//     data.items =  feature.tests.length;
+//     console.log(feature.tests, data)
+//   }
+//   if (feature.packs !== null && feature.packs !== undefined) {
+//     count += feature.packs.length;
+//     data.items = count;
+//   }
+//   if (feature.questionnaires !== null && feature.questionnaires !== undefined) {
+//     count += feature.questionnaires.length;
+//     data.items = count;
+//   }
+//   if (feature.testGroups !== null && feature.testGroups !== undefined) {
+//     count += feature.testGroups.length;
+//     data.items = count;
+//   }
