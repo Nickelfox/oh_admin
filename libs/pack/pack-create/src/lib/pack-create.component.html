@@ -133,7 +133,7 @@
                     <div class='row mb-2' *ngFor='let url of urlFormArray.controls; let i=index'>
                       <div class='col-12'>
                         <div class='container-fluid p-0' formGroupName='{{i}}'>
-                          <div class='row'>
+                          <div class='row mb-1'>
                             <div class='col-10'>
                               <mat-form-field class='w-100'>
                                 <mat-label>Enter URL</mat-label>
@@ -214,31 +214,29 @@
           </mat-card-title>
           <mat-divider></mat-divider>
           <mat-card-content class='content-container'>
-            <ng-template [ngIf]='contentArrayExists' [ngIfElse]='contentElse'>
+            <ng-template [ngIf]='contentArrayExists'>
               <hidden-innovation-pack-content-card
                 class='mb-3'
                 *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
                 [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
                 [name]='content.name'
                 [category]='content.type'
-                (emitDeleteEvent)='deleteSelectedContent(content)'
+                (emitDeleteEvent)='deleteSelectedContentPrompt(content)'
               ></hidden-innovation-pack-content-card>
             </ng-template>
-            <ng-template #contentElse>
-              <div class='d-flex align-items-center justify-content-center w-100'>
-                <h4 class='mat-h4 mb-0 my-2 font-calibri text-muted'>--</h4>
-              </div>
-            </ng-template>
+            <div class='d-flex align-items-center justify-content-center w-100 mt-3' *ngIf='packForm.controls.content.invalid'>
+              <ng-template
+                [ngIf]='((packForm.controls.content.touch$ | async) || (packForm.controls.content.dirty$ | async))'
+                [ngIfElse]='minContentLengthElse'>
+                <mat-error><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-error>
+              </ng-template>
+              <ng-template #minContentLengthElse>
+                <mat-hint><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-hint>
+              </ng-template>
+            </div>
           </mat-card-content>
         </mat-card>
-        <ng-template
-          [ngIf]='!contentIsValid && ((packForm.controls.content.touch$ | async) || (packForm.controls.content.dirty$ | async))'
-          [ngIfElse]='minContentLengthElse'>
-          <mat-error><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-error>
-        </ng-template>
-        <ng-template #minContentLengthElse>
-          <mat-hint><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-hint>
-        </ng-template>
+
       </div>
     </div>
   </div>

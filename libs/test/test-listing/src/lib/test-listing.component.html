@@ -29,7 +29,7 @@
                 <table mat-table [dataSource]='tests' [trackBy]='trackById' class='w-100'>
 
                   <ng-container matColumnDef='id'>
-                    <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
+                    <th mat-header-cell [width]='70' *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'> {{element.id ?? '--'}} </td>
                   </ng-container>
 
@@ -76,6 +76,9 @@
                           <mat-menu #typeMenu='matMenu'>
                             <mat-selection-list color='primary' (selectionChange)='categoryFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
+                              <mat-list-option value='NONE'>
+                                <h6 class='mat-h6'>None</h6>
+                              </mat-list-option>
                               <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
                                 <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>
                               </mat-list-option>
@@ -132,6 +135,9 @@
                             <mat-selection-list color='primary'
                                                 (selectionChange)='typeFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
+                              <mat-list-option value='NONE'>
+                                <h6 class='mat-h6'>None</h6>
+                              </mat-list-option>
                               <ng-template ngFor [ngForOf]='testInputTypeIte' let-type>
                                 <mat-list-option [value]='type'>
                                   <h6
@@ -162,7 +168,6 @@
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
                           <mat-menu #statusMenu='matMenu'>
-
                             <mat-selection-list color='primary'
                                                 (selectionChange)='updateFilterChange($event, filters.controls.published)'
                                                 [multiple]='false' class='pt-0'>
@@ -196,7 +201,7 @@
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #testListMenu='matMenu'>
-                        <button mat-menu-item [routerLink]='["/tests", "edit", row.id]'>
+                        <button mat-menu-item (click)='editPromptForPublished(row)'>
                           <mat-icon>create</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>

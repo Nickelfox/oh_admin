@@ -30,9 +30,15 @@ export class LessonCreateComponent implements OnDestroy {
 
   lessonFrom: FormGroup<LessonCore> = new FormGroup<LessonCore>({
     name: new FormControl<string>('', [
-      ...this.formValidationService.requiredFieldValidation
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.minLength({
+        value: 1
+      }),
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+      })
     ]),
-    category: new FormControl<TagCategoryEnum>(undefined, [
+    category: new FormControl<TagCategoryEnum | 'NONE'>('NONE', [
       ...this.formValidationService.requiredFieldValidation
     ]),
     videoId: new FormControl<number>(undefined, [

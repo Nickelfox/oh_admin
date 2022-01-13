@@ -77,7 +77,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
-    name: new FormControl('', [...this.utilities.requiredFieldValidation]),
+    name: new FormControl('', [
+      ...this.utilities.requiredFieldValidation,
+      RxwebValidators.minLength({
+        value: 1
+      }),
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+      })
+    ]),
     category: new FormControl('NONE', [...this.utilities.requiredFieldValidation]),
     videoId: new FormControl(undefined, [
       RxwebValidators.required(),
@@ -262,9 +270,6 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       relativeProfile
     } = this.testGroup.controls;
     needEquipment.valueChanges.subscribe(isActive => isActive ? equipment.enable() : equipment.disable());
-    oneRMInputFields.valueChanges.subscribe(_ => this.validatePublishedState());
-    inputFields.valueChanges.subscribe(_ => this.validatePublishedState());
-    multipleChoiceInputFields.valueChanges.subscribe(_ => this.validatePublishedState());
     const ratioGroup: FormGroup<RatioSubObject> = ratioVariable as FormGroup<RatioSubObject>;
     const relativeGroup: FormGroup<RelativeProfileObject> = relativeProfile as FormGroup<RelativeProfileObject>;
     inputType.valueChanges.subscribe(type => {
@@ -283,7 +288,6 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       multipleChoiceQuestion.disable();
       ratioGroup.disable();
       relativeGroup.disable();
-      this.validatePublishedState();
       switch (type) {
         case TestInputTypeEnum.DISTANCE:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.DISTANCE) {
@@ -342,7 +346,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           multipleChoiceQuestion.enable();
           break;
         case TestInputTypeEnum.TIME:
-          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.ONE_RM) {
+          if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.TIME) {
             this.utilities.buildTimeForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
           } else {
             this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
@@ -399,7 +403,6 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     category.valueChanges.subscribe(_ => {
       this.utilities.removeTypeTags(TagTypeEnum.SUB_CATEGORY);
       this.updateTagControl();
-      this.validatePublishedState();
     });
     const { xWeightUnit, xDistanceUnit, yWeightUnit, yDistanceUnit, xType, yType } = ratioGroup.controls;
     xType.valueChanges.subscribe((type) => {
@@ -481,9 +484,10 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     return this.testGroup.controls.relativeProfile as FormGroup<RelativeProfileObject>;
   }
 
-  get isCategoryValid(): boolean {
-    const { category } = this.testGroup.controls;
-    return (category.valid && category.value !== 'NONE');
+  get disableEditState(): boolean {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return !!(this.opType === this.opTypeEnum.EDIT && this.selectedTest?.isPublished && this.selectedTest?.inputType !== 'NONE');
   }
 
   ngOnDestroy(): void {
@@ -491,55 +495,6 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       selectedTest: undefined
     });
     this.utilities.resetTagsState();
-  }
-
-  validatePublishedState(): void {
-    const {
-      inputType,
-      oneRMInputFields,
-      multipleChoiceInputFields,
-      inputFields,
-      isPublished
-    } = this.testGroup.controls;
-    const isInputTypeValid = (inputType.valid && inputType.value !== 'NONE');
-    const isOneRemValid = (oneRMInputFields.valid && !!(oneRMInputFields.value?.length)) || oneRMInputFields.disabled;
-    const isInputValid = (inputFields.valid && !!(inputFields.value?.length)) || inputFields.disabled;
-    const isMChoiceValid = (multipleChoiceInputFields.valid && !!(multipleChoiceInputFields.value?.length)) || multipleChoiceInputFields.disabled;
-    if (this.isCategoryValid) {
-      isPublished.setValue(true);
-    } else {
-      isPublished.setValue(false);
-      return;
-    }
-    if (isInputTypeValid) {
-      isPublished.setValue(true);
-    } else {
-      isPublished.setValue(false);
-      return;
-    }
-    switch (inputType.value) {
-      case TestInputTypeEnum.ONE_RM:
-        if (isOneRemValid) {
-          isPublished.setValue(true);
-        } else {
-          isPublished.setValue(false);
-        }
-        break;
-      case TestInputTypeEnum.MULTIPLE_CHOICE:
-        if (isMChoiceValid) {
-          isPublished.setValue(true);
-        } else {
-          isPublished.setValue(false);
-        }
-        break;
-      default :
-        if (isInputValid) {
-          isPublished.setValue(true);
-        } else {
-          isPublished.setValue(false);
-        }
-    }
-
   }
 
   getOneRMInputFieldGroup(i: number): FormGroup<OneRMField> {

@@ -58,6 +58,7 @@
                         ></hidden-innovation-form-field-errors>
                       </ng-template>
                     </mat-error>
+                    <mat-hint>Be Careful! Changing category might reset the selected test options list</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -68,6 +69,7 @@
                     fieldType='INPUT'
                     label='Sub Category'
                     [tagCategory]='testGroup.controls.category.value'
+                    [isDisabled]='!isCategoryValid'
                   ></hidden-innovation-common-form-field-tag-autocomplete>
                 </div>
               </div>
@@ -138,9 +140,9 @@
                       <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #testOption='matMenu'>
-                      <button type='button' mat-menu-item (click)='deleteSelectedTest(test)'>
+                      <button type='button' mat-menu-item (click)='deleteSelectedTestPrompt(test)'>
                         <mat-icon>delete</mat-icon>
-                        <span>Delete</span>
+                        <span>Remove</span>
                       </button>
                     </mat-menu>
                   </div>
@@ -150,6 +152,7 @@
           </mat-card-content>
           <mat-card-actions>
             <button
+              [disabled]='!isCategoryValid'
               (click)='openTestSelector()'
               color='accent' class='w-100' mat-flat-button
               type='button'>
@@ -159,12 +162,8 @@
           </mat-card-actions>
         </mat-card>
         <ng-template
-          [ngIf]='!testsIsValid && ((testGroup.controls.tests.touch$ | async) || (testGroup.controls.tests.dirty$ | async))'
-          [ngIfElse]='minTetsLengthElse'>
+          [ngIf]='testGroup.controls.tests.invalid && ((testGroup.controls.tests.touch$ | async) || (testGroup.controls.tests.dirty$ | async))'>
           <mat-error><small>{{formValidationService.testSelectionValidationMessage.minLength}}</small></mat-error>
-        </ng-template>
-        <ng-template #minTetsLengthElse>
-          <mat-hint><small>{{formValidationService.testSelectionValidationMessage.minLength}}</small></mat-hint>
         </ng-template>
       </div>
     </div>

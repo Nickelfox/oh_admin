@@ -301,7 +301,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
     const newState = !currentState;
     const dialogData: GenericDialogPrompt = {
       title: newState ? 'Activate Questionnaire?' : 'Deactivate Questionnaire?',
-      desc: `Are you sure you want to ${newState ? 'activate this Questionnaire' : 'deactivate this Questionnaire'}?`,
+      desc: newState ? `Are you sure you want to activate this Questionnaire?` : 'This might impact various other modules .i.e. Packs, Assessments etc.',
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
@@ -326,7 +326,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
     const { id, pageSize, pageIndex, active, dateSort, nameSort, scoring, search } = deleteObj;
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Questionnaire?',
-      desc: `Are you sure you want to delete this Questionnaire?`,
+      desc: `This might impact various other modules .i.e. Packs, Assessments etc.`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',

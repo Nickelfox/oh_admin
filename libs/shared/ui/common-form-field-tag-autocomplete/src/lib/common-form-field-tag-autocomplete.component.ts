@@ -20,7 +20,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   selector: 'hidden-innovation-common-form-field-tag-autocomplete',
   template: `
     <mat-form-field class='w-100' *ngIf='fieldType === "CHIP"'>
-      <mat-label>{{(isDisabled ? "Select Category First" : label) || "--"}}</mat-label>
+      <mat-label>{{(disabled ? "Select a Category First" : label) || "--"}}</mat-label>
       <mat-chip-list #list aria-label='tag selection'>
         <ng-template ngFor [ngForOf]='testTags' let-tag>
           <mat-chip
@@ -34,7 +34,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
           </mat-chip>
         </ng-template>
         <input
-          [disabled]='isDisabled'
+          [disabled]='disabled'
           (keyup)='getTags(tagTypeEnum, input.value)'
           (focusin)='getTags(tagTypeEnum)'
           placeholder='New tag...'
@@ -69,10 +69,10 @@ import { UntilDestroy } from '@ngneat/until-destroy';
     </mat-form-field>
 
     <mat-form-field class='w-100' *ngIf='fieldType === "INPUT"'>
-      <mat-label>{{label || "--"}}</mat-label>
+      <mat-label>{{(disabled ? "Select a Category First" : label) || "--"}}</mat-label>
       <input
         [formControl]='control'
-        autocomplete='no'
+        autocomplete='off'
         #input
         (keyup)='getTagsTypeSingle(input.value)'
         (focusin)='getTagsTypeSingle(input.value)'
@@ -121,7 +121,6 @@ export class CommonFormFieldTagAutocompleteComponent implements OnInit {
   @Input() tagCategory?: TagCategoryEnum | 'NONE';
   @Input() testTags: Tag[] = [];
   @Input() label?: string;
-  @Input() isDisabled = false;
 
   @Input() controlPath: any;
   @Input() errorMessage: Partial<GenericErrorMessage> = this.formValidationService.fieldValidationMessage;
@@ -133,12 +132,30 @@ export class CommonFormFieldTagAutocompleteComponent implements OnInit {
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
+  disabled = false;
+
   constructor(
     public store: TagsStore,
     private fgd: FormGroupDirective,
     public formValidationService: FormValidationService,
     public constantDataService: ConstantDataService
   ) {
+  }
+
+  @Input() set isDisabled(state: boolean) {
+    this.disabled = state;
+    if (this.fieldType === 'INPUT') {
+      this.disabled ? this.control.disable() : this.control.enable();
+    }
+  }
+
+  ngOnInit(): void {
+    if (this.fieldType === 'INPUT') {
+      this.control = this.fgd.control.get(
+        this.controlPath
+      ) as FormControl;
+      this.disabled ? this.control.disable() : this.control.enable();
+    }
   }
 
   getTags(cat: TagTypeEnum, search?: string) {
@@ -184,14 +201,6 @@ export class CommonFormFieldTagAutocompleteComponent implements OnInit {
   emitUpdatedTags(tag: Tag, input: HTMLInputElement): void {
     input.value = '';
     this.updateTags.emit(tag);
-  }
-
-  ngOnInit(): void {
-    if (this.fieldType === 'INPUT') {
-      this.control = this.fgd.control.get(
-        this.controlPath
-      ) as FormControl;
-    }
   }
 
 }

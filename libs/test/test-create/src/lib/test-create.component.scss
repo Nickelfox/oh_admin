@@ -14,3 +14,17 @@
     border-color: var(--warn-darker-color) !important;
   }
 }
+
+.disabledState__container {
+  position: relative;
+
+  //&::after {
+  //  content: '';
+  //  position: absolute;
+  //  top: 0;
+  //  left: 0;
+  //  right: 0;
+  //  bottom: 0;
+  //  background: transparentize(black, 0.5);
+  //}
+}

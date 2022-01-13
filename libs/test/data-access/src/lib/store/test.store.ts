@@ -303,7 +303,7 @@ export class TestStore extends ComponentStore<TestState> {
     const newState = !currentState;
     const dialogData: GenericDialogPrompt = {
       title: newState ? 'Publish Test?' : 'Un-publish Test?',
-      desc: `Are you sure you want to ${newState ? 'publish this Test' : 'un-publish this Test'}?`,
+      desc: newState ? `Are you sure you want to publish this Test?` : 'This might impact various other modules .i.e. TestGroup, Packs etc.',
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
@@ -327,11 +327,11 @@ export class TestStore extends ComponentStore<TestState> {
   deleteTest(deleteObj: TestDeleteRequest): void {
     const dialogData: GenericDialogPrompt = {
       title: 'Delete Test?',
-      desc: `Are you sure you want to delete this Test?`,
+      desc: `This might impact various other modules .i.e. TestGroup, Packs etc.`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
-        type: 'mat-primary'
+        type: 'mat-warn'
       }
     };
     const dialogRef = this.matDialog.open(PromptDialogComponent, {

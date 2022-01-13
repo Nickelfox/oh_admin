@@ -18,11 +18,13 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { AspectRatio, Media } from '@hidden-innovation/media';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { OperationTypeEnum, PackContentTypeEnum } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, OperationTypeEnum, PackContentTypeEnum } from '@hidden-innovation/shared/models';
 import { ActivatedRoute } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentSelectorComponent } from '@hidden-innovation/shared/ui/content-selector';
 import { UpperCasePipe } from '@angular/common';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { Validators } from '@angular/forms';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -44,7 +46,7 @@ export class PackCreateComponent implements OnDestroy {
     description: new FormControl<string>('', [
       ...this.formValidationService.requiredFieldValidation
     ]),
-    subTitle:  new FormControl<string>('', [
+    subTitle: new FormControl<string>('', [
       ...this.formValidationService.requiredFieldValidation,
       RxwebValidators.maxLength({
         value: this.formValidationService.FIELD_VALIDATION_VALUES.SUB_TITLE_LENGTH
@@ -66,7 +68,10 @@ export class PackCreateComponent implements OnDestroy {
       })
     ]),
     urls: new FormArray<ContentUrl>([]),
-    content: new FormControl<ContentCore[] | LessonCore[]>([]),
+    content: new FormControl<ContentCore[] | LessonCore[]>([], Validators.compose([
+      Validators.required,
+      Validators.minLength(2)
+    ])),
     imagesAndPdfsIds: new FormArray<number>([])
   });
 
@@ -123,16 +128,11 @@ export class PackCreateComponent implements OnDestroy {
       this.packForm.updateValueAndValidity();
       this.cdr.markForCheck();
     });
-    const { isPublished, content } = this.packForm.controls;
+    const { content } = this.packForm.controls;
     content.valueChanges.subscribe(_ => {
-      this.contentIsValid ? isPublished.setValue(true) : isPublished.setValue(false);
       this.packForm.updateValueAndValidity();
       this.cdr.markForCheck();
     });
-  }
-
-  get contentIsValid(): boolean {
-    return this.packForm.controls.content.value?.length >= 2;
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[] | LessonCore[]> {
@@ -178,15 +178,32 @@ export class PackCreateComponent implements OnDestroy {
     this.imagesAndPdfsArrayCtrl.removeAt(index);
   }
 
-  deleteSelectedContent(content: ContentCore | LessonCore): void {
-    const selectedContent = this.selectedContents.find(value => value.contentId === content.contentId && value.type === content.type);
-    if (selectedContent) {
-      this.uiStore.patchState({
-        selectedContent: [
-          ...this.selectedContents.filter(c => c.contentId !== content.contentId || c.type !== content.type)
-        ]
-      });
-    }
+  deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Remove Content?',
+      desc: `Are you sure you want to remove this Content from Pack?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        const selectedContent = this.selectedContents.find(value => value.contentId === content.contentId && value.type === content.type);
+        if (selectedContent) {
+          this.uiStore.patchState({
+            selectedContent: [
+              ...this.selectedContents.filter(c => c.contentId !== content.contentId || c.type !== content.type)
+            ]
+          });
+        }
+      }
+    });
   }
 
   openContentSelectorDialog(): void {
