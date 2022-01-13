@@ -312,15 +312,7 @@ import { MatCardModule } from '@angular/material/card';
             data: { breadcrumb: 'Featured' }
           },
           {
-            path: `edit/${FeaturedNameEnum.SPOTLIGHT}/HOME`,
-            loadChildren: () =>
-              import('@hidden-innovation/featured/create-featured').then(
-                (m) => m.CreateFeaturedModule
-              ),
-            data: { breadcrumb: 'Edit Featured' }
-          },
-          {
-            path: `edit/:featured-name-enum/:screen`,
+            path: `edit/:id`,
             loadChildren: () =>
               import('@hidden-innovation/featured/create-featured').then(
                 (m) => m.CreateFeaturedModule
