@@ -4,9 +4,9 @@ import {Environment, ENVIRONMENT} from "@hidden-innovation/environment";
 import {Observable, throwError} from "rxjs";
 import {catchError, map, tap} from "rxjs/operators";
 import {
-  Featured,
+  Featured, FeaturedExtended,
   FeaturedListingFilters,
-  FeaturedListingResponse
+  FeaturedListingResponse, FeaturedResponse
 } from "../models/featured.interface";
 
 @Injectable()
@@ -31,4 +31,11 @@ export class FeaturedService {
 
     );
   }
+
+  getFeatured(id:number): Observable<FeaturedExtended>{
+    return this.http.get<FeaturedResponse>(`${this.env.baseURL}/v1/admin/get-featured/${id}`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err)),
+    );
+}
 }

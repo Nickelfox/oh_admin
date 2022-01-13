@@ -11,7 +11,7 @@ import {
 import {Test} from "@hidden-innovation/test/data-access";
 import {TestGroup} from "@hidden-innovation/test-group/data-access";
 import {Media} from "@hidden-innovation/media";
-import {QuestionnaireExtended} from "@hidden-innovation/questionnaire/data-access";
+import {QuestionExtended, Questionnaire, QuestionnaireExtended} from "@hidden-innovation/questionnaire/data-access";
 
 export interface FeaturedLocalState {
   name: FeaturedNameEnum;
@@ -64,6 +64,14 @@ export interface FeaturedListingFilters {
   dateSort: SortingEnum | undefined;
 }
 
+export interface FeaturedResponse extends CustomApiResponse {
+  data: FeaturedExtended
+}
+
+export interface FeaturedExtended extends Featured {
+  featured: Featured[];
+  id: number;
+}
 
 
 export interface FeaturedListingResponse extends CustomApiResponse {

@@ -70,7 +70,7 @@ export class FeaturedListingComponent implements OnInit {
     },
 
   ];
-  count = 0;
+  count?:number;
 
   displayedColumns: string[] = ['name', 'location', 'updated_at', 'items','action'];
   featured: MatTableDataSource<FeaturedLocalState> = new MatTableDataSource<FeaturedLocalState>();
@@ -131,9 +131,6 @@ export class FeaturedListingComponent implements OnInit {
                 }
               }
             )
-          }
-          if (res.tests !== null && res.tests !== undefined) {
-
           }
 
         })

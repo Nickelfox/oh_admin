@@ -5,11 +5,13 @@ import { MaterialModule } from '@hidden-innovation/material';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { RouterModule } from '@angular/router';
+import {FeaturedDataAccessModule} from "@hidden-innovation/featured/data-access";
 
 @NgModule({
   imports: [
     CommonModule,
     MaterialModule,
+    FeaturedDataAccessModule,
     CommonFormFieldModule,
     UtilsModule,
     RouterModule.forChild([

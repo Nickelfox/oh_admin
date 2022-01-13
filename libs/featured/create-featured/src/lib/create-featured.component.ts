@@ -1,11 +1,12 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {FeaturedCore} from '@hidden-innovation/featured/data-access';
+import {FeaturedCore, FeaturedListingFilters, FeaturedStore} from '@hidden-innovation/featured/data-access';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatDialog} from '@angular/material/dialog';
 import {TestSelectorComponent} from '@hidden-innovation/shared/ui/test-selector';
 import {TestStore} from '@hidden-innovation/test/data-access';
-import {FeaturedNameEnum} from "@hidden-innovation/shared/models";
+import {FeaturedNameEnum, SortingEnum} from "@hidden-innovation/shared/models";
 import {ActivatedRoute, Router} from "@angular/router";
+import {FormControl, FormGroup} from "@ngneat/reactive-forms";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -19,15 +20,32 @@ export class CreateFeaturedComponent implements OnInit {
   name = '' ;
   featuredType = FeaturedNameEnum;
   selection = new SelectionModel<FeaturedCore>(true, []);
+  filters: FormGroup<FeaturedListingFilters> = new FormGroup<FeaturedListingFilters>({
+    dateSort: new FormControl(SortingEnum.DESC),
+  });
+
+  readonly featuredID: number = 13;
 
   constructor(
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    public store: FeaturedStore,
     private router: Router,
     private route : ActivatedRoute
-  ) { }
+  ) {
+
+  }
+
+
+
 
   ngOnInit(): void {
+    this.store.selectedFeatured$.subscribe( (d) => console.log(d)) ;
+
+    this.store.getFeaturedDetails$({
+      id: this.featuredID
+    });
+
     // console.log( this.route.snapshot.paramMap.get('name'));
     if (this.router.url.includes(FeaturedNameEnum.SPOTLIGHT) ) {
       this.name = FeaturedNameEnum.SPOTLIGHT

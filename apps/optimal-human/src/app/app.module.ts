@@ -317,7 +317,7 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/featured/create-featured').then(
                 (m) => m.CreateFeaturedModule
               ),
-            data: { breadcrumb: 'Add Featured' }
+            data: { breadcrumb: 'Edit Featured' }
           },
           {
             path: `edit/:featured-name-enum/:screen`,
@@ -325,7 +325,7 @@ import { MatCardModule } from '@angular/material/card';
               import('@hidden-innovation/featured/create-featured').then(
                 (m) => m.CreateFeaturedModule
               ),
-            data: { breadcrumb: 'Add Featured' }
+            data: { breadcrumb: 'Edit Featured' }
           },
         ]
       },

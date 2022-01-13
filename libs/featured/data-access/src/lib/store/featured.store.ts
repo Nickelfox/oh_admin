@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ComponentStore, tapResponse} from '@ngrx/component-store';
-import {Featured, FeaturedContent, FeaturedListingFilters} from "../models/featured.interface";
+import {Featured, FeaturedContent, FeaturedExtended, FeaturedListingFilters} from "../models/featured.interface";
 import {EMPTY, Observable} from "rxjs";
 import {catchError, switchMap, tap} from "rxjs/operators";
 import {FeaturedService} from "../services/featured.service";
@@ -8,7 +8,7 @@ import {FeaturedService} from "../services/featured.service";
 export interface FeaturedState {
   featuredList: Featured[];
   featuredContents?: FeaturedContent[];
-  selectedFeatured?: Featured;
+  selectedFeatured?: FeaturedExtended;
   isLoading?: boolean;
   isContentLoading?: boolean;
   isActing?: boolean;
@@ -20,7 +20,7 @@ const initialState: FeaturedState = {
   featuredContents: [],
   isLoading: false,
   isActing: false,
-  loaded: false
+  loaded: false,
 };
 
 @Injectable()
@@ -31,7 +31,7 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly featuredList$: Observable<Featured[]> = this.select(state => state.featuredList || []);
   readonly featuredContents$: Observable<FeaturedContent[]> = this.select(state => state.featuredContents || []);
-  readonly selectedFeatured$: Observable<Featured | undefined> = this.select(state => state.selectedFeatured);
+  readonly selectedFeatured$: Observable<FeaturedExtended | undefined> = this.select(state => state.selectedFeatured );
 
   getFeaturedList$ = this.effect<FeaturedListingFilters>(params$ =>
     params$.pipe(
@@ -61,6 +61,34 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
       )
     )
   );
+
+  getFeaturedDetails$ = this.effect<{id:number}>( params$ =>
+  params$.pipe(
+    tap((_) => {
+      this.patchState({
+        isLoading:true
+      })
+    }),
+    switchMap( ({ id }) =>
+    this.featuredService.getFeatured(id).pipe(
+      tapResponse(
+        (selectedFeatured) => {
+          this.patchState({
+            isLoading: false,
+            selectedFeatured
+          });
+        },
+        (_) => {
+          this.patchState({
+            isLoading: false
+          });
+        }
+      ),
+      catchError(() => EMPTY)
+    )
+    )
+  )
+  )
 
   constructor(
     private featuredService: FeaturedService
