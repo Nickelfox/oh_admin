@@ -5,6 +5,7 @@ import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { PageEvent } from '@angular/material/paginator';
 import {
   DifficultyEnum,
+  GenericDialogPrompt,
   PublishStatusEnum,
   SortingEnum,
   StatusChipType,
@@ -18,6 +19,9 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { isEqual } from 'lodash-es';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { MatSelectionListChange } from '@angular/material/list';
+import { InfoDialogComponent } from '@hidden-innovation/shared/ui/info-dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -67,7 +71,8 @@ export class TestListingComponent implements OnInit {
     public store: TestStore,
     private route: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private matDialog: MatDialog
   ) {
     this.noData = this.tests.connect().pipe(map(data => data.length === 0));
     this.route.params.subscribe((params) => {
@@ -226,6 +231,33 @@ export class TestListingComponent implements OnInit {
       pageIndex: this.pageIndex
     };
     this.store.deleteTest(deleteObj);
+  }
+
+  editPromptForPublished(test: Test): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (test.isPublished && test.category !== 'NONE' && test.inputType !== 'NONE') {
+      const dialogData: GenericDialogPrompt = {
+        title: 'Edit a Published Test?',
+        desc: 'This might impact various other modules .i.e. TestGroup, Packs etc.',
+        action: {
+          type: 'mat-error',
+          posTitle: 'Confirm',
+          negTitle: 'Cancel'
+        }
+      };
+      const dialogRef = this.matDialog.open(PromptDialogComponent, {
+        data: dialogData,
+        minWidth: '25rem'
+      });
+      dialogRef.afterClosed().subscribe((proceed: boolean | undefined) => {
+        if (proceed) {
+          this.router.navigate(['/tests', 'edit', test.id]);
+        }
+      });
+    } else {
+      this.router.navigate(['/tests', 'edit', test.id]);
+    }
   }
 
 }

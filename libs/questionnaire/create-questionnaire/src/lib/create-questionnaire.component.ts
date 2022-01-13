@@ -196,7 +196,6 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   submit(): void {
     this.questionnaire.markAllAsDirty();
     this.questionnaire.markAllAsTouched();
-    console.log(this.questionnaire);
     if (this.questionnaire.invalid) {
       if (this.questionnaire.controls.name.invalid || this.questionnaire.controls.isScoring.invalid) {
         return;

@@ -4,6 +4,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import {
   DifficultyEnum,
+  GenericDialogPrompt,
   PublishStatusEnum,
   SortingEnum,
   StatusChipType,
@@ -21,6 +22,8 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'hidden-innovation-test-group-listing',
@@ -64,6 +67,7 @@ export class TestGroupListingComponent implements OnInit {
     public store: TestGroupStore,
     private route: ActivatedRoute,
     private router: Router,
+    private matDialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) {
     this.noData = this.testGroup.connect().pipe(map(data => data.length === 0));
@@ -76,6 +80,10 @@ export class TestGroupListingComponent implements OnInit {
 
   get paginatorIndex() {
     return this.pageIndex - 1;
+  }
+
+  isPublishToggleAvailable(tg: TestGroup): boolean {
+    return tg.tests.length >= 2 || tg.isVisible;
   }
 
   resetRoute(): void {
@@ -196,6 +204,33 @@ export class TestGroupListingComponent implements OnInit {
       pageIndex: this.pageIndex
     };
     this.store.deleteTestGroup(deleteObj);
+  }
+
+  editPromptForPublished(tg: TestGroup): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (this.isPublishToggleAvailable(tg)) {
+      const dialogData: GenericDialogPrompt = {
+        title: 'Edit a Published Test Group?',
+        desc: 'This might impact various other modules .i.e. Packs, Assessments etc.',
+        action: {
+          type: 'mat-warn',
+          posTitle: 'Confirm',
+          negTitle: 'Cancel'
+        }
+      };
+      const dialogRef = this.matDialog.open(PromptDialogComponent, {
+        data: dialogData,
+        minWidth: '25rem'
+      });
+      dialogRef.afterClosed().subscribe((proceed: boolean | undefined) => {
+        if (proceed) {
+          this.router.navigate(['/tests-group', 'edit', tg.id]);
+        }
+      });
+    } else {
+      this.router.navigate(['/tests-group', 'edit', tg.id]);
+    }
   }
 
 }

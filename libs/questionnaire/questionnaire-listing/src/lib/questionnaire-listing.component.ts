@@ -7,15 +7,18 @@ import { MatTableDataSource } from '@angular/material/table';
 import {
   Questionnaire,
   QuestionnaireDeleteRequest,
+  QuestionnaireExtended,
   QuestionnaireListingFilters,
   QuestionnaireStore
 } from '@hidden-innovation/questionnaire/data-access';
-import { SortingEnum, StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt, SortingEnum, StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -37,7 +40,7 @@ export class QuestionnaireListingComponent implements OnInit {
     nameSort: new FormControl({ value: undefined, disabled: true }),
     active: new FormControl({ value: undefined, disabled: true }),
     scoring: new FormControl({ value: undefined, disabled: true }),
-    search: new FormControl(undefined),
+    search: new FormControl(undefined)
   });
 
   // Paginator options
@@ -57,7 +60,8 @@ export class QuestionnaireListingComponent implements OnInit {
     public store: QuestionnaireStore,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private matDialog: MatDialog
   ) {
     this.noData = this.questionnaires.connect().pipe(map(data => data.length === 0));
     this.route.params.subscribe((params) => {
@@ -69,6 +73,10 @@ export class QuestionnaireListingComponent implements OnInit {
 
   get paginatorIndex() {
     return this.pageIndex - 1;
+  }
+
+  isPublishToggleAvailable(ques: QuestionnaireExtended): boolean {
+    return ques.questions.length >= 2 || ques.isActive;
   }
 
   resetRoute(): void {
@@ -171,6 +179,33 @@ export class QuestionnaireListingComponent implements OnInit {
     } else {
       ctrl.setValue(undefined);
       ctrl.disable();
+    }
+  }
+
+  editPromptForPublished(q: QuestionnaireExtended): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (this.isPublishToggleAvailable(q) && q.isActive) {
+      const dialogData: GenericDialogPrompt = {
+        title: 'Edit a Active Questionnaire?',
+        desc: 'This might impact various other modules .i.e. Packs, Assessments etc.',
+        action: {
+          type: 'mat-warn',
+          posTitle: 'Confirm',
+          negTitle: 'Cancel'
+        }
+      };
+      const dialogRef = this.matDialog.open(PromptDialogComponent, {
+        data: dialogData,
+        minWidth: '25rem'
+      });
+      dialogRef.afterClosed().subscribe((proceed: boolean | undefined) => {
+        if (proceed) {
+          this.router.navigate(['/questionnaire', 'edit', q.id]);
+        }
+      });
+    } else {
+      this.router.navigate(['/questionnaire', 'edit', q.id]);
     }
   }
 

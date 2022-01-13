@@ -143,11 +143,11 @@
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #testListMenu='matMenu'>
-                        <button mat-menu-item [routerLink]='["/tests-group", "edit", row.id]'>
+                        <button mat-menu-item (click)='editPromptForPublished(row)'>
                           <mat-icon>create</mat-icon>
                           <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                         </button>
-                        <button mat-menu-item (click)='store.toggleActive(row.id, row.isVisible)'>
+                        <button mat-menu-item (click)='store.toggleActive(row.id, row.isVisible)' *ngIf='isPublishToggleAvailable(row)'>
                           <mat-icon>{{row.isVisible ? "block" : "check_circle_outline"}}</mat-icon>
                           <span>{{(row.isVisible ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
                         </button>

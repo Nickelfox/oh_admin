@@ -146,6 +146,7 @@
 
                   <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumns;' (click)='addToList(row)'
+                      [ngClass]='{"active":isSelected(row)}'
                       class='row-react'></tr>
                 </table>
               </div>

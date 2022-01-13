@@ -16,6 +16,7 @@ import { Test } from '@hidden-innovation/test/data-access';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { isEqual } from 'lodash-es';
+import { Validators } from '@angular/forms';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -69,7 +70,10 @@ export class TestGroupCreateComponent implements OnDestroy {
       })
     ]),
     isVisible: new FormControl(false),
-    tests: new FormArray<number>([])
+    tests: new FormArray<number>([], Validators.compose([
+      Validators.required,
+      Validators.minLength(2)
+    ]))
   });
 
   opType?: OperationTypeEnum;
@@ -111,7 +115,7 @@ export class TestGroupCreateComponent implements OnDestroy {
         });
       }
     });
-    const { category, tests, subCategory, isVisible } = this.testGroup.controls;
+    const { category, tests, subCategory } = this.testGroup.controls;
     const testFormArray: FormArray<number> = tests as FormArray<number>;
     this.uiStore.selectedTests$.subscribe(newTests => {
       this.selectedTests = newTests;
@@ -131,10 +135,6 @@ export class TestGroupCreateComponent implements OnDestroy {
       this.uiStore.patchState({
         selectedTests: []
       });
-    });
-    tests.valueChanges.subscribe(_ => {
-      this.testsIsValid ? isVisible.setValue(true) : isVisible.setValue(false);
-      this.testGroup.updateValueAndValidity();
     });
   }
 
@@ -194,6 +194,7 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   submit(): void {
+    console.log(this.testGroup);
     this.testGroup.markAllAsTouched();
     this.testGroup.markAllAsDirty();
     if (this.testGroup.invalid) {

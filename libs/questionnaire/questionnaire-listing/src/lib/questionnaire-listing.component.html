@@ -154,11 +154,12 @@
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #userListMenu='matMenu'>
-                  <button mat-menu-item [routerLink]='["/questionnaire", "edit", row?.id]'>
+                  <button mat-menu-item (click)='editPromptForPublished(row)'>
                     <mat-icon>create</mat-icon>
                     <span>{{constantDataService.BUTTON_NAME.EDIT | titlecase}}</span>
                   </button>
                   <button (click)='store.toggleActive(row.id, row.isActive)' mat-menu-item
+                          *ngIf='isPublishToggleAvailable(row)'
                           [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'>
                     <mat-icon>{{row.isActive ? "block" : "check_circle_outline"}}</mat-icon>
                     <span>{{(row.isActive ? constantDataService.BUTTON_NAME.DEACTIVATE : constantDataService.BUTTON_NAME.ACTIVATE) | titlecase}}</span>

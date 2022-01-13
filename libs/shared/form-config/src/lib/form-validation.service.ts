@@ -18,7 +18,7 @@ export class FormValidationService {
     USERNAME_LENGTH: 30,
     QUESTION_NAME_LENGTH: 36,
     QUESTION_DESC_LENGTH: 50,
-    ANSWER_LENGTH: 50,
+    ANSWER_LENGTH: 50
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {
@@ -30,8 +30,8 @@ export class FormValidationService {
   pointsValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Point field is required',
     invalid: 'Only numeric & non-floating point values allowed',
-    highField: 'Must be greater than the low field value',
-    lowField: 'Must be lower than the low field value'
+    highField: 'Must be higher than the low field value',
+    lowField: 'Must be less than the low field value'
   };
 
   emailValidationMessage: Partial<GenericErrorMessage> = {
@@ -64,12 +64,12 @@ export class FormValidationService {
   };
 
   testSelectionValidationMessage: Partial<GenericErrorMessage> = {
-    minLength: 'Minimum of 2 tests are required to publish a test group'
-  }
+    minLength: 'Minimum of 2 tests are required to save a test group'
+  };
 
   contentSelectionValidationMessage: Partial<GenericErrorMessage> = {
-    minLength: 'Minimum of 2 contents are required to publish a pack'
-  }
+    minLength: 'Minimum of 2 contents are required to save a pack'
+  };
 
   formSubmitError = 'Invalid Submission! Please fill all valid details';
 
@@ -208,6 +208,49 @@ export class FormValidationService {
       }
       // return array errors ({} is considered an error so return null if it is the case)
       return errors;
+    };
+  }
+
+  get greaterLowHigh(): ValidatorFn {
+    return (group: AbstractControl) => {
+      if (!group) {
+        return null;
+      }
+      const low: FormControl = group.get('low') as FormControl;
+      const high: FormControl = group.get('high') as FormControl;
+      if (low !== null && low !== undefined && high !== null && high !== undefined && low.value >= high.value) {
+        low?.setErrors({ highThan: true });
+        high?.setErrors({ lessThan: true });
+        return null;
+      }
+      low?.removeError('highThan');
+      high?.removeError('lessThan');
+      return null;
+    };
+  }
+
+  get greaterTimeLowHigh(): ValidatorFn {
+    return (group: AbstractControl) => {
+      if (!group) {
+        return null;
+      }
+      const low: FormControl = group.get('low') as FormControl<Date>;
+      const high: FormControl = group.get('high') as FormControl<Date>;
+      if (low !== null && low !== undefined && high !== null && high !== undefined) {
+        const lowVal = DateTime.fromJSDate(low.value).toSeconds();
+        const highVal = DateTime.fromJSDate(high.value).toSeconds();
+        if (Math.round(lowVal) <= Math.round(highVal)) {
+          low?.setErrors({ highThan: true });
+          high?.setErrors({ lessThan: true });
+          return null;
+        }
+        low?.removeError('highThan');
+        high?.removeError('lessThan');
+        return null;
+      }
+      low?.removeError('highThan');
+      high?.removeError('lessThan');
+      return null;
     };
   }
 }
