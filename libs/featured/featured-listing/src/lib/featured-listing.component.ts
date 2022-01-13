@@ -106,13 +106,12 @@ export class FeaturedListingComponent implements OnInit {
         res.forEach(feature => {
           if (FeaturedNameEnum[feature.name]) {
             this.localData = this.localData.map(data => {
-
                 if ((data.name === FeaturedNameEnum[feature.name]) && (feature.name !== 'PACKS')) {
                   //   data.updated_at = feature.updatedAt;
+
                   return {
                     ...data,
                     updated_at: feature.updatedAt,
-
                   }
                 } else {
                   return {
