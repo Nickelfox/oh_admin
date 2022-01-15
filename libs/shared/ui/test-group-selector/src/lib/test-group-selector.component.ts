@@ -189,13 +189,14 @@ export class TestGroupSelectorComponent implements OnInit {
       case ContentSelectorOpType.SINGLE:
         return !!this.selectedTestGroups.find(value => value.id === tg.id);
       case ContentSelectorOpType.OTHER:
-        return !!this.selectedContents.find(value => value.contentId === tg.id);
+        return !!this.selectedContents.find(value => (value.contentId === tg.id) && (value.type === PackContentTypeEnum.GROUP));
     }
   }
 
   addToList(tg: TestGroup): void {
     let selectedContent: (ContentCore | LessonCore)[] = [];
     let selectedTestGroups: TestGroup[] = [];
+    let selectedItem : ContentCore;
     switch (this.data.type) {
       case ContentSelectorOpType.SINGLE:
         if (!this.selectedTestGroups.find(value => value.id === tg.id)) {
@@ -213,8 +214,9 @@ export class TestGroupSelectorComponent implements OnInit {
         });
         break;
       case ContentSelectorOpType.OTHER:
-        if (this.selectedContents.find(value => (value.contentId === tg.id) && (value.type === PackContentTypeEnum.GROUP))) {
-          selectedContent = [...this.selectedContents.filter(t => t.contentId !== tg.id)];
+        selectedItem = this.selectedContents.find(value => (value.contentId === tg.id) && (value.type === PackContentTypeEnum.GROUP)) as ContentCore;
+        if (selectedItem) {
+          selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
         } else {
           selectedContent = [
             ...this.selectedContents,

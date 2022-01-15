@@ -135,13 +135,14 @@ export class QuestionnaireSelectorComponent implements OnInit {
       case ContentSelectorOpType.SINGLE:
         return !!this.selectedQuestionnaires.find(value => value.id === q.id);
       case ContentSelectorOpType.OTHER:
-        return !!this.selectedContents.find(value => value.contentId === q.id);
+        return !!this.selectedContents.find(value => (value.contentId === q.id) && (value.type === PackContentTypeEnum.QUESTIONNAIRE));
     }
   }
 
   addToList(q: QuestionnaireExtended): void {
     let selectedContent: (ContentCore | LessonCore)[] = [];
     let selectedQuestionnaires: QuestionnaireExtended[] = [];
+    let selectedItem : ContentCore;
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:
         if (!this.selectedQuestionnaires.find(value => value.id === q.id)) {
@@ -159,8 +160,9 @@ export class QuestionnaireSelectorComponent implements OnInit {
         });
         break;
       case ContentSelectorOpType.OTHER:
-        if (this.selectedContents.find(value => (value.contentId === q.id) && (value.type === PackContentTypeEnum.QUESTIONNAIRE))) {
-          selectedContent = [...this.selectedContents.filter(t => t.contentId !== q.id)];
+        selectedItem = this.selectedContents.find(value => (value.contentId === q.id) && (value.type === PackContentTypeEnum.QUESTIONNAIRE)) as ContentCore;
+        if (selectedItem) {
+          selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
         } else {
           selectedContent = [
             ...this.selectedContents,

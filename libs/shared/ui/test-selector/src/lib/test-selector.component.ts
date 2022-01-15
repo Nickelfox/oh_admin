@@ -191,13 +191,14 @@ export class TestSelectorComponent implements OnInit {
       case ContentSelectorOpType.SINGLE:
         return !!this.selectedTests.find(value => value.id === test.id);
       case ContentSelectorOpType.OTHER:
-        return !!this.selectedContents.find(value => value.contentId === test.id);
+        return !!this.selectedContents.find(value => (value.contentId === test.id) && (value.type === PackContentTypeEnum.SINGLE));
     }
   }
 
   addToList(test: Test): void {
     let selectedContent: (ContentCore | LessonCore)[] = [];
     let selectedTests: Test[] = [];
+    let selectedItem : ContentCore;
     switch (this.categoryData.type) {
       case ContentSelectorOpType.SINGLE:
         if (this.selectedTests.find(value => value.id === test.id)) {
@@ -215,8 +216,9 @@ export class TestSelectorComponent implements OnInit {
         });
         break;
       case ContentSelectorOpType.OTHER:
-        if (this.selectedContents.find(value => (value.contentId === test.id) && (value.type === PackContentTypeEnum.SINGLE))) {
-          selectedContent = [...this.selectedContents.filter(t => t.contentId !== test.id)];
+        selectedItem = this.selectedContents.find(value => (value.contentId === test.id) && (value.type === PackContentTypeEnum.SINGLE)) as ContentCore;
+        if (selectedItem) {
+          selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
         } else {
           selectedContent = [
             ...this.selectedContents,

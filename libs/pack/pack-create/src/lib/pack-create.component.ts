@@ -167,7 +167,7 @@ export class PackCreateComponent implements OnDestroy {
       selectedQuestionnaires: [],
       selectedTests: [],
       selectedTestGroups: [],
-      selectedLessons: [],
+      selectedLessons: []
     });
     this.store.patchState({
       selectedPack: undefined
@@ -305,17 +305,8 @@ export class PackCreateComponent implements OnDestroy {
       this.hotToastService.error(this.formValidationService.formSubmitError);
       return;
     }
-    const packObject: PackCore = {
-      ...this.packForm.value,
-      content: this.packForm.value.content.map(c => {
-        return {
-          ...c,
-          type: this.upperCasePipe.transform(c.type) as PackContentTypeEnum
-        };
-      })
-    };
     if (this.opType === OperationTypeEnum.CREATE) {
-      this.store.createPack$(packObject);
+      this.store.createPack$(this.packForm.value);
     } else if (this.opType === OperationTypeEnum.EDIT) {
       if (!this.packID) {
         this.hotToastService.error('Error occurred while submitting details');
@@ -323,13 +314,17 @@ export class PackCreateComponent implements OnDestroy {
       }
       this.store.updatePack$({
         id: this.packID,
-        pack: packObject
+        pack: this.packForm.value
       });
     }
   }
 
   selectedResource(i: number): Media | undefined {
-    return this.selectedPack?.imagesAndPdfs[i];
+    try {
+      return this.selectedPack?.imagesAndPdfs[i];
+    } catch {
+      return;
+    }
   }
 
   private populatePack(pack: Pack): void {
