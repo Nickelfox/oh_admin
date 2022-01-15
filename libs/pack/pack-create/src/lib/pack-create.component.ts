@@ -31,6 +31,10 @@ import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialo
 import { Validators } from '@angular/forms';
 import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
 import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+import {
+  QuestionnaireSelectorComponent,
+  QuestionnaireSelectorData
+} from '@hidden-innovation/shared/ui/questionnaire-selector';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -159,7 +163,11 @@ export class PackCreateComponent implements OnDestroy {
 
   restoreSelectedState(): void {
     this.uiStore.patchState({
-      selectedContent: []
+      selectedContent: [],
+      selectedQuestionnaires: [],
+      selectedTests: [],
+      selectedTestGroups: [],
+      selectedLessons: [],
     });
     this.store.patchState({
       selectedPack: undefined
@@ -224,6 +232,20 @@ export class PackCreateComponent implements OnDestroy {
       type: ContentSelectorOpType.OTHER
     };
     this.matDialog.open(TestGroupSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
+  }
+
+  openQuestionnaireSelector(): void {
+    const data: QuestionnaireSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(QuestionnaireSelectorComponent, {
       data,
       height: '100%',
       width: '100%',

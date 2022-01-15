@@ -51,7 +51,7 @@ export interface TestGroupSelectorData {
 })
 export class TestGroupSelectorComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'options'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'options', 'status'];
 
   testGroup: MatTableDataSource<TestGroup> = new MatTableDataSource<TestGroup>([]);
   noData?: Observable<boolean>;

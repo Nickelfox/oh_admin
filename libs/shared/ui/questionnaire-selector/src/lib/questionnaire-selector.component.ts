@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import {
   Questionnaire,
@@ -7,17 +14,28 @@ import {
   QuestionnaireStore
 } from '@hidden-innovation/questionnaire/data-access';
 import { PageEvent } from '@angular/material/paginator';
-import { GenericDialogPrompt, SortingEnum, StatusChipType, UserStatusEnum } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  PackContentTypeEnum,
+  SortingEnum,
+  StatusChipType,
+  UserStatusEnum
+} from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { Observable } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { differenceBy, isEqual } from 'lodash-es';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
 import { UiStore } from '@hidden-innovation/shared/store';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { HotToastService } from '@ngneat/hot-toast';
+import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
+
+export interface QuestionnaireSelectorData {
+  type: ContentSelectorOpType;
+}
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -30,9 +48,9 @@ import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialo
 export class QuestionnaireSelectorComponent implements OnInit {
 
   displayedColumns: string[] = ['select', 'id', 'name', 'date_added', 'questions', 'scoring', 'status'];
-  questionnaires: MatTableDataSource<Questionnaire> = new MatTableDataSource<Questionnaire>();
+  questionnaires: MatTableDataSource<QuestionnaireExtended> = new MatTableDataSource<QuestionnaireExtended>();
 
-  noData: Observable<boolean>;
+  noData?: Observable<boolean>;
 
   filters: FormGroup<QuestionnaireListingFilters> = new FormGroup<QuestionnaireListingFilters>({
     dateSort: new FormControl(SortingEnum.DESC),
@@ -55,27 +73,55 @@ export class QuestionnaireSelectorComponent implements OnInit {
   selectedQuestionnaires: QuestionnaireExtended[] = [];
   dummyQuestionnaires: QuestionnaireExtended[] = [];
 
-  initialised = false;
+  selectedContents: (ContentCore | LessonCore)[] = [];
+  dummyContents: (ContentCore | LessonCore)[] = [];
 
+  initialised = false;
+  isLoading = false;
 
   constructor(
     public matDialogRef: MatDialogRef<Questionnaire[]>,
     public constantDataService: ConstantDataService,
+    @Inject(MAT_DIALOG_DATA) public questionnaireData: QuestionnaireSelectorData,
     public store: QuestionnaireStore,
     private cdr: ChangeDetectorRef,
     private matDialog: MatDialog,
-    public uiStore: UiStore
+    public uiStore: UiStore,
+    private hotToastService: HotToastService
   ) {
+    if (!this.questionnaireData) {
+      this.hotToastService.error('Application Error! Category data needs to to sent before selecting any questionnaires');
+      this.matDialogRef.close();
+      return;
+    }
     this.noData = this.questionnaires.connect().pipe(map(data => data.length === 0));
-    this.uiStore.selectedQuestionnaires$.subscribe(tgs => {
-      this.selectedQuestionnaires = tgs;
-      this.dummyQuestionnaires = tgs;
+    this.uiStore.state$.subscribe(res => {
+      switch (this.questionnaireData.type) {
+        case ContentSelectorOpType.SINGLE:
+          this.selectedQuestionnaires = res.selectedQuestionnaires ?? [];
+          this.dummyQuestionnaires = res.selectedQuestionnaires ?? [];
+          break;
+        case ContentSelectorOpType.OTHER:
+          this.selectedContents = res.selectedContent ?? [];
+          this.dummyContents = res.selectedContent ?? [];
+          break;
+      }
     });
     if (!this.initialised) {
-      this.uiStore.patchState({
-        selectedQuestionnaires: this.selectedQuestionnaires
-      });
+      switch (this.questionnaireData.type) {
+        case ContentSelectorOpType.SINGLE:
+          this.uiStore.patchState({
+            selectedQuestionnaires: this.selectedQuestionnaires
+          });
+          break;
+        case ContentSelectorOpType.OTHER:
+          this.uiStore.patchState({
+            selectedContent: this.selectedContents
+          });
+          break;
+      }
       this.initialised = true;
+      this.cdr.markForCheck();
     }
     this.refreshList();
   }
@@ -85,19 +131,50 @@ export class QuestionnaireSelectorComponent implements OnInit {
   }
 
   isSelected(q: QuestionnaireExtended): boolean {
-    return !!this.selectedQuestionnaires.find(value => value.id === q.id);
+    switch (this.questionnaireData.type) {
+      case ContentSelectorOpType.SINGLE:
+        return !!this.selectedQuestionnaires.find(value => value.id === q.id);
+      case ContentSelectorOpType.OTHER:
+        return !!this.selectedContents.find(value => value.contentId === q.id);
+    }
   }
 
   addToList(q: QuestionnaireExtended): void {
-    if (!this.selectedQuestionnaires.find(value => value.id === q.id)) {
-      this.selectedQuestionnaires = [
-        ...this.selectedQuestionnaires,
-        q
-      ];
-    } else {
-      this.selectedQuestionnaires = [
-        ...this.selectedQuestionnaires.filter(t => t.id !== q.id)
-      ];
+    let selectedContent: (ContentCore | LessonCore)[] = [];
+    let selectedQuestionnaires: QuestionnaireExtended[] = [];
+    switch (this.questionnaireData.type) {
+      case ContentSelectorOpType.SINGLE:
+        if (!this.selectedQuestionnaires.find(value => value.id === q.id)) {
+          selectedQuestionnaires = [
+            ...this.selectedQuestionnaires,
+            q
+          ];
+        } else {
+          selectedQuestionnaires = [
+            ...this.selectedQuestionnaires.filter(t => t.id !== q.id)
+          ];
+        }
+        this.uiStore.patchState({
+          selectedQuestionnaires
+        });
+        break;
+      case ContentSelectorOpType.OTHER:
+        if (this.selectedContents.find(value => (value.contentId === q.id) && (value.type === PackContentTypeEnum.QUESTIONNAIRE))) {
+          selectedContent = [...this.selectedContents.filter(t => t.contentId !== q.id)];
+        } else {
+          selectedContent = [
+            ...this.selectedContents,
+            {
+              contentId: q.id,
+              type: PackContentTypeEnum.QUESTIONNAIRE,
+              name: q.name
+            } as ContentCore
+          ];
+        }
+        this.uiStore.patchState({
+          selectedContent
+        });
+        break;
     }
   }
 
@@ -122,7 +199,7 @@ export class QuestionnaireSelectorComponent implements OnInit {
   ngOnInit(): void {
     this.store.state$.subscribe(
       ({ questionnaires }) => {
-        this.questionnaires = new MatTableDataSource<Questionnaire>(questionnaires);
+        this.questionnaires = new MatTableDataSource<QuestionnaireExtended>(questionnaires);
         this.noData = this.questionnaires.connect().pipe(map(data => data.length === 0));
         if (!questionnaires?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
           this.resetPagination();
@@ -130,16 +207,24 @@ export class QuestionnaireSelectorComponent implements OnInit {
         this.cdr.markForCheck();
       }
     );
+    this.store.isLoading$.subscribe(loading => this.isLoading = loading);
     this.filters.valueChanges.pipe(
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
     ).subscribe();
+    this.updateSorting('nameSort');
+    this.updateSorting('nameSort');
   }
 
   onPaginateChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex + 1;
     this.pageSize = $event.pageSize;
     this.refreshList();
+  }
+
+
+  trackById(index: number, q: QuestionnaireExtended): number {
+    return q.id;
   }
 
   updateSorting(fieldName: 'dateSort' | 'nameSort'): void {
@@ -184,44 +269,35 @@ export class QuestionnaireSelectorComponent implements OnInit {
     }
   }
 
-  saveSelectedQuestionnaires(): void {
-    this.uiStore.patchState({
-      selectedQuestionnaires: [
-        ...this.selectedQuestionnaires
-      ]
-    });
-    this.matDialogRef.close();
-  }
-
-  closeDialog(): void {
-    const isDifferent = differenceBy(this.selectedQuestionnaires, [...this.dummyQuestionnaires], 'id');
-    if (isDifferent.length) {
-      const dialogData: GenericDialogPrompt = {
-        title: 'Review Changes',
-        desc: `You have made changes. Do you want to save them?`,
-        action: {
-          posTitle: 'Save',
-          negTitle: 'Discard',
-          type: 'mat-primary'
-        }
-      };
-      const dialogRef = this.matDialog.open(PromptDialogComponent, {
-        data: dialogData,
-        minWidth: '25rem'
-      });
-      dialogRef.afterClosed().subscribe((proceed: boolean) => {
-        if (proceed === true) {
-          this.saveSelectedQuestionnaires();
-        } else if (proceed === false) {
-          this.matDialogRef.close();
-        } else {
-          dialogRef.close();
-        }
-      });
-    } else {
-      this.matDialogRef.close();
-    }
-  }
+  // closeDialog(): void {
+  //   const isDifferent = differenceBy(this.selectedQuestionnaires, [...this.dummyQuestionnaires], 'id');
+  //   if (isDifferent.length) {
+  //     const dialogData: GenericDialogPrompt = {
+  //       title: 'Review Changes',
+  //       desc: `You have made changes. Do you want to save them?`,
+  //       action: {
+  //         posTitle: 'Save',
+  //         negTitle: 'Discard',
+  //         type: 'mat-primary'
+  //       }
+  //     };
+  //     const dialogRef = this.matDialog.open(PromptDialogComponent, {
+  //       data: dialogData,
+  //       minWidth: '25rem'
+  //     });
+  //     dialogRef.afterClosed().subscribe((proceed: boolean) => {
+  //       if (proceed === true) {
+  //         this.saveSelectedQuestionnaires();
+  //       } else if (proceed === false) {
+  //         this.matDialogRef.close();
+  //       } else {
+  //         dialogRef.close();
+  //       }
+  //     });
+  //   } else {
+  //     this.matDialogRef.close();
+  //   }
+  // }
 
 
 }
