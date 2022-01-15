@@ -204,8 +204,11 @@
               Add
             </button>
             <mat-menu #menuPack='matMenu'>
-              <button type='button' mat-menu-item (click)='openContentSelectorDialog()'>
-                <span>Content (Test/Test-Group/Questionnaire)</span>
+              <button type='button' mat-menu-item (click)='openTestSelector()'>
+                <span>Test Single</span>
+              </button>
+              <button type='button' mat-menu-item (click)='openTestGroupSelector()'>
+                <span>Test Group</span>
               </button>
               <button type='button' mat-menu-item (click)='openCreateLessonDialog()'>
                 <span>Lessons</span>

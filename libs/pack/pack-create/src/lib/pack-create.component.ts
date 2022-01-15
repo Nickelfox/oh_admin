@@ -18,13 +18,19 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { AspectRatio, Media } from '@hidden-innovation/media';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { GenericDialogPrompt, OperationTypeEnum, PackContentTypeEnum } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  GenericDialogPrompt,
+  OperationTypeEnum,
+  PackContentTypeEnum
+} from '@hidden-innovation/shared/models';
 import { ActivatedRoute } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ContentSelectorComponent } from '@hidden-innovation/shared/ui/content-selector';
 import { UpperCasePipe } from '@angular/common';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { Validators } from '@angular/forms';
+import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
+import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -194,28 +200,37 @@ export class PackCreateComponent implements OnDestroy {
     });
     dialogRef.afterClosed().subscribe((proceed: boolean) => {
       if (proceed) {
-        const selectedContent = this.selectedContents.find(value => value.contentId === content.contentId && value.type === content.type);
-        if (selectedContent) {
-          this.uiStore.patchState({
-            selectedContent: [
-              ...this.selectedContents.filter(c => c.contentId !== content.contentId || c.type !== content.type)
-            ]
-          });
-        }
+        this.uiStore.removeContent$(content);
       }
     });
   }
 
-  openContentSelectorDialog(): void {
-    this.matDialog.open(ContentSelectorComponent, {
+  openTestSelector(): void {
+    const catData: TestSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestSelectorComponent, {
+      data: catData,
       height: '100%',
       width: '100%',
       maxHeight: '100%',
       maxWidth: '100%',
       role: 'dialog'
     });
-    // testGroupDialog.afterClosed().subscribe((tgs: TestGroup[] | undefined) => {
-    // });
+  }
+
+  openTestGroupSelector(): void {
+    const data: TestGroupSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestGroupSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
   }
 
   openCreateLessonDialog(): void {
@@ -224,11 +239,10 @@ export class PackCreateComponent implements OnDestroy {
     });
     dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
       if (lesson) {
-        const newLesson: LessonCore = lesson as LessonCore;
         this.uiStore.patchState({
           selectedContent: [
             ...this.selectedContents,
-            newLesson
+            lesson as LessonCore
           ]
         });
       }
