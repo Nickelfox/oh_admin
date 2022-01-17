@@ -18,13 +18,23 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { AspectRatio, Media } from '@hidden-innovation/media';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { filter, switchMap, tap } from 'rxjs/operators';
-import { GenericDialogPrompt, OperationTypeEnum, PackContentTypeEnum } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  GenericDialogPrompt,
+  OperationTypeEnum,
+  PackContentTypeEnum
+} from '@hidden-innovation/shared/models';
 import { ActivatedRoute } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ContentSelectorComponent } from '@hidden-innovation/shared/ui/content-selector';
 import { UpperCasePipe } from '@angular/common';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { Validators } from '@angular/forms';
+import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
+import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+import {
+  QuestionnaireSelectorComponent,
+  QuestionnaireSelectorData
+} from '@hidden-innovation/shared/ui/questionnaire-selector';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -153,7 +163,11 @@ export class PackCreateComponent implements OnDestroy {
 
   restoreSelectedState(): void {
     this.uiStore.patchState({
-      selectedContent: []
+      selectedContent: [],
+      selectedQuestionnaires: [],
+      selectedTests: [],
+      selectedTestGroups: [],
+      selectedLessons: []
     });
     this.store.patchState({
       selectedPack: undefined
@@ -194,28 +208,51 @@ export class PackCreateComponent implements OnDestroy {
     });
     dialogRef.afterClosed().subscribe((proceed: boolean) => {
       if (proceed) {
-        const selectedContent = this.selectedContents.find(value => value.contentId === content.contentId && value.type === content.type);
-        if (selectedContent) {
-          this.uiStore.patchState({
-            selectedContent: [
-              ...this.selectedContents.filter(c => c.contentId !== content.contentId || c.type !== content.type)
-            ]
-          });
-        }
+        this.uiStore.removeContent$(content);
       }
     });
   }
 
-  openContentSelectorDialog(): void {
-    this.matDialog.open(ContentSelectorComponent, {
+  openTestSelector(): void {
+    const catData: TestSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestSelectorComponent, {
+      data: catData,
       height: '100%',
       width: '100%',
       maxHeight: '100%',
       maxWidth: '100%',
       role: 'dialog'
     });
-    // testGroupDialog.afterClosed().subscribe((tgs: TestGroup[] | undefined) => {
-    // });
+  }
+
+  openTestGroupSelector(): void {
+    const data: TestGroupSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestGroupSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
+  }
+
+  openQuestionnaireSelector(): void {
+    const data: QuestionnaireSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(QuestionnaireSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
   }
 
   openCreateLessonDialog(): void {
@@ -224,11 +261,10 @@ export class PackCreateComponent implements OnDestroy {
     });
     dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
       if (lesson) {
-        const newLesson: LessonCore = lesson as LessonCore;
         this.uiStore.patchState({
           selectedContent: [
             ...this.selectedContents,
-            newLesson
+            lesson as LessonCore
           ]
         });
       }
@@ -269,17 +305,8 @@ export class PackCreateComponent implements OnDestroy {
       this.hotToastService.error(this.formValidationService.formSubmitError);
       return;
     }
-    const packObject: PackCore = {
-      ...this.packForm.value,
-      content: this.packForm.value.content.map(c => {
-        return {
-          ...c,
-          type: this.upperCasePipe.transform(c.type) as PackContentTypeEnum
-        };
-      })
-    };
     if (this.opType === OperationTypeEnum.CREATE) {
-      this.store.createPack$(packObject);
+      this.store.createPack$(this.packForm.value);
     } else if (this.opType === OperationTypeEnum.EDIT) {
       if (!this.packID) {
         this.hotToastService.error('Error occurred while submitting details');
@@ -287,13 +314,17 @@ export class PackCreateComponent implements OnDestroy {
       }
       this.store.updatePack$({
         id: this.packID,
-        pack: packObject
+        pack: this.packForm.value
       });
     }
   }
 
   selectedResource(i: number): Media | undefined {
-    return this.selectedPack?.imagesAndPdfs[i];
+    try {
+      return this.selectedPack?.imagesAndPdfs[i];
+    } catch {
+      return;
+    }
   }
 
   private populatePack(pack: Pack): void {

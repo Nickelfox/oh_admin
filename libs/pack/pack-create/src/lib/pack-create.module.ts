@@ -14,6 +14,9 @@ import { FormFieldErrorsModule } from '@hidden-innovation/shared/ui/form-field-e
 import { CommonFormFieldFileModule } from '@hidden-innovation/shared/ui/common-form-field-file';
 import { MediaModule } from '@hidden-innovation/media';
 import { ContentSelectorModule } from '@hidden-innovation/shared/ui/content-selector';
+import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
+import { TestGroupDataAccessModule } from '@hidden-innovation/test-group/data-access';
+import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
 
 @NgModule({
   imports: [
@@ -26,6 +29,9 @@ import { ContentSelectorModule } from '@hidden-innovation/shared/ui/content-sele
     MediaModule,
     TagsDataAccessModule,
     ContentSelectorModule,
+    TestDataAccessModule,
+    TestGroupDataAccessModule,
+    QuestionnaireDataAccessModule,
     UtilsModule,
     PackDataAccessModule,
     FormFieldErrorsModule,

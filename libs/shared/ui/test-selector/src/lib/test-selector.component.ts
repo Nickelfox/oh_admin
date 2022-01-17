@@ -11,8 +11,9 @@ import { Test, TestListingFilters, TestStore } from '@hidden-innovation/test/dat
 import { Observable } from 'rxjs';
 import { PageEvent } from '@angular/material/paginator';
 import {
+  ContentSelectorOpType,
   DifficultyEnum,
-  GenericDialogPrompt,
+  PackContentTypeEnum,
   PublishStatusEnum,
   SortingEnum,
   StatusChipType,
@@ -24,11 +25,16 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { differenceBy, isEqual } from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
+import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
+
+export interface TestSelectorData {
+  type: ContentSelectorOpType;
+  category?: TagCategoryEnum | 'NONE';
+}
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -40,10 +46,10 @@ import { HotToastService } from '@ngneat/hot-toast';
 })
 export class TestSelectorComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'difficulty', 'input'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'difficulty', 'input', 'status'];
   tests: MatTableDataSource<Test> = new MatTableDataSource<Test>();
 
-  noData: Observable<boolean>;
+  noData?: Observable<boolean>;
 
   // Paginator options
   pageIndex = this.constantDataService.PaginatorData.pageIndex;
@@ -62,43 +68,66 @@ export class TestSelectorComponent implements OnInit {
     nameSort: new FormControl({ value: undefined, disabled: true }),
     search: new FormControl(undefined),
     level: new FormControl(undefined),
-    published: new FormControl('TRUE')
+    published: new FormControl(undefined)
   });
 
   tagCategoryIte = Object.values(TagCategoryEnum);
   difficultyIte = Object.values(DifficultyEnum);
   testInputTypeIte = Object.values(TestInputTypeEnum);
+
   selectedTests: Test[] = [];
+  dummyTests: Test[] = [];
+
+  selectedContents: (ContentCore | LessonCore)[] = [];
+  dummyContents: (ContentCore | LessonCore)[] = [];
 
   initialised = false;
-  dummyTests: Test[] = [];
+  isLoading = false;
 
   constructor(
     public matDialogRef: MatDialogRef<Test[]>,
     private matDialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public category: TagCategoryEnum,
+    @Inject(MAT_DIALOG_DATA) public categoryData: TestSelectorData,
     public constantDataService: ConstantDataService,
     public store: TestStore,
     private cdr: ChangeDetectorRef,
     public uiStore: UiStore,
-    private hotToastService: HotToastService,
+    private hotToastService: HotToastService
   ) {
-    if(!this.category) {
-      this.hotToastService.error('Application Error! Category needs to be selected before selecting any tests');
+    if (this.categoryData === undefined || this.categoryData === null) {
+      this.hotToastService.error('Application Error! Category data needs to to sent before selecting any tests');
       this.matDialogRef.close();
+      return;
     }
     this.noData = this.tests.connect().pipe(map(data => data.length === 0));
-    this.uiStore.selectedTests$.subscribe(tests => {
-      this.selectedTests = tests;
-      this.dummyTests = tests;
+    this.uiStore.state$.subscribe((res) => {
+      switch (this.categoryData.type) {
+        case ContentSelectorOpType.SINGLE:
+          this.selectedTests = res.selectedTests ?? [];
+          this.dummyTests = res.selectedTests ?? [];
+          break;
+        case ContentSelectorOpType.OTHER:
+          this.selectedContents = res.selectedContent ?? [];
+          this.dummyContents = res.selectedContent ?? [];
+          break;
+      }
     });
     if (!this.initialised) {
-      this.uiStore.patchState({
-        selectedTests: this.selectedTests
-      });
+      switch (this.categoryData.type) {
+        case ContentSelectorOpType.SINGLE:
+          this.uiStore.patchState({
+            selectedTests: this.selectedTests
+          });
+          break;
+        case ContentSelectorOpType.OTHER:
+          this.uiStore.patchState({
+            selectedContent: this.selectedContents
+          });
+          break;
+      }
       this.initialised = true;
+      this.cdr.markForCheck();
     }
-
     this.refreshList();
   }
 
@@ -112,12 +141,13 @@ export class TestSelectorComponent implements OnInit {
   }
 
   refreshList(): void {
+    const category = this.categoryData?.category ? [this.categoryData?.category] : [];
     const { type, nameSort, dateSort, search, published, level } = this.filters.value;
     this.store.getTests$({
       page: this.pageIndex,
       limit: this.pageSize,
       type,
-      category: this.category ? [this.category] : [],
+      category: category,
       dateSort,
       search,
       published,
@@ -137,6 +167,7 @@ export class TestSelectorComponent implements OnInit {
         this.cdr.markForCheck();
       }
     );
+    this.store.isLoading$.subscribe(loading => this.isLoading = loading);
     this.filters.valueChanges.pipe(
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
@@ -156,25 +187,57 @@ export class TestSelectorComponent implements OnInit {
   }
 
   isSelected(test: Test): boolean {
-    return !!this.selectedTests.find(value => value.id === test.id);
+    switch (this.categoryData.type) {
+      case ContentSelectorOpType.SINGLE:
+        return !!this.selectedTests.find(value => value.id === test.id);
+      case ContentSelectorOpType.OTHER:
+        return !!this.selectedContents.find(value => (value.contentId === test.id) && (value.type === PackContentTypeEnum.SINGLE));
+    }
   }
 
   addToList(test: Test): void {
-    if (!this.selectedTests.find(value => value.id === test.id)) {
-      this.selectedTests = [
-        ...this.selectedTests,
-        test
-      ];
-    } else {
-      this.selectedTests = [
-        ...this.selectedTests.filter(t => t.id !== test.id)
-      ];
+    let selectedContent: (ContentCore | LessonCore)[] = [];
+    let selectedTests: Test[] = [];
+    let selectedItem : ContentCore;
+    switch (this.categoryData.type) {
+      case ContentSelectorOpType.SINGLE:
+        if (this.selectedTests.find(value => value.id === test.id)) {
+          selectedTests = [
+            ...this.selectedTests.filter(t => t.id !== test.id)
+          ];
+        } else {
+          selectedTests = [
+            ...this.selectedTests,
+            test
+          ];
+        }
+        this.uiStore.patchState({
+          selectedTests
+        });
+        break;
+      case ContentSelectorOpType.OTHER:
+        selectedItem = this.selectedContents.find(value => (value.contentId === test.id) && (value.type === PackContentTypeEnum.SINGLE)) as ContentCore;
+        if (selectedItem) {
+          selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
+        } else {
+          selectedContent = [
+            ...this.selectedContents,
+            {
+              contentId: test.id,
+              type: PackContentTypeEnum.SINGLE,
+              name: test.name
+            } as ContentCore
+          ];
+        }
+        this.uiStore.patchState({
+          selectedContent
+        });
+        break;
     }
   }
 
   updateSorting(fieldName: 'type' | 'category' | 'dateSort' | 'nameSort'): void {
     const { nameSort, dateSort } = this.filters.controls;
-
     const updateSortingCtrl = (ctrl: FormControl) => {
       if (ctrl.disabled) {
         ctrl.setValue(this.sortingEnum.DESC);
@@ -250,42 +313,33 @@ export class TestSelectorComponent implements OnInit {
     }
   }
 
-  saveSelectedTests(): void {
-    this.uiStore.patchState({
-      selectedTests: [
-        ...this.selectedTests
-      ]
-    });
-    this.matDialogRef.close(this.selectedTests);
-  }
-
-  closeDialog(): void {
-    const isDifferent = differenceBy(this.selectedTests, [...this.dummyTests], 'id');
-    if (isDifferent.length) {
-      const dialogData: GenericDialogPrompt = {
-        title: 'Review Changes',
-        desc: `You have made changes. Do you want to save them?`,
-        action: {
-          posTitle: 'Save',
-          negTitle: 'Discard',
-          type: 'mat-primary'
-        }
-      };
-      const dialogRef = this.matDialog.open(PromptDialogComponent, {
-        data: dialogData,
-        minWidth: '25rem'
-      });
-      dialogRef.afterClosed().subscribe((proceed: boolean) => {
-        if (proceed === true) {
-          this.saveSelectedTests();
-        } else if (proceed === false) {
-          this.matDialogRef.close();
-        } else {
-          dialogRef.close();
-        }
-      });
-    } else {
-      this.matDialogRef.close();
-    }
-  }
+  // closeDialog(): void {
+  //   const isDifferent = differenceBy(this.selectedTests, [...this.dummyTests], 'id');
+  //   if (isDifferent.length) {
+  //     const dialogData: GenericDialogPrompt = {
+  //       title: 'Review Changes',
+  //       desc: `You have made changes. Do you want to save them?`,
+  //       action: {
+  //         posTitle: 'Save',
+  //         negTitle: 'Discard',
+  //         type: 'mat-primary'
+  //       }
+  //     };
+  //     const dialogRef = this.matDialog.open(PromptDialogComponent, {
+  //       data: dialogData,
+  //       minWidth: '25rem'
+  //     });
+  //     dialogRef.afterClosed().subscribe((proceed: boolean) => {
+  //       if (proceed === true) {
+  //         this.saveSelectedTests();
+  //       } else if (proceed === false) {
+  //         this.matDialogRef.close();
+  //       } else {
+  //         dialogRef.close();
+  //       }
+  //     });
+  //   } else {
+  //     this.matDialogRef.close();
+  //   }
+  // }
 }

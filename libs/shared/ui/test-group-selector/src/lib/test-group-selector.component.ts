@@ -1,7 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { SelectionModel } from '@angular/cdk/collections';
@@ -12,8 +19,9 @@ import {
   TestGroupStore
 } from '@hidden-innovation/test-group/data-access';
 import {
+  ContentSelectorOpType,
   DifficultyEnum,
-  GenericDialogPrompt,
+  PackContentTypeEnum,
   PublishStatusEnum,
   SortingEnum,
   StatusChipType,
@@ -22,11 +30,18 @@ import {
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { differenceBy, isEqual } from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { MatSelectionListChange } from '@angular/material/list';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { HotToastService } from '@ngneat/hot-toast';
+import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
 
+export interface TestGroupSelectorData {
+  type: ContentSelectorOpType;
+}
+
+@UntilDestroy({ checkProperties: true })
 @Component({
   selector: 'hidden-innovation-test-group-selector',
   templateUrl: './test-group-selector.component.html',
@@ -36,10 +51,10 @@ import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialo
 })
 export class TestGroupSelectorComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'options'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'category', 'options', 'status'];
 
   testGroup: MatTableDataSource<TestGroup> = new MatTableDataSource<TestGroup>([]);
-  noData: Observable<boolean>;
+  noData?: Observable<boolean>;
 
   selection = new SelectionModel<TestGroupCore>(true, []);
 
@@ -66,28 +81,57 @@ export class TestGroupSelectorComponent implements OnInit {
 
 
   selectedTestGroups: TestGroup[] = [];
-  dummyTests: TestGroup[] = [];
+  dummyTestGroups: TestGroup[] = [];
+  selectedContents: (ContentCore | LessonCore)[] = [];
+  dummyContents: (ContentCore | LessonCore)[] = [];
 
   initialised = false;
+  isLoading = false;
 
   constructor(
     public constantDataService: ConstantDataService,
     public matDialogRef: MatDialogRef<TestGroup[]>,
+    @Inject(MAT_DIALOG_DATA) public data: TestGroupSelectorData,
     public store: TestGroupStore,
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
-    public uiStore: UiStore
+    public uiStore: UiStore,
+    private hotToastService: HotToastService
   ) {
+    if (!this.data) {
+      this.hotToastService.error('Application Error! Type data needs to to sent before selecting any test group');
+      this.matDialogRef.close();
+      return;
+    }
     this.noData = this.testGroup.connect().pipe(map(data => data.length === 0));
-    this.uiStore.selectedTestGroups$.subscribe(tgs => {
-      this.selectedTestGroups = tgs;
-      this.dummyTests = tgs;
+    this.uiStore.state$.subscribe(res => {
+      const { selectedTestGroups } = res;
+      switch (this.data.type) {
+        case ContentSelectorOpType.SINGLE:
+          this.selectedTestGroups = selectedTestGroups ?? [];
+          this.dummyTestGroups = selectedTestGroups ?? [];
+          break;
+        case ContentSelectorOpType.OTHER:
+          this.selectedContents = res.selectedContent ?? [];
+          this.dummyContents = res.selectedContent ?? [];
+          break;
+      }
     });
     if (!this.initialised) {
-      this.uiStore.patchState({
-        selectedTestGroups: this.selectedTestGroups
-      });
+      switch (this.data.type) {
+        case ContentSelectorOpType.SINGLE:
+          this.uiStore.patchState({
+            selectedTestGroups: this.selectedTestGroups
+          });
+          break;
+        case ContentSelectorOpType.OTHER:
+          this.uiStore.patchState({
+            selectedContent: this.selectedContents
+          });
+          break;
+      }
       this.initialised = true;
+      this.cdr.markForCheck();
     }
     this.refreshList();
   }
@@ -112,6 +156,7 @@ export class TestGroupSelectorComponent implements OnInit {
         this.cdr.markForCheck();
       }
     );
+    this.store.isLoading$.subscribe(loading => this.isLoading = loading);
     this.filters.valueChanges.pipe(
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
@@ -140,19 +185,52 @@ export class TestGroupSelectorComponent implements OnInit {
   }
 
   isSelected(tg: TestGroup): boolean {
-    return !!this.selectedTestGroups.find(value => value.id === tg.id);
+    switch (this.data.type) {
+      case ContentSelectorOpType.SINGLE:
+        return !!this.selectedTestGroups.find(value => value.id === tg.id);
+      case ContentSelectorOpType.OTHER:
+        return !!this.selectedContents.find(value => (value.contentId === tg.id) && (value.type === PackContentTypeEnum.GROUP));
+    }
   }
 
   addToList(tg: TestGroup): void {
-    if (!this.selectedTestGroups.find(value => value.id === tg.id)) {
-      this.selectedTestGroups = [
-        ...this.selectedTestGroups,
-        tg
-      ];
-    } else {
-      this.selectedTestGroups = [
-        ...this.selectedTestGroups.filter(t => t.id !== tg.id)
-      ];
+    let selectedContent: (ContentCore | LessonCore)[] = [];
+    let selectedTestGroups: TestGroup[] = [];
+    let selectedItem : ContentCore;
+    switch (this.data.type) {
+      case ContentSelectorOpType.SINGLE:
+        if (!this.selectedTestGroups.find(value => value.id === tg.id)) {
+          selectedTestGroups = [
+            ...this.selectedTestGroups,
+            tg
+          ];
+        } else {
+          selectedTestGroups = [
+            ...this.selectedTestGroups.filter(t => t.id !== tg.id)
+          ];
+        }
+        this.uiStore.patchState({
+          selectedTestGroups
+        });
+        break;
+      case ContentSelectorOpType.OTHER:
+        selectedItem = this.selectedContents.find(value => (value.contentId === tg.id) && (value.type === PackContentTypeEnum.GROUP)) as ContentCore;
+        if (selectedItem) {
+          selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
+        } else {
+          selectedContent = [
+            ...this.selectedContents,
+            {
+              contentId: tg.id,
+              type: PackContentTypeEnum.GROUP,
+              name: tg.name
+            } as ContentCore
+          ];
+        }
+        this.uiStore.patchState({
+          selectedContent
+        });
+        break;
     }
   }
 
@@ -210,49 +288,40 @@ export class TestGroupSelectorComponent implements OnInit {
     }
   }
 
-  saveSelectedTestgroups(): void {
-    this.uiStore.patchState({
-      selectedTestGroups: [
-        ...this.selectedTestGroups
-      ]
-    });
-    this.matDialogRef.close(this.selectedTestGroups);
-  }
-
   onPaginateChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex + 1;
     this.pageSize = $event.pageSize;
     this.refreshList();
   }
 
-  closeDialog(): void {
-    const isDifferent = differenceBy(this.selectedTestGroups, [...this.dummyTests], 'id');
-    if (isDifferent.length) {
-      const dialogData: GenericDialogPrompt = {
-        title: 'Review Changes',
-        desc: `You have made changes. Do you want to save them?`,
-        action: {
-          posTitle: 'Save',
-          negTitle: 'Discard',
-          type: 'mat-primary'
-        }
-      };
-      const dialogRef = this.matDialog.open(PromptDialogComponent, {
-        data: dialogData,
-        minWidth: '25rem'
-      });
-      dialogRef.afterClosed().subscribe((proceed: boolean) => {
-        if (proceed === true) {
-          this.saveSelectedTestgroups();
-        } else if (proceed === false) {
-          this.matDialogRef.close();
-        } else {
-          dialogRef.close();
-        }
-      });
-    } else {
-      this.matDialogRef.close();
-    }
-  }
+  // closeDialog(): void {
+  //   const isDifferent = differenceBy(this.selectedTestGroups, [...this.dummyTestGroups], 'id');
+  //   if (isDifferent.length) {
+  //     const dialogData: GenericDialogPrompt = {
+  //       title: 'Review Changes',
+  //       desc: `You have made changes. Do you want to save them?`,
+  //       action: {
+  //         posTitle: 'Save',
+  //         negTitle: 'Discard',
+  //         type: 'mat-primary'
+  //       }
+  //     };
+  //     const dialogRef = this.matDialog.open(PromptDialogComponent, {
+  //       data: dialogData,
+  //       minWidth: '25rem'
+  //     });
+  //     dialogRef.afterClosed().subscribe((proceed: boolean) => {
+  //       if (proceed === true) {
+  //         this.saveSelectedTestgroups();
+  //       } else if (proceed === false) {
+  //         this.matDialogRef.close();
+  //       } else {
+  //         dialogRef.close();
+  //       }
+  //     });
+  //   } else {
+  //     this.matDialogRef.close();
+  //   }
+  // }
 
 }
