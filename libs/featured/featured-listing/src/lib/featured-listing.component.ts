@@ -133,6 +133,7 @@ export class FeaturedListingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.store.featuredList$.subscribe(
       (res) => {
         res.forEach(feature => this.localData = this.localData.map(data => {

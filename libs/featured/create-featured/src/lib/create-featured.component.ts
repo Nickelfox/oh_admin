@@ -1,14 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FeaturedCore, FeaturedListingFilters, FeaturedStore } from '@hidden-innovation/featured/data-access';
+import {
+  Featured,
+  FeaturedCore,
+  FeaturedListingFilters,
+  FeaturedResponse, FeaturedResponseData,
+  FeaturedStore
+} from '@hidden-innovation/featured/data-access';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
 import { TestStore } from '@hidden-innovation/test/data-access';
-import {FeaturedNameEnum, OperationTypeEnum, SortingEnum} from '@hidden-innovation/shared/models';
+import {FeaturedNameEnum, OperationTypeEnum, QuestionTypeEnum, SortingEnum} from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {filter, switchMap, tap} from "rxjs/operators";
 import {HotToastService} from "@ngneat/hot-toast";
+import {QuestionExtended} from "@hidden-innovation/questionnaire/data-access";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -37,27 +44,33 @@ export class CreateFeaturedComponent implements OnInit {
     public route: ActivatedRoute
   ) {
     this.route.data.pipe(
-      filter(data => data?.type !== undefined),
-      tap((data) => {
-        this.opType = data.type as OperationTypeEnum;
-      }),
       switchMap(_ => this.route.params)
     ).subscribe((res) => {
-      if (this.opType === OperationTypeEnum.EDIT) {
         this.featuredID = res['id'];
         if (!this.featuredID) {
           this.hotToastService.error('Error occurred while fetching details');
           return;
         }
+
         this.store.getFeaturedDetails$({
           id: this.featuredID
         });
-      }
     })
   }
 
+
+  parseFeatured(featured: FeaturedCore[]): FeaturedCore[] {
+    return featured ? featured.map(feature => {
+      return {
+        ...feature,
+      };
+    }) : [];
+  }
+
+
+
   ngOnInit(): void {
-    this.store.selectedFeatured$.subscribe((d) => console.log(d));
+
   }
 
 
