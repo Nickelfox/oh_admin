@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
 export class FeaturedListingComponent implements OnInit {
   _dummyFeatured: FeaturedLocalState[] = [
     {
+
       name: FeaturedNameEnum.SPOTLIGHT,
       location: 'HOME',
       items: 0,
@@ -100,6 +101,8 @@ export class FeaturedListingComponent implements OnInit {
 
   set localData(featured: FeaturedLocalState[]) {
     this._dummyFeatured = [...featured];
+    this.featured = new MatTableDataSource<FeaturedLocalState>(this.localData);
+
   }
 
   refreshList(): void {
@@ -133,21 +136,26 @@ export class FeaturedListingComponent implements OnInit {
     this.store.featuredList$.subscribe(
       (res) => {
         res.forEach(feature => this.localData = this.localData.map(data => {
+
               if ((data.name === FeaturedNameEnum[feature.name]) && (feature.name !== 'PACKS')) {
+
                 return {
                   ...data,
+                  id: feature.id,
                   items: this.getItemsCount(feature),
                   updated_at: feature.updatedAt
                 };
-              } else {
+              }
+
+              else {
                 return {
                   ...data,
+                  id: TagCategoryEnum[feature.location as TagCategoryEnum] ? feature.id : null,
                   items: this.getItemsCount(feature),
                   updated_at: TagCategoryEnum[feature.location as TagCategoryEnum] ? feature.updatedAt : ''
-                };
-              }
-            }
-          )
+                };}
+
+            })
         );
         this.cdr.markForCheck();
       }

@@ -17,6 +17,7 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 })
 export class CreateFeaturedComponent implements OnInit {
 
+  readonly featuredID : number = 13 ;
   name = '';
   featuredType = FeaturedNameEnum;
   selection = new SelectionModel<FeaturedCore>(true, []);
@@ -24,7 +25,7 @@ export class CreateFeaturedComponent implements OnInit {
     dateSort: new FormControl(SortingEnum.DESC)
   });
 
-  readonly featuredID?: number;
+  // readonly featuredID?: number;
 
   constructor(
     private matDialog: MatDialog,
@@ -33,7 +34,7 @@ export class CreateFeaturedComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute
   ) {
-    if (!this.featuredID) return;
+    // if (!this.featuredID) return;
     this.store.getFeaturedDetails$({
       id: this.featuredID
     });
@@ -41,17 +42,9 @@ export class CreateFeaturedComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.selectedFeatured$.subscribe((d) => console.log(d));
-
-    // console.log( this.route.snapshot.paramMap.get('name'));
-    if (this.router.url.includes(FeaturedNameEnum.SPOTLIGHT)) {
-      this.name = FeaturedNameEnum.SPOTLIGHT;
-    } else if (this.router.url.includes(FeaturedNameEnum.FEATURED_PACKS)) {
-      this.name = FeaturedNameEnum.FEATURED_PACKS;
-    } else if (this.router.url.includes(FeaturedNameEnum.FEATURED_TESTS)) {
-      this.name = FeaturedNameEnum.FEATURED_TESTS;
-    }
-
   }
+
+
 
 
   openTestSelector(): void {

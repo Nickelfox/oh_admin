@@ -1,21 +1,8 @@
 <div class='p-4'>
   <div class='container-fluid p-0'>
-    <div class='row'>
-      <div class='col-3'>
-        <mat-form-field hidden class='w-100'>
-          <mat-label>Search</mat-label>
-          <input matInput>
-          <button mat-icon-button matSuffix *ngIf='false'>
-            <mat-icon style='font-size: 14px'>close</mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
+    <div class='row mb-3'>
       <div class='col d-flex align-items-center justify-content-end'>
         <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
-<!--        <button mat-flat-button color='primary' class='ml-2' [routerLink]='["/featured", "create"]'>-->
-<!--          <mat-icon class='mr-2'>add</mat-icon>-->
-<!--          {{"Add Featured"}}-->
-<!--        </button>-->
       </div>
     </div>
     <div class='row'>

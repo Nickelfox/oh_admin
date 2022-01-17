@@ -6,6 +6,7 @@ import { Media } from '@hidden-innovation/media';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
 
 export interface FeaturedLocalState {
+  id?: number | null;
   name: FeaturedNameEnum;
   location: 'HOME' | TagCategoryEnum;
   items: number;
