@@ -26,7 +26,7 @@ import {
 } from '@hidden-innovation/shared/models';
 import { ActivatedRoute } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
-import { UpperCasePipe } from '@angular/common';
+import { TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { Validators } from '@angular/forms';
 import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
@@ -99,6 +99,7 @@ export class PackCreateComponent implements OnDestroy {
     public store: PackStore,
     private fb: FormBuilder,
     public uiStore: UiStore,
+    private titleCasePipe: TitleCasePipe,
     private hotToastService: HotToastService,
     private route: ActivatedRoute,
     private upperCasePipe: UpperCasePipe
@@ -194,8 +195,8 @@ export class PackCreateComponent implements OnDestroy {
 
   deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
     const dialogData: GenericDialogPrompt = {
-      title: 'Remove Content?',
-      desc: `Are you sure you want to remove this Content from Pack?`,
+      title: `Remove ${content.type}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)} from Pack?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',

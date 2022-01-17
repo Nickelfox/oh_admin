@@ -76,7 +76,7 @@ export class TestGroupSelectorComponent implements OnInit {
     dateSort: new FormControl(SortingEnum.DESC),
     nameSort: new FormControl({ value: undefined, disabled: true }),
     search: new FormControl(undefined),
-    published: new FormControl('TRUE')
+    published: new FormControl(undefined)
   });
 
 

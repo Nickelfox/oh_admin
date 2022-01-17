@@ -60,6 +60,7 @@ export class TestSelectorComponent implements OnInit {
   statusChipType = StatusChipType;
   publishStatusEnum = PublishStatusEnum;
   sortingEnum = SortingEnum;
+  contentSelectorOpType = ContentSelectorOpType;
 
   filters: FormGroup<TestListingFilters> = new FormGroup<TestListingFilters>({
     type: new FormControl(undefined),
@@ -141,13 +142,13 @@ export class TestSelectorComponent implements OnInit {
   }
 
   refreshList(): void {
-    const category = this.categoryData?.category ? [this.categoryData?.category] : [];
-    const { type, nameSort, dateSort, search, published, level } = this.filters.value;
+    const { type, nameSort, dateSort, search, published, level, category } = this.filters.value;
+    const categoryData: (TagCategoryEnum | 'NONE')[] | undefined = this.categoryData.type === ContentSelectorOpType.SINGLE ? (this.categoryData.category ? [this.categoryData.category] : []) : category;
     this.store.getTests$({
       page: this.pageIndex,
       limit: this.pageSize,
       type,
-      category: category,
+      category: categoryData,
       dateSort,
       search,
       published,

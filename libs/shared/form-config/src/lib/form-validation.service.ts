@@ -5,6 +5,7 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DateTime } from 'luxon';
+import { PointTypeEnum } from '@hidden-innovation/shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -218,14 +219,27 @@ export class FormValidationService {
       }
       const low: FormControl = group.get('low') as FormControl;
       const high: FormControl = group.get('high') as FormControl;
-      if (low !== null && low !== undefined && high !== null && high !== undefined && low.value >= high.value) {
-        low?.setErrors({ highThan: true });
-        high?.setErrors({ lessThan: true });
-        return null;
+      const pointType: FormControl = group.get('pointType') as FormControl;
+      switch (pointType.value) {
+        case PointTypeEnum.HP:
+          if (low !== null && low !== undefined && high !== null && high !== undefined && low.value !== high.value) {
+            low?.setErrors({ notEqual: true });
+            high?.setErrors({ notEqual: true });
+            return null;
+          }
+          low?.removeError('notEqual');
+          high?.removeError('notEqual');
+          return null;
+        default:
+          if (low !== null && low !== undefined && high !== null && high !== undefined && low.value >= high.value) {
+            low?.setErrors({ highThan: true });
+            high?.setErrors({ lessThan: true });
+            return null;
+          }
+          low?.removeError('highThan');
+          high?.removeError('lessThan');
+          return null;
       }
-      low?.removeError('highThan');
-      high?.removeError('lessThan');
-      return null;
     };
   }
 
@@ -236,21 +250,42 @@ export class FormValidationService {
       }
       const low: FormControl = group.get('low') as FormControl<Date>;
       const high: FormControl = group.get('high') as FormControl<Date>;
-      if (low !== null && low !== undefined && high !== null && high !== undefined) {
-        const lowVal = DateTime.fromJSDate(low.value).toSeconds();
-        const highVal = DateTime.fromJSDate(high.value).toSeconds();
-        if (Math.round(lowVal) <= Math.round(highVal)) {
-          low?.setErrors({ highThan: true });
-          high?.setErrors({ lessThan: true });
+      const pointType: FormControl = group.get('pointType') as FormControl;
+      switch (pointType.value) {
+        case PointTypeEnum.HP:
+          if (low !== null && low !== undefined && high !== null && high !== undefined) {
+            const lowVal = DateTime.fromJSDate(low.value).toSeconds();
+            const highVal = DateTime.fromJSDate(high.value).toSeconds();
+            if (Math.round(lowVal) === Math.round(highVal)) {
+              low?.setErrors({ notEqual: true });
+              high?.setErrors({ notEqual: true });
+              return null;
+            }
+            low?.removeError('notEqual');
+            high?.removeError('notEqual');
+            return null;
+          }
+          low?.removeError('notEqual');
+          high?.removeError('notEqual');
           return null;
-        }
-        low?.removeError('highThan');
-        high?.removeError('lessThan');
-        return null;
+        default:
+          if (low !== null && low !== undefined && high !== null && high !== undefined) {
+            const lowVal = DateTime.fromJSDate(low.value).toSeconds();
+            const highVal = DateTime.fromJSDate(high.value).toSeconds();
+            if (Math.round(lowVal) <= Math.round(highVal)) {
+              low?.setErrors({ highThan: true });
+              high?.setErrors({ lessThan: true });
+              return null;
+            }
+            low?.removeError('highThan');
+            high?.removeError('lessThan');
+            return null;
+          }
+          low?.removeError('highThan');
+          high?.removeError('lessThan');
+          return null;
       }
-      low?.removeError('highThan');
-      high?.removeError('lessThan');
-      return null;
+
     };
   }
 }
