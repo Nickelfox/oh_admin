@@ -4,9 +4,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
 import { TestStore } from '@hidden-innovation/test/data-access';
-import { FeaturedNameEnum, SortingEnum } from '@hidden-innovation/shared/models';
+import {FeaturedNameEnum, OperationTypeEnum, SortingEnum} from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import {filter, switchMap, tap} from "rxjs/operators";
+import {HotToastService} from "@ngneat/hot-toast";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -17,27 +19,41 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 })
 export class CreateFeaturedComponent implements OnInit {
 
-  readonly featuredID : number = 13 ;
-  name = '';
+  featuredID? : number ;
+  opType?: OperationTypeEnum;
   featuredType = FeaturedNameEnum;
   selection = new SelectionModel<FeaturedCore>(true, []);
   filters: FormGroup<FeaturedListingFilters> = new FormGroup<FeaturedListingFilters>({
     dateSort: new FormControl(SortingEnum.DESC)
   });
 
-  // readonly featuredID?: number;
 
   constructor(
+    private hotToastService: HotToastService,
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
     public store: FeaturedStore,
     public router: Router,
     public route: ActivatedRoute
   ) {
-    // if (!this.featuredID) return;
-    this.store.getFeaturedDetails$({
-      id: this.featuredID
-    });
+    this.route.data.pipe(
+      filter(data => data?.type !== undefined),
+      tap((data) => {
+        this.opType = data.type as OperationTypeEnum;
+      }),
+      switchMap(_ => this.route.params)
+    ).subscribe((res) => {
+      if (this.opType === OperationTypeEnum.EDIT) {
+        this.featuredID = res['id'];
+        if (!this.featuredID) {
+          this.hotToastService.error('Error occurred while fetching details');
+          return;
+        }
+        this.store.getFeaturedDetails$({
+          id: this.featuredID
+        });
+      }
+    })
   }
 
   ngOnInit(): void {
