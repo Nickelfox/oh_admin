@@ -162,7 +162,8 @@ export class TestGroupCreateComponent implements OnDestroy {
 
   get isCategoryValid(): boolean {
     const { category } = this.testGroup.controls;
-    return category.valid && category.value !== 'NONE';
+    return category.valid;
+  // && category.value !== 'NONE'
   }
 
   categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
