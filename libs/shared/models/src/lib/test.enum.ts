@@ -20,6 +20,16 @@ export enum PointTypeEnum {
   HP = 'HP'
 }
 
+export enum PointTypeEnumNumber {
+  ZERO,
+  ONE,
+  TWO,
+  THREE,
+  FOUR,
+  FIVE,
+  HP
+}
+
 export enum RatioTestTypeEnum {
   WEIGHT = 'WEIGHT',
   DISTANCE_LENGTH = 'DISTANCE_LENGTH',

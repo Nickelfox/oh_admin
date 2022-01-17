@@ -55,7 +55,7 @@ export class QuestionnaireSelectorComponent implements OnInit {
   filters: FormGroup<QuestionnaireListingFilters> = new FormGroup<QuestionnaireListingFilters>({
     dateSort: new FormControl(SortingEnum.DESC),
     nameSort: new FormControl({ value: undefined, disabled: true }),
-    active: new FormControl({ value: undefined, disabled: true }),
+    active: new FormControl(undefined),
     scoring: new FormControl({ value: undefined, disabled: true }),
     search: new FormControl(undefined)
   });

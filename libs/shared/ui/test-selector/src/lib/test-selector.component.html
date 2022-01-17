@@ -1,7 +1,13 @@
 <div mat-dialog-title>
   <div class='d-flex align-items-center justify-content-between'>
     <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
-      ADD TEST OF TYPE - <b>{{categoryData ? (categoryData?.category | titlecase) : "--"}}</b></h4>
+      <ng-template [ngIf]='this.categoryData.type === contentSelectorOpType.SINGLE' [ngIfElse]='elseTitle'>
+        ADD TEST OF TYPE - <b>{{categoryData ? (categoryData?.category | titlecase) : "--"}}</b>
+      </ng-template>
+      <ng-template #elseTitle>
+        ADD TEST
+      </ng-template>
+    </h4>
     <div class='d-flex align-items-center'>
       <div class='d-flex align-items-center text-muted mt-1 mr-3'>
         <mat-icon class='text-success mr-2'>autorenew</mat-icon>
@@ -94,7 +100,7 @@
                   </span>
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
-                                  [disabled]='(store.isActing$ | async)'
+                                  [disabled]='(store.isActing$ | async) || this.categoryData.type === contentSelectorOpType.SINGLE'
                                   color='{{filters.controls.category?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
