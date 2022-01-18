@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { NavItem } from '@hidden-innovation/shared/models';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { Test } from '@hidden-innovation/test/data-access';
 import { Observable } from 'rxjs';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
@@ -18,7 +18,7 @@ export interface UiState {
   selectedTestGroups?: TestGroup[];
   selectedQuestionnaires?: QuestionnaireExtended[];
   selectedLessons?: Lesson[];
-  selectedContent?: ContentCore[] | LessonCore[];
+  selectedContent?: (ContentCore | LessonCore)[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -33,14 +33,22 @@ export class UiStore extends ComponentStore<UiState> {
   readonly questionnairesExists$: Observable<boolean> = this.select(state => !!state.selectedQuestionnaires?.length);
   readonly selectedLessons$: Observable<Lesson[]> = this.select(state => state.selectedLessons || []);
   readonly lessonsExists$: Observable<boolean> = this.select(state => !!state.selectedLessons?.length);
-  readonly selectedContent$: Observable<ContentCore[] | LessonCore[]> = this.select(state => state.selectedContent || []);
+  readonly selectedContent$: Observable<(ContentCore | LessonCore)[]> = this.select(state => state.selectedContent || []);
   readonly contentsExists$: Observable<boolean> = this.select(state => !!state.selectedContent?.length);
 
-  updateSelectedTest$ = this.effect<Test[]>(params$ =>
-    params$.pipe(
-      tap((selectedTests) => this.patchState({
-        selectedTests
-      }))
+  removeContent$ = this.effect<ContentCore | LessonCore>(origin$ =>
+    origin$.pipe(
+      filter(content => !!this.get().selectedContent?.find(value => value.contentId === content.contentId && value.type === content.type)),
+      tap((content) => {
+        const selectedContent = this.get().selectedContent?.find(value => value.contentId === content.contentId && value.type === content.type);
+        if (selectedContent) {
+          this.patchState({
+            selectedContent: [
+              ...this.get().selectedContent?.filter(c => c.contentId !== selectedContent.contentId || c.type !== selectedContent.type) ?? []
+            ]
+          });
+        }
+      })
     )
   );
 

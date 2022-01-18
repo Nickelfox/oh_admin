@@ -7,11 +7,13 @@ import {
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   DifficultyEnum,
   DistanceTypeEnum,
   OperationTypeEnum,
+  PointTypeEnum,
+  PointTypeEnumNumber,
   ProfileInputEnum,
   ProfileInputTypeEnum,
   ProfileInputTypeUnitEnum,
@@ -74,6 +76,10 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   profileInputTypeUnitIte = Object.values(ProfileInputTypeUnitEnum).map(value => value.toString());
 
   opType?: OperationTypeEnum;
+
+  pointTypeEnum = PointTypeEnum;
+  pointTypeEnumNumber = PointTypeEnumNumber;
+
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
@@ -291,32 +297,38 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       switch (type) {
         case TestInputTypeEnum.DISTANCE:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.DISTANCE) {
-            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             distanceUnit.setValue(this.selectedTest.distanceUnit);
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          resultExplanation.enable();
           distanceUnit.enable();
           break;
         case TestInputTypeEnum.CUSTOM_NUMERIC:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.CUSTOM_NUMERIC) {
-            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             customNumericLabel.setValue(this.selectedTest.customNumericLabel);
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          resultExplanation.enable();
           customNumericLabel.enable();
           break;
         case TestInputTypeEnum.WEIGHT:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.WEIGHT) {
-            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             weightUnit.setValue(this.selectedTest.weightUnit);
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          resultExplanation.enable();
           weightUnit.enable();
           break;
         case TestInputTypeEnum.ONE_RM:
@@ -340,30 +352,36 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.MULTIPLE_CHOICE) {
             this.utilities.buildMultiChoiceForm(this.selectedTest.multipleChoiceInputFields).map(fg => mCArray.push(fg));
             multipleChoiceQuestion.setValue(this.selectedTest.multipleChoiceQuestion);
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
             this.utilities.buildMultiChoiceForm().map(fg => mCArray.push(fg));
           }
           multipleChoiceQuestion.enable();
+          resultExplanation.enable();
           break;
         case TestInputTypeEnum.TIME:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.TIME) {
             this.utilities.buildTimeForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
             this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
           }
           inputFArray.addValidators([this.formValidationService.greaterTimeValidator()]);
+          resultExplanation.enable();
           break;
         case TestInputTypeEnum.REPS:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.REPS) {
-            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          resultExplanation.enable();
           break;
         case TestInputTypeEnum.RATIO:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.RATIO) {
-            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             const ratioTypeFormGroup: FormGroup<RatioSubObject> = this.testGroup.controls.ratioVariable as FormGroup<RatioSubObject>;
             ratioTypeFormGroup.patchValue({
               xLabel: this.selectedTest.ratioVariable?.xLabel,
@@ -377,26 +395,30 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
               xType: this.selectedTest.ratioVariable?.xType,
               yType: this.selectedTest.ratioVariable?.yType
             });
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
           ratioGroup.enable();
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          resultExplanation.enable();
           break;
         case TestInputTypeEnum.RELATIVE_PROFILE:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.RELATIVE_PROFILE) {
-            this.utilities.buildDistanceOrWeightOrRepsForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
             relativeGroup.patchValue({
               unit: this.selectedTest.relativeProfile?.unit,
               label: this.selectedTest.relativeProfile?.label,
               inputType: this.selectedTest.relativeProfile?.inputType,
               profileInput: this.selectedTest.relativeProfile?.profileInput
             });
+            resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildDistanceOrWeightOrRepsForm().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
           relativeGroup.enable();
           inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          resultExplanation.enable();
           break;
       }
     });
@@ -581,6 +603,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   @HostListener('window:beforeunload')
   canDeactivate(): boolean {
     return this.testGroup.dirty ? this.loaded : true;
+  }
+
+  updateHPHighValue($event: Event, highCtrl: AbstractControl<OneRMField['high'] | InputField['high']>): void {
+    const inputElement: HTMLInputElement = $event?.srcElement as HTMLInputElement;
+    if(typeof inputElement?.valueAsNumber === 'number') {
+      highCtrl.setValue(inputElement.valueAsNumber);
+    } else {
+      highCtrl.setValue(undefined);
+    }
   }
 
   private populateTest(test: Test): void {

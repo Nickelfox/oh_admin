@@ -120,7 +120,7 @@ export interface CreateTestResponse extends CustomApiResponse {
 export interface TestListingFilters {
   dateSort: SortingEnum | undefined;
   nameSort: SortingEnum | undefined;
-  category: TagCategoryEnum[] | undefined;
+  category: (TagCategoryEnum | 'NONE')[] | undefined;
   published: 'TRUE' | 'FALSE' | undefined;
   search: string | undefined;
   type: TestInputTypeEnum[] | undefined;
