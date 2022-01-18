@@ -88,13 +88,6 @@ export class CreateFeaturedComponent implements OnInit {
   }
 
 
-  // parseFeatured(featured: FeaturedCore[]): FeaturedCore[] {
-  //   return featured ? featured.map(feature => {
-  //     return {
-  //       ...feature,
-  //     };
-  //   }) : [];
-  // }
 
 
   populateFeatured(feature:Featured):void{
