@@ -1,4 +1,4 @@
-<div class='p-4'>
+<form class='p-4' [formGroup]='featuredGroup'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -20,6 +20,7 @@
   <div class='container-fluid p-0'>
     <div class='row'>
       <ng-template [ngIf]='store.selectedFeatured$ | async' let-feature>
+        <!--        Feature Packs-->
         <ng-template [ngIf]='feature.name === featuredType.FEATURED_PACKS'>
           <div class='col-lg-6 col-12'>
             <mat-card>
@@ -33,18 +34,18 @@
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Location</mat-label>
-                        <input matInput autocomplete='no' type='text'>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.LOCATION | titlecase'
+                        controlPath='location'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Rail Name</mat-label>
-                        <input matInput autocomplete='no' type='text'>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.RAIL_NAME | titlecase'
+                        controlPath='name'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                 </div>
@@ -52,6 +53,8 @@
             </mat-card>
           </div>
         </ng-template>
+
+        <!--        Feature Test-->
         <ng-template [ngIf]='feature.name === featuredType.FEATURED_TESTS'>
           <div class='col-lg-6 col-12'>
             <mat-card>
@@ -65,10 +68,10 @@
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Location</mat-label>
-                        <input matInput autocomplete='no' type='text' disabled>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.LOCATION | titlecase'
+                        controlPath='location'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                 </div>
@@ -76,9 +79,10 @@
             </mat-card>
           </div>
         </ng-template>
+
+        <!--        Spotlight-->
         <ng-template [ngIf]='feature.name === featuredType.SPOTLIGHT'>
           <div class='col-lg-6 col-12'>
-
             <mat-card>
               <mat-card-content>
                 <div class='container-fluid p-0 '>
@@ -90,42 +94,42 @@
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Location</mat-label>
-                        <input matInput autocomplete='no' type='text'>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.LOCATION | titlecase'
+                        controlPath='location'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Rail Name</mat-label>
-                        <input matInput autocomplete='no' type='text'>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.RAIL_NAME | titlecase'
+                        controlPath='name'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Heading</mat-label>
-                        <input matInput autocomplete='no' type='text'>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.HEADING | titlecase'
+                        controlPath='heading'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Subheading</mat-label>
-                        <input matInput autocomplete='no' type='text'>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.SUB_HEADING | titlecase'
+                        controlPath='subHeading'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                   <div class='row mb-2'>
                     <div class='col-12'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Button Text</mat-label>
-                        <input matInput autocomplete='no' type='text'>
-                      </mat-form-field>
+                      <hidden-innovation-common-form-field
+                        [label]='constantDataService.FIELD_NAME.BOTTOM_TEXT | titlecase'
+                        controlPath='bottomText'
+                      ></hidden-innovation-common-form-field>
                     </div>
                   </div>
                 </div>
@@ -139,11 +143,14 @@
                   <div class='row mb-3'>
                     <div class='col-12'>
                       <p class='text-muted mb-2'>Poster</p>
-                      <button
-                        mat-stroked-button
-                        color='primary' type='submit'>
-                        Upload
-                      </button>
+                      <hidden-innovation-common-form-field-image
+                        controlPath='posterId'
+                        [setImageData]='selectedFeatured?.poster'
+                        [aspectRatio]='aspectRatio.CUBE'
+                        [parentCtrl]='featuredGroup.controls.posterId'
+                        (emitImageCtrlData)='featuredGroup.controls.posterId?.setValue($event)'
+                        (emitRemoveImage)='featuredGroup.controls.posterId?.reset($event)'
+                      ></hidden-innovation-common-form-field-image>
                     </div>
                   </div>
                 </div>
@@ -219,4 +226,4 @@
     </div>
   </div>
 
-
+</form>

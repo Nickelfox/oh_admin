@@ -6,6 +6,7 @@ import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { RouterModule } from '@angular/router';
 import {FeaturedDataAccessModule} from "@hidden-innovation/featured/data-access";
+import {CommonFormFieldImageModule} from "@hidden-innovation/shared/ui/common-form-field-image";
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import {FeaturedDataAccessModule} from "@hidden-innovation/featured/data-access"
     FeaturedDataAccessModule,
     CommonFormFieldModule,
     UtilsModule,
+    CommonFormFieldImageModule,
     RouterModule.forChild([
       {
         path: '',

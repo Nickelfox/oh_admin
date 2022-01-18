@@ -23,8 +23,8 @@ export interface FeaturedContent {
 }
 
 export interface FeaturedCore {
-  name: FeaturedNameEnum;
-  location: 'HOME' | TagCategoryEnum;
+  name: FeaturedNameEnum ;
+  location: 'HOME' | TagCategoryEnum ;
   heading: string | undefined;
   subHeading: string | undefined;
   bottomText: string | undefined;
