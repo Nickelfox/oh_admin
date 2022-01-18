@@ -3,7 +3,7 @@ import {Featured, FeaturedCore, FeaturedListingFilters, FeaturedStore} from '@hi
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatDialog} from '@angular/material/dialog';
 import {TestSelectorComponent} from '@hidden-innovation/shared/ui/test-selector';
-import {Test, TestStore} from '@hidden-innovation/test/data-access';
+import {TestStore} from '@hidden-innovation/test/data-access';
 import {FeaturedNameEnum, SortingEnum, TagCategoryEnum} from '@hidden-innovation/shared/models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, ValidatorFn} from '@ngneat/reactive-forms';
@@ -28,11 +28,17 @@ export class CreateFeaturedComponent implements OnInit {
   ];
 
   featuredGroup:FormGroup<FeaturedCore> = new FormGroup<FeaturedCore>({
-    name: new FormControl(FeaturedNameEnum.SPOTLIGHT,[...this.requiredFieldValidation]),
-    location: new FormControl(TagCategoryEnum.CARDIO,[...this.requiredFieldValidation]),
-    bottomText: new FormControl<string | undefined>(''),
-    heading: new FormControl<string | undefined>(''),
-    subHeading: new FormControl<string | undefined>(''),
+    name: new FormControl({
+      value: FeaturedNameEnum.SPOTLIGHT,
+      disabled:true
+    },[...this.requiredFieldValidation]),
+    location: new FormControl({
+      value: TagCategoryEnum.CARDIO,
+      disabled: true
+    },[...this.requiredFieldValidation]),
+    bottomText: new FormControl(''),
+    heading: new FormControl(''),
+    subHeading: new FormControl(''),
     posterId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
@@ -79,14 +85,16 @@ export class CreateFeaturedComponent implements OnInit {
           this.populateFeatured(feat);
         }
       });
-
         this.store.getFeaturedDetails$({
           id: this.featuredID
         });
     })
-
   }
 
+  get posterIDctrl():FormControl<number | undefined>
+  {
+    return  this.featuredGroup.controls.posterId;
+  }
 
 
 
@@ -101,8 +109,9 @@ export class CreateFeaturedComponent implements OnInit {
       packIds,
       testGroupIds,
       singleTestIds,
-      questionnaireIds
-    } = feature
+      questionnaireIds,
+    } = feature;
+    this.selectedFeatured = feature;
   this.featuredGroup.patchValue({
     name,
     location,
@@ -114,7 +123,7 @@ export class CreateFeaturedComponent implements OnInit {
     testGroupIds,
     singleTestIds,
     questionnaireIds,
-  })
+  });
   }
 
   ngOnInit(): void {

@@ -7,7 +7,7 @@ import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-acc
 
 export interface FeaturedLocalState {
   id?: number | null;
-  name: FeaturedNameEnum;
+  name: FeaturedNameEnum ;
   location: 'HOME' | TagCategoryEnum;
   items: number;
   updated_at: string;
@@ -23,7 +23,7 @@ export interface FeaturedContent {
 }
 
 export interface FeaturedCore {
-  name: FeaturedNameEnum ;
+  name:   FeaturedNameEnum ;
   location: 'HOME' | TagCategoryEnum ;
   heading: string | undefined;
   subHeading: string | undefined;
@@ -35,6 +35,7 @@ export interface FeaturedCore {
   questionnaireIds: number[];
   // content: string;
 }
+
 
 
 export interface Featured extends FeaturedCore {

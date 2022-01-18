@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {
   Featured,
   FeaturedListingFilters,
   FeaturedLocalState,
   FeaturedStore
 } from '@hidden-innovation/featured/data-access';
-import { MatTableDataSource } from '@angular/material/table';
-import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { FeaturedNameEnum, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
-import { Router } from '@angular/router';
+import {MatTableDataSource} from '@angular/material/table';
+import {ConstantDataService} from '@hidden-innovation/shared/form-config';
+import {FormControl, FormGroup} from '@ngneat/reactive-forms';
+import {FeaturedNameEnum, SortingEnum, TagCategoryEnum} from '@hidden-innovation/shared/models';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -138,7 +138,7 @@ export class FeaturedListingComponent implements OnInit {
       (res) => {
         res.forEach(feature => this.localData = this.localData.map(data => {
 
-              if ((data.name === FeaturedNameEnum[feature.name]) && (feature.name !== 'PACKS')) {
+              if ((data.name === FeaturedNameEnum[feature.name]) && (feature.name !== FeaturedNameEnum.PACKS)) {
 
                 return {
                   ...data,
@@ -149,12 +149,15 @@ export class FeaturedListingComponent implements OnInit {
               }
 
               else {
+                console.log(TagCategoryEnum[feature.location as TagCategoryEnum])
                 return {
                   ...data,
                   id: TagCategoryEnum[feature.location as TagCategoryEnum] ? feature.id : null,
                   items: this.getItemsCount(feature),
-                  updated_at: TagCategoryEnum[feature.location as TagCategoryEnum] ? feature.updatedAt : ''
-                };}
+                  updated_at:  feature.updatedAt
+                };
+
+              }
 
             })
         );

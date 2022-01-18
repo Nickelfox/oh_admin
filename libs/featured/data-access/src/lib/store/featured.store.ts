@@ -75,6 +75,7 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
             (selectedFeatured) => {
               this.patchState({
                 isLoading: false,
+                loaded:true,
                 selectedFeatured
               });
 
