@@ -7,6 +7,7 @@ import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { RouterModule } from '@angular/router';
 import {FeaturedDataAccessModule} from "@hidden-innovation/featured/data-access";
 import {CommonFormFieldImageModule} from "@hidden-innovation/shared/ui/common-form-field-image";
+import { PackContentCardModule } from '@hidden-innovation/shared/ui/pack-content-card';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import {CommonFormFieldImageModule} from "@hidden-innovation/shared/ui/common-fo
     CommonFormFieldModule,
     UtilsModule,
     CommonFormFieldImageModule,
+    PackContentCardModule,
     RouterModule.forChild([
       {
         path: '',

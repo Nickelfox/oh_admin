@@ -10,8 +10,8 @@ import { Featured, FeaturedCore, FeaturedListingFilters, FeaturedStore } from '@
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
-import { TestStore } from '@hidden-innovation/test/data-access';
-import { FeaturedNameEnum, SortingEnum } from '@hidden-innovation/shared/models';
+import { Test } from '@hidden-innovation/test/data-access';
+import { FeaturedNameEnum, PackContentTypeEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
 import { switchMap } from 'rxjs/operators';
@@ -20,6 +20,9 @@ import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validato
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { AspectRatio } from '@hidden-innovation/media';
 import { UiStore } from '@hidden-innovation/shared/store';
+import { Pack } from '@hidden-innovation/pack/data-access';
+import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
+import { TestGroup } from '@hidden-innovation/test-group/data-access';
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -69,6 +72,9 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
   });
 
   selectedFeatured: Featured | undefined;
+  packContentTypeEnum = PackContentTypeEnum;
+
+  type: PackContentTypeEnum | undefined;
 
   constructor(
     private hotToastService: HotToastService,
@@ -77,7 +83,7 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     public store: FeaturedStore,
     public router: Router,
-    private uiStore: UiStore,
+    public uiStore: UiStore,
     public route: ActivatedRoute,
     public constantDataService: ConstantDataService
   ) {
@@ -98,12 +104,57 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
         id: this.featuredID
       });
     });
+    const { packIds, testGroupIds, singleTestIds, questionnaireIds } = this.featuredGroup.controls;
+    this.uiStore.state$.subscribe((state) => {
+      const setTestCtrl = (selectedTests: Test[]) => {
+        singleTestIds.setValue(selectedTests.map(t => t.id));
+      };
+      const setTestGroupCtrl = (selectedTestGroups: TestGroup[]) => {
+        testGroupIds.setValue(selectedTestGroups.map(t => t.id));
+      };
+      const setPacksCtrl = (selectedPacks: Pack[]) => {
+        packIds.setValue(selectedPacks.map(t => t.id));
+      };
+      const setQuestionnaireCtrl = (selectedQuestionnaires: QuestionnaireExtended[]) => {
+        questionnaireIds.setValue(selectedQuestionnaires.map(t => t.id));
+      };
+      if (this.selectedFeatured?.name === FeaturedNameEnum.SPOTLIGHT && this.type) {
+        switch (this.type) {
+          case PackContentTypeEnum.SINGLE:
+            this.restoreSelectedState();
+            setTestCtrl(state.selectedTests ?? []);
+            return;
+          case PackContentTypeEnum.GROUP:
+            this.restoreSelectedState();
+            setTestGroupCtrl(state.selectedTestGroups ?? []);
+            return;
+          case PackContentTypeEnum.PACK:
+            this.restoreSelectedState();
+            setPacksCtrl(state.selectedPacks ?? []);
+            return;
+          case PackContentTypeEnum.QUESTIONNAIRE:
+            this.restoreSelectedState();
+            setQuestionnaireCtrl(state.selectedQuestionnaires ?? []);
+        }
+        return;
+      }
+      if (this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS) {
+        this.restoreSelectedState();
+        setTestCtrl(state.selectedTests as Test[] ?? []);
+        return;
+      }
+      this.restoreSelectedState();
+      setPacksCtrl(state.selectedPacks as Pack[] ?? []);
+    });
   }
 
   get posterIDctrl(): FormControl<number | undefined> {
     return this.featuredGroup.controls.posterId;
   }
 
+  get isSpotlight(): boolean {
+    return this.selectedFeatured?.name === FeaturedNameEnum.SPOTLIGHT;
+  }
 
   populateFeatured(feature: Featured): void {
     const {
@@ -119,6 +170,7 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
       questionnaireIds
     } = feature;
     this.selectedFeatured = feature;
+
     this.featuredGroup.patchValue({
       name,
       location,
@@ -136,18 +188,26 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
   }
 
+  restoreSelectedState(): void {
+    this.uiStore.patchState({
+      selectedContent: [],
+      selectedQuestionnaires: [],
+      selectedTests: [],
+      selectedTestGroups: [],
+      selectedLessons: []
+    });
+  }
+
   openTestSelector(): void {
-    const dialogRef = this.matDialog.open(TestSelectorComponent, {
+    if (this.isSpotlight) {
+      this.type = PackContentTypeEnum.SINGLE;
+    }
+    this.matDialog.open(TestSelectorComponent, {
       height: '100%',
       width: '100%',
       maxHeight: '100%',
       maxWidth: '100%',
       role: 'dialog'
-    });
-    dialogRef.afterClosed().subscribe((tests: TestStore[] | undefined) => {
-      if (tests) {
-        return;
-      }
     });
   }
 
