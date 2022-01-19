@@ -1,15 +1,15 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {
   Featured,
   FeaturedListingFilters,
   FeaturedLocalState,
   FeaturedStore
 } from '@hidden-innovation/featured/data-access';
-import {MatTableDataSource} from '@angular/material/table';
-import {ConstantDataService} from '@hidden-innovation/shared/form-config';
-import {FormControl, FormGroup} from '@ngneat/reactive-forms';
-import {FeaturedNameEnum, SortingEnum, TagCategoryEnum} from '@hidden-innovation/shared/models';
-import {Router} from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { ConstantDataService } from '@hidden-innovation/shared/form-config';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { FeaturedNameEnum, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -116,50 +116,37 @@ export class FeaturedListingComponent implements OnInit {
     let count = 0;
     switch (feature.name) {
       case FeaturedNameEnum.SPOTLIGHT:
-        count += feature.testGroupIds?.length ?? 0;
-        count += feature.singleTestIds?.length ?? 0;
-        count += feature.questionnaireIds?.length ?? 0;
-        count += feature.packIds?.length ?? 0;
+        count += feature.testGroups?.length ?? 0;
+        count += feature.tests?.length ?? 0;
+        count += feature.questionnaires?.length ?? 0;
+        count += feature.packs?.length ?? 0;
         return count ?? 0;
       case FeaturedNameEnum.PACKS:
-        return feature.packIds?.length ?? 0;
+        return feature.packs?.length ?? 0;
       case FeaturedNameEnum.FEATURED_TESTS:
-        return feature.singleTestIds?.length ?? 0;
+        return feature.tests?.length ?? 0;
       case FeaturedNameEnum.FEATURED_PACKS:
-        return feature.packIds?.length ?? 0;
+        return feature.packs?.length ?? 0;
       default:
         return 0;
     }
   }
 
   ngOnInit(): void {
-
     this.store.featuredList$.subscribe(
       (res) => {
         res.forEach(feature => this.localData = this.localData.map(data => {
-
-              if ((data.name === FeaturedNameEnum[feature.name]) && (feature.name !== FeaturedNameEnum.PACKS)) {
-
-                return {
-                  ...data,
-                  id: feature.id,
-                  items: this.getItemsCount(feature),
-                  updated_at: feature.updatedAt
-                };
-              }
-
-              else {
-                console.log(TagCategoryEnum[feature.location as TagCategoryEnum])
-                return {
-                  ...data,
-                  id: TagCategoryEnum[feature.location as TagCategoryEnum] ? feature.id : null,
-                  items: this.getItemsCount(feature),
-                  updated_at:  feature.updatedAt
-                };
-
-              }
-
-            })
+            if ((data.name === feature.name) && (data.location === feature.location)) {
+              return {
+                ...data,
+                id: feature.id ?? undefined,
+                items: this.getItemsCount(feature),
+                updated_at: feature.updatedAt ?? ''
+              };
+            } else {
+              return data;
+            }
+          })
         );
         this.cdr.markForCheck();
       }

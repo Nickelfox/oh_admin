@@ -6,7 +6,7 @@ import { Test } from '@hidden-innovation/test/data-access';
 import { Observable } from 'rxjs';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
-import { ContentCore, Lesson, LessonCore } from '@hidden-innovation/pack/data-access';
+import { ContentCore, Lesson, LessonCore, Pack } from '@hidden-innovation/pack/data-access';
 
 export interface UiState {
   navData: {
@@ -17,6 +17,7 @@ export interface UiState {
   selectedTests?: Test[];
   selectedTestGroups?: TestGroup[];
   selectedQuestionnaires?: QuestionnaireExtended[];
+  selectedPacks?: Pack[];
   selectedLessons?: Lesson[];
   selectedContent?: (ContentCore | LessonCore)[];
 }
@@ -26,7 +27,9 @@ export class UiStore extends ComponentStore<UiState> {
   readonly navItems$ = this.select(({ navData }) => navData);
   readonly isLoading$ = this.select(({ isLoading }) => isLoading);
   readonly selectedTests$: Observable<Test[]> = this.select(state => state.selectedTests || []);
+  readonly selectedPacks$: Observable<Pack[]> = this.select(state => state.selectedPacks || []);
   readonly testsExists$: Observable<boolean> = this.select(state => !!state.selectedTests?.length);
+  readonly packsExists$: Observable<boolean> = this.select(state => !!state.selectedPacks?.length);
   readonly selectedTestGroups$: Observable<TestGroup[]> = this.select(state => state.selectedTestGroups || []);
   readonly testGroupsExists$: Observable<boolean> = this.select(state => !!state.selectedTestGroups?.length);
   readonly selectedQuestionnaires$: Observable<QuestionnaireExtended[]> = this.select(state => state.selectedQuestionnaires || []);

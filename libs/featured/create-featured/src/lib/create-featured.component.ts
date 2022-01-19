@@ -1,17 +1,25 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {Featured, FeaturedCore, FeaturedListingFilters, FeaturedStore} from '@hidden-innovation/featured/data-access';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatDialog} from '@angular/material/dialog';
-import {TestSelectorComponent} from '@hidden-innovation/shared/ui/test-selector';
-import {TestStore} from '@hidden-innovation/test/data-access';
-import {FeaturedNameEnum, SortingEnum, TagCategoryEnum} from '@hidden-innovation/shared/models';
-import {ActivatedRoute, Router} from '@angular/router';
-import {FormControl, FormGroup, ValidatorFn} from '@ngneat/reactive-forms';
-import {switchMap} from "rxjs/operators";
-import {HotToastService} from "@ngneat/hot-toast";
-import {NumericValueType, RxwebValidators} from "@rxweb/reactive-form-validators";
-import {ConstantDataService, FormValidationService} from "@hidden-innovation/shared/form-config";
-import {AspectRatio} from "@hidden-innovation/media";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
+import { Featured, FeaturedCore, FeaturedListingFilters, FeaturedStore } from '@hidden-innovation/featured/data-access';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatDialog } from '@angular/material/dialog';
+import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
+import { TestStore } from '@hidden-innovation/test/data-access';
+import { FeaturedNameEnum, SortingEnum } from '@hidden-innovation/shared/models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
+import { switchMap } from 'rxjs/operators';
+import { HotToastService } from '@ngneat/hot-toast';
+import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
+import { AspectRatio } from '@hidden-innovation/media';
+import { UiStore } from '@hidden-innovation/shared/store';
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -20,22 +28,22 @@ import {AspectRatio} from "@hidden-innovation/media";
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateFeaturedComponent implements OnInit {
+export class CreateFeaturedComponent implements OnInit, OnDestroy {
 
   requiredFieldValidation: ValidatorFn[] = [
     RxwebValidators.required(),
     RxwebValidators.notEmpty()
   ];
 
-  featuredGroup:FormGroup<FeaturedCore> = new FormGroup<FeaturedCore>({
+  featuredGroup: FormGroup<FeaturedCore> = new FormGroup<FeaturedCore>({
     name: new FormControl({
-      value: FeaturedNameEnum.SPOTLIGHT,
-      disabled:true
-    },[...this.requiredFieldValidation]),
-    location: new FormControl({
-      value: TagCategoryEnum.CARDIO,
+      value: undefined,
       disabled: true
-    },[...this.requiredFieldValidation]),
+    }, [...this.requiredFieldValidation]),
+    location: new FormControl({
+      value: undefined,
+      disabled: true
+    }, [...this.requiredFieldValidation]),
     bottomText: new FormControl(''),
     heading: new FormControl(''),
     subHeading: new FormControl(''),
@@ -50,10 +58,10 @@ export class CreateFeaturedComponent implements OnInit {
     questionnaireIds: new FormControl([]),
     singleTestIds: new FormControl([]),
     testGroupIds: new FormControl([])
-  })
+  });
 
   aspectRatio = AspectRatio;
-  featuredID? : number ;
+  featuredID?: number;
   featuredType = FeaturedNameEnum;
   selection = new SelectionModel<FeaturedCore>(true, []);
   filters: FormGroup<FeaturedListingFilters> = new FormGroup<FeaturedListingFilters>({
@@ -69,36 +77,35 @@ export class CreateFeaturedComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     public store: FeaturedStore,
     public router: Router,
+    private uiStore: UiStore,
     public route: ActivatedRoute,
-    public constantDataService: ConstantDataService,
+    public constantDataService: ConstantDataService
   ) {
     this.route.data.pipe(
       switchMap(_ => this.route.params)
     ).subscribe((res) => {
-        this.featuredID = res['id'];
-        if (!this.featuredID) {
-          this.hotToastService.error('Error occurred while fetching details');
-          return;
-        }
+      this.featuredID = res['id'];
+      if (!this.featuredID) {
+        this.hotToastService.error('Error occurred while fetching details');
+        return;
+      }
       this.store.selectedFeatured$.subscribe((feat) => {
         if (feat) {
           this.populateFeatured(feat);
         }
       });
-        this.store.getFeaturedDetails$({
-          id: this.featuredID
-        });
-    })
+      this.store.getFeaturedDetails$({
+        id: this.featuredID
+      });
+    });
   }
 
-  get posterIDctrl():FormControl<number | undefined>
-  {
-    return  this.featuredGroup.controls.posterId;
+  get posterIDctrl(): FormControl<number | undefined> {
+    return this.featuredGroup.controls.posterId;
   }
 
 
-
-  populateFeatured(feature:Featured):void{
+  populateFeatured(feature: Featured): void {
     const {
       name,
       location,
@@ -109,29 +116,25 @@ export class CreateFeaturedComponent implements OnInit {
       packIds,
       testGroupIds,
       singleTestIds,
-      questionnaireIds,
+      questionnaireIds
     } = feature;
     this.selectedFeatured = feature;
-  this.featuredGroup.patchValue({
-    name,
-    location,
-    bottomText,
-    heading,
-    subHeading,
-    posterId: poster?.id,
-    packIds,
-    testGroupIds,
-    singleTestIds,
-    questionnaireIds,
-  });
+    this.featuredGroup.patchValue({
+      name,
+      location,
+      bottomText,
+      heading,
+      subHeading,
+      posterId: poster?.id,
+      packIds,
+      testGroupIds,
+      singleTestIds,
+      questionnaireIds
+    });
   }
 
   ngOnInit(): void {
-
   }
-
-
-
 
   openTestSelector(): void {
     const dialogRef = this.matDialog.open(TestSelectorComponent, {
@@ -145,6 +148,12 @@ export class CreateFeaturedComponent implements OnInit {
       if (tests) {
         return;
       }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.store.patchState({
+      selectedFeatured: undefined
     });
   }
 
