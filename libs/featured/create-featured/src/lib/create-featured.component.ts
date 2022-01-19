@@ -136,15 +136,13 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
             this.restoreSelectedState();
             setQuestionnaireCtrl(state.selectedQuestionnaires ?? []);
         }
-        return;
-      }
-      if (this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS) {
+      } else if (this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS) {
         this.restoreSelectedState();
         setTestCtrl(state.selectedTests as Test[] ?? []);
-        return;
+      } else {
+        this.restoreSelectedState();
+        setPacksCtrl(state.selectedPacks as Pack[] ?? []);
       }
-      this.restoreSelectedState();
-      setPacksCtrl(state.selectedPacks as Pack[] ?? []);
     });
   }
 
