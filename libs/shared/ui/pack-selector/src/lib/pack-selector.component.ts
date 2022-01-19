@@ -1,14 +1,13 @@
-import {Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import {PageEvent} from "@angular/material/paginator";
-import {PublishStatusEnum, SortingEnum, StatusChipType, TagCategoryEnum} from "@hidden-innovation/shared/models";
+import { PageEvent } from '@angular/material/paginator';
+import { PublishStatusEnum, SortingEnum, StatusChipType, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import {DateTime} from "luxon";
-import {Test, TestListingFilters} from "@hidden-innovation/test/data-access";
-import {PackCore} from "@hidden-innovation/pack/data-access";
-import {FormControl, FormGroup} from "@ngneat/reactive-forms";
+import { DateTime } from 'luxon';
+import { TestListingFilters } from '@hidden-innovation/test/data-access';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 
-export enum PackType  {
+export enum PackType {
   CARDIO = 'CARDIO',
   LIFESTYLE = 'LIFESTYLE',
   FUNCTION = 'FUNCTION',
@@ -19,31 +18,31 @@ export enum PackType  {
 
 export const dummyPack = [
   {
-    name:'Pack 1',
+    name: 'Pack 1',
     category: PackType.CARDIO,
-    updated_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
   },
   {
-    name:'Pack 2',
+    name: 'Pack 2',
     category: PackType.LIFESTYLE,
-    updated_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
   },
   {
-    name:'Pack 3',
+    name: 'Pack 3',
     category: PackType.STRENGTH,
-    updated_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
   },
   {
-    name:'Pack 4',
+    name: 'Pack 4',
     category: PackType.FUNCTION,
-    updated_at: DateTime.now().toISODate(),
+    updated_at: DateTime.now().toISODate()
   },
   {
-    name:'Pack 5',
+    name: 'Pack 5',
     category: PackType.MOVEMENT,
-    updated_at: DateTime.now().toISODate(),
-  },
-]
+    updated_at: DateTime.now().toISODate()
+  }
+];
 
 @Component({
   selector: 'hidden-innovation-pack-selector',
@@ -54,7 +53,7 @@ export const dummyPack = [
 })
 export class PackSelectorComponent implements OnInit {
 
-  displayedColumns: string[] = ['select', 'name','category', 'updated_at'];
+  displayedColumns: string[] = ['select', 'name', 'category', 'updated_at'];
   packSelector: MatTableDataSource<any> = new MatTableDataSource();
 
   filters: FormGroup<TestListingFilters> = new FormGroup<TestListingFilters>({
@@ -81,7 +80,7 @@ export class PackSelectorComponent implements OnInit {
   tagCategoryIte = Object.values(TagCategoryEnum);
 
   constructor(
-    public constantDataService: ConstantDataService,
+    public constantDataService: ConstantDataService
   ) {
   }
 
@@ -90,14 +89,10 @@ export class PackSelectorComponent implements OnInit {
   }
 
 
-
   ngOnInit(): void {
     this.packSelector = new MatTableDataSource(dummyPack);
     console.log(dummyPack);
   }
-
-
-
 
 
 }

@@ -4,6 +4,7 @@ import { Featured, FeaturedListingFilters } from '../models/featured.interface';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { FeaturedService } from '../services/featured.service';
+import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 
 export interface FeaturedState {
   featuredList: Featured[];
@@ -28,6 +29,8 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
   readonly featuredList$: Observable<Featured[]> = this.select(state => state.featuredList || []);
   readonly selectedFeatured$: Observable<Featured | undefined> = this.select(state => state.selectedFeatured);
 
+  private toastRef: CreateHotToastRef<unknown> | undefined;
+
   getFeaturedList$ = this.effect<FeaturedListingFilters>(params$ =>
     params$.pipe(
       tap((_) => {
@@ -51,7 +54,10 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
               });
             }
           ),
-          catchError(() => EMPTY)
+          catchError(() => {
+            this.toastRef?.close();
+            return EMPTY;
+          })
         )
       )
     )
@@ -63,6 +69,11 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
         this.patchState({
           isLoading: true
         });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Populating Details...', {
+          dismissible: false,
+          role: 'status'
+        });
       }),
       switchMap(({ id }) =>
         this.featuredService.getFeatured(id).pipe(
@@ -73,22 +84,27 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
                 loaded: true,
                 selectedFeatured
               });
-
+              this.toastRef?.close();
             },
             (_) => {
               this.patchState({
                 isLoading: false
               });
+              this.toastRef?.close();
             }
           ),
-          catchError(() => EMPTY)
+          catchError(() => {
+            this.toastRef?.close();
+            return EMPTY;
+          })
         )
       )
     )
   );
 
   constructor(
-    private featuredService: FeaturedService
+    private featuredService: FeaturedService,
+    private hotToastService: HotToastService,
   ) {
     super(initialState);
   }

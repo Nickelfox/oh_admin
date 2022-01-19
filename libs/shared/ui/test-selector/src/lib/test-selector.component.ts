@@ -33,6 +33,8 @@ import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
 
 export interface TestSelectorData {
   type: ContentSelectorOpType;
+  limit?: boolean;
+  limitValue?: number;
   category?: TagCategoryEnum | 'NONE';
 }
 
@@ -134,6 +136,10 @@ export class TestSelectorComponent implements OnInit {
 
   get paginatorIndex() {
     return this.pageIndex - 1;
+  }
+
+  get selectionLimit(): number {
+    return this.categoryData.limitValue ?? 0;
   }
 
   resetPagination(): void {

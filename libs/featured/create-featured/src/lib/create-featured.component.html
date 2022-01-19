@@ -86,7 +86,7 @@
                     <p class='text-muted mb-2'>Poster</p>
                     <hidden-innovation-common-form-field-image
                       controlPath='posterId'
-                      [setImageData]='selectedFeatured?.poster'
+                      [setImageData]='(selectedPosterData | async)'
                       [aspectRatio]='aspectRatio.CUBE'
                       [parentCtrl]='posterIDctrl'
                       (emitImageCtrlData)='posterIDctrl?.setValue($event)'
@@ -106,45 +106,117 @@
           <mat-card-title class='d-flex justify-content-between align-items-center'>
             <h3 class='mat-h3 mb-0 font-sf-pro'>Contents</h3>
             <button
-              [disabled]='(store.isActing$ | async)'
+              [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
               mat-flat-button
               class='ml-3'
-              [matMenuTriggerFor]='menuPack'
-              color='primary' type='button'>
+              [matMenuTriggerFor]='menuPack' color='primary' type='button'>
               Add
             </button>
             <mat-menu #menuPack='matMenu'>
-              <button type='button' mat-menu-item (click)='openTestSelector()'>
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT) || (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
+                      mat-menu-item (click)='openTestSelector()'>
                 <span>Test Single</span>
               </button>
-              <button type='button' mat-menu-item>
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      mat-menu-item (click)='openTestGroupSelector()'>
                 <span>Test Group</span>
               </button>
-              <button type='button' mat-menu-item >
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      mat-menu-item>
                 <span>Questionnaire</span>
               </button>
-              <button type='button' mat-menu-item>
-                <span>Lessons</span>
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name !== featuredType.SPOTLIGHT) || (selectedFeatured?.name !== featuredType.FEATURED_TESTS)'
+                      mat-menu-item>
+                <span>Pack</span>
               </button>
             </mat-menu>
           </mat-card-title>
           <mat-divider></mat-divider>
-          <mat-card-content class='content-container'>
-            <ng-template [ngIf]='uiStore.testsExists$ | async'>
-              <hidden-innovation-pack-content-card
-                class='mb-3'
-                *ngFor='let content of (uiStore.selectedTests$ | async); index as i; first as isFirst; last as isLast'
-                [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
-                [name]='content.name'
-                [category]='packContentTypeEnum.SINGLE'
-                (emitDeleteEvent)='null'
-              ></hidden-innovation-pack-content-card>
-            </ng-template>
+          <mat-card-content class='content-container' [ngSwitch]='selectedFeatured?.name'>
+            <div *ngSwitchCase='featuredType.SPOTLIGHT' [ngSwitch]='type'>
+              <div *ngSwitchCase='packContentTypeEnum.SINGLE'>
+                <ng-container *ngTemplateOutlet='testSelectedState'></ng-container>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.GROUP'>
+                <ng-template [ngIf]='uiStore.testGroupsExists$ | async' [ngIfElse]='elseExists'>
+                  <hidden-innovation-pack-content-card
+                    class='mb-3'
+                    *ngFor='let content of (uiStore.selectedTestGroups$ | async); index as i; first as isFirst; last as isLast'
+                    [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                    [name]='content.name'
+                    [category]='packContentTypeEnum.GROUP'
+                    (emitDeleteEvent)='null'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.QUESTIONNAIRE'>
+                <ng-template [ngIf]='uiStore.questionnairesExists$ | async' [ngIfElse]='elseExists'>
+                  <hidden-innovation-pack-content-card
+                    class='mb-3'
+                    *ngFor='let content of (uiStore.selectedQuestionnaires$ | async); index as i; first as isFirst; last as isLast'
+                    [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                    [name]='content.name'
+                    [category]='packContentTypeEnum.QUESTIONNAIRE'
+                    (emitDeleteEvent)='null'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+              <div *ngSwitchCase='featuredType.PACKS'>
+                <ng-container *ngTemplateOutlet='packSelectedState'></ng-container>
+              </div>
+            </div>
+            <div *ngSwitchCase='featuredType.FEATURED_TESTS'>
+              <ng-container *ngTemplateOutlet='testSelectedState'></ng-container>
+            </div>
+            <div *ngSwitchCase='featuredType.PACKS'>
+              <ng-container *ngTemplateOutlet='packSelectedState'></ng-container>
+            </div>
+            <div *ngSwitchCase='featuredType.FEATURED_PACKS'>
+              <ng-container *ngTemplateOutlet='packSelectedState'></ng-container>
+            </div>
+            <div *ngSwitchDefault>
+              <ng-container *ngTemplateOutlet='elseExists'></ng-container>
+            </div>
           </mat-card-content>
         </mat-card>
       </div>
-
     </div>
   </div>
-
 </form>
+
+<ng-template #packSelectedState>
+  <ng-template [ngIf]='uiStore.packsExists$ | async' [ngIfElse]='elseExists'>
+    <hidden-innovation-pack-content-card
+      class='mb-2'
+      *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
+      [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+      [name]='content.name'
+      [category]='packContentTypeEnum.SINGLE'
+      (emitDeleteEvent)='null'
+    ></hidden-innovation-pack-content-card>
+  </ng-template>
+</ng-template>
+
+<ng-template #testSelectedState>
+  <ng-template [ngIf]='uiStore.testsExists$ | async' [ngIfElse]='elseExists'>
+    <hidden-innovation-pack-content-card
+      class='mb-2'
+      *ngFor='let content of (uiStore.selectedTests$ | async); index as i; first as isFirst; last as isLast'
+      [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+      [name]='content.name'
+      [category]='packContentTypeEnum.SINGLE'
+      (emitDeleteEvent)='null'
+    ></hidden-innovation-pack-content-card>
+  </ng-template>
+</ng-template>
+
+<ng-template #elseExists>
+  <div class='d-flex align-items-center justify-content-center w-100 mt-3'>
+    <mat-hint><small>No Content Available</small></mat-hint>
+  </div>
+</ng-template>
+

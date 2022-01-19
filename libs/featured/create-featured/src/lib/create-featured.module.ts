@@ -8,6 +8,10 @@ import { RouterModule } from '@angular/router';
 import {FeaturedDataAccessModule} from "@hidden-innovation/featured/data-access";
 import {CommonFormFieldImageModule} from "@hidden-innovation/shared/ui/common-form-field-image";
 import { PackContentCardModule } from '@hidden-innovation/shared/ui/pack-content-card';
+import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
+import { TestGroupDataAccessModule } from '@hidden-innovation/test-group/data-access';
+import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
+import { PackDataAccessModule } from '@hidden-innovation/pack/data-access';
 
 @NgModule({
   imports: [
@@ -16,6 +20,10 @@ import { PackContentCardModule } from '@hidden-innovation/shared/ui/pack-content
     FeaturedDataAccessModule,
     CommonFormFieldModule,
     UtilsModule,
+    TestDataAccessModule,
+    TestGroupDataAccessModule,
+    QuestionnaireDataAccessModule,
+    PackDataAccessModule,
     CommonFormFieldImageModule,
     PackContentCardModule,
     RouterModule.forChild([
