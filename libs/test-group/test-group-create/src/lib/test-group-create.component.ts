@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TestSelectorComponent } from '@hidden-innovation/shared/ui/test-selector';
+import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
 import { TestGroup, TestGroupCore, TestGroupStore } from '@hidden-innovation/test-group/data-access';
 import { FormArray, FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { GenericDialogPrompt, OperationTypeEnum, TagCategoryEnum, TagTypeEnum } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  GenericDialogPrompt,
+  OperationTypeEnum,
+  TagCategoryEnum,
+  TagTypeEnum
+} from '@hidden-innovation/shared/models';
 import { AspectRatio } from '@hidden-innovation/media';
 import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
 import { HotToastService } from '@ngneat/hot-toast';
@@ -156,7 +162,8 @@ export class TestGroupCreateComponent implements OnDestroy {
 
   get isCategoryValid(): boolean {
     const { category } = this.testGroup.controls;
-    return category.valid && category.value !== 'NONE';
+    return category.valid;
+  // && category.value !== 'NONE'
   }
 
   categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
@@ -194,7 +201,6 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   submit(): void {
-    console.log(this.testGroup);
     this.testGroup.markAllAsTouched();
     this.testGroup.markAllAsDirty();
     if (this.testGroup.invalid) {
@@ -220,9 +226,12 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   openTestSelector(): void {
-    const { category } = this.testGroup.controls;
+    const catData: TestSelectorData = {
+      type: ContentSelectorOpType.SINGLE,
+      category: this.testGroup.value.category
+    };
     this.matDialog.open(TestSelectorComponent, {
-      data: category.value,
+      data: catData,
       height: '100%',
       width: '100%',
       maxHeight: '100%',

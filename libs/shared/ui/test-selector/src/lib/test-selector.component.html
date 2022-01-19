@@ -1,10 +1,22 @@
 <div mat-dialog-title>
   <div class='d-flex align-items-center justify-content-between'>
     <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
-      ADD TEST OF TYPE - <b>{{category | titlecase}}</b></h4>
-    <button mat-icon-button (click)='closeDialog()'>
-      <mat-icon>close</mat-icon>
-    </button>
+      <ng-template [ngIf]='this.categoryData.type === contentSelectorOpType.SINGLE' [ngIfElse]='elseTitle'>
+        ADD TEST OF TYPE - <b>{{categoryData ? (categoryData?.category | titlecase) : "--"}}</b>
+      </ng-template>
+      <ng-template #elseTitle>
+        ADD TEST
+      </ng-template>
+    </h4>
+    <div class='d-flex align-items-center'>
+      <div class='d-flex align-items-center text-muted mt-1 mr-3'>
+        <mat-icon class='text-success mr-2'>autorenew</mat-icon>
+        <h4 class='text-success mat-h4 mb-0'>Selection Auto-Saved</h4>
+      </div>
+      <button mat-icon-button mat-dialog-close>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
 <div class='container-fluid p-0'>
@@ -37,6 +49,7 @@
                     </th>
                     <td mat-cell *matCellDef='let test'>
                       <mat-checkbox
+                        [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
                         color='primary'
                         (click)='$event.stopPropagation()'
                         (change)='$event ? addToList(test) : null'
@@ -46,8 +59,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef='id'>
-                    <th mat-header-cell
-                        [width]='55'
+                    <th mat-header-cell [width]='70'
                         *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'> {{element.id ?? '--'}} </td>
                   </ng-container>
@@ -80,7 +92,31 @@
                   </ng-container>
 
                   <ng-container matColumnDef='category'>
-                    <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
+                  </span>
+                        <div class='d-flex align-items-center'>
+                          <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
+                                  [disabled]='(store.isActing$ | async) || this.categoryData.type === contentSelectorOpType.SINGLE'
+                                  color='{{filters.controls.category?.value ? "primary" : ""}}'>
+                            <mat-icon style='font-size: 20px'>filter_list</mat-icon>
+                          </button>
+                          <mat-menu #typeMenu='matMenu'>
+                            <mat-selection-list color='primary' (selectionChange)='categoryFilterChange($event)'
+                                                [multiple]='true' class='pt-0'>
+                              <mat-list-option value='NONE'>
+                                <h6 class='mat-h6'>None</h6>
+                              </mat-list-option>
+                              <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
+                                <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>
+                              </mat-list-option>
+                            </mat-selection-list>
+                          </mat-menu>
+                        </div>
+                      </div>
                     </th>
                     <td mat-cell *matCellDef='let element'> {{((element.category | titlecase) || '--')}} </td>
                   </ng-container>
@@ -130,6 +166,9 @@
                             <mat-selection-list color='primary'
                                                 (selectionChange)='typeFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
+                              <mat-list-option value='NONE'>
+                                <h6 class='mat-h6'>None</h6>
+                              </mat-list-option>
                               <ng-template ngFor [ngForOf]='testInputTypeIte' let-type>
                                 <mat-list-option [value]='type'>
                                   <h6
@@ -144,8 +183,50 @@
                     <td mat-cell *matCellDef='let element'> {{(element.inputType || '--')}} </td>
                   </ng-container>
 
+                  <ng-container matColumnDef='status'>
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                  <span>
+                    {{constantDataService.FIELD_NAME.STATUS | titlecase}}
+                  </span>
+                        <div class='d-flex align-items-center'>
+                          <button mat-icon-button class='mr-3'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'
+                                  [matMenuTriggerFor]='statusMenu'
+                                  [disabled]='(store.isActing$ | async)'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'>
+                            <mat-icon style='font-size: 20px'>filter_list</mat-icon>
+                          </button>
+                          <mat-menu #statusMenu='matMenu'>
+                            <mat-selection-list color='primary'
+                                                (selectionChange)='updateFilterChange($event, filters.controls.published)'
+                                                [multiple]='false' class='pt-0'>
+                              <mat-list-option [value]='"TRUE"'>
+                                {{publishStatusEnum.PUBLISHED | titlecase}}
+                              </mat-list-option>
+                              <mat-list-option [value]='"FALSE"'>
+                                {{publishStatusEnum.UNPUBLISHED | titlecase}}
+                              </mat-list-option>
+                              <mat-list-option [value]='undefined'>
+                                Clear
+                              </mat-list-option>
+                            </mat-selection-list>
+                          </mat-menu>
+                        </div>
+                      </div>
+                    </th>
+                    <td mat-cell *matCellDef='let element'>
+                      <hidden-innovation-common-data-field-status
+                        [chipType]='element.isPublished ? statusChipType.SUCCESS : statusChipType.WARNING'
+                        [text]='((element.isPublished ? publishStatusEnum.PUBLISHED : publishStatusEnum.UNPUBLISHED)  | titlecase)'
+                      ></hidden-innovation-common-data-field-status>
+                    </td>
+                  </ng-container>
+
                   <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
-                  <tr mat-row *matRowDef='let row; columns: displayedColumns;' (click)='addToList(row)'
+                  <tr mat-row *matRowDef='let row; columns: displayedColumns;'
+                      (click)='isLoading ? null : addToList(row)'
                       [ngClass]='{"active":isSelected(row)}'
                       class='row-react'></tr>
                 </table>
@@ -178,8 +259,4 @@
       </mat-card>
     </div>
   </div>
-</div>
-<div mat-dialog-actions align='end'>
-  <button mat-button (click)='closeDialog()' cdkFocusInitial>Cancel</button>
-  <button mat-flat-button color='primary' (click)='saveSelectedTests()'>Save</button>
 </div>

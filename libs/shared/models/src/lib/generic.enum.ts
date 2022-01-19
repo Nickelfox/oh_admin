@@ -12,3 +12,8 @@ export enum PublishStatusEnum {
   PUBLISHED = 'published',
   UNPUBLISHED = 'unpublished'
 }
+
+export enum ContentSelectorOpType {
+  SINGLE,
+  OTHER
+}

@@ -209,7 +209,7 @@ export class TestGroupListingComponent implements OnInit {
   editPromptForPublished(tg: TestGroup): void {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    if (this.isPublishToggleAvailable(tg)) {
+    if (tg.isVisible) {
       const dialogData: GenericDialogPrompt = {
         title: 'Edit a Published Test Group?',
         desc: 'This might impact various other modules .i.e. Packs, Assessments etc.',

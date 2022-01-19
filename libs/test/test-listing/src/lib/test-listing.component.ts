@@ -19,7 +19,6 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { isEqual } from 'lodash-es';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { MatSelectionListChange } from '@angular/material/list';
-import { InfoDialogComponent } from '@hidden-innovation/shared/ui/info-dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 
@@ -259,5 +258,4 @@ export class TestListingComponent implements OnInit {
       this.router.navigate(['/tests', 'edit', test.id]);
     }
   }
-
 }

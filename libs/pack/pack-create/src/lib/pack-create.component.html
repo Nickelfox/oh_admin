@@ -204,8 +204,14 @@
               Add
             </button>
             <mat-menu #menuPack='matMenu'>
-              <button type='button' mat-menu-item (click)='openContentSelectorDialog()'>
-                <span>Content (Test/Test-Group/Questionnaire)</span>
+              <button type='button' mat-menu-item (click)='openTestSelector()'>
+                <span>Test Single</span>
+              </button>
+              <button type='button' mat-menu-item (click)='openTestGroupSelector()'>
+                <span>Test Group</span>
+              </button>
+              <button type='button' mat-menu-item (click)='openQuestionnaireSelector()'>
+                <span>Questionnaire</span>
               </button>
               <button type='button' mat-menu-item (click)='openCreateLessonDialog()'>
                 <span>Lessons</span>
@@ -214,25 +220,16 @@
           </mat-card-title>
           <mat-divider></mat-divider>
           <mat-card-content class='content-container'>
-            <ng-template [ngIf]='contentArrayExists'>
-              <hidden-innovation-pack-content-card
-                class='mb-3'
-                *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
-                [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
-                [name]='content.name'
-                [category]='content.type'
-                (emitDeleteEvent)='deleteSelectedContentPrompt(content)'
-              ></hidden-innovation-pack-content-card>
-            </ng-template>
-            <div class='d-flex align-items-center justify-content-center w-100 mt-3' *ngIf='packForm.controls.content.invalid'>
-              <ng-template
-                [ngIf]='((packForm.controls.content.touch$ | async) || (packForm.controls.content.dirty$ | async))'
-                [ngIfElse]='minContentLengthElse'>
-                <mat-error><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-error>
-              </ng-template>
-              <ng-template #minContentLengthElse>
-                <mat-hint><small>{{formValidationService.contentSelectionValidationMessage.minLength}}</small></mat-hint>
-              </ng-template>
+            <hidden-innovation-pack-content-card
+              class='mb-3'
+              *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
+              [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+              [name]='content.name'
+              [category]='content.type'
+              (emitDeleteEvent)='deleteSelectedContentPrompt(content)'
+            ></hidden-innovation-pack-content-card>
+            <div class='d-flex align-items-center justify-content-center w-100 mt-3' *ngIf='!contentArrayExists'>
+              <mat-hint><small>No Content Available</small></mat-hint>
             </div>
           </mat-card-content>
         </mat-card>
