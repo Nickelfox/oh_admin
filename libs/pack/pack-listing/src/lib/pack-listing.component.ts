@@ -66,7 +66,7 @@ export class PackListingComponent implements OnInit {
   }
 
   isPublishToggleAvailable(pack: Pack): boolean {
-    return pack.content.length >= 2;
+    return !!pack.content.length;
   }
 
   resetRoute(): void {
