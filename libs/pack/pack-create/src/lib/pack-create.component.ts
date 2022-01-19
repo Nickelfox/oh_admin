@@ -78,10 +78,7 @@ export class PackCreateComponent implements OnDestroy {
       })
     ]),
     urls: new FormArray<ContentUrl>([]),
-    content: new FormControl<ContentCore[] | LessonCore[]>([], Validators.compose([
-      Validators.required,
-      Validators.minLength(2)
-    ])),
+    content: new FormControl<ContentCore[] | LessonCore[]>([]),
     imagesAndPdfsIds: new FormArray<number>([])
   });
 
