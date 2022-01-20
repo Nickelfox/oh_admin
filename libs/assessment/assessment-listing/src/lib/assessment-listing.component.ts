@@ -1,53 +1,9 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { MatTableDataSource } from '@angular/material/table';
-
-export  interface AssessmentCore {
-  category: string;
-  test: number;
-  worstCase: number;
-  bestCase: number;
-  lockout:number;
-}
-
-export const dummyAssessments:AssessmentCore[] = [
-  {
-  category: 'Strength',
-  test: 1,
-  worstCase: 2,
-  bestCase: 9,
-  lockout: 29
-  },
-  {
-    category: 'Cardio',
-    test: 3,
-    worstCase: 2,
-    bestCase: 6,
-    lockout: 29
-  },
-  {
-    category: 'Lifestyle',
-    test: 6,
-    worstCase: -57,
-    bestCase: 61,
-    lockout: 28
-  },
-  {
-    category: 'Function',
-    test: 4,
-    worstCase: 1,
-    bestCase: 61,
-    lockout: 28
-  },
-  {
-    category: 'Mobility',
-    test: 8,
-    worstCase: 1,
-    bestCase: 61,
-    lockout: 28
-  },
-
-]
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ConstantDataService} from '@hidden-innovation/shared/form-config';
+import {MatTableDataSource} from '@angular/material/table';
+import {AssessmentLocalState, AssessmentStore} from "@hidden-innovation/assessment/data-access";
+import {TagCategoryEnum} from "@hidden-innovation/shared/models";
+import {FeaturedLocalState} from "@hidden-innovation/featured/data-access";
 
 
 @Component({
@@ -58,17 +14,94 @@ export const dummyAssessments:AssessmentCore[] = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AssessmentListingComponent implements OnInit {
-  displayedColumns: string[] = ['category','test','worstCase', 'bestCase', 'lockout'];
-  assessments: MatTableDataSource<AssessmentCore> = new MatTableDataSource<AssessmentCore>();
+
+  private _dummyAssessment:AssessmentLocalState[] = [
+    {
+      category: TagCategoryEnum.STRENGTH,
+      test: 0,
+      worstCase: 0,
+      bestCase: 0,
+      lockout: 0
+    },
+    {
+      category: TagCategoryEnum.CARDIO,
+      test: 0,
+      worstCase: 0,
+      bestCase: 0,
+      lockout: 0
+    },
+    {
+      category: TagCategoryEnum.LIFESTYLE,
+      test: 0,
+      worstCase: 0,
+      bestCase: 0,
+      lockout: 0
+    },
+    {
+      category: TagCategoryEnum.FUNCTION,
+      test: 0,
+      worstCase: 0,
+      bestCase: 0,
+      lockout: 0
+    },
+    {
+      category: TagCategoryEnum.MOBILE,
+      test: 0,
+      worstCase: 0,
+      bestCase: 0,
+      lockout: 0
+    },
+
+  ]
+
+  displayedColumns: string[] = ['category','test','worstCase', 'bestCase', 'lockout', 'action'];
+  assessment: MatTableDataSource<AssessmentLocalState> = new MatTableDataSource<AssessmentLocalState>();
 
   constructor(
-    public constantDataService: ConstantDataService
+    public constantDataService: ConstantDataService,
+    public store: AssessmentStore,
+    private cdr: ChangeDetectorRef,
   ) {
-    this.assessments = new MatTableDataSource<AssessmentCore>(dummyAssessments);
+    this.assessment = new MatTableDataSource<AssessmentLocalState>(this._dummyAssessment);
+    this.refreshList();
   }
 
+  refreshList(): void {
+    this.store.getAssessmentList$();
+  }
+
+
+  get localData(): AssessmentLocalState[] {
+    return this._dummyAssessment;
+  }
+
+  set localData(assessment: AssessmentLocalState[]) {
+    this._dummyAssessment = [...assessment];
+    this.assessment = new MatTableDataSource<AssessmentLocalState>(this.localData);
+  }
+
+
+
   ngOnInit(): void {
-    console.log(dummyAssessments);
+    this.store.assessmentList$.subscribe(
+      (res) => {
+        res.forEach(assessment => this.localData = this.localData.map(data => {
+            if ( (data.category === assessment.category) ) {
+              return {
+                ...data,
+                id: assessment.id ?? undefined,
+                lockout: assessment.lockout,
+                bestCase: assessment.bestCase,
+                worstCase: assessment.worstCase
+              };
+            } else {
+              return data;
+            }
+          })
+        );
+        this.cdr.markForCheck();
+      }
+    );
   }
 
 }
