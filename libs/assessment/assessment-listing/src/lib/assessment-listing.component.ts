@@ -62,7 +62,6 @@ export class AssessmentListingComponent implements OnInit {
     public store: AssessmentStore,
     private cdr: ChangeDetectorRef,
   ) {
-    this.assessment = new MatTableDataSource<AssessmentLocalState>(this._dummyAssessment);
     this.refreshList();
   }
 
@@ -86,7 +85,7 @@ export class AssessmentListingComponent implements OnInit {
     this.store.assessmentList$.subscribe(
       (res) => {
         res.forEach(assessment => this.localData = this.localData.map(data => {
-            if ( (data.category === assessment.category) ) {
+            if (data.category === assessment.category) {
               return {
                 ...data,
                 id: assessment.id ?? undefined,
