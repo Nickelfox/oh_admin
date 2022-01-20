@@ -24,6 +24,7 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
 import {FeaturedNameEnum, OperationTypeEnum} from '@hidden-innovation/shared/models';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import { TitleCasePipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -359,7 +360,7 @@ import { MatCardModule } from '@angular/material/card';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [{ provide: ENVIRONMENT, useValue: environment }]
+  providers: [{ provide: ENVIRONMENT, useValue: environment }, TitleCasePipe]
 })
 export class AppModule {
 }

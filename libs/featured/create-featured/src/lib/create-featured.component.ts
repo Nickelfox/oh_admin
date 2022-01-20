@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Featured, FeaturedCore, FeaturedStore } from '@hidden-innovation/featured/data-access';
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
@@ -28,6 +21,7 @@ import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
+import { PackSelectorComponent, PackSelectorData } from '@hidden-innovation/shared/ui/pack-selector';
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -36,20 +30,29 @@ import {
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateFeaturedComponent implements OnInit, OnDestroy {
+export class CreateFeaturedComponent implements OnDestroy {
 
   featuredGroup: FormGroup<FeaturedCore> = new FormGroup<FeaturedCore>({
     name: new FormControl({
       value: undefined,
       disabled: true
-    }, [...this.formValidationService.requiredFieldValidation]),
+    }, [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.PACK_NAME_LENGTH
+      })
+    ]),
     location: new FormControl({
       value: undefined,
       disabled: true
     }, [...this.formValidationService.requiredFieldValidation]),
-    bottomText: new FormControl(''),
-    heading: new FormControl(''),
-    subHeading: new FormControl(''),
+    bottomText: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
+    heading: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation
+    ]),
+    subHeading: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation
+    ]),
     posterId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
@@ -126,18 +129,19 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
           case PackContentTypeEnum.SINGLE:
             resetContentCtrls();
             setTestCtrl(state.selectedTests ?? []);
-            return;
+            break;
           case PackContentTypeEnum.GROUP:
             resetContentCtrls();
             setTestGroupCtrl(state.selectedTestGroups ?? []);
-            return;
+            break;
           case PackContentTypeEnum.PACK:
             resetContentCtrls();
             setPacksCtrl(state.selectedPacks ?? []);
-            return;
+            break;
           case PackContentTypeEnum.QUESTIONNAIRE:
             resetContentCtrls();
             setQuestionnaireCtrl(state.selectedQuestionnaires ?? []);
+            break;
         }
       } else if (this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS) {
         resetContentCtrls();
@@ -186,7 +190,7 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
       posterId: poster?.id
     });
     this.restoreSelectedState();
-    if (this.selectedFeatured.name === FeaturedNameEnum.SPOTLIGHT) {
+    if (this.isSpotlight) {
       if (this.selectedFeatured.tests.length) {
         this.type = PackContentTypeEnum.SINGLE;
       } else if (this.selectedFeatured.testGroups.length) {
@@ -196,6 +200,8 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
       } else if (this.selectedFeatured.questionnaires.length) {
         this.type = PackContentTypeEnum.QUESTIONNAIRE;
       }
+    } else {
+      this.disableNonSpotlightFields();
     }
     this.uiStore.patchState({
       selectedTests: tests,
@@ -205,7 +211,12 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
+  disableNonSpotlightFields(): void {
+    const { bottomText, heading, subHeading, posterId } = this.featuredGroup.controls;
+    bottomText.disable();
+    heading.disable();
+    subHeading.disable();
+    posterId.disable();
   }
 
   restoreSelectedState(): void {
@@ -276,25 +287,46 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
     if (this.isSpotlight) {
       this.type = PackContentTypeEnum.PACK;
     }
-    // TODO: Implement pack selector flow along with pack selection development
-    // const data: QuestionnaireSelectorData = {
-    //   type: ContentSelectorOpType.SINGLE,
-    // };
-    // this.matDialog.open(QuestionnaireSelectorComponent, {
-    //   data,
-    //   height: '100%',
-    //   width: '100%',
-    //   maxHeight: '100%',
-    //   maxWidth: '100%',
-    //   role: 'dialog'
-    // });
+    const data: PackSelectorData = {
+      limit: this.isSpotlight
+    };
+    this.matDialog.open(PackSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
   }
 
   ngOnDestroy(): void {
+    this.restoreSelectedState();
     this.store.patchState({
       selectedFeatured: undefined
     });
   }
 
+  submit() {
+    this.featuredGroup.markAllAsTouched();
+    this.featuredGroup.markAllAsDirty();
+    if (this.featuredGroup.invalid) {
+      this.hotToastService.error(this.formValidationService.formSubmitError);
+      return;
+    }
+    if (!this.featuredID) {
+      this.hotToastService.error('Error occurred while submitting details');
+      return;
+    }
+    const featured: FeaturedCore = {
+      name: this.featuredGroup.getRawValue().name,
+      location: this.featuredGroup.getRawValue().location,
+      ...this.featuredGroup.value
+    };
+    this.store.updateFeatured$({
+      id: this.featuredID,
+      featured
+    });
+  }
 
 }

@@ -1,4 +1,4 @@
-<form class='p-4' [formGroup]='featuredGroup'>
+<form class='p-4' [formGroup]='featuredGroup' (ngSubmit)='submit()'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -11,7 +11,7 @@
         <button
           mat-flat-button
           class='ml-3'
-          color='primary' type='submit' [disabled]='(store.isLoading$ | async ) || (store.loaded$ | async) '>
+          color='primary' type='submit' [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'>
           Save
         </button>
       </div>
@@ -129,8 +129,8 @@
                 <span>Questionnaire</span>
               </button>
               <button type='button'
-                      *ngIf='(selectedFeatured?.name !== featuredType.SPOTLIGHT) || (selectedFeatured?.name !== featuredType.FEATURED_TESTS)'
-                      mat-menu-item>
+                      *ngIf='(selectedFeatured?.name !== featuredType.FEATURED_TESTS)'
+                      mat-menu-item (click)='openPacksSelector()'>
                 <span>Pack</span>
               </button>
             </mat-menu>
@@ -149,7 +149,7 @@
                     [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                     [name]='content.name'
                     [category]='packContentTypeEnum.GROUP'
-                    (emitDeleteEvent)='null'
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.GROUP, content.id)'
                   ></hidden-innovation-pack-content-card>
                 </ng-template>
               </div>
@@ -161,11 +161,11 @@
                     [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                     [name]='content.name'
                     [category]='packContentTypeEnum.QUESTIONNAIRE'
-                    (emitDeleteEvent)='null'
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.QUESTIONNAIRE, content.id)'
                   ></hidden-innovation-pack-content-card>
                 </ng-template>
               </div>
-              <div *ngSwitchCase='featuredType.PACKS'>
+              <div *ngSwitchCase='packContentTypeEnum.PACK'>
                 <ng-container *ngTemplateOutlet='packSelectedState'></ng-container>
               </div>
             </div>
@@ -196,7 +196,7 @@
       [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
       [name]='content.name'
       [category]='packContentTypeEnum.PACK'
-      (emitDeleteEvent)='null'
+      (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.PACK, content.id)'
     ></hidden-innovation-pack-content-card>
   </ng-template>
 </ng-template>
@@ -209,7 +209,7 @@
       [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
       [name]='content.name'
       [category]='packContentTypeEnum.SINGLE'
-      (emitDeleteEvent)='null'
+      (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.SINGLE, content.id)'
     ></hidden-innovation-pack-content-card>
   </ng-template>
 </ng-template>

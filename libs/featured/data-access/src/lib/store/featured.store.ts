@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Featured, FeaturedListingFilters } from '../models/featured.interface';
+import { Featured, FeaturedCore } from '../models/featured.interface';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { FeaturedService } from '../services/featured.service';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
+import { Router } from '@angular/router';
 
 export interface FeaturedState {
   featuredList: Featured[];
@@ -31,15 +32,15 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
 
   private toastRef: CreateHotToastRef<unknown> | undefined;
 
-  getFeaturedList$ = this.effect<FeaturedListingFilters>(params$ =>
+  getFeaturedList$ = this.effect(params$ =>
     params$.pipe(
-      tap((_) => {
+      tap(() => {
         this.patchState({
           isLoading: true
         });
       }),
-      switchMap((reqObj) =>
-        this.featuredService.getFeaturedList(reqObj).pipe(
+      switchMap(() =>
+        this.featuredService.getFeaturedList().pipe(
           tapResponse(
             (featuredList) => {
               this.patchState({
@@ -102,9 +103,51 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
     )
   );
 
+  updateFeatured$ = this.effect<{ id: number, featured: FeaturedCore }>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Updating Featured...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap(({ featured, id }) =>
+        this.featuredService.updateFeatured(id, featured).pipe(
+          tapResponse(
+            (selectedFeatured) => {
+              this.patchState({
+                isActing: false,
+                loaded: true,
+                selectedFeatured
+              });
+              this.toastRef?.updateMessage('Featured Updated!');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success',
+                duration: 300
+              });
+              this.router.navigate(['/featured']);
+            },
+            error => {
+              this.patchState({
+                isActing: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
+        )
+      )
+    )
+  );
+
   constructor(
     private featuredService: FeaturedService,
     private hotToastService: HotToastService,
+    private router: Router,
   ) {
     super(initialState);
   }

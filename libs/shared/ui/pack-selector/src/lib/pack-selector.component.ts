@@ -1,48 +1,28 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
-import { PublishStatusEnum, SortingEnum, StatusChipType, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { DateTime } from 'luxon';
-import { TestListingFilters } from '@hidden-innovation/test/data-access';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { Pack, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
+import { Observable } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { UiStore } from '@hidden-innovation/shared/store';
+import { HotToastService } from '@ngneat/hot-toast';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { isEqual } from 'lodash-es';
+import { MatSelectionListChange } from '@angular/material/list';
 
-export enum PackType {
-  CARDIO = 'CARDIO',
-  LIFESTYLE = 'LIFESTYLE',
-  FUNCTION = 'FUNCTION',
-  MOVEMENT = 'MOVEMENT',
-  STRENGTH = 'STRENGTH'
+export interface PackSelectorData {
+  limit?: boolean;
 }
-
-
-export const dummyPack = [
-  {
-    name: 'Pack 1',
-    category: PackType.CARDIO,
-    updated_at: DateTime.now().toISODate()
-  },
-  {
-    name: 'Pack 2',
-    category: PackType.LIFESTYLE,
-    updated_at: DateTime.now().toISODate()
-  },
-  {
-    name: 'Pack 3',
-    category: PackType.STRENGTH,
-    updated_at: DateTime.now().toISODate()
-  },
-  {
-    name: 'Pack 4',
-    category: PackType.FUNCTION,
-    updated_at: DateTime.now().toISODate()
-  },
-  {
-    name: 'Pack 5',
-    category: PackType.MOVEMENT,
-    updated_at: DateTime.now().toISODate()
-  }
-];
 
 @Component({
   selector: 'hidden-innovation-pack-selector',
@@ -52,19 +32,10 @@ export const dummyPack = [
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PackSelectorComponent implements OnInit {
+  displayedColumns: string[] = ['select', 'id', 'name', 'updated_at', 'lessons', 'content', 'status'];
+  packs: MatTableDataSource<Pack> = new MatTableDataSource<Pack>();
 
-  displayedColumns: string[] = ['select', 'name', 'category', 'updated_at'];
-  packSelector: MatTableDataSource<any> = new MatTableDataSource();
-
-  filters: FormGroup<TestListingFilters> = new FormGroup<TestListingFilters>({
-    type: new FormControl(undefined),
-    category: new FormControl(undefined),
-    dateSort: new FormControl(SortingEnum.DESC),
-    nameSort: new FormControl({ value: undefined, disabled: true }),
-    search: new FormControl(undefined),
-    level: new FormControl(undefined),
-    published: new FormControl(undefined)
-  });
+  noData?: Observable<boolean>;
 
   // Paginator options
   pageIndex = this.constantDataService.PaginatorData.pageIndex;
@@ -76,22 +47,164 @@ export class PackSelectorComponent implements OnInit {
   publishStatusEnum = PublishStatusEnum;
   sortingEnum = SortingEnum;
 
+  filters: FormGroup<PackListingFilters> = new FormGroup<PackListingFilters>({
+    dateSort: new FormControl(SortingEnum.DESC),
+    nameSort: new FormControl({ value: undefined, disabled: true }),
+    search: new FormControl(undefined),
+    published: new FormControl(undefined)
+  });
 
-  tagCategoryIte = Object.values(TagCategoryEnum);
+  selectedPacks: Pack[] = [];
+  dummyPacks: Pack[] = [];
+
+  initialised = false;
+  isLoading = false;
 
   constructor(
-    public constantDataService: ConstantDataService
+    public matDialogRef: MatDialogRef<Pack[]>,
+    public constantDataService: ConstantDataService,
+    public store: PackStore,
+    @Inject(MAT_DIALOG_DATA) public data: PackSelectorData,
+    private cdr: ChangeDetectorRef,
+    public uiStore: UiStore,
+    private hotToastService: HotToastService
   ) {
+    if (this.data === undefined || this.data === null) {
+      this.hotToastService.error('Application Error! Data needs to to sent before selecting any tests');
+      this.matDialogRef.close();
+      return;
+    }
+    this.noData = this.packs.connect().pipe(map(data => data.length === 0));
+    this.uiStore.selectedPacks$.subscribe((res) => {
+      this.selectedPacks = res;
+      this.dummyPacks = res;
+    });
+    if (!this.initialised) {
+      this.uiStore.patchState({
+        selectedPacks: this.selectedPacks
+      });
+      this.initialised = true;
+      this.cdr.markForCheck();
+    }
+    this.refreshList();
   }
 
   get paginatorIndex() {
     return this.pageIndex - 1;
   }
 
+  resetPagination(): void {
+    this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
+    this.pageSize = this.constantDataService.PaginatorData.pageSize;
+  }
+
+
+  refreshList(): void {
+    const { nameSort, dateSort, search, published } = this.filters.value;
+    this.store.getPacks$({
+      page: this.pageIndex,
+      limit: this.pageSize,
+      dateSort,
+      search,
+      published,
+      nameSort
+    });
+  }
+
 
   ngOnInit(): void {
-    this.packSelector = new MatTableDataSource(dummyPack);
-    console.log(dummyPack);
+    this.store.packs$.subscribe(
+      (packs) => {
+        this.packs = new MatTableDataSource<Pack>(packs);
+        this.noData = this.packs.connect().pipe(map(data => data.length === 0));
+        if (!packs?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+          this.resetPagination();
+        }
+        this.cdr.markForCheck();
+      }
+    );
+    this.store.isLoading$.subscribe(loading => this.isLoading = loading);
+    this.filters.valueChanges.pipe(
+      distinctUntilChanged((x, y) => isEqual(x, y)),
+      tap(_ => this.refreshList())
+    ).subscribe();
+  }
+
+  isSelected(pack: Pack): boolean {
+    return !!this.selectedPacks.find(value => value.id === pack.id);
+  }
+
+  addToList(pack: Pack): void {
+    let selectedPacks: Pack[] = [];
+    if (this.selectedPacks.find(value => value.id === pack.id)) {
+      selectedPacks = [
+        ...this.selectedPacks.filter(t => t.id !== pack.id)
+      ];
+    } else {
+      if (this.data?.limit) {
+        selectedPacks = [pack];
+      } else {
+        selectedPacks = [
+          ...this.selectedPacks,
+          pack
+        ];
+      }
+    }
+    this.uiStore.patchState({
+      selectedPacks
+    });
+  }
+
+  onPaginateChange($event: PageEvent): void {
+    this.pageIndex = $event.pageIndex + 1;
+    this.pageSize = $event.pageSize;
+    this.refreshList();
+  }
+
+  trackById(index: number, p: Pack): number {
+    return p.id;
+  }
+
+  updateSorting(fieldName: 'dateSort' | 'nameSort'): void {
+    const { nameSort, dateSort } = this.filters.controls;
+
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+    switch (fieldName) {
+      case 'nameSort':
+        dateSort.disable();
+        updateSortingCtrl(nameSort);
+        break;
+      case 'dateSort':
+        nameSort.disable();
+        updateSortingCtrl(dateSort);
+        break;
+    }
+  }
+
+  updateFilterChange(matSelection: MatSelectionListChange, ctrl: FormControl): void {
+    const value = matSelection.source._value as unknown as Array<boolean | undefined>;
+    let expandedVal: boolean | undefined;
+    try {
+      expandedVal = value[0] ?? undefined;
+    } catch {
+      expandedVal = undefined;
+    }
+    if (expandedVal !== undefined && expandedVal !== null) {
+      ctrl.setValue(expandedVal);
+      ctrl.enable();
+    } else {
+      ctrl.setValue(undefined);
+      ctrl.disable();
+    }
   }
 
 

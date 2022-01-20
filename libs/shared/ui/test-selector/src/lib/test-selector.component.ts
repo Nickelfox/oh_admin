@@ -175,8 +175,6 @@ export class TestSelectorComponent implements OnInit {
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
     ).subscribe();
-    this.updateSorting('nameSort');
-    this.updateSorting('nameSort');
   }
 
   onPaginateChange($event: PageEvent): void {

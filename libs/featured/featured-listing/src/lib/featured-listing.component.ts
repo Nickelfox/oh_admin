@@ -1,14 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {
-  Featured,
-  FeaturedListingFilters,
-  FeaturedLocalState,
-  FeaturedStore
-} from '@hidden-innovation/featured/data-access';
+import { Featured, FeaturedLocalState, FeaturedStore } from '@hidden-innovation/featured/data-access';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { FeaturedNameEnum, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { FeaturedNameEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { Router } from '@angular/router';
 
 
@@ -22,7 +16,9 @@ import { Router } from '@angular/router';
 
 
 export class FeaturedListingComponent implements OnInit {
-  _dummyFeatured: FeaturedLocalState[] = [
+  displayedColumns: string[] = ['name', 'location', 'updated_at', 'items', 'action'];
+  featured: MatTableDataSource<FeaturedLocalState> = new MatTableDataSource<FeaturedLocalState>();
+  private _dummyFeatured: FeaturedLocalState[] = [
     {
 
       name: FeaturedNameEnum.SPOTLIGHT,
@@ -75,24 +71,13 @@ export class FeaturedListingComponent implements OnInit {
 
   ];
 
-  displayedColumns: string[] = ['name', 'location', 'updated_at', 'items', 'action'];
-  featured: MatTableDataSource<FeaturedLocalState> = new MatTableDataSource<FeaturedLocalState>();
-
-
-  filters: FormGroup<FeaturedListingFilters> = new FormGroup<FeaturedListingFilters>({
-    dateSort: new FormControl(SortingEnum.DESC)
-  });
-
-
   constructor(
     public constantDataService: ConstantDataService,
     public store: FeaturedStore,
     private cdr: ChangeDetectorRef,
-    private router: Router
   ) {
     this.featured = new MatTableDataSource<FeaturedLocalState>(this.localData);
     this.refreshList();
-
   }
 
   get localData(): FeaturedLocalState[] {
@@ -102,14 +87,10 @@ export class FeaturedListingComponent implements OnInit {
   set localData(featured: FeaturedLocalState[]) {
     this._dummyFeatured = [...featured];
     this.featured = new MatTableDataSource<FeaturedLocalState>(this.localData);
-
   }
 
   refreshList(): void {
-    const { dateSort } = this.filters.value;
-    this.store.getFeaturedList$({
-      dateSort
-    });
+    this.store.getFeaturedList$();
   }
 
   getItemsCount(feature: Featured): number {
