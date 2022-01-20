@@ -50,6 +50,8 @@ export class PackContentCardComponent {
         return '#FFC107';
       case PackContentTypeEnum.QUESTIONNAIRE:
         return '#4DB6AC';
+      case PackContentTypeEnum.PACK:
+        return '#A259FF';
       default:
         return '#c4c6cc';
     }

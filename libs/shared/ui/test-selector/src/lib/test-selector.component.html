@@ -2,7 +2,9 @@
   <div class='d-flex align-items-center justify-content-between'>
     <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
       <ng-template [ngIf]='this.categoryData.type === contentSelectorOpType.SINGLE' [ngIfElse]='elseTitle'>
-        ADD TEST OF TYPE - <b>{{categoryData ? (categoryData?.category | titlecase) : "--"}}</b>
+        <ng-template [ngIf]='!this.categoryData?.limit' [ngIfElse]='elseTitle'>
+          ADD TEST OF TYPE - <b>{{categoryData ? (categoryData?.category | titlecase) : "--"}}</b>
+        </ng-template>
       </ng-template>
       <ng-template #elseTitle>
         ADD TEST
@@ -49,7 +51,7 @@
                     </th>
                     <td mat-cell *matCellDef='let test'>
                       <mat-checkbox
-                        [disabled]='(store.isLoading$ | async) || (store.isActing$ | async) || ((categoryData?.limit && selectedTests.length >= selectionLimit) && !isSelected(test))'
+                        [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
                         color='primary'
                         (click)='$event.stopPropagation()'
                         (change)='$event ? addToList(test) : null'
@@ -226,7 +228,7 @@
 
                   <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumns;'
-                      (click)='isLoading ? null : ((categoryData?.limit && selectedTests.length >= selectionLimit) ? (isSelected(row) ? addToList(row) : null) : addToList(row))'
+                      (click)='isLoading ? null : addToList(row)'
                       [ngClass]='{"active":isSelected(row)}'
                       class='row-react'></tr>
                 </table>

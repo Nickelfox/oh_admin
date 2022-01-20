@@ -224,8 +224,7 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
     }
     const data: TestSelectorData = {
       type: ContentSelectorOpType.SINGLE,
-      limit: true,
-      limitValue: 1
+      limit: this.isSpotlight
     };
     this.matDialog.open(TestSelectorComponent, {
       data,
@@ -242,7 +241,8 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
       this.type = PackContentTypeEnum.GROUP;
     }
     const data: TestGroupSelectorData = {
-      type: ContentSelectorOpType.SINGLE
+      type: ContentSelectorOpType.SINGLE,
+      limit: this.isSpotlight
     };
     this.matDialog.open(TestGroupSelectorComponent, {
       data,
@@ -259,7 +259,8 @@ export class CreateFeaturedComponent implements OnInit, OnDestroy {
       this.type = PackContentTypeEnum.QUESTIONNAIRE;
     }
     const data: QuestionnaireSelectorData = {
-      type: ContentSelectorOpType.SINGLE
+      type: ContentSelectorOpType.SINGLE,
+      limit: this.isSpotlight
     };
     this.matDialog.open(QuestionnaireSelectorComponent, {
       data,

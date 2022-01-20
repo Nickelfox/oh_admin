@@ -125,7 +125,7 @@
               </button>
               <button type='button'
                       *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
-                      mat-menu-item>
+                      mat-menu-item (click)='openQuestionnaireSelector()'>
                 <span>Questionnaire</span>
               </button>
               <button type='button'
@@ -144,9 +144,9 @@
               <div *ngSwitchCase='packContentTypeEnum.GROUP'>
                 <ng-template [ngIf]='uiStore.testGroupsExists$ | async' [ngIfElse]='elseExists'>
                   <hidden-innovation-pack-content-card
-                    class='mb-3'
+                    class='mb-2'
                     *ngFor='let content of (uiStore.selectedTestGroups$ | async); index as i; first as isFirst; last as isLast'
-                    [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                     [name]='content.name'
                     [category]='packContentTypeEnum.GROUP'
                     (emitDeleteEvent)='null'
@@ -156,9 +156,9 @@
               <div *ngSwitchCase='packContentTypeEnum.QUESTIONNAIRE'>
                 <ng-template [ngIf]='uiStore.questionnairesExists$ | async' [ngIfElse]='elseExists'>
                   <hidden-innovation-pack-content-card
-                    class='mb-3'
+                    class='mb-2'
                     *ngFor='let content of (uiStore.selectedQuestionnaires$ | async); index as i; first as isFirst; last as isLast'
-                    [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                     [name]='content.name'
                     [category]='packContentTypeEnum.QUESTIONNAIRE'
                     (emitDeleteEvent)='null'
@@ -195,7 +195,7 @@
       *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
       [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
       [name]='content.name'
-      [category]='packContentTypeEnum.SINGLE'
+      [category]='packContentTypeEnum.PACK'
       (emitDeleteEvent)='null'
     ></hidden-innovation-pack-content-card>
   </ng-template>
