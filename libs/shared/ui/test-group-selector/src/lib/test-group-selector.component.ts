@@ -39,6 +39,7 @@ import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
 
 export interface TestGroupSelectorData {
   type: ContentSelectorOpType;
+  limit?: boolean;
 }
 
 @UntilDestroy({ checkProperties: true })
@@ -161,8 +162,6 @@ export class TestGroupSelectorComponent implements OnInit {
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
     ).subscribe();
-    this.updateSorting('nameSort');
-    this.updateSorting('nameSort');
   }
 
 
@@ -196,14 +195,18 @@ export class TestGroupSelectorComponent implements OnInit {
   addToList(tg: TestGroup): void {
     let selectedContent: (ContentCore | LessonCore)[] = [];
     let selectedTestGroups: TestGroup[] = [];
-    let selectedItem : ContentCore;
+    let selectedItem: ContentCore;
     switch (this.data.type) {
       case ContentSelectorOpType.SINGLE:
         if (!this.selectedTestGroups.find(value => value.id === tg.id)) {
-          selectedTestGroups = [
-            ...this.selectedTestGroups,
-            tg
-          ];
+          if (this.data?.limit) {
+            selectedTestGroups = [tg];
+          } else {
+            selectedTestGroups = [
+              ...this.selectedTestGroups,
+              tg
+            ];
+          }
         } else {
           selectedTestGroups = [
             ...this.selectedTestGroups.filter(t => t.id !== tg.id)
@@ -218,14 +221,25 @@ export class TestGroupSelectorComponent implements OnInit {
         if (selectedItem) {
           selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
         } else {
-          selectedContent = [
-            ...this.selectedContents,
-            {
-              contentId: tg.id,
-              type: PackContentTypeEnum.GROUP,
-              name: tg.name
-            } as ContentCore
-          ];
+          if (this.data?.limit) {
+            selectedContent = [
+              {
+                contentId: tg.id,
+                type: PackContentTypeEnum.GROUP,
+                name: tg.name
+              } as ContentCore
+            ];
+          } else {
+            selectedContent = [
+              ...this.selectedContents,
+              {
+                contentId: tg.id,
+                type: PackContentTypeEnum.GROUP,
+                name: tg.name
+              } as ContentCore
+            ];
+          }
+
         }
         this.uiStore.patchState({
           selectedContent

@@ -181,9 +181,13 @@ export class TestStore extends ComponentStore<TestState> {
               this.patchState({
                 isLoading: false
               });
+              this.toastRef?.close();
             }
           ),
-          catchError(() => EMPTY)
+          catchError(() => {
+            this.toastRef?.close();
+            return EMPTY;
+          })
         )
       )
     )
