@@ -13,10 +13,11 @@
               <div class='col-12'>
                 <table mat-table [dataSource]='assessment' class='w-100'>
                   <ng-container matColumnDef='category'>
-                    <th mat-header-cell *matHeaderCellDef >
+                    <th mat-header-cell *matHeaderCellDef>
                       {{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
                     </th>
-                    <td mat-cell *matCellDef='let element'> {{(element.category | replaceUnderscore | titlecase) || '--'}} </td>
+                    <td mat-cell
+                        *matCellDef='let element'> {{(element.category | replaceUnderscore | titlecase) || '--'}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef='test'>
@@ -25,18 +26,18 @@
                   </ng-container>
 
                   <ng-container matColumnDef='worstCase'>
-                    <th mat-header-cell *matHeaderCellDef >Worst Case </th>
+                    <th mat-header-cell *matHeaderCellDef>Worst Case</th>
                     <td mat-cell *matCellDef='let element'> {{element.worstCase || 0}}  </td>
                   </ng-container>
 
 
                   <ng-container matColumnDef='bestCase'>
-                    <th mat-header-cell *matHeaderCellDef >Best Case</th>
+                    <th mat-header-cell *matHeaderCellDef>Best Case</th>
                     <td mat-cell *matCellDef='let element'> {{element.bestCase || 0}}  </td>
                   </ng-container>
 
                   <ng-container matColumnDef='lockout'>
-                    <th mat-header-cell *matHeaderCellDef >Lockout (days)</th>
+                    <th mat-header-cell *matHeaderCellDef>Lockout (days)</th>
                     <td mat-cell *matCellDef='let element'> {{element.lockout || 0}}  </td>
                   </ng-container>
 
@@ -44,14 +45,15 @@
                     <th mat-header-cell *matHeaderCellDef
                         [width]='100'>{{constantDataService.FIELD_NAME.ACTION | titlecase}}</th>
                     <td mat-cell *matCellDef='let row'>
-                      <button [disabled]='!row.id' mat-icon-button color='primary' class='my-2'  >
+                      <button [disabled]='!row.id' mat-icon-button color='primary' class='my-2'
+                              [routerLink]="['/assessments','edit', row.id]">
                         <mat-icon style='font-size: 16px'>create</mat-icon>
                       </button>
                     </td>
                   </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef='displayedColumns' ></tr>
-                  <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react' ></tr>
+                  <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
+                  <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react'></tr>
                 </table>
               </div>
             </div>

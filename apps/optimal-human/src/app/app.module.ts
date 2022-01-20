@@ -286,7 +286,7 @@ import { TitleCasePipe } from '@angular/common';
             data: { breadcrumb: 'Assessments' }
           },
           {
-            path: 'create',
+            path: 'edit/:id',
             loadChildren: () =>
               import('@hidden-innovation/assessment/assessment-create').then(
                 (m) => m.AssessmentCreateModule
