@@ -5,7 +5,7 @@ import {Featured} from "@hidden-innovation/featured/data-access";
 
 export  interface AssessmentLocalState {
   id?:number;
-  category: TagCategoryEnum;
+  category: TagCategoryEnum ;
   test: number;
   worstCase: number;
   bestCase: number;
@@ -14,14 +14,14 @@ export  interface AssessmentLocalState {
 
 
 export interface AssessmentCore{
-  about: string;
-  name: string;
-  whyAreWeAskingQuestion:string
-  whatYouWillGetOutOfIt: string;
-  whatYouWillNeed: string;
-  howItWorks: string;
-  lockout: number;
-  imageId:number;
+  about: string | undefined;
+  name: string | undefined;
+  whyAreWeAskingQuestion:string | undefined;
+  whatYouWillGetOutOfIt: string | undefined;
+  whatYouWillNeed: string | undefined;
+  howItWorks: string | undefined;
+  lockout: number ;
+  imageId:number | undefined;
   singleTestIds: number[];
   testGroupIds: number[];
   questionnaireIds: number[];

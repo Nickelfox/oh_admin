@@ -5,7 +5,10 @@ import {PackStore} from "@hidden-innovation/pack/data-access";
 import {UiStore} from "@hidden-innovation/shared/store";
 import {HotToastService} from "@ngneat/hot-toast";
 import {ActivatedRoute} from "@angular/router";
-import {ConstantDataService} from "@hidden-innovation/shared/form-config";
+import {ConstantDataService, FormValidationService} from "@hidden-innovation/shared/form-config";
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import {Assessment, AssessmentCore} from "@hidden-innovation/assessment/data-access";
+import {NumericValueType, RxwebValidators} from "@rxweb/reactive-form-validators";
 
 @Component({
   selector: 'hidden-innovation-assessment-create',
@@ -16,15 +19,56 @@ import {ConstantDataService} from "@hidden-innovation/shared/form-config";
 })
 export class AssessmentCreateComponent implements OnInit {
 
+  // assessmentGroup: FormGroup<AssessmentCore> = new FormGroup<AssessmentCore>({
+  //   name: new FormControl<string>(undefined,[...this.formValidationService.requiredFieldValidation]),
+  //   about: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+  //   whatYouWillGetOutOfIt: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+  //   whatYouWillNeed: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+  //   lockout: new FormControl<number>(0,[...this.formValidationService.requiredFieldValidation]),
+  //   howItWorks: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+  //   whyAreWeAskingQuestion: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+  //   imageId: new FormControl<number>(undefined,[
+  //     RxwebValidators.required(),
+  //     RxwebValidators.numeric({
+  //       allowDecimal: false,
+  //       acceptValue: NumericValueType.PositiveNumber
+  //     })
+  //   ]),
+  //   testGroupIds: new FormControl([]),
+  //   singleTestIds: new FormControl([]),
+  //   questionnaireIds: new FormControl([])
+  // })
+
   constructor(
     public constantDataService: ConstantDataService,
     private matDialog: MatDialog,
     public store: PackStore,
     public uiStore: UiStore,
-  ) { }
+    public formValidationService: FormValidationService
+  ) {
+
+  }
 
   ngOnInit(): void {
   }
+
+  // populateAssessment(assessment: Assessment):void{
+  //   const {
+  //     name,
+  //     about,
+  //     whatYouWillGetOutOfIt,
+  //     whatYouWillNeed,
+  //     lockout,
+  //     howItWorks,
+  //     whyAreWeAskingQuestion,
+  //     imageId,
+  //     testGroupIds,
+  //     singleTestIds,
+  //     questionnaireIds
+  //   } = assessment
+  // }
+
+
   openContentSelectorDialog(): void {
     this.matDialog.open(ContentSelectorComponent, {
       height: '100%',
