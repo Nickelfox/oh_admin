@@ -8,7 +8,9 @@ import {ConstantDataService, FormValidationService} from "@hidden-innovation/sha
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {Assessment, AssessmentCore, AssessmentStore} from "@hidden-innovation/assessment/data-access";
 import {NumericValueType, RxwebValidators} from "@rxweb/reactive-form-validators";
-import {switchMap} from "rxjs/operators";
+import {map, switchMap} from "rxjs/operators";
+import {AspectRatio, Media} from "@hidden-innovation/media";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'hidden-innovation-assessment-create',
@@ -38,7 +40,7 @@ export class AssessmentCreateComponent implements OnInit {
     questionnaireIds: new FormControl([])
   })
 
-
+  aspectRatio = AspectRatio;
   assessmentID?:number;
   selectedAssessment: Assessment | undefined;
 
@@ -77,6 +79,16 @@ export class AssessmentCreateComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  get imageIDctrl(): FormControl<number | undefined> {
+    return this.assessmentGroup.controls.imageId;
+  }
+
+  get selectedImageData(): Observable<Media | undefined> {
+    return this.store.selectedAssessment$.pipe(
+      map(assess => assess?.image)
+    );
+  }
+
   populateAssessment(assessment: Assessment):void{
     const {
       name,
@@ -85,7 +97,7 @@ export class AssessmentCreateComponent implements OnInit {
       whatYouWillNeed,
       lockout,
       howItWorks,
-      imageId,
+      image,
       testGroupIds,
       singleTestIds,
       questionnaireIds
@@ -96,7 +108,8 @@ export class AssessmentCreateComponent implements OnInit {
       whatYouWillGetOutOfIt,
       howItWorks,
       whatYouWillNeed,
-      lockout
+      lockout,
+      imageId: image?.id
     })
   }
 
