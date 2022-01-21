@@ -49,24 +49,27 @@ export class AssessmentCreateComponent implements OnInit {
 
   }
 
+  selectedAssessment: Assessment | undefined;
+
   ngOnInit(): void {
   }
 
-  // populateAssessment(assessment: Assessment):void{
-  //   const {
-  //     name,
-  //     about,
-  //     whatYouWillGetOutOfIt,
-  //     whatYouWillNeed,
-  //     lockout,
-  //     howItWorks,
-  //     whyAreWeAskingQuestion,
-  //     imageId,
-  //     testGroupIds,
-  //     singleTestIds,
-  //     questionnaireIds
-  //   } = assessment
-  // }
+  populateAssessment(assessment: Assessment):void{
+    const {
+      name,
+      about,
+      whatYouWillGetOutOfIt,
+      whatYouWillNeed,
+      lockout,
+      howItWorks,
+      whyAreWeAskingQuestion,
+      imageId,
+      testGroupIds,
+      singleTestIds,
+      questionnaireIds
+    } = assessment
+    this.selectedAssessment = assessment;
+  }
 
 
   openContentSelectorDialog(): void {
