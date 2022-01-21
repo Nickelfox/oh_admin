@@ -14,6 +14,7 @@ import {MediaModule} from "@hidden-innovation/media";
 import {TagsDataAccessModule} from "@hidden-innovation/tags/data-access";
 import {ContentSelectorModule} from "@hidden-innovation/shared/ui/content-selector";
 import {PackContentCardModule} from "@hidden-innovation/shared/ui/pack-content-card";
+import {AssessmentDataAccessModule} from "@hidden-innovation/assessment/data-access";
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import {PackContentCardModule} from "@hidden-innovation/shared/ui/pack-content-c
     PackDataAccessModule,
     FormFieldErrorsModule,
     PackContentCardModule,
+    AssessmentDataAccessModule,
     RouterModule.forChild([
       {
         path: '',

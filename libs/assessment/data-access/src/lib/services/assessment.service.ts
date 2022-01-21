@@ -24,10 +24,11 @@ export class AssessmentService {
   }
 
   getAssessment(id:number): Observable<AssessmentResponseData>{
-    return this.http.get<AssessmentResponse>(`${this.env.baseURL}v1/admin/get-assessment?id=${id}`).pipe(
-      map(res => res.data),
+    return this.http.get<AssessmentResponse>(`${this.env.baseURL}/v1/admin/get-assessment?id=${id}`).pipe(
+      map(res => res.data.assessment),
       catchError((err: HttpErrorResponse) => throwError(err))
     )
   }
+
 }
 

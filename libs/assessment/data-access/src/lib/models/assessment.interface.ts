@@ -16,7 +16,6 @@ export  interface AssessmentLocalState {
 export interface AssessmentCore{
   about: string | undefined;
   name: string | undefined;
-  whyAreWeAskingQuestion:string | undefined;
   whatYouWillGetOutOfIt: string | undefined;
   whatYouWillNeed: string | undefined;
   howItWorks: string | undefined;
@@ -40,8 +39,11 @@ export interface Assessment extends AssessmentCore {
 }
 
 
+
 export interface AssessmentResponse extends CustomApiResponse {
-  data: AssessmentResponseData;
+  data: {
+    assessment:AssessmentResponseData;
+  };
 }
 
 export interface AssessmentResponseData extends Assessment {

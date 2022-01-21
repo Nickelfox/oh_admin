@@ -94,6 +94,7 @@ export class CreateFeaturedComponent implements OnDestroy {
         return;
       }
       this.store.selectedFeatured$.subscribe((feat) => {
+
         if (feat) {
           this.populateFeatured(feat);
         }
