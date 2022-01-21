@@ -1,6 +1,6 @@
 import {CustomApiResponse, TagCategoryEnum} from "@hidden-innovation/shared/models";
 import {Media} from "@hidden-innovation/media";
-import {Featured} from "@hidden-innovation/featured/data-access";
+
 
 
 export  interface AssessmentLocalState {
