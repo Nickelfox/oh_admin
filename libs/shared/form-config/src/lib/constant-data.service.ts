@@ -57,7 +57,8 @@ export class ConstantDataService {
     HEADING: 'Heading',
     SUB_HEADING: 'Subheading',
     BOTTOM_TEXT: 'Bottom Text',
-    RAIL_NAME: 'Rail Name'
+    RAIL_NAME: 'Rail Name',
+    ABOUT: 'About'
   };
 
   BUTTON_NAME = {
@@ -71,7 +72,8 @@ export class ConstantDataService {
     UN_BLOCK: 'unblock',
     ACTIVATE: 'activate',
     DEACTIVATE: 'deactivate',
-    SAVE: 'save'
+    SAVE: 'save',
+
   };
 
   CONST_NUMS = {

@@ -5,6 +5,7 @@ import {PackStore} from "@hidden-innovation/pack/data-access";
 import {UiStore} from "@hidden-innovation/shared/store";
 import {HotToastService} from "@ngneat/hot-toast";
 import {ActivatedRoute} from "@angular/router";
+import {ConstantDataService} from "@hidden-innovation/shared/form-config";
 
 @Component({
   selector: 'hidden-innovation-assessment-create',
@@ -16,6 +17,7 @@ import {ActivatedRoute} from "@angular/router";
 export class AssessmentCreateComponent implements OnInit {
 
   constructor(
+    public constantDataService: ConstantDataService,
     private matDialog: MatDialog,
     public store: PackStore,
     public uiStore: UiStore,
