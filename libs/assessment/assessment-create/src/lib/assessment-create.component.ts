@@ -19,25 +19,25 @@ import {NumericValueType, RxwebValidators} from "@rxweb/reactive-form-validators
 })
 export class AssessmentCreateComponent implements OnInit {
 
-  // assessmentGroup: FormGroup<AssessmentCore> = new FormGroup<AssessmentCore>({
-  //   name: new FormControl<string>(undefined,[...this.formValidationService.requiredFieldValidation]),
-  //   about: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
-  //   whatYouWillGetOutOfIt: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
-  //   whatYouWillNeed: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
-  //   lockout: new FormControl<number>(0,[...this.formValidationService.requiredFieldValidation]),
-  //   howItWorks: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
-  //   whyAreWeAskingQuestion: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
-  //   imageId: new FormControl<number>(undefined,[
-  //     RxwebValidators.required(),
-  //     RxwebValidators.numeric({
-  //       allowDecimal: false,
-  //       acceptValue: NumericValueType.PositiveNumber
-  //     })
-  //   ]),
-  //   testGroupIds: new FormControl([]),
-  //   singleTestIds: new FormControl([]),
-  //   questionnaireIds: new FormControl([])
-  // })
+  assessmentGroup: FormGroup<AssessmentCore> = new FormGroup<AssessmentCore>({
+    name: new FormControl<string>(undefined,[...this.formValidationService.requiredFieldValidation]),
+    about: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+    whatYouWillGetOutOfIt: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+    whatYouWillNeed: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+    lockout: new FormControl<number>(undefined,[...this.formValidationService.requiredFieldValidation]),
+    howItWorks: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+    whyAreWeAskingQuestion: new FormControl<string>('',[...this.formValidationService.requiredFieldValidation]),
+    imageId: new FormControl<number>(undefined,[
+      RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]),
+    testGroupIds: new FormControl([]),
+    singleTestIds: new FormControl([]),
+    questionnaireIds: new FormControl([])
+  })
 
   constructor(
     public constantDataService: ConstantDataService,

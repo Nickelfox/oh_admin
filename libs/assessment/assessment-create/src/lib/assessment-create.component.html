@@ -1,4 +1,4 @@
-<form class="p-4" >
+<form class="p-4" [formGroup]="assessmentGroup">
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -32,7 +32,7 @@
                   <div class='col-12'>
                     <hidden-innovation-common-form-field-textarea
                       [label]='constantDataService.FIELD_NAME.ABOUT | titlecase'
-                      controlPath='label'
+                      controlPath='about'
                     ></hidden-innovation-common-form-field-textarea>
                   </div>
                 </div>
@@ -41,7 +41,7 @@
                     <hidden-innovation-common-form-field-textarea
                       [label]="'What you’ll get out of it'"
                       [placeholder]="'eg. An understanding of your upper body strength'"
-                      controlPath='label'
+                      controlPath='whatYouWillGetOutOfIt'
                     ></hidden-innovation-common-form-field-textarea>
                   </div>
                 </div>
@@ -50,7 +50,7 @@
                     <hidden-innovation-common-form-field-textarea
                       [label]="'What you’ll need'"
                       [placeholder]="'eg. Bench with safety, bar and various free weights.'"
-                      controlPath='label'
+                      controlPath='whatYouWillNeed'
                     ></hidden-innovation-common-form-field-textarea>
                   </div>
                 </div>
@@ -58,14 +58,15 @@
                   <div class='col-12'>
                     <hidden-innovation-common-form-field-textarea
                       [label]="'How it works'"
-                      controlPath='label'
+                      controlPath='howItWorks'
                     ></hidden-innovation-common-form-field-textarea>
                   </div>
                 </div>
                 <div class='row mb-2'>
                   <div class='col-12'>
                     <hidden-innovation-common-form-field
-                      label='Lockout(days)'
+                      label='lockout(Days)'
+                      controlPath="lockout"
                     ></hidden-innovation-common-form-field>
                   </div>
                 </div>
