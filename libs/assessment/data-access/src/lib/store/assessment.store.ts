@@ -65,6 +65,46 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
     )
   );
 
+  getAssessmentDetails$ = this.effect<{ id: number }>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isLoading: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Populating Details...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      switchMap(({ id }) =>
+        this.assessmentService.getAssessment(id).pipe(
+          tapResponse(
+            (selectedAssessment) => {
+              this.patchState({
+                isLoading: false,
+                loaded: true,
+                selectedAssessment
+              });
+              this.toastRef?.close();
+            },
+            (_) => {
+              this.patchState({
+                isLoading: false
+              });
+              this.toastRef?.close();
+            }
+          ),
+          catchError(() => {
+            this.toastRef?.close();
+            return EMPTY;
+          })
+        )
+      )
+    )
+  );
+
+
   constructor(
     private assessmentService: AssessmentService,
     private hotToastService: HotToastService,

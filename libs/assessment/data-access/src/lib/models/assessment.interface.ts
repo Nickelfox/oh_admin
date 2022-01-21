@@ -44,8 +44,8 @@ export interface AssessmentResponse extends CustomApiResponse {
   data: AssessmentResponseData;
 }
 
-export interface AssessmentResponseData extends Featured {
-  Assessment: Assessment[];
+export interface AssessmentResponseData extends Assessment {
+  assessment: Assessment[];
 }
 
 export interface AssessmentListingResponse extends CustomApiResponse {
