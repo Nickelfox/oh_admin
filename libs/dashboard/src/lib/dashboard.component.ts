@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
-import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
+import { DashboardRangeFilterEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { DashboardRequest } from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
@@ -43,31 +43,33 @@ export class DashboardComponent {
     'July'
   ];
 
-  colors = {
-    cardio: '#3297E0',
-    strength: '#4EBC9C',
-    function: '#394155',
-    test1: '#394155',
-    test2: '#3297E0',
-    test3: '#9C5AB6',
-    test4: '#BFC4C8',
-    test5: '#CADF6E',
-    test6: '#54DBDF'
+  colors: {[key: string]: string} = {
+    CARDIO: '#3297E0',
+    STRENGTH: '#4EBC9C',
+    FUNCTION: '#394155',
+    MOBILE: '#54DBDF',
+    LIFESTYLE: '#CADF6E'
   };
+  completeTestColors = ['#394155',
+    '#3297E0',
+    '#9C5AB6',
+    '#BFC4C8',
+    '#CADF6E',
+    '#54DBDF']
 
   doughnutChartColorTest: ChartColor = [
     {
       backgroundColor: [
-        this.colors.cardio,
-        this.colors.strength,
-        this.colors.function
+        this.colors.CARDIO,
+        this.colors.STRENGTH,
+        this.colors.FUNCTION,
+        this.colors.MOBILE,
+        this.colors.LIFESTYLE
       ]
     }
   ];
   doughnutChartLabelTest: ChartLabel[] = [
-    'Cardio',
-    'Strength',
-    'Funtion'
+    ...Object.values(TagCategoryEnum)
   ];
   assestTest: SingleOrMultiDataSet = [
     [20, 20, 20]
@@ -78,12 +80,12 @@ export class DashboardComponent {
   doughnutChartColorComplete: ChartColor = [
     {
       backgroundColor: [
-        this.colors.test1,
-        this.colors.test2,
-        this.colors.test3,
-        this.colors.test4,
-        this.colors.test5,
-        this.colors.test6
+        this.completeTestColors[0],
+        this.completeTestColors[1],
+        this.completeTestColors[2],
+        this.completeTestColors[3],
+        this.completeTestColors[4],
+        this.completeTestColors[5]
       ]
     }
   ];
@@ -157,6 +159,7 @@ export class DashboardComponent {
       }
       this.rangeFilterGroup.markAsUntouched();
     });
+    this.store.getGenderData();
   }
 
   // get calenderView(): 'month' | 'year' | 'multi-year' {

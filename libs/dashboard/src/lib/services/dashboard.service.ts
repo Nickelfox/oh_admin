@@ -19,4 +19,22 @@ export class DashboardService {
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
+  getGenderStatics(): Observable<any> {
+    return this.http.get<DashboardResponse>(`${this.env.baseURL}/v1/admin/user-group`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+  getAllTestEngagement(): Observable<any> {
+    return this.http.get<DashboardResponse>(`${this.env.baseURL}/v1/admin/all-test-engagement`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+  getAssessmentTestEngagement(): Observable<any> {
+    return this.http.get<DashboardResponse>(`${this.env.baseURL}/v1/admin/all-assessment-engagement`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
 }
