@@ -7,6 +7,7 @@ import { DashboardRequest } from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { skip } from 'rxjs/operators';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -40,7 +41,12 @@ export class DashboardComponent {
     'April',
     'May',
     'June',
-    'July'
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
   ];
 
   colors: {[key: string]: string} = {
@@ -140,6 +146,9 @@ export class DashboardComponent {
   constructor(
     public store: DashboardStore
   ) {
+    this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: DateTime.now().toISODate(), endDate: DateTime.now().minus({
+        days: 7
+      }).toISODate()})
     this.rangeFilterGroup.controls.type.valueChanges.subscribe(res => {
       switch (res) {
         case DashboardRangeFilterEnum.WEEKLY:
@@ -149,18 +158,60 @@ export class DashboardComponent {
               days: 7
             }).toISODate()
           });
+          this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: DateTime.now().toISODate(), endDate: DateTime.now().minus({
+              days: 7
+            }).toISODate()})
+          this.store.getActiveUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: DateTime.now().toISODate(), endDate: DateTime.now().minus({
+              days: 7
+            }).toISODate()})
           break;
         case (DashboardRangeFilterEnum.MONTHLY || DashboardRangeFilterEnum.DAILY):
           this.rangeFilterGroup.patchValue({
             end: DateTime.now().toISODate(),
             start: DateTime.now().toISODate()
           });
+          this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: DateTime.now().toISODate(), endDate: DateTime.now().minus({
+              days: 7
+            }).toISODate()})
+          this.store.getActiveUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: DateTime.now().toISODate(), endDate: DateTime.now().minus({
+              days: 7
+            }).toISODate()})
           break;
       }
       this.rangeFilterGroup.markAsUntouched();
     });
     this.store.getGenderData();
-  }
+    this.rangeFilterGroup.controls.start.valueChanges.pipe(skip(1)).subscribe((value) => {
+      if(this.rangeFilterGroup.get('type').value !== DashboardRangeFilterEnum.DAILY){
+        this.store.getRegisteredUsers({
+          filterBy: this.rangeFilterGroup.get('type').value,
+          startDate: this.rangeFilterGroup.get('start').value,
+          endDate: this.rangeFilterGroup.get('end').value
+        })
+        this.store.getActiveUsers({
+          filterBy: this.rangeFilterGroup.get('type').value,
+          startDate: this.rangeFilterGroup.get('start').value,
+          endDate: this.rangeFilterGroup.get('end').value
+        })
+      }
+      }
+    )
+    this.rangeFilterGroup.controls.end.valueChanges.pipe(skip(1)).subscribe((value) => {
+      if(this.rangeFilterGroup.get('type').value === DashboardRangeFilterEnum.DAILY){
+        this.store.getRegisteredUsers({
+          filterBy: this.rangeFilterGroup.get('type').value,
+          startDate: this.rangeFilterGroup.get('start').value,
+          endDate: this.rangeFilterGroup.get('end').value
+        })
+        this.store.getActiveUsers({
+          filterBy: this.rangeFilterGroup.get('type').value,
+          startDate: this.rangeFilterGroup.get('start').value,
+          endDate: this.rangeFilterGroup.get('end').value
+        })
+      }
+      }
+    )
+  };
 
   // get calenderView(): 'month' | 'year' | 'multi-year' {
   //   const type: DashboardRangeFilterEnum = this.rangeFilterGroup.controls.type.value;

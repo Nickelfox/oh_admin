@@ -4,22 +4,35 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
 @Component({
   selector: 'hidden-innovation-line-chart',
   template: `
-    <mat-card>
-      <mat-card-content>
-        <div class='d-flex align-items-center mb-3'>
-          <mat-icon color='primary' class='mr-1 card-icon'>{{icon || '--'}}</mat-icon>
-          <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>{{label || '--'}}</h4>
-        </div>
-        <canvas baseChart
-                chartType='line'
-                [colors]='chartColors'
-                [datasets]='chartData'
-                [labels]='chartLabels'
-                [legend]='chartLegend'
-                [options]='chartOptions'>
-        </canvas>
-      </mat-card-content>
-    </mat-card>
+    <ng-template [ngIf]='isLoading' [ngIfElse]='statsLoadingElse'>
+      <hidden-innovation-shimmer
+        [rounded]='true'
+        class='mb-2'
+        height='200px'
+      ></hidden-innovation-shimmer>
+      <hidden-innovation-shimmer
+        [rounded]='true'
+        height='200px'
+      ></hidden-innovation-shimmer>
+    </ng-template>
+    <ng-template #statsLoadingElse>
+      <mat-card>
+        <mat-card-content>
+          <div class='d-flex align-items-center mb-3'>
+            <mat-icon color='primary' class='mr-1 card-icon'>{{icon || '--'}}</mat-icon>
+            <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>{{label || '--'}}</h4>
+          </div>
+          <canvas baseChart
+                  chartType='line'
+                  [colors]='chartColors'
+                  [datasets]='chartData'
+                  [labels]='chartLabels'
+                  [legend]='chartLegend'
+                  [options]='chartOptions'>
+          </canvas>
+        </mat-card-content>
+      </mat-card>
+    </ng-template>
   `,
   styleUrls: ['./line-chart.component.scss'],
   encapsulation: ViewEncapsulation.Emulated,
@@ -31,7 +44,7 @@ export class LineChartComponent implements OnInit {
   @Input() chartData: ChartDatasets = [];
   @Input() label?: string;
   @Input() icon?: string;
-
+  @Input() isLoading?: boolean | null;
   chartOptions: ChartOptions = {
     layout: {
       padding: 0

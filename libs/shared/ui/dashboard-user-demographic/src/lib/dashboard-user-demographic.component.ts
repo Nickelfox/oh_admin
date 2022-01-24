@@ -21,9 +21,10 @@ export class DashboardUserDemographicComponent implements OnInit {
   @Input() femaleBarData: ChartDatasets | null = [];
   @Input() nonBinaryBarData: ChartDatasets | null = [];
   @Input() ratioChartData: SingleOrMultiDataSet | null = [];
-  public malePercentage: number = 0;
-  public femalePercentage: number = 0;
-  public nonBinaryPercentage: number = 0;
+  @Input() isLoading: boolean | null = false;
+  public malePercentage = 0;
+  public femalePercentage = 0;
+  public nonBinaryPercentage = 0;
   femaleAgeBarColor: ChartColor = [
     {
       backgroundColor: this.colors.female
@@ -58,7 +59,7 @@ export class DashboardUserDemographicComponent implements OnInit {
     '18-24',
     '25-34',
     '35-44',
-    '45-54'
+    '45+'
   ];
   doughnutChartLabel: ChartLabel[] = [
     'Female',
