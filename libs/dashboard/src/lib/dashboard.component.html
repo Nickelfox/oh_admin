@@ -53,13 +53,15 @@
           </form>
           <div class='row mb-4'>
             <div class='col-6'>
-              <hidden-innovation-line-chart [chartData]='$any(store.registeredUsersData$ | async)' [chartLabels]='$any(store.registeredUsersLabel$ | async)'
+              <hidden-innovation-line-chart [chartData]='$any(store.registeredUsersData$ | async)'
+                                            [chartLabels]='$any(store.registeredUsersLabel$ | async)'
                                             label='Registered Users'
                                             [isLoading]='(store.isLineChartLoading$ | async)'
                                             icon='how_to_reg'></hidden-innovation-line-chart>
             </div>
             <div class='col-6'>
-              <hidden-innovation-line-chart [chartData]='$any(store.activeUserData$ | async)' [chartLabels]='$any(store.activeUserLabel$ | async)'
+              <hidden-innovation-line-chart [chartData]='$any(store.activeUserData$ | async)'
+                                            [chartLabels]='$any(store.activeUserLabel$ | async)'
                                             label='Active Users'
                                             [isLoading]='(store.isLineChartLoading$ | async)'
                                             icon='sports_martial_arts'></hidden-innovation-line-chart>
@@ -114,8 +116,9 @@
                     </div>
                     <div class='col-12 d-flex flex-column justify-content-around'>
                       <div class='container-fluid p-0 w-100'>
-                        <ng-container *ngIf="(store.assessmentTestEngagementData$ | async) as labels">
-                          <ng-container *ngFor="let category of (store.assessmentTestEngagementLables$ | async); let i=index">
+                        <ng-container *ngIf='(store.assessmentTestEngagementData$ | async) as labels'>
+                          <ng-container
+                            *ngFor='let category of (store.assessmentTestEngagementLables$ | async); let i=index'>
                             <div class='row mb-2'>
                               <div class='col-12'>
                                 <div class='w-100' mat-stroked-button
@@ -177,9 +180,9 @@
                     </div>
                     <div class='col-12 d-flex flex-column justify-content-around'>
                       <div class='container-fluid p-0 w-100'>
-                        <ng-container *ngIf="(store.completeTestEngagementLables$ | async) as completeTestLabels" >
+                        <ng-container *ngIf='(store.completeTestEngagementLables$ | async) as completeTestLabels'>
                           <ng-container
-                            *ngFor="let test of (store.completeTestEngagementData$ | async);let i = index">
+                            *ngFor='let test of (store.completeTestEngagementData$ | async);let i = index'>
                             <div class='row mb-2'>
                               <div class='col-12'>
                                 <div class='w-100' mat-stroked-button
@@ -189,7 +192,8 @@
                                     </mat-icon>
                                     <div class='d-flex  align-items-center justify-content-between'
                                          [ngStyle]='{width: "calc(100% - 42px)"}'>
-                                      <h3 class='mat-h4 m-0 ml-3 text-nowrap text-truncate overflow-hidden' [ngStyle]='{width: "150px"}'>{{completeTestLabels[i]}}</h3>
+                                      <h3 class='mat-h4 m-0 ml-3 text-nowrap text-truncate overflow-hidden'
+                                          [ngStyle]='{width: "150px"}'>{{completeTestLabels[i]}}</h3>
                                       <h3 class='mat-h1 m-0'
                                           [ngStyle]='{"color": completeTestColors[i]}'>{{test}} %</h3>
                                     </div>

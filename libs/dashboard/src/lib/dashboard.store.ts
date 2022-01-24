@@ -279,9 +279,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     private uiStore: UiStore
   ) {
     super(initialState);
-    this.getStats();
-    this.getCompleteTestEngagement();
-    this.getAssessmentTestEngagement();
   }
 
   public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): any {
