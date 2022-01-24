@@ -1,25 +1,22 @@
 import {CustomApiResponse, TagCategoryEnum} from "@hidden-innovation/shared/models";
 import {Media} from "@hidden-innovation/media";
 
-
-
-export  interface AssessmentLocalState {
-  id?:number;
+export  interface AssessmentListState {
   category: TagCategoryEnum ;
-  test: number;
+  count: number;
   worstCase: number;
   bestCase: number;
   lockout:number;
 }
 
-
 export interface AssessmentCore{
   about: string | undefined;
   name: string | undefined;
+  count: number | undefined;
   whatYouWillGetOutOfIt: string | undefined;
   whatYouWillNeed: string | undefined;
   howItWorks: string | undefined;
-  lockout: number ;
+  lockout: number | undefined;
   imageId:number | undefined;
   singleTestIds: number[];
   testGroupIds: number[];
@@ -37,8 +34,6 @@ export interface Assessment extends AssessmentCore {
   created_at: string;
   updated_at: string;
 }
-
-
 
 export interface AssessmentResponse extends CustomApiResponse {
   data: {
