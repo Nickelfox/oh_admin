@@ -214,7 +214,4 @@ export class DashboardComponent {
   //   }
   // }
 
-  submit(): void {
-    console.log(this.rangeFilterGroup);
-  }
 }

@@ -3,7 +3,7 @@
     <div class='row'>
       <div class='col-12'>
         <div class='container-fluid p-0'>
-          <form class='row mb-4' [formGroup]='rangeFilterGroup' (ngSubmit)='submit()'>
+          <form class='row mb-4' [formGroup]='rangeFilterGroup'>
             <div class='col-6 col-lg-3'>
               <hidden-innovation-dashboard-count-card [count]='store.totalUsers$ | async'
                                                       [isLoading]='store.isChangeLoading$ | async'

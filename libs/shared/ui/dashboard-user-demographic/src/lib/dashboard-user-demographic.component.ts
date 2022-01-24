@@ -9,7 +9,7 @@ import { BehaviorSubject, Observable } from "rxjs";
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardUserDemographicComponent implements OnInit {
+export class DashboardUserDemographicComponent {
 
   colors = {
     male: '#367AEC',
@@ -93,13 +93,8 @@ export class DashboardUserDemographicComponent implements OnInit {
 
   chartLegend = false;
 
-  public ngOnInit() {
-    console.log(this.femaleBarData)
-  }
-
   ngOnChanges() {
     if (this.ratioChartData) {
-      console.log(this.ratioChartData)
       const ratios = this.ratioChartData[0] as number[];
       this.malePercentage = ratios[0] as number;
       this.femalePercentage = ratios[1] as number;
