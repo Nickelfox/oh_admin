@@ -149,10 +149,10 @@ export class DashboardComponent {
     this.store.getStats();
     this.store.getCompleteTestEngagement();
     this.store.getAssessmentTestEngagement();
-    this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: DateTime.now().toISODate(), endDate: DateTime.now().minus({
+    this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
         days: 7
       }).toISODate()})
-    this.store.getActiveUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: DateTime.now().toISODate(), endDate: DateTime.now().minus({
+    this.store.getActiveUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
         days: 7
       }).toISODate()})
     this.rangeFilterGroup.controls.type.valueChanges.subscribe(res => {

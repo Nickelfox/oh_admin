@@ -42,7 +42,6 @@ export class DashboardService {
     let params = new HttpParams();
     let startDate = new Date(reqObj.startDate).toISOString();
     let endDate = new Date(reqObj.endDate).toISOString();
-    console.log(startDate, endDate);
     if(reqObj.filterBy === DashboardRangeFilterEnum.MONTHLY){
       const year = new Date(startDate).getFullYear();
       const month = new Date(startDate).getMonth();
@@ -62,7 +61,6 @@ export class DashboardService {
     let params = new HttpParams();
     let startDate = new Date(reqObj.startDate).toISOString();
     let endDate = new Date(reqObj.endDate).toISOString();
-    console.log(startDate, endDate);
     if(reqObj.filterBy === DashboardRangeFilterEnum.MONTHLY){
       const year = new Date(startDate).getFullYear();
       const month = new Date(startDate).getMonth();

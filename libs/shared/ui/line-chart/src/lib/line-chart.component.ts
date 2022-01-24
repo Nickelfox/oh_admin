@@ -8,11 +8,7 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
       <hidden-innovation-shimmer
         [rounded]='true'
         class='mb-2'
-        height='200px'
-      ></hidden-innovation-shimmer>
-      <hidden-innovation-shimmer
-        [rounded]='true'
-        height='200px'
+        height='344px'
       ></hidden-innovation-shimmer>
     </ng-template>
     <ng-template #statsLoadingElse>

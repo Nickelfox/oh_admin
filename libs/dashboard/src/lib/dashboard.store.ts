@@ -281,11 +281,14 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     super(initialState);
   }
 
-  public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): any {
+  public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): {dataSet: ChartDatasets; labels: ChartLabel} {
     const filterBy = reqObj.filterBy;
-    let dataLabels: ChartLabel;
-    let dataSet: number[];
-    let label;
+    let dataLabels: ChartLabel = [];
+    let dataSet: number[] = [];
+    const label = '';
+    if(!users.length){
+      return { dataSet: [{ data: dataSet, label: label }], labels: dataLabels };
+    }
     // if (filterBy === 'DashboardRangeFilterEnum.DAILY') {
     //   dataLabels = [
     //     'Jan',
@@ -314,18 +317,24 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       });
       dataSet = Array.from(Array(totalDaysInMonth).fill(0));
       for (const user of users) {
-        // @ts-ignore
-        const date = users[0]?.created_at ? new Date(user.created_at).getDate() : new Date(user.lastActive).getDate();
+        const createdAt: string = user.created_at ?? '';
+        const lastActive: string = user.lastActive ?? '';
+        const date = createdAt ? new Date(createdAt).getDate() : new Date(lastActive).getDate();
         dataSet[date]++;
       }
-      label = 'feb';
     } else if (filterBy === DashboardRangeFilterEnum.WEEKLY) {
+      let startDay = new Date(reqObj.startDate).getDay();
       dataLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       dataSet = Array.from(Array(7).fill(0));
       for (const user of users) {
-        // @ts-ignore
-        const date = users[0]?.created_at ? new Date(user.created_at).getDay() : new Date(user.lastActive).getDay();
+        const createdAt: string = user.created_at ?? '';
+        const lastActive: string = user.lastActive ?? '';
+        const date = createdAt ? new Date(createdAt).getDay() : new Date(lastActive).getDay();
         dataSet[date]++;
+      }
+      while (startDay--){
+        dataLabels.push(dataLabels.shift() as string);
+        dataSet.push(dataSet.shift() as number);
       }
     } else if (filterBy === DashboardRangeFilterEnum.DAILY) {
       dataLabels = getDateArray(new Date(reqObj.startDate), new Date(reqObj.endDate)) as ChartLabel;
@@ -345,7 +354,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       }
       dataSet = Object.values(obj);
     }
-    // @ts-ignore
     return { dataSet: [{ data: dataSet, label: label }], labels: dataLabels };
   }
 
