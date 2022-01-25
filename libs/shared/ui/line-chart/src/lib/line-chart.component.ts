@@ -9,6 +9,7 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
         [rounded]='true'
         class='mb-2'
         height='344px'
+        width='100%'
       ></hidden-innovation-shimmer>
     </ng-template>
     <ng-template #statsLoadingElse>

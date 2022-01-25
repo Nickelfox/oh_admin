@@ -82,16 +82,23 @@
       <div class='col-6'>
         <div class='row'>
           <ng-template [ngIf]='(store.isChangeLoading$ | async)' [ngIfElse]='assessmentLoadingElse'>
-            <hidden-innovation-shimmer
-              [rounded]='true'
-              class='mb-2'
-              height='500px'
-            ></hidden-innovation-shimmer>
+            <div class='col-6'>
+              <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
+            </div>
+            <div class='col-6'>
+              <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
+            </div>
+            <ng-template #dummyShimmerRef>
+              <hidden-innovation-shimmer
+                [rounded]='true'
+                height='500px'
+                width='100%'
+              ></hidden-innovation-shimmer>
+            </ng-template>
           </ng-template>
           <ng-template #assessmentLoadingElse>
             <div class='col-6'>
               <mat-card>
-
                 <div class='container-fluid p-0'>
                   <div class='row'>
                     <div class='col-12'>
@@ -145,15 +152,6 @@
                 </div>
               </mat-card>
             </div>
-          </ng-template>
-          <ng-template [ngIf]='(store.isChangeLoading$ | async)' [ngIfElse]='testLoadingElse'>
-            <hidden-innovation-shimmer
-              [rounded]='true'
-              class='mb-2'
-              height='500px'
-            ></hidden-innovation-shimmer>
-          </ng-template>
-          <ng-template #testLoadingElse>
             <div class='col-6'>
               <mat-card>
                 <div class='container-fluid p-0'>
@@ -314,7 +312,6 @@
             </div>
           </ng-template>
         </div>
-
       </div>
     </div>
   </div>

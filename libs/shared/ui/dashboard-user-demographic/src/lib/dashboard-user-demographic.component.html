@@ -1,12 +1,30 @@
 <ng-template [ngIf]='isLoading' [ngIfElse]='statsLoadingElse'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-6'>
+        <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
+      </div>
+      <div class='col-6'>
+        <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
+      </div>
+    </div>
+    <div class='row mb-4'>
+      <div class='col-6'>
+        <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-12'>
+        <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #dummyShimmerRef>
   <hidden-innovation-shimmer
     [rounded]='true'
-    class='mb-2'
-    height='100px'
-  ></hidden-innovation-shimmer>
-  <hidden-innovation-shimmer
-    [rounded]='true'
-    height='100px'
+    height='200px'
+    width='100%'
   ></hidden-innovation-shimmer>
 </ng-template>
 <ng-template #statsLoadingElse>
@@ -97,7 +115,6 @@
     <div class='row'>
       <div class='col-12'>
         <mat-card>
-
           <div class='container-fluid p-0'>
             <div class='row'>
               <div class='col-12'>
