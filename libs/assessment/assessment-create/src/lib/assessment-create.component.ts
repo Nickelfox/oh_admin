@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
-import { ContentSelectorComponent } from '@hidden-innovation/shared/ui/content-selector';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
@@ -18,9 +10,16 @@ import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validato
 import { map, switchMap } from 'rxjs/operators';
 import { AspectRatio, Media } from '@hidden-innovation/media';
 import { Observable } from 'rxjs';
-import { TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { ContentSelectorOpType, GenericDialogPrompt, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { TitleCasePipe } from '@angular/common';
+import { ContentCore } from '@hidden-innovation/pack/data-access';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
+import {
+  QuestionnaireSelectorComponent,
+  QuestionnaireSelectorData
+} from '@hidden-innovation/shared/ui/questionnaire-selector';
 
 @Component({
   selector: 'hidden-innovation-assessment-create',
@@ -29,10 +28,15 @@ import { TitleCasePipe } from '@angular/common';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AssessmentCreateComponent implements OnInit, OnDestroy {
+export class AssessmentCreateComponent implements OnDestroy {
 
   assessmentGroup: FormGroup<AssessmentCore> = new FormGroup<AssessmentCore>({
-    name: new FormControl(undefined, [...this.formValidationService.requiredFieldValidation]),
+    name: new FormControl(undefined, [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.PACK_NAME_LENGTH
+      })
+    ]),
     about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     count: new FormControl(undefined),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
@@ -46,15 +50,16 @@ export class AssessmentCreateComponent implements OnInit, OnDestroy {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    testGroupIds: new FormControl([]),
     singleTestIds: new FormControl([]),
-    questionnaireIds: new FormControl([])
+    questionnaireIds: new FormControl([]),
+    content: new FormControl<ContentCore[]>([])
   });
 
   aspectRatio = AspectRatio;
   assessmentCat?: TagCategoryEnum;
   selectedAssessment: Assessment | undefined;
 
+  private selectedContents: ContentCore[] = [];
 
   constructor(
     public constantDataService: ConstantDataService,
@@ -71,6 +76,7 @@ export class AssessmentCreateComponent implements OnInit, OnDestroy {
     this.route.data.pipe(
       switchMap(_ => this.route.params)
     ).subscribe((res) => {
+      this.restoreSelectedState();
       this.assessmentCat = res['category'] as TagCategoryEnum;
       if (!this.assessmentCat) {
         this.hotToastService.error('Error occurred while fetching details');
@@ -84,7 +90,25 @@ export class AssessmentCreateComponent implements OnInit, OnDestroy {
       });
       this.store.getAssessmentDetails$(this.assessmentCat);
     });
+    this.uiStore.selectedContent$.subscribe((contents) => {
+      this.selectedContents = contents.map((c, i) => {
+        return {
+          ...c,
+          order: i + 1
+        };
+      }) as ContentCore[];
+      this.contentArrayCtrl.setValue(this.selectedContents);
+      this.assessmentGroup.updateValueAndValidity();
+    });
+    const { content } = this.assessmentGroup.controls;
+    content.valueChanges.subscribe(_ => {
+      this.assessmentGroup.updateValueAndValidity();
+      this.cdr.markForCheck();
+    });
+  }
 
+  get contentArrayCtrl(): FormControl<ContentCore[]> {
+    return this.assessmentGroup.controls.content as FormControl<ContentCore[]>;
   }
 
   get imageIDctrl(): FormControl<number | undefined> {
@@ -97,7 +121,13 @@ export class AssessmentCreateComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit(): void {
+  restoreSelectedState(): void {
+    this.uiStore.patchState({
+      selectedContent: []
+    });
+    this.store.patchState({
+      selectedAssessment: undefined
+    });
   }
 
   populateAssessment(assessment: Assessment): void {
@@ -109,9 +139,7 @@ export class AssessmentCreateComponent implements OnInit, OnDestroy {
       lockout,
       howItWorks,
       image,
-      testGroupIds,
-      singleTestIds,
-      questionnaireIds
+      content
     } = assessment;
     this.selectedAssessment = assessment;
     this.assessmentGroup.patchValue({
@@ -120,26 +148,63 @@ export class AssessmentCreateComponent implements OnInit, OnDestroy {
       howItWorks,
       whatYouWillNeed,
       lockout,
-      imageId: image?.id
+      imageId: image?.id,
+      content,
+      name
+    });
+  }
+
+  deleteSelectedContentPrompt(content: ContentCore): void {
+    const dialogData: GenericDialogPrompt = {
+      title: `Remove ${content.type}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)} from Assessment?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.uiStore.removeContent$(content);
+      }
     });
   }
 
 
-  openContentSelectorDialog(): void {
-    this.matDialog.open(ContentSelectorComponent, {
+  openTestSelector(): void {
+    const catData: TestSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestSelectorComponent, {
+      data: catData,
       height: '100%',
       width: '100%',
       maxHeight: '100%',
       maxWidth: '100%',
       role: 'dialog'
     });
-    // testGroupDialog.afterClosed().subscribe((tgs: TestGroup[] | undefined) => {
-    // });
+  }
+
+  openQuestionnaireSelector(): void {
+    const data: QuestionnaireSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(QuestionnaireSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
   }
 
   ngOnDestroy(): void {
-    this.store.patchState({
-      selectedAssessment: undefined
-    });
+    this.restoreSelectedState();
   }
 }

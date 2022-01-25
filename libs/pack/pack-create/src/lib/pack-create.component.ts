@@ -28,7 +28,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HotToastService } from '@ngneat/hot-toast';
 import { TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { Validators } from '@angular/forms';
 import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
 import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
 import {

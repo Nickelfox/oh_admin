@@ -1,17 +1,17 @@
-<form class="p-4" [formGroup]="assessmentGroup">
+<form [formGroup]='assessmentGroup' class='p-4'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
         <button
-          mat-stroked-button type='button'
-          [routerLink]="['/assessments']"
-          class='ml-3'>
+          [routerLink]="['/assessments']" class='ml-3'
+          mat-stroked-button
+          type='button'>
           Cancel
         </button>
         <button
-          mat-flat-button
+          [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'
           class='ml-3'
-          color='primary' type='submit' [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'>
+          color='primary' mat-flat-button type='submit'>
           Save
         </button>
       </div>
@@ -65,8 +65,8 @@
                 <div class='row mb-2'>
                   <div class='col-12'>
                     <hidden-innovation-common-form-field
+                      controlPath='lockout'
                       label='lockout(Days)'
-                      controlPath="lockout"
                     ></hidden-innovation-common-form-field>
                   </div>
                 </div>
@@ -74,12 +74,12 @@
                   <div class='col-12'>
                     <p class='text-muted mb-2'>Poster</p>
                     <hidden-innovation-common-form-field-image
-                      controlPath='posterId'
-                      [setImageData]='(selectedImageData | async)'
-                      [aspectRatio]='aspectRatio.CUBE'
-                      [parentCtrl]='imageIDctrl'
                       (emitImageCtrlData)='imageIDctrl?.setValue($event)'
                       (emitRemoveImage)='imageIDctrl?.reset($event)'
+                      [aspectRatio]='aspectRatio.CUBE'
+                      [parentCtrl]='imageIDctrl'
+                      [setImageData]='(selectedImageData | async)'
+                      controlPath='posterId'
                     ></hidden-innovation-common-form-field-image>
                   </div>
                 </div>
@@ -89,18 +89,18 @@
         </div>
         <div class='col-lg-6 col-12'>
           <mat-card class='mb-2'>
-            <mat-card-title class="row m-0 mb-3 d-flex justify-content-between">
-              <h3 class='mat-h3 mb-0 font-sf-pro'>Test Options</h3>
+            <mat-card-title class='row m-0 mb-3 d-flex justify-content-between'>
+              <h3 class='mat-h3 mb-0 font-sf-pro mb-0 mt-2'>Tests</h3>
               <div class='align-items-center'>
                 <div class='col-12 mt-1  d-flex align-items-center justify-content-end'>
-                  <h5 class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>TOTAL POINTS</h5>
-                  <div class='d-flex align-items-center ml-5 mr-3'>
+                  <h5 class='mat-h5 text-color__primary--light mb-0 mr-3 font-calibri'>TOTAL POINTS</h5>
+                  <div class='d-flex align-items-center mr-3'>
                     <div class='d-flex align-items-center'>
-                      <mat-icon color='primary' class='mr-3 text-color__success'>sentiment_satisfied_alt</mat-icon>
+                      <mat-icon class='mr-3 text-color__success' color='primary'>sentiment_satisfied_alt</mat-icon>
                       <h2 class='m-0 text-color__success'>20</h2>
                     </div>
-                    <div class='d-flex align-items-center ml-5'>
-                      <mat-icon color='primary' class='mr-3 text-color__error'>sentiment_very_dissatisfied</mat-icon>
+                    <div class='d-flex align-items-center ml-4'>
+                      <mat-icon class='mr-3 text-color__error' color='primary'>sentiment_very_dissatisfied</mat-icon>
                       <h2 class='m-0 text-color__error'>0</h2>
                     </div>
                   </div>
@@ -108,54 +108,29 @@
               </div>
             </mat-card-title>
             <mat-divider></mat-divider>
-            <mat-card-content>
-              <mat-card class='mat-elevation-z3 p-3 mb-3 mt-5' >
-                <div class='container-fluid p-0'>
-                  <div class='row'>
-                    <div class='col-8'>
-                      <h4 class='mat-h4 mb-0 font-weight-bold'>{{'MAF Test'}}</h4>
-                      <h5
-                        class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>{{'Group'}}</h5>
-                    </div>
-                    <div class='col-4 d-flex justify-content-end'>
-                      <div class='d-flex align-items-center justify-content-end'>
-                        <div class='d-flex align-items-center ml-5 mr-3'>
-                          <div class='d-flex align-items-center'>
-                            <mat-icon color='primary' class='mr-3 text-color__success'>sentiment_satisfied_alt</mat-icon>
-                            <h2 class='m-0 text-color__success'>10</h2>
-                          </div>
-                          <div class='d-flex align-items-center ml-5'>
-                            <mat-icon color='primary' class='mr-3 text-color__error'>sentiment_very_dissatisfied</mat-icon>
-                            <h2 class='m-0 text-color__error'>0</h2>
-                          </div>
-                        </div>
-                      </div>
-                      <button type='button' mat-icon-button [matMenuTriggerFor]='testOption'>
-                        <mat-icon>more_vert</mat-icon>
-                      </button>
-                      <mat-menu #testOption='matMenu'>
-                        <button type='button' mat-menu-item>
-                          <mat-icon>delete</mat-icon>
-                          <span>Delete</span>
-                        </button>
-                      </mat-menu>
-                    </div>
-                  </div>
-                </div>
-              </mat-card>
+            <mat-card-content class='content-container'>
+              <hidden-innovation-pack-content-card
+                class='mb-3'
+                *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
+                [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                [name]='content.name'
+                [category]='content.type'
+                [showScore]='true'
+                (emitDeleteEvent)='null'
+              ></hidden-innovation-pack-content-card>
             </mat-card-content>
             <mat-card-actions>
-              <button
-                color='accent' class='w-100' mat-flat-button
-                type='button'
-                [matMenuTriggerFor]='menuPack'
-              >
+              <button [matMenuTriggerFor]='menuPack'
+                      class='w-100' color='accent' mat-flat-button type='button'>
                 <mat-icon class='mr-2 mb-1'>add</mat-icon>
                 Add
               </button>
               <mat-menu #menuPack='matMenu'>
-                <button type='button' mat-menu-item (click)='openContentSelectorDialog()'>
-                  <span>Content (Test/Test-Group/Questionnaire)</span>
+                <button type='button' mat-menu-item (click)='openTestSelector()'>
+                  <span>Test Single</span>
+                </button>
+                <button type='button' mat-menu-item (click)='openQuestionnaireSelector()'>
+                  <span>Questionnaire</span>
                 </button>
               </mat-menu>
             </mat-card-actions>
