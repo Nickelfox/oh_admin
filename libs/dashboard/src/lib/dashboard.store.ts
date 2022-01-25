@@ -81,7 +81,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
-        this.uiStore.toggleGlobalLoading(true);
       }),
       switchMap(() =>
         combineLatest([
@@ -92,14 +91,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
                   isLoading: false,
                   totalUser: apiRes.totalUser
                 });
-                this.uiStore.toggleGlobalLoading(false);
               },
               err => {
                 this.patchState({
                   isLoading: false
                 });
-                this.uiStore.toggleGlobalLoading(false);
-
               }
             ),
             catchError(() => EMPTY))
@@ -114,7 +110,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
-        this.uiStore.toggleGlobalLoading(true);
       }),
       switchMap(() =>
         this.dashboardService.getGenderStatics().pipe(
@@ -129,14 +124,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
                 nonBinaryUsers: this.convertToChartData(apiRes.nonBinaryUsers),
                 ageRatioData
               });
-              this.uiStore.toggleGlobalLoading(false);
             },
             err => {
               this.patchState({
                 isLoading: false
               });
-              this.uiStore.toggleGlobalLoading(false);
-
             }
           ),
           catchError(() => EMPTY))
@@ -149,7 +141,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
-        this.uiStore.toggleGlobalLoading(true);
       }),
       switchMap(() =>
         this.dashboardService.getAllTestEngagement().pipe(
@@ -161,14 +152,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
                 completeTestEngagementData: dataSet.data,
                 completeTestEngagementLables: dataSet.label
               });
-              this.uiStore.toggleGlobalLoading(false);
             },
             err => {
               this.patchState({
                 isLoading: false
               });
-              this.uiStore.toggleGlobalLoading(false);
-
             }
           ),
           catchError(() => EMPTY))
@@ -181,7 +169,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
-        this.uiStore.toggleGlobalLoading(true);
       }),
       switchMap(() =>
         this.dashboardService.getAssessmentTestEngagement().pipe(
@@ -193,14 +180,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
                 assessmentTestEngagementData: dataSet.data,
                 assessmentTestEngagementLables: dataSet.label
               });
-              this.uiStore.toggleGlobalLoading(false);
             },
             err => {
               this.patchState({
                 isLoading: false
               });
-              this.uiStore.toggleGlobalLoading(false);
-
             }
           ),
           catchError(() => EMPTY))
@@ -214,7 +198,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
           isLineChartLoading: true,
           filterBy: req.filterBy
         });
-        this.uiStore.toggleGlobalLoading(true);
       }),
       switchMap((req) =>
         this.dashboardService.getRegisteredUsers(req).pipe(
@@ -226,14 +209,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
                 registeredUsersData: dataSet.dataSet,
                 registeredUsersLabel: dataSet.labels
               });
-              this.uiStore.toggleGlobalLoading(false);
             },
             err => {
               this.patchState({
                 isLineChartLoading: false
               });
-              this.uiStore.toggleGlobalLoading(false);
-
             }
           ),
           catchError(() => EMPTY))
@@ -247,7 +227,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
           isLineChartLoading: true,
           filterBy: req.filterBy
         });
-        this.uiStore.toggleGlobalLoading(true);
       }),
       switchMap((req) =>
         this.dashboardService.getActiveUsers(req).pipe(
@@ -259,14 +238,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
                 activeUsersData: dataSet.dataSet,
                 activeUsersLabel: dataSet.labels
               });
-              this.uiStore.toggleGlobalLoading(false);
             },
             err => {
               this.patchState({
                 isLineChartLoading: false
               });
-              this.uiStore.toggleGlobalLoading(false);
-
             }
           ),
           catchError(() => EMPTY))
@@ -281,12 +257,12 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     super(initialState);
   }
 
-  public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): {dataSet: ChartDatasets; labels: ChartLabel} {
+  public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): { dataSet: ChartDatasets; labels: ChartLabel } {
     const filterBy = reqObj.filterBy;
     let dataLabels: ChartLabel = [];
     let dataSet: number[] = [];
     const label = '';
-    if(!users.length){
+    if (!users.length) {
       return { dataSet: [{ data: dataSet, label: label }], labels: dataLabels };
     }
     // if (filterBy === 'DashboardRangeFilterEnum.DAILY') {
@@ -332,7 +308,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         const date = createdAt ? new Date(createdAt).getDay() : new Date(lastActive).getDay();
         dataSet[date]++;
       }
-      while (startDay--){
+      while (startDay--) {
         dataLabels.push(dataLabels.shift() as string);
         dataSet.push(dataSet.shift() as number);
       }
