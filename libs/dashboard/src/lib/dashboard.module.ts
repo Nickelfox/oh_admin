@@ -14,6 +14,7 @@ import { DashboardUserDemographicModule } from '@hidden-innovation/shared/ui/das
 import { LineChartModule } from '@hidden-innovation/shared/ui/line-chart';
 
 import { ChartsModule } from '@rinminase/ng-charts';
+import { ShimmerModule } from '@hidden-innovation/shared/ui/shimmer';
 // import {AuthGuard} from "@hidden-innovation/auth";
 
 @NgModule({
@@ -36,7 +37,8 @@ import { ChartsModule } from '@rinminase/ng-charts';
         // canActivate: [AuthGuard],
         component: DashboardComponent
       }
-    ])
+    ]),
+    ShimmerModule
   ],
   providers: [
     DashboardService,
