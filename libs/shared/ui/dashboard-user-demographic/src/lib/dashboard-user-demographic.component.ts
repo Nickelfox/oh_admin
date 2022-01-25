@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Component({
   selector: 'hidden-innovation-dashboard-user-demographic',
@@ -12,16 +13,26 @@ export class DashboardUserDemographicComponent {
 
   colors = {
     male: '#367AEC',
-    female: '#CADF6E'
+    female: '#CADF6E',
+    other: '#2D3753',
   };
 
-  @Input() maleBarData: ChartDatasets = [];
-  @Input() femaleBarData: ChartDatasets = [];
-  @Input() ratioChartData: SingleOrMultiDataSet = [];
-
+  @Input() maleBarData: ChartDatasets | null = [];
+  @Input() femaleBarData: ChartDatasets | null = [];
+  @Input() nonBinaryBarData: ChartDatasets | null = [];
+  @Input() ratioChartData: SingleOrMultiDataSet | null = [];
+  @Input() isLoading: boolean | null = false;
+  public malePercentage = 0;
+  public femalePercentage = 0;
+  public nonBinaryPercentage = 0;
   femaleAgeBarColor: ChartColor = [
     {
       backgroundColor: this.colors.female
+    }
+  ];
+  nonBinaryAgeBarColor: ChartColor = [
+    {
+      backgroundColor: this.colors.other
     }
   ];
   maleAgeBarColor: ChartColor = [
@@ -29,11 +40,17 @@ export class DashboardUserDemographicComponent {
       backgroundColor: this.colors.male
     }
   ];
+  otherAgeBarColor: ChartColor = [
+    {
+      backgroundColor: this.colors.other
+    }
+  ];
   doughnutChartColor: ChartColor = [
     {
       backgroundColor: [
         this.colors.female,
-        this.colors.male
+        this.colors.male,
+        this.colors.other
       ]
     }
   ];
@@ -42,11 +59,12 @@ export class DashboardUserDemographicComponent {
     '18-24',
     '25-34',
     '35-44',
-    '45-54'
+    '45+'
   ];
   doughnutChartLabel: ChartLabel[] = [
     'Female',
-    'Male'
+    'Male',
+    'Other'
   ];
 
   doughnutPlugins = [this.doughnutChartLabel];
@@ -74,4 +92,13 @@ export class DashboardUserDemographicComponent {
   };
 
   chartLegend = false;
+
+  ngOnChanges() {
+    if (this.ratioChartData) {
+      const ratios = this.ratioChartData[0] as number[];
+      this.malePercentage = ratios[0] as number;
+      this.femalePercentage = ratios[1] as number;
+      this.nonBinaryPercentage = ratios[2] as number;
+    }
+  }
 }
