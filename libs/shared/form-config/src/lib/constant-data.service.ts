@@ -53,7 +53,11 @@ export class ConstantDataService {
     AGE: 'age',
     GENDER: 'gender',
     VIDEO_FILE: 'video file',
-    RESULT_EXPLANATION: 'result explanation'
+    RESULT_EXPLANATION: 'result explanation',
+    HEADING: 'Heading',
+    SUB_HEADING: 'Subheading',
+    BOTTOM_TEXT: 'Bottom Text',
+    RAIL_NAME: 'Rail Name'
   };
 
   BUTTON_NAME = {

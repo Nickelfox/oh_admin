@@ -13,3 +13,4 @@ export * from './lib/test.enum';
 export * from './lib/distance-type.enum';
 export * from './lib/weight-type.enum';
 export * from './lib/pack.enum';
+export  * from './lib/featured.enum'

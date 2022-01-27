@@ -243,7 +243,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     let answer: FormGroup<MultipleChoiceAnswer | ImageSelectAnswer | AnswerCore>;
 
     switch (question.type) {
-      case QuestionTypeEnum.MULTIPLE_CHOICE:
+        case QuestionTypeEnum.MULTIPLE_CHOICE:
         answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.answer as FormArray<MultipleChoiceAnswer>;
         answer = new FormGroup<MultipleChoiceAnswer>({
           name: new FormControl<string>(multipleChoice?.name ?? '', [

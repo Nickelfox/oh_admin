@@ -21,9 +21,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
 import { paginatorData } from '@hidden-innovation/user/data-access';
-import { OperationTypeEnum } from '@hidden-innovation/shared/models';
+import {FeaturedNameEnum, OperationTypeEnum} from '@hidden-innovation/shared/models';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import { TitleCasePipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -312,21 +313,13 @@ import { MatCardModule } from '@angular/material/card';
             data: { breadcrumb: 'Featured' }
           },
           {
-            path: 'create',
+            path: `edit/:id`,
             loadChildren: () =>
               import('@hidden-innovation/featured/create-featured').then(
                 (m) => m.CreateFeaturedModule
               ),
-            data: { breadcrumb: 'Add Featured' }
+            data: { breadcrumb: 'Edit Featured' }
           },
-          {
-            path: 'pack-selector',
-            loadChildren: () =>
-              import('@hidden-innovation/shared/ui/pack-selector').then(
-                (m) => m.PackSelectorModule
-              ),
-            data: { breadcrumb: 'Pack Selector'}
-          }
         ]
       },
 
@@ -367,7 +360,7 @@ import { MatCardModule } from '@angular/material/card';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [{ provide: ENVIRONMENT, useValue: environment }]
+  providers: [{ provide: ENVIRONMENT, useValue: environment }, TitleCasePipe]
 })
 export class AppModule {
 }

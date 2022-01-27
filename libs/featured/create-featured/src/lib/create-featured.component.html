@@ -1,4 +1,4 @@
-<div class='p-4'>
+<form class='p-4' [formGroup]='featuredGroup' (ngSubmit)='submit()'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -11,7 +11,7 @@
         <button
           mat-flat-button
           class='ml-3'
-          color='primary' type='submit'>
+          color='primary' type='submit' [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'>
           Save
         </button>
       </div>
@@ -31,127 +31,192 @@
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Location</mat-label>
-                    <input matInput autocomplete='no' type='text'>
-                  </mat-form-field>
+                  <hidden-innovation-common-form-field
+                    [label]='constantDataService.FIELD_NAME.LOCATION | titlecase'
+                    controlPath='location'
+                  ></hidden-innovation-common-form-field>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Rail Name</mat-label>
-                    <input matInput autocomplete='no' type='text'>
-                  </mat-form-field>
+                  <hidden-innovation-common-form-field
+                    [label]='constantDataService.FIELD_NAME.RAIL_NAME | titlecase'
+                    controlPath='name'
+                  ></hidden-innovation-common-form-field>
                 </div>
               </div>
-              <div class='row mb-2'>
-                <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Heading</mat-label>
-                    <input matInput autocomplete='no' type='text'>
-                  </mat-form-field>
+              <ng-template [ngIf]='selectedFeatured?.name === featuredType.SPOTLIGHT'>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field
+                      [label]='constantDataService.FIELD_NAME.HEADING | titlecase'
+                      controlPath='heading'
+                    ></hidden-innovation-common-form-field>
+                  </div>
                 </div>
-              </div>
-              <div class='row mb-2'>
-                <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Subheading</mat-label>
-                    <input matInput autocomplete='no' type='text'>
-                  </mat-form-field>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field
+                      [label]='constantDataService.FIELD_NAME.SUB_HEADING | titlecase'
+                      controlPath='subHeading'
+                    ></hidden-innovation-common-form-field>
+                  </div>
                 </div>
-              </div>
-              <div class='row mb-2'>
-                <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>Button Text</mat-label>
-                    <input matInput autocomplete='no' type='text'>
-                  </mat-form-field>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field
+                      [label]='constantDataService.FIELD_NAME.BOTTOM_TEXT | titlecase'
+                      controlPath='bottomText'
+                    ></hidden-innovation-common-form-field>
+                  </div>
                 </div>
-              </div>
+              </ng-template>
             </div>
-            <div class='container-fluid p-0 '>
-              <div class='row mb-3'>
-                <div class='col-12'>
-                  <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
-                    Media</h5>
+
+            <ng-template [ngIf]='selectedFeatured?.name === featuredType.SPOTLIGHT'>
+              <div class='container-fluid p-0 '>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                      Media</h5>
+                  </div>
+                </div>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <p class='text-muted mb-2'>Poster</p>
+                    <hidden-innovation-common-form-field-image
+                      controlPath='posterId'
+                      [setImageData]='(selectedPosterData | async)'
+                      [aspectRatio]='aspectRatio.CUBE'
+                      [parentCtrl]='posterIDctrl'
+                      (emitImageCtrlData)='posterIDctrl?.setValue($event)'
+                      (emitRemoveImage)='posterIDctrl?.reset($event)'
+                    ></hidden-innovation-common-form-field-image>
+                  </div>
                 </div>
               </div>
-              <div class='row mb-3'>
-                <div class='col-12'>
-                  <p class='text-muted mb-2'>Poster</p>
-                  <button
-                    mat-stroked-button
-                    color='primary' type='submit'>
-                    Upload
-                  </button>
-                </div>
-              </div>
-            </div>
+            </ng-template>
           </mat-card-content>
         </mat-card>
       </div>
+
+      <!--      Content Section-->
       <div class='col-lg-6 col-12'>
         <mat-card>
           <mat-card-title class='d-flex justify-content-between align-items-center'>
             <h3 class='mat-h3 mb-0 font-sf-pro'>Contents</h3>
             <button
+              [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
               mat-flat-button
               class='ml-3'
-              [matMenuTriggerFor]="menuPack"
-              color='primary' type='submit'>
+              [matMenuTriggerFor]='menuPack' color='primary' type='button'>
               Add
             </button>
-            <mat-menu #menuPack="matMenu">
-              <button mat-menu-item  (click)='openTestSelector()'>
-                <span>Test</span>
+            <mat-menu #menuPack='matMenu'>
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT) || (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
+                      mat-menu-item (click)='openTestSelector()'>
+                <span>Test Single</span>
               </button>
-              <button mat-menu-item >
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      mat-menu-item (click)='openTestGroupSelector()'>
                 <span>Test Group</span>
               </button>
-              <button mat-menu-item  >
-                <span>Packs</span>
-              </button>
-              <button mat-menu-item  >
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      mat-menu-item (click)='openQuestionnaireSelector()'>
                 <span>Questionnaire</span>
+              </button>
+              <button type='button'
+                      *ngIf='(selectedFeatured?.name !== featuredType.FEATURED_TESTS)'
+                      mat-menu-item (click)='openPacksSelector()'>
+                <span>Pack</span>
               </button>
             </mat-menu>
           </mat-card-title>
           <mat-divider></mat-divider>
-          <mat-card-content >
-
-            <div class='pt-3' cdkDrag>
-              <mat-card class='question-card mat-elevation-z3 pt-1 pr-1'>
-                <div class='d-flex align-items-center justify-content-between'>
-                  <h4 class='mat-h4 mb-0 font-weight-bold'>Luke Woolley’s High Performance Pack</h4>
-                  <div>
-                    <button type='button' mat-icon-button [matMenuTriggerFor]='menu'>
-                      <mat-icon>more_vert</mat-icon>
-                    </button>
-                    <mat-menu #menu='matMenu'>
-                      <button type='button'  mat-menu-item>
-                        <mat-icon>create</mat-icon>
-                        <span>Edit</span>
-                      </button>
-                      <button type='button'  mat-menu-item>
-                        <mat-icon>delete</mat-icon>
-                        <span>Delete</span>
-                      </button>
-                    </mat-menu>
-                  </div>
-                </div>
-                <h5
-                  class='mat-h5 d-flex align-items-center text-color__primary mb-0 mr-2 type-icon font-calibri'>
-                  <mat-icon class='d-flex align-items-center'  aria-hidden="false" aria-label="fiber manual record">fiber_manual_record</mat-icon>
-                  <span>Pack</span>
-                </h5>
-              </mat-card>
+          <mat-card-content class='content-container' [ngSwitch]='selectedFeatured?.name'>
+            <div *ngSwitchCase='featuredType.SPOTLIGHT' [ngSwitch]='type'>
+              <div *ngSwitchCase='packContentTypeEnum.SINGLE'>
+                <ng-container *ngTemplateOutlet='testSelectedState'></ng-container>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.GROUP'>
+                <ng-template [ngIf]='uiStore.testGroupsExists$ | async' [ngIfElse]='elseExists'>
+                  <hidden-innovation-pack-content-card
+                    class='mb-2'
+                    *ngFor='let content of (uiStore.selectedTestGroups$ | async); index as i; first as isFirst; last as isLast'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    [name]='content.name'
+                    [category]='packContentTypeEnum.GROUP'
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.GROUP, content.id)'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.QUESTIONNAIRE'>
+                <ng-template [ngIf]='uiStore.questionnairesExists$ | async' [ngIfElse]='elseExists'>
+                  <hidden-innovation-pack-content-card
+                    class='mb-2'
+                    *ngFor='let content of (uiStore.selectedQuestionnaires$ | async); index as i; first as isFirst; last as isLast'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    [name]='content.name'
+                    [category]='packContentTypeEnum.QUESTIONNAIRE'
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.QUESTIONNAIRE, content.id)'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.PACK'>
+                <ng-container *ngTemplateOutlet='packSelectedState'></ng-container>
+              </div>
             </div>
-
+            <div *ngSwitchCase='featuredType.FEATURED_TESTS'>
+              <ng-container *ngTemplateOutlet='testSelectedState'></ng-container>
+            </div>
+            <div *ngSwitchCase='featuredType.PACKS'>
+              <ng-container *ngTemplateOutlet='packSelectedState'></ng-container>
+            </div>
+            <div *ngSwitchCase='featuredType.FEATURED_PACKS'>
+              <ng-container *ngTemplateOutlet='packSelectedState'></ng-container>
+            </div>
+            <div *ngSwitchDefault>
+              <ng-container *ngTemplateOutlet='elseExists'></ng-container>
+            </div>
           </mat-card-content>
         </mat-card>
       </div>
     </div>
   </div>
-</div>
+</form>
+
+<ng-template #packSelectedState>
+  <ng-template [ngIf]='uiStore.packsExists$ | async' [ngIfElse]='elseExists'>
+    <hidden-innovation-pack-content-card
+      class='mb-2'
+      *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
+      [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+      [name]='content.name'
+      [category]='packContentTypeEnum.PACK'
+      (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.PACK, content.id)'
+    ></hidden-innovation-pack-content-card>
+  </ng-template>
+</ng-template>
+
+<ng-template #testSelectedState>
+  <ng-template [ngIf]='uiStore.testsExists$ | async' [ngIfElse]='elseExists'>
+    <hidden-innovation-pack-content-card
+      class='mb-2'
+      *ngFor='let content of (uiStore.selectedTests$ | async); index as i; first as isFirst; last as isLast'
+      [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+      [name]='content.name'
+      [category]='packContentTypeEnum.SINGLE'
+      (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.SINGLE, content.id)'
+    ></hidden-innovation-pack-content-card>
+  </ng-template>
+</ng-template>
+
+<ng-template #elseExists>
+  <div class='d-flex align-items-center justify-content-center w-100 mt-3'>
+    <mat-hint><small>No Content Available</small></mat-hint>
+  </div>
+</ng-template>
 

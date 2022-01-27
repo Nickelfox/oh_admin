@@ -36,7 +36,7 @@ export class CommonFormFieldImageComponent implements OnInit {
   ) {
   }
 
-  @Input() set setImageData(media: Media | undefined) {
+  @Input() set setImageData(media: Media | null | undefined) {
     if (media) {
       this.imageData = {
         croppedImage: media.url,

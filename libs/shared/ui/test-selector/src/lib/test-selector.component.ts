@@ -33,6 +33,7 @@ import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
 
 export interface TestSelectorData {
   type: ContentSelectorOpType;
+  limit?: boolean;
   category?: TagCategoryEnum | 'NONE';
 }
 
@@ -136,6 +137,7 @@ export class TestSelectorComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
@@ -173,8 +175,6 @@ export class TestSelectorComponent implements OnInit {
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
     ).subscribe();
-    this.updateSorting('nameSort');
-    this.updateSorting('nameSort');
   }
 
   onPaginateChange($event: PageEvent): void {
@@ -199,7 +199,7 @@ export class TestSelectorComponent implements OnInit {
   addToList(test: Test): void {
     let selectedContent: (ContentCore | LessonCore)[] = [];
     let selectedTests: Test[] = [];
-    let selectedItem : ContentCore;
+    let selectedItem: ContentCore;
     switch (this.categoryData.type) {
       case ContentSelectorOpType.SINGLE:
         if (this.selectedTests.find(value => value.id === test.id)) {
@@ -207,10 +207,14 @@ export class TestSelectorComponent implements OnInit {
             ...this.selectedTests.filter(t => t.id !== test.id)
           ];
         } else {
-          selectedTests = [
-            ...this.selectedTests,
-            test
-          ];
+          if (this.categoryData?.limit) {
+            selectedTests = [test];
+          } else {
+            selectedTests = [
+              ...this.selectedTests,
+              test
+            ];
+          }
         }
         this.uiStore.patchState({
           selectedTests
@@ -221,14 +225,24 @@ export class TestSelectorComponent implements OnInit {
         if (selectedItem) {
           selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
         } else {
-          selectedContent = [
-            ...this.selectedContents,
-            {
-              contentId: test.id,
-              type: PackContentTypeEnum.SINGLE,
-              name: test.name
-            } as ContentCore
-          ];
+          if (this.categoryData?.limit) {
+            selectedContent = [
+              {
+                contentId: test.id,
+                type: PackContentTypeEnum.SINGLE,
+                name: test.name
+              } as ContentCore
+            ];
+          } else {
+            selectedContent = [
+              ...this.selectedContents,
+              {
+                contentId: test.id,
+                type: PackContentTypeEnum.SINGLE,
+                name: test.name
+              } as ContentCore
+            ];
+          }
         }
         this.uiStore.patchState({
           selectedContent

@@ -54,7 +54,7 @@ export class PackStore extends ComponentStore<PackState> {
     params$.pipe(
       tap((_) => {
         this.patchState({
-          isLoading: true
+          isLoading: true,
         });
       }),
       switchMap((reqObj) =>

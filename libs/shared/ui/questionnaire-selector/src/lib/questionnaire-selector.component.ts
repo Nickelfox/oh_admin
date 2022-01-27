@@ -35,6 +35,7 @@ import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
 
 export interface QuestionnaireSelectorData {
   type: ContentSelectorOpType;
+  limit?: boolean;
 }
 
 @UntilDestroy({ checkProperties: true })
@@ -142,14 +143,18 @@ export class QuestionnaireSelectorComponent implements OnInit {
   addToList(q: QuestionnaireExtended): void {
     let selectedContent: (ContentCore | LessonCore)[] = [];
     let selectedQuestionnaires: QuestionnaireExtended[] = [];
-    let selectedItem : ContentCore;
+    let selectedItem: ContentCore;
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:
         if (!this.selectedQuestionnaires.find(value => value.id === q.id)) {
-          selectedQuestionnaires = [
-            ...this.selectedQuestionnaires,
-            q
-          ];
+          if (this.questionnaireData?.limit) {
+            selectedQuestionnaires = [q];
+          } else {
+            selectedQuestionnaires = [
+              ...this.selectedQuestionnaires,
+              q
+            ];
+          }
         } else {
           selectedQuestionnaires = [
             ...this.selectedQuestionnaires.filter(t => t.id !== q.id)
@@ -164,14 +169,22 @@ export class QuestionnaireSelectorComponent implements OnInit {
         if (selectedItem) {
           selectedContent = [...this.selectedContents.filter(value => !isEqual(value, selectedItem))];
         } else {
-          selectedContent = [
-            ...this.selectedContents,
-            {
+          if (this.questionnaireData?.limit) {
+            selectedContent = [{
               contentId: q.id,
               type: PackContentTypeEnum.QUESTIONNAIRE,
               name: q.name
-            } as ContentCore
-          ];
+            } as ContentCore];
+          } else {
+            selectedContent = [
+              ...this.selectedContents,
+              {
+                contentId: q.id,
+                type: PackContentTypeEnum.QUESTIONNAIRE,
+                name: q.name
+              } as ContentCore
+            ];
+          }
         }
         this.uiStore.patchState({
           selectedContent
@@ -214,8 +227,6 @@ export class QuestionnaireSelectorComponent implements OnInit {
       distinctUntilChanged((x, y) => isEqual(x, y)),
       tap(_ => this.refreshList())
     ).subscribe();
-    this.updateSorting('nameSort');
-    this.updateSorting('nameSort');
   }
 
   onPaginateChange($event: PageEvent): void {
