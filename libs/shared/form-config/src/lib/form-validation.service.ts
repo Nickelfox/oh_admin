@@ -175,9 +175,8 @@ export class FormValidationService {
       for (let i = 1; i < controls.length; i++) {
         const previousValueControl = controls[i - 1].controls.high as FormControl<number>;
         const valueControl = controls[i].controls.low as FormControl<number>;
-
         // if error, set array error
-        if (previousValueControl.value >= valueControl.value) {
+        if (previousValueControl.value > valueControl.value) {
           // array error (sum up of all errors)
           errors[(i - 1) + 'lessThan' + (i)] = true;
         }
@@ -202,7 +201,7 @@ export class FormValidationService {
         const prevVal = DateTime.fromJSDate(previousValueControl.value).toSeconds();
         const currVal = DateTime.fromJSDate(valueControl.value).toSeconds();
         // if error, set array error
-        if (Math.round(prevVal) <= Math.round(currVal)) {
+        if (Math.round(prevVal) < Math.round(currVal)) {
           // array error (sum up of all errors)
           errors[(i - 1) + 'lessThan' + (i)] = true;
         }

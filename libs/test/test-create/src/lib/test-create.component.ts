@@ -509,7 +509,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   get disableEditState(): boolean {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return !!(this.opType === this.opTypeEnum.EDIT && this.selectedTest?.isPublished && this.selectedTest?.inputType !== 'NONE');
+    return  (this.opType === this.opTypeEnum.EDIT);
   }
 
   ngOnDestroy(): void {
