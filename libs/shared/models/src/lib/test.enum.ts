@@ -42,6 +42,7 @@ export enum ProfileInputEnum {
   AGE = 'AGE',
 }
 
+// TODO UPDATE LENGTH = 'LENGTH'  TO "DISTANCE_LENGTH = 'DISTANCE_LENGTH'"
 export enum ProfileInputTypeEnum {
   WEIGHT = 'WEIGHT',
   LENGTH = 'LENGTH',
