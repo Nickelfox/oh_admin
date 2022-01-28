@@ -149,7 +149,7 @@
                         </button>
                         <button mat-menu-item (click)='store.toggleActive(row.id, row.isVisible)' *ngIf='isPublishToggleAvailable(row)'>
                           <mat-icon>{{row.isVisible ? "block" : "check_circle_outline"}}</mat-icon>
-                          <span>{{(row.isVisible ? publishStatusEnum.UNPUBLISHED : publishStatusEnum.PUBLISHED) | titlecase}}</span>
+                          <span>{{(row.isVisible ? constantDataService.BUTTON_NAME.UNPUBLISH : constantDataService.BUTTON_NAME.PUBLISH) | titlecase}}</span>
                         </button>
                         <button mat-menu-item (click)='deleteTestGroup(row.id)'>
                           <mat-icon>delete</mat-icon>

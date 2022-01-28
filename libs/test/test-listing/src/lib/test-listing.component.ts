@@ -40,7 +40,7 @@ export class TestListingComponent implements OnInit {
   // Paginator options
   pageIndex = this.constantDataService.PaginatorData.pageIndex;
   pageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
-  pageSize = this.constantDataService.PaginatorData.pageSize;
+  pageSize = this.constantDataService.PaginatorData.pageSizeOptions[3];
   pageEvent: PageEvent | undefined;
 
   tagCategoryEnum = TagCategoryEnum;

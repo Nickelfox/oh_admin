@@ -94,6 +94,7 @@ export class CreateFeaturedComponent implements OnDestroy {
         return;
       }
       this.store.selectedFeatured$.subscribe((feat) => {
+        console.log(feat);
         if (feat) {
           this.populateFeatured(feat);
         }
@@ -191,13 +192,13 @@ export class CreateFeaturedComponent implements OnDestroy {
     });
     this.restoreSelectedState();
     if (this.isSpotlight) {
-      if (this.selectedFeatured.tests.length) {
+      if (this.selectedFeatured?.tests.length) {
         this.type = PackContentTypeEnum.SINGLE;
-      } else if (this.selectedFeatured.testGroups.length) {
+      } else if (this.selectedFeatured?.testGroups.length) {
         this.type = PackContentTypeEnum.GROUP;
-      } else if (this.selectedFeatured.packs.length) {
+      } else if (this.selectedFeatured?.packs.length) {
         this.type = PackContentTypeEnum.PACK;
-      } else if (this.selectedFeatured.questionnaires.length) {
+      } else if (this.selectedFeatured?.questionnaires?.length) {
         this.type = PackContentTypeEnum.QUESTIONNAIRE;
       }
     } else {

@@ -71,7 +71,9 @@ export class ConstantDataService {
     UN_BLOCK: 'unblock',
     ACTIVATE: 'activate',
     DEACTIVATE: 'deactivate',
-    SAVE: 'save'
+    SAVE: 'save',
+    PUBLISH: 'publish',
+    UNPUBLISH: 'unpublish',
   };
 
   CONST_NUMS = {

@@ -65,10 +65,6 @@ export class PackListingComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
-  isPublishToggleAvailable(pack: Pack): boolean {
-    return !!pack.content.length;
-  }
-
   resetRoute(): void {
     this.router.navigate([
       this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
@@ -177,7 +173,7 @@ export class PackListingComponent implements OnInit {
   editPromptForPublished(pack: Pack): void {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    if (this.isPublishToggleAvailable(pack) && pack.isPublished) {
+    if (pack.isPublished) {
       const dialogData: GenericDialogPrompt = {
         title: 'Edit a Published Pack?',
         desc: 'This might impact various other modules .i.e. Featured Screen etc.',
