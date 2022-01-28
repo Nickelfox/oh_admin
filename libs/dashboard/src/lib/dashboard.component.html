@@ -4,19 +4,19 @@
       <div class='col-12'>
         <div class='container-fluid p-0'>
           <form class='row mb-4' [formGroup]='rangeFilterGroup'>
-            <div class='col-6 col-lg-3'>
+            <div class='col-md-12 col-lg-3 '>
               <hidden-innovation-dashboard-count-card [count]='store.totalUsers$ | async'
                                                       [isLoading]='store.isChangeLoading$ | async'
                                                       [change]='-89' cardTitle='Total Users'
                                                       icon='people'>
               </hidden-innovation-dashboard-count-card>
             </div>
-            <div class='col-6 col-lg-3'>
+            <div class='col-md-12 col-lg-3 mt-lg-0 mt-3'>
               <hidden-innovation-dashboard-count-card [isLoading]='store.isChangeLoading$ | async'
                                                       cardTitle='Total App Downloads'
                                                       icon='file_download'></hidden-innovation-dashboard-count-card>
             </div>
-            <div class='col-6'>
+            <div class='col-md-12 col-lg-6 mt-lg-0 mt-3'>
               <mat-card class='bg-light h-100' style='padding: 10px'>
                 <div class='container-fluid p-0'>
                   <div class='row'>
@@ -52,14 +52,14 @@
             </div>
           </form>
           <div class='row mb-4'>
-            <div class='col-6'>
+            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
               <hidden-innovation-line-chart [chartData]='$any(store.registeredUsersData$ | async)'
                                             [chartLabels]='$any(store.registeredUsersLabel$ | async)'
                                             label='Registered Users'
                                             [isLoading]='(store.isLineChartLoading$ | async)'
                                             icon='how_to_reg'></hidden-innovation-line-chart>
             </div>
-            <div class='col-6'>
+            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
               <hidden-innovation-line-chart [chartData]='$any(store.activeUserData$ | async)'
                                             [chartLabels]='$any(store.activeUserLabel$ | async)'
                                             label='Active Users'
@@ -72,14 +72,14 @@
       </div>
     </div>
     <div class='row'>
-      <div class='col-6'>
+      <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
         <hidden-innovation-dashboard-user-demographic [femaleBarData]='store.femaleUsers$ | async'
                                                       [nonBinaryBarData]='store.nonBinaryUsers$ | async'
                                                       [maleBarData]='store.maleUsers$ | async'
                                                       [isLoading]='(store.isChangeLoading$ | async)'
                                                       [ratioChartData]='store.ageRatioData$ | async'></hidden-innovation-dashboard-user-demographic>
       </div>
-      <div class='col-6'>
+      <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
         <div class='row'>
           <ng-template [ngIf]='(store.isChangeLoading$ | async)' [ngIfElse]='assessmentLoadingElse'>
             <div class='col-6'>
@@ -97,7 +97,7 @@
             </ng-template>
           </ng-template>
           <ng-template #assessmentLoadingElse>
-            <div class='col-6'>
+            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
               <mat-card>
                 <div class='container-fluid p-0'>
                   <div class='row'>
@@ -134,10 +134,10 @@
                                     <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
 
                                     <div class='d-flex  align-items-center justify-content-between'
-                                         [ngStyle]='{width: "calc(100% - 42px)"}'>
-                                      <h3 class='mat-h4 m-0 ml-3'>{{category}}</h3>
-                                      <h3 class='mat-h1 m-0'
-                                          [ngStyle]='{"color": colors[category]}'>{{labels[i]}} %</h3>
+                                         [ngStyle]='{width: "calc(100% - 10px)"}'>
+                                      <h4 class='mat-h4 m-0 ml-2'>{{category}}</h4>
+                                      <h4 class='mat-h1 m-0'
+                                          [ngStyle]='{"color": colors[category]}'>{{labels[i]}} %</h4>
                                     </div>
                                   </div>
                                 </div>
@@ -152,7 +152,7 @@
                 </div>
               </mat-card>
             </div>
-            <div class='col-6'>
+            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
               <mat-card>
                 <div class='container-fluid p-0'>
                   <div class='row'>
@@ -186,14 +186,14 @@
                                 <div class='w-100' mat-stroked-button
                                      [ngStyle]='{"color": completeTestColors[i]}'>
                                   <div class='d-flex align-items-center pt-1 py-0'>
-                                    <mat-icon class='test-icon'>fiber_manual_record
+                                    <mat-icon class='test-icon '>fiber_manual_record
                                     </mat-icon>
                                     <div class='d-flex  align-items-center justify-content-between'
-                                         [ngStyle]='{width: "calc(100% - 42px)"}'>
-                                      <h3 class='mat-h4 m-0 ml-3 text-nowrap text-truncate overflow-hidden'
-                                          [ngStyle]='{width: "150px"}'>{{completeTestLabels[i]}}</h3>
-                                      <h3 class='mat-h1 m-0'
-                                          [ngStyle]='{"color": completeTestColors[i]}'>{{test}} %</h3>
+                                         [ngStyle]='{width: "calc(100% - 10px)"}'>
+                                      <h4 class='mat-h4 m-0 ml-3 text-uppercase text-nowrap text-truncate overflow-hidden'
+                                          [ngStyle]='{width: "calc(100% - 60px)"}'>{{completeTestLabels[i]}}</h4>
+                                      <h4 class='mat-h1 m-0'
+                                          [ngStyle]='{"color": completeTestColors[i]}'>{{test}} %</h4>
                                     </div>
                                   </div>
                                 </div>
