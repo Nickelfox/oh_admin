@@ -118,11 +118,10 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
       exhaustMap(({ featured, id }) =>
         this.featuredService.updateFeatured(id, featured).pipe(
           tapResponse(
-            (selectedFeatured) => {
+            (_) => {
               this.patchState({
                 isActing: false,
                 loaded: true,
-                selectedFeatured
               });
               this.toastRef?.updateMessage('Featured Updated!');
               this.toastRef?.updateToast({
