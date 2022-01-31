@@ -122,6 +122,7 @@ export class DashboardComponent {
     maintainAspectRatio: true
   };
 
+
   chartLegendTest = false;
   chartLegendComplete = false;
 
