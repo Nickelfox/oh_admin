@@ -73,7 +73,8 @@ export class ConstantDataService {
     ACTIVATE: 'activate',
     DEACTIVATE: 'deactivate',
     SAVE: 'save',
-
+    PUBLISH: 'publish',
+    UNPUBLISH: 'unpublish',
   };
 
   CONST_NUMS = {

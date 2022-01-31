@@ -205,7 +205,7 @@ import { TitleCasePipe } from '@angular/common';
           {
             path: '',
             pathMatch: 'full',
-            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+            redirectTo: `listing/${paginatorData.pageSizeOptions[3]}/${paginatorData.pageIndex}`
           },
           {
             path: 'listing/:size/:index',

@@ -5,6 +5,7 @@ import { MaxStringLimitPipe } from './pipes/max-string-limit.pipe';
 import { ReplaceUnderscorePipe } from './pipes/replace-underscore.pipe';
 import { PendingChangesGuard } from './guards/pending-changes.guard';
 import { ImagePreloaderDirective } from './directives/image-preloader.directive';
+import { ParseOneRemPipe } from './pipes/parse-one-rem.pipe';
 
 @NgModule({
   imports: [CommonModule],
@@ -13,11 +14,13 @@ import { ImagePreloaderDirective } from './directives/image-preloader.directive'
     MaxStringLimitPipe,
     ReplaceUnderscorePipe,
     ImagePreloaderDirective,
+    ParseOneRemPipe,
   ],
   exports: [
     DisableCopyPasteDirective,
     MaxStringLimitPipe,
     ReplaceUnderscorePipe,
+    ParseOneRemPipe,
     ImagePreloaderDirective
   ],
   providers:[
