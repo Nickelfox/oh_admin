@@ -75,6 +75,7 @@ export class ConstantDataService {
     SAVE: 'save',
     PUBLISH: 'publish',
     UNPUBLISH: 'unpublish',
+    DONE: 'done'
   };
 
   CONST_NUMS = {

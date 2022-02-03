@@ -37,8 +37,8 @@ export class AssessmentCreateComponent implements OnDestroy {
         value: this.formValidationService.FIELD_VALIDATION_VALUES.PACK_NAME_LENGTH
       })
     ]),
+    category: new FormControl<TagCategoryEnum>(undefined),
     about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
-    count: new FormControl(undefined),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillNeed: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     lockout: new FormControl(undefined, [...this.formValidationService.requiredFieldValidation]),
@@ -56,7 +56,6 @@ export class AssessmentCreateComponent implements OnDestroy {
   });
 
   aspectRatio = AspectRatio;
-  assessmentCat?: TagCategoryEnum;
   selectedAssessment: Assessment | undefined;
 
   private selectedContents: ContentCore[] = [];
@@ -77,18 +76,21 @@ export class AssessmentCreateComponent implements OnDestroy {
       switchMap(_ => this.route.params)
     ).subscribe((res) => {
       this.restoreSelectedState();
-      this.assessmentCat = res['category'] as TagCategoryEnum;
-      if (!this.assessmentCat) {
+      this.assessmentGroup.patchValue({
+        category: res['category'] as TagCategoryEnum
+      });
+      const { category } = this.assessmentGroup.value;
+      if (!category) {
         this.hotToastService.error('Error occurred while fetching details');
         return;
       }
-      this.breadcrumbService.set('/assessments/edit/:category', this.titleCasePipe.transform(this.assessmentCat) + ' Assessment');
+      this.breadcrumbService.set('/assessments/edit/:category', this.titleCasePipe.transform(category) + ' Assessment');
       this.store.selectedAssessment$.subscribe((assess) => {
         if (assess) {
           this.populateAssessment(assess);
         }
       });
-      this.store.getAssessmentDetails$(this.assessmentCat);
+      this.store.getAssessmentDetails$(category);
     });
     this.uiStore.selectedContent$.subscribe((contents) => {
       this.selectedContents = contents.map((c, i) => {
@@ -100,8 +102,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.contentArrayCtrl.setValue(this.selectedContents);
       this.assessmentGroup.updateValueAndValidity();
     });
-    const { content } = this.assessmentGroup.controls;
-    content.valueChanges.subscribe(_ => {
+    this.assessmentGroup.controls.content.valueChanges.subscribe(_ => {
       this.assessmentGroup.updateValueAndValidity();
       this.cdr.markForCheck();
     });
@@ -138,8 +139,8 @@ export class AssessmentCreateComponent implements OnDestroy {
       whatYouWillNeed,
       lockout,
       howItWorks,
+      category,
       image,
-      content
     } = assessment;
     this.selectedAssessment = assessment;
     this.assessmentGroup.patchValue({
@@ -148,8 +149,8 @@ export class AssessmentCreateComponent implements OnDestroy {
       howItWorks,
       whatYouWillNeed,
       lockout,
+      category,
       imageId: image?.id,
-      content,
       name
     });
   }
@@ -206,5 +207,15 @@ export class AssessmentCreateComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.restoreSelectedState();
+  }
+
+  submit(): void {
+    this.assessmentGroup.markAllAsDirty();
+    this.assessmentGroup.markAllAsTouched();
+    if (this.assessmentGroup.invalid) {
+      this.hotToastService.error(this.formValidationService.formSubmitError);
+      return;
+    }
+    this.store.updateAssessment$(this.assessmentGroup.value);
   }
 }

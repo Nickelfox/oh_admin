@@ -15,7 +15,7 @@ export interface AssessmentListState {
 export interface AssessmentCore {
   about: string | undefined;
   name: string | undefined;
-  count: number | undefined;
+  category: TagCategoryEnum | undefined
   whatYouWillGetOutOfIt: string | undefined;
   whatYouWillNeed: string | undefined;
   howItWorks: string | undefined;
@@ -29,7 +29,6 @@ export interface AssessmentCore {
 
 export interface Assessment extends AssessmentCore {
   id: number;
-  category: TagCategoryEnum;
   // tests: number;
   image: Media;
   tests: Test[];
@@ -53,4 +52,8 @@ export interface AssessmentResponseData extends Assessment {
 
 export interface AssessmentListingResponse extends CustomApiResponse {
   data: Assessment[];
+}
+
+export interface AssessmentUpdateResponse extends CustomApiResponse {
+  data: Assessment;
 }

@@ -13,7 +13,7 @@ import { AssessmentListState, AssessmentStore } from '@hidden-innovation/assessm
 })
 export class AssessmentListingComponent implements OnInit {
 
-  displayedColumns: string[] = ['category', 'test', 'worstCase', 'bestCase', 'lockout', 'action'];
+  displayedColumns: string[] = ['category', 'test', 'lockout', 'action'];
   assessment: MatTableDataSource<AssessmentListState> = new MatTableDataSource<AssessmentListState>([]);
 
   constructor(

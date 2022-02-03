@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { Assessment, AssessmentListState } from '../models/assessment.interface';
+import { Assessment, AssessmentCore, AssessmentListState } from '../models/assessment.interface';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../services/assessment.service';
 import { TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { PackCore } from '@hidden-innovation/pack/data-access';
 
 export interface AssessmentState {
   assessmentList: AssessmentListState[];
@@ -47,9 +48,8 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
             (assessmentList) => {
               this.patchState({
                 isLoading: false,
-                assessmentList: assessmentList.map(({ count, lockout, worstCase, bestCase, category }) => {
+                assessmentList: assessmentList.map(({ lockout, worstCase, bestCase, category }) => {
                   return {
-                    count,
                     lockout,
                     bestCase,
                     worstCase,
@@ -107,6 +107,46 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
             this.toastRef?.close();
             return EMPTY;
           })
+        )
+      )
+    )
+  );
+
+  updateAssessment$ = this.effect<AssessmentCore>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Updating Assessment...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap((assessment) =>
+        this.assessmentService.updateAssessment(assessment).pipe(
+          tapResponse(
+            (_) => {
+              this.patchState({
+                isActing: false,
+                loaded: true,
+              });
+              this.toastRef?.updateMessage('Assessment Updated!');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success',
+                duration: 300
+              });
+              this.router.navigate(['/assessments']);
+            },
+            _ => {
+              this.patchState({
+                isActing: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
         )
       )
     )

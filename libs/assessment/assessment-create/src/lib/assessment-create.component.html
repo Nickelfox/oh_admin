@@ -10,6 +10,7 @@
         </button>
         <button
           [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'
+          (click)='submit()'
           class='ml-3'
           color='primary' mat-flat-button type='submit'>
           Save
@@ -91,31 +92,15 @@
           <mat-card class='mb-2'>
             <mat-card-title class='row m-0 mb-3 d-flex justify-content-between'>
               <h3 class='mat-h3 mb-0 font-sf-pro mb-0 mt-2'>Tests</h3>
-              <div class='align-items-center'>
-                <div class='col-12 mt-1  d-flex align-items-center justify-content-end'>
-                  <h5 class='mat-h5 text-color__primary--light mb-0 mr-3 font-calibri'>TOTAL POINTS</h5>
-                  <div class='d-flex align-items-center mr-3'>
-                    <div class='d-flex align-items-center'>
-                      <mat-icon class='mr-3 text-color__success' color='primary'>sentiment_satisfied_alt</mat-icon>
-                      <h2 class='m-0 text-color__success'>20</h2>
-                    </div>
-                    <div class='d-flex align-items-center ml-4'>
-                      <mat-icon class='mr-3 text-color__error' color='primary'>sentiment_very_dissatisfied</mat-icon>
-                      <h2 class='m-0 text-color__error'>0</h2>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </mat-card-title>
             <mat-divider></mat-divider>
             <mat-card-content class='content-container'>
               <hidden-innovation-pack-content-card
-                class='mb-3'
+                class='my-3'
                 *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
-                [ngClass]='{"mt-2" : isFirst, "mb-0": isLast }'
+                [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                 [name]='content.name'
                 [category]='content.type'
-                [showScore]='true'
                 (emitDeleteEvent)='null'
               ></hidden-innovation-pack-content-card>
             </mat-card-content>
