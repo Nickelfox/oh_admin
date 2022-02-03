@@ -30,7 +30,7 @@ export class AssessmentService {
 
   getAssessment(cat: TagCategoryEnum): Observable<AssessmentResponseData> {
     return this.http.get<AssessmentResponse>(`${this.env.baseURL}/v1/admin/get-assessment?category=${cat}`).pipe(
-      map(res => res.data.assessment),
+      map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }

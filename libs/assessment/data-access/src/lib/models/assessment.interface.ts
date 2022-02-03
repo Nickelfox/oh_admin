@@ -6,9 +6,7 @@ import { ContentCore } from '@hidden-innovation/pack/data-access';
 
 export interface AssessmentListState {
   category: TagCategoryEnum;
-  count: number;
-  worstCase: number;
-  bestCase: number;
+  count: number | undefined;
   lockout: number;
 }
 
@@ -21,6 +19,7 @@ export interface AssessmentCore {
   howItWorks: string | undefined;
   lockout: number | undefined;
   imageId: number | undefined;
+  count: number | undefined;
   singleTestIds: number[];
   // testGroupIds: number[];
   questionnaireIds: number[];
@@ -41,9 +40,7 @@ export interface Assessment extends AssessmentCore {
 }
 
 export interface AssessmentResponse extends CustomApiResponse {
-  data: {
-    assessment: AssessmentResponseData;
-  };
+  data: AssessmentResponseData;
 }
 
 export interface AssessmentResponseData extends Assessment {

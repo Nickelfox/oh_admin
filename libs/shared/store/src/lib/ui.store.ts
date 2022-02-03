@@ -232,4 +232,25 @@ export class UiStore extends ComponentStore<UiState> {
       }
     });
   }
+
+  deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
+    const dialogData: GenericDialogPrompt = {
+      title: `Remove ${content.type}`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)}?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.removeContent$(content);
+      }
+    });
+  }
 }

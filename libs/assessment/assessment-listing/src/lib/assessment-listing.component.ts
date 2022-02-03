@@ -31,6 +31,7 @@ export class AssessmentListingComponent implements OnInit {
   ngOnInit(): void {
     this.store.assessmentList$.subscribe(
       (res) => {
+        console.log(res);
         this.assessment = new MatTableDataSource<AssessmentListState>(res);
         this.cdr.markForCheck();
       }

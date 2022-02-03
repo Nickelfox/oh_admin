@@ -98,7 +98,6 @@ export class PackCreateComponent implements OnDestroy {
     private titleCasePipe: TitleCasePipe,
     private hotToastService: HotToastService,
     private route: ActivatedRoute,
-    private upperCasePipe: UpperCasePipe
   ) {
     this.route.data.pipe(
       filter(data => data?.type !== undefined),

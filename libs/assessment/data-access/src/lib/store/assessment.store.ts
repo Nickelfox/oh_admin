@@ -7,7 +7,6 @@ import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../services/assessment.service';
 import { TagCategoryEnum } from '@hidden-innovation/shared/models';
-import { PackCore } from '@hidden-innovation/pack/data-access';
 
 export interface AssessmentState {
   assessmentList: AssessmentListState[];
@@ -45,17 +44,16 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
       switchMap(() =>
         this.assessmentService.getAssessmentList().pipe(
           tapResponse(
-            (assessmentList) => {
+            (list) => {
               this.patchState({
                 isLoading: false,
-                assessmentList: assessmentList.map(({ lockout, worstCase, bestCase, category }) => {
+                assessmentList: list?.map(({ lockout, category, count }) => {
                   return {
                     lockout,
-                    bestCase,
-                    worstCase,
+                    count,
                     category
                   } as AssessmentListState;
-                })
+                }) ?? []
               });
             },
             _ => {
@@ -130,7 +128,7 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
             (_) => {
               this.patchState({
                 isActing: false,
-                loaded: true,
+                loaded: true
               });
               this.toastRef?.updateMessage('Assessment Updated!');
               this.toastRef?.updateToast({

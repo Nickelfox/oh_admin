@@ -37,6 +37,7 @@ export class AssessmentCreateComponent implements OnDestroy {
         value: this.formValidationService.FIELD_VALIDATION_VALUES.PACK_NAME_LENGTH
       })
     ]),
+    count: new FormControl<number>(undefined),
     category: new FormControl<TagCategoryEnum>(undefined),
     about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
@@ -93,6 +94,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.store.getAssessmentDetails$(category);
     });
     this.uiStore.selectedContent$.subscribe((contents) => {
+      console.log(contents);
       this.selectedContents = contents.map((c, i) => {
         return {
           ...c,
@@ -101,6 +103,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       }) as ContentCore[];
       this.contentArrayCtrl.setValue(this.selectedContents);
       this.assessmentGroup.updateValueAndValidity();
+      this.cdr.markForCheck();
     });
     this.assessmentGroup.controls.content.valueChanges.subscribe(_ => {
       this.assessmentGroup.updateValueAndValidity();
@@ -110,6 +113,10 @@ export class AssessmentCreateComponent implements OnDestroy {
 
   get contentArrayCtrl(): FormControl<ContentCore[]> {
     return this.assessmentGroup.controls.content as FormControl<ContentCore[]>;
+  }
+
+  get contentArrayExists(): boolean {
+    return this.contentArrayCtrl.value?.length > 0;
   }
 
   get imageIDctrl(): FormControl<number | undefined> {
@@ -140,7 +147,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       lockout,
       howItWorks,
       category,
-      image,
+      image
     } = assessment;
     this.selectedAssessment = assessment;
     this.assessmentGroup.patchValue({
@@ -153,6 +160,10 @@ export class AssessmentCreateComponent implements OnDestroy {
       imageId: image?.id,
       name
     });
+    this.uiStore.patchState({
+      selectedContent: this.selectedAssessment?.content ?? []
+    });
+    this.cdr.markForCheck();
   }
 
   deleteSelectedContentPrompt(content: ContentCore): void {
