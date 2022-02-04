@@ -14,6 +14,9 @@ import {MediaModule} from "@hidden-innovation/media";
 import {TagsDataAccessModule} from "@hidden-innovation/tags/data-access";
 import {ContentSelectorModule} from "@hidden-innovation/shared/ui/content-selector";
 import {PackContentCardModule} from "@hidden-innovation/shared/ui/pack-content-card";
+import {AssessmentDataAccessModule} from "@hidden-innovation/assessment/data-access";
+import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
+import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
 
 @NgModule({
   imports: [
@@ -24,12 +27,12 @@ import {PackContentCardModule} from "@hidden-innovation/shared/ui/pack-content-c
     CommonFormFieldImageModule,
     CommonFormFieldFileModule,
     MediaModule,
-    TagsDataAccessModule,
-    ContentSelectorModule,
-    UtilsModule,
-    PackDataAccessModule,
-    FormFieldErrorsModule,
+    TestDataAccessModule,
+    QuestionnaireDataAccessModule,
     PackContentCardModule,
+    UtilsModule,
+    FormFieldErrorsModule,
+    AssessmentDataAccessModule,
     RouterModule.forChild([
       {
         path: '',

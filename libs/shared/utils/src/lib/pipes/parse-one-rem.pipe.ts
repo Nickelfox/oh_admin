@@ -10,6 +10,6 @@ export class ParseOneRemPipe implements PipeTransform {
     if (!value) {
       return value;
     }
-    return value === TestInputTypeEnum.ONE_RM ? '1 REM' : value;
+    return value === TestInputTypeEnum.ONE_RM ? '1 RM' : value;
   }
 }

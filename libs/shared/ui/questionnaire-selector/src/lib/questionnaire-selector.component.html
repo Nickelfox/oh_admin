@@ -7,8 +7,8 @@
         <mat-icon class='text-success mr-2'>autorenew</mat-icon>
         <h4 class='text-success mat-h4 mb-0'>Selection Auto-Saved</h4>
       </div>
-      <button mat-icon-button mat-dialog-close>
-        <mat-icon>close</mat-icon>
+      <button mat-flat-button color='primary' mat-dialog-close>
+        {{constantDataService.BUTTON_NAME.DONE | titlecase}}
       </button>
     </div>
   </div>
