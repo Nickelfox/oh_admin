@@ -49,7 +49,7 @@
                         [datasets]='$any(femaleBarData)'
                         [labels]='ageLabels'
                         [legend]='chartLegend'
-                        [options]='chartOptions'
+                        [options]='chartOptionsFemale'
                 >
                 </canvas>
               </div>
@@ -77,7 +77,7 @@
                   [datasets]='$any(maleBarData)'
                   [labels]='ageLabels'
                   [legend]='chartLegend'
-                  [options]='chartOptions'
+                  [options]='chartOptionsMale'
                 ></canvas>
               </div>
             </div>
@@ -103,7 +103,7 @@
                         [datasets]='$any(nonBinaryBarData)'
                         [labels]='ageLabels'
                         [legend]='chartLegend'
-                        [options]='chartOptions'
+                        [options]='chartOptionsBinary'
                 >
                 </canvas>
               </div>
@@ -155,7 +155,7 @@
                     <div class='col-12'>
                       <button class='w-100' mat-stroked-button [ngStyle]='{"color": colors.other}'>
                         <div class='d-flex align-items-center pt-1 py-0'>
-                          <mat-icon>male</mat-icon>
+                          <mat-icon>transgender</mat-icon>
                           <div class='d-flex flex-column align-items-center' [ngStyle]='{width: "calc(100% - 42px)"}'>
                             <h4 class='mat-h4 m-0'>Non-Binary</h4>
                             <h2 class='mat-h1 m-0' [ngStyle]='{"color": colors.other}'>{{nonBinaryPercentage}} %</h2>
