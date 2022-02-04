@@ -53,7 +53,7 @@ export class DashboardComponent {
     CARDIO: '#3297E0',
     STRENGTH: '#4EBC9C',
     FUNCTION: '#394155',
-    MOBILE: '#54DBDF',
+    MOBILITY: '#54DBDF',
     LIFESTYLE: '#CADF6E'
   };
   completeTestColors = ['#394155',

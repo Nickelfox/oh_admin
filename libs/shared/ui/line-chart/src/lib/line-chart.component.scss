@@ -1,0 +1,18 @@
+.chart{
+  &__no-data-con {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    h3 {
+      opacity: 0.5;
+    }
+
+  }
+
+  &__container-main {
+    position: relative;
+  }
+}

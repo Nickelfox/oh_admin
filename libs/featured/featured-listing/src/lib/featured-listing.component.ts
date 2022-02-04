@@ -58,7 +58,7 @@ export class FeaturedListingComponent implements OnInit {
     },
     {
       name: FeaturedNameEnum.PACKS,
-      location: TagCategoryEnum.MOBILE,
+      location: TagCategoryEnum.MOBILITY,
       items: 0,
       updated_at: ''
     },

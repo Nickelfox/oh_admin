@@ -9,6 +9,6 @@ export enum TagCategoryEnum {
   STRENGTH = 'STRENGTH',
   CARDIO = 'CARDIO',
   FUNCTION = 'FUNCTION',
-  MOBILE = 'MOBILE',
+  MOBILITY = 'MOBILITY',
   LIFESTYLE = 'LIFESTYLE',
 }
