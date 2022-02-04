@@ -61,6 +61,7 @@ export class DashboardUserDemographicComponent {
     '35-44',
     '45+'
   ];
+
   doughnutChartLabel: ChartLabel[] = [
     'Female',
     'Male',
@@ -69,7 +70,9 @@ export class DashboardUserDemographicComponent {
 
   doughnutPlugins = [this.doughnutChartLabel];
 
-  chartOptions: ChartOptions = {
+
+
+  chartOptionsFemale: ChartOptions = {
     layout: {
       padding: 0
     },
@@ -84,12 +87,82 @@ export class DashboardUserDemographicComponent {
     title: {
       display: true,
       position: 'left',
-      text: 'No. Of Users',
+      text: 'Female',
       fontColor: '#394155',
       fontSize: 10,
       padding: 4,
     },
+    scales:{
+      yAxes:[{
+        ticks:{
+          stepSize:10,
+          fontSize:10,
+
+        }
+      }]
+    }
   };
+  chartOptionsMale: ChartOptions = {
+    layout: {
+      padding: 0
+    },
+    elements: {
+      point: {
+        radius: 4,
+        hoverRadius: 8
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: true,
+    title: {
+      display: true,
+      position: 'left',
+      text: 'Male',
+      fontColor: '#394155',
+      fontSize: 10,
+      padding: 4,
+    },
+    scales:{
+      yAxes:[{
+        ticks:{
+          stepSize:10,
+          fontSize:10,
+
+        }
+      }]
+    }
+  };
+  chartOptionsBinary: ChartOptions = {
+    layout: {
+      padding: 0
+    },
+    elements: {
+      point: {
+        radius: 4,
+        hoverRadius: 8
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: true,
+    title: {
+      display: true,
+      position: 'left',
+      text: 'Others',
+      fontColor: '#394155',
+      fontSize: 10,
+      padding: 4,
+    },
+    scales:{
+      yAxes:[{
+        ticks:{
+          stepSize:15,
+          fontSize:10,
+
+        }
+      }]
+    }
+  };
+
 
   chartLegend = false;
 
