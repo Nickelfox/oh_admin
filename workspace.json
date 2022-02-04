@@ -3,6 +3,7 @@
   "projects": {
     "assessment-assessment-create": "libs/assessment/assessment-create",
     "assessment-assessment-listing": "libs/assessment/assessment-listing",
+    "assessment-data-access": "libs/assessment/data-access",
     "auth": "libs/auth",
     "change-password": "libs/change-password",
     "dashboard": "libs/dashboard",
