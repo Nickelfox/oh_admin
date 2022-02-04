@@ -3,11 +3,12 @@
     <div class='row'>
       <div class='col-12'>
         <div class='container-fluid p-0'>
-          <form class='row mb-4' [formGroup]='rangeFilterGroup'>
+          <form [formGroup]='rangeFilterGroup' class='row mb-4'>
             <div class='col-md-12 col-lg-3 '>
-              <hidden-innovation-dashboard-count-card [count]='store.totalUsers$ | async'
+              <hidden-innovation-dashboard-count-card [change]='-89'
+                                                      [count]='store.totalUsers$ | async'
                                                       [isLoading]='store.isChangeLoading$ | async'
-                                                      [change]='-89' cardTitle='Total Users'
+                                                      cardTitle='Total Users'
                                                       icon='people'>
               </hidden-innovation-dashboard-count-card>
             </div>
@@ -23,18 +24,18 @@
                     <div class='col-6'>
                       <hidden-innovation-common-form-field-date
                         *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.DAILY'
-                        startControlPath='start'
+                        [maxDate]='maxDate'
                         endControlPath='end'
-                        [maxDate]='maxDate'></hidden-innovation-common-form-field-date>
+                        startControlPath='start'></hidden-innovation-common-form-field-date>
                       <hidden-innovation-common-form-field-month
                         *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.MONTHLY'
-                        controlPath='start'
-                        [maxDate]='maxDate'></hidden-innovation-common-form-field-month>
+                        [maxDate]='maxDate'
+                        controlPath='start'></hidden-innovation-common-form-field-month>
                       <hidden-innovation-common-form-field-week
                         *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.WEEKLY'
-                        startControlPath='start'
+                        [maxDate]='maxDate'
                         endControlPath='end'
-                        [maxDate]='maxDate'></hidden-innovation-common-form-field-week>
+                        startControlPath='start'></hidden-innovation-common-form-field-week>
                     </div>
                     <div class='col-6'>
                       <mat-form-field class='w-100'>
@@ -53,35 +54,37 @@
           </form>
           <div class='row mb-4'>
             <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
-              <hidden-innovation-line-chart [chartData]='$any(store.registeredUsersData$ | async)'
-                                            [chartLabels]='$any(store.registeredUsersLabel$ | async)'
-                                            label='Registered Users'
-                                            [isLoading]='(store.isLineChartLoading$ | async)'
-                                            icon='how_to_reg'></hidden-innovation-line-chart>
+              <hidden-innovation-line-chart
+                [chartData]='$any(store.registeredUsersData$ | async)'
+                [chartLabels]='$any(store.registeredUsersLabel$ | async)'
+                [isLoading]='(store.isLineChartLoading$ | async)'
+                icon='how_to_reg'
+                label='Registered Users'></hidden-innovation-line-chart>
             </div>
             <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
-              <hidden-innovation-line-chart [chartData]='$any(store.activeUserData$ | async)'
-                                            [chartLabels]='$any(store.activeUserLabel$ | async)'
-                                            label='Active Users'
-                                            [isLoading]='(store.isLineChartLoading$ | async)'
-                                            icon='sports_martial_arts'></hidden-innovation-line-chart>
+              <hidden-innovation-line-chart
+                [chartData]='$any(store.activeUserData$ | async)'
+                [chartLabels]='$any(store.activeUserLabel$ | async)'
+                [isLoading]='(store.isLineChartLoading$ | async)'
+                icon='sports_martial_arts'
+                label='Active Users'></hidden-innovation-line-chart>
             </div>
-
           </div>
         </div>
       </div>
     </div>
     <div class='row'>
       <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
-        <hidden-innovation-dashboard-user-demographic [femaleBarData]='store.femaleUsers$ | async'
-                                                      [nonBinaryBarData]='store.nonBinaryUsers$ | async'
-                                                      [maleBarData]='store.maleUsers$ | async'
-                                                      [isLoading]='(store.isChangeLoading$ | async)'
-                                                      [ratioChartData]='store.ageRatioData$ | async'></hidden-innovation-dashboard-user-demographic>
+        <hidden-innovation-dashboard-user-demographic
+          [femaleBarData]='store.femaleUsers$ | async'
+          [isLoading]='(store.isChangeLoading$ | async)'
+          [maleBarData]='store.maleUsers$ | async'
+          [nonBinaryBarData]='store.nonBinaryUsers$ | async'
+          [ratioChartData]='store.ageRatioData$ | async'></hidden-innovation-dashboard-user-demographic>
       </div>
       <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
         <div class='row'>
-          <ng-template [ngIf]='(store.isChangeLoading$ | async)' [ngIfElse]='assessmentLoadingElse'>
+          <ng-template [ngIfElse]='assessmentLoadingElse' [ngIf]='(store.isChangeLoading$ | async)'>
             <div class='col-6'>
               <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
             </div>
@@ -103,7 +106,7 @@
                   <div class='row'>
                     <div class='col-12'>
                       <div class='d-flex align-items-center mb-3'>
-                        <mat-icon color='primary' class='mr-1 card-icon'>people_alt</mat-icon>
+                        <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
                         <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Assessment Test
                           Engagement</h4>
                       </div>
@@ -112,13 +115,13 @@
                   <div class='row justify-content-center'>
                     <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>
                       <canvas
-                        class='w-100'
-                        baseChart
-                        chartType='doughnut'
                         [colors]='doughnutChartColorTest'
                         [data]='$any(store.assessmentTestEngagementData$ | async)'
                         [labels]='$any(store.assessmentTestEngagementLables$ | async)'
                         [legend]='chartLegendTest'
+                        baseChart
+                        chartType='doughnut'
+                        class='w-100'
                       ></canvas>
                     </div>
                     <div class='col-12 d-flex flex-column justify-content-around'>
@@ -128,16 +131,16 @@
                             *ngFor='let category of (store.assessmentTestEngagementLables$ | async); let i=index'>
                             <div class='row mb-2'>
                               <div class='col-12'>
-                                <div class='w-100' mat-stroked-button
-                                     [ngStyle]='{"color": colors[category]}'>
+                                <div [ngStyle]='{"color": colors[category]}' class='w-100'
+                                     mat-stroked-button>
                                   <div class='d-flex align-items-center pt-1 py-0'>
                                     <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
 
-                                    <div class='d-flex  align-items-center justify-content-between'
-                                         [ngStyle]='{width: "calc(100% - 10px)"}'>
+                                    <div [ngStyle]='{width: "calc(100% - 10px)"}'
+                                         class='d-flex  align-items-center justify-content-between'>
                                       <h4 class='mat-h4 m-0 ml-2'>{{category}}</h4>
-                                      <h4 class='mat-h1 m-0'
-                                          [ngStyle]='{"color": colors[category]}'>{{labels[i]}} %</h4>
+                                      <h4 [ngStyle]='{"color": colors[category]}'
+                                          class='mat-h1 m-0'>{{labels[i]}} %</h4>
                                     </div>
                                   </div>
                                 </div>
@@ -158,7 +161,7 @@
                   <div class='row'>
                     <div class='col-12'>
                       <div class='d-flex align-items-center mb-3'>
-                        <mat-icon color='primary' class='mr-1 card-icon'>people_alt</mat-icon>
+                        <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
                         <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Complete Test
                           Engagement</h4>
                       </div>
@@ -167,13 +170,13 @@
                   <div class='row justify-content-center'>
                     <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>
                       <canvas
-                        class='w-100'
-                        baseChart
-                        chartType='doughnut'
                         [colors]='doughnutChartColorComplete'
                         [data]='$any(store.completeTestEngagementData$ | async)'
                         [labels]='$any(store.completeTestEngagementLables$ | async)'
                         [legend]='chartLegendComplete'
+                        baseChart
+                        chartType='doughnut'
+                        class='w-100'
                       ></canvas>
                     </div>
                     <div class='col-12 d-flex flex-column justify-content-around'>
@@ -183,17 +186,18 @@
                             *ngFor='let test of (store.completeTestEngagementData$ | async);let i = index'>
                             <div class='row mb-2'>
                               <div class='col-12'>
-                                <div class='w-100' mat-stroked-button
-                                     [ngStyle]='{"color": completeTestColors[i]}'>
+                                <div [ngStyle]='{"color": completeTestColors[i]}' class='w-100'
+                                     mat-stroked-button>
                                   <div class='d-flex align-items-center pt-1 py-0'>
                                     <mat-icon class='test-icon '>fiber_manual_record
                                     </mat-icon>
-                                    <div class='d-flex  align-items-center justify-content-between'
-                                         [ngStyle]='{width: "calc(100% - 10px)"}'>
-                                      <h4 class='mat-h4 m-0 ml-3 text-uppercase text-nowrap text-truncate overflow-hidden'
-                                          [ngStyle]='{width: "calc(100% - 60px)"}'>{{completeTestLabels[i]}}</h4>
-                                      <h4 class='mat-h1 m-0'
-                                          [ngStyle]='{"color": completeTestColors[i]}'>{{test}} %</h4>
+                                    <div [ngStyle]='{width: "calc(100% - 10px)"}'
+                                         class='d-flex  align-items-center justify-content-between'>
+                                      <h4
+                                        [ngStyle]='{width: "calc(100% - 60px)"}'
+                                        class='mat-h4 m-0 ml-3 text-uppercase text-nowrap text-truncate overflow-hidden'>{{completeTestLabels[i]}}</h4>
+                                      <h4 [ngStyle]='{"color": completeTestColors[i]}'
+                                          class='mat-h1 m-0'>{{test}} %</h4>
                                     </div>
                                   </div>
                                 </div>
