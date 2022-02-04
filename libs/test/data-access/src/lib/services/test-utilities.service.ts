@@ -218,7 +218,7 @@ export class TestUtilitiesService {
         three: data[data.findIndex(f => f.pointType === PointTypeEnum.THREE)],
         four: data[data.findIndex(f => f.pointType === PointTypeEnum.FOUR)],
         five: data[data.findIndex(f => f.pointType === PointTypeEnum.FIVE)],
-        hp: data[data.findIndex(f => f.pointType === PointTypeEnum.FIVE)]
+        hp: data[data.findIndex(f => f.pointType === PointTypeEnum.HP)]
       };
     }
     return [
