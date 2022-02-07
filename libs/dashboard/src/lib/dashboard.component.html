@@ -119,6 +119,7 @@
                         [data]='$any(store.assessmentTestEngagementData$ | async)'
                         [labels]='$any(store.assessmentTestEngagementLables$ | async)'
                         [legend]='chartLegendTest'
+                        [options]='chartOptionsTest'
                         baseChart
                         chartType='doughnut'
                         class='w-100'
@@ -174,6 +175,7 @@
                         [data]='$any(store.completeTestEngagementData$ | async)'
                         [labels]='$any(store.completeTestEngagementLables$ | async)'
                         [legend]='chartLegendComplete'
+                        [options]='chartOptionsTest'
                         baseChart
                         chartType='doughnut'
                         class='w-100'

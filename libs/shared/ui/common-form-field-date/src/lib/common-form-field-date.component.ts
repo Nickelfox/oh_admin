@@ -30,10 +30,10 @@ export const MY_FORMATS = {
 <!--      <mat-datepicker #picker></mat-datepicker>-->
 <!--    </mat-form-field>-->
 <mat-form-field class='w-100'>
-  <mat-label>Select Range</mat-label>
+  <mat-label >Select Range</mat-label >
   <mat-date-range-input [max]='maxDate' separator='to' [rangePicker]='weekPicker'>
     <input matStartDate readonly type='text' placeholder='Start' [formControl]='startControl'>
-    <input matEndDate readonly type='text' placeholder='End' [formControl]='endControl'>
+    <input matEndDate readonly type='text'  placeholder='End' [formControl]='endControl'>
   </mat-date-range-input>
   <mat-datepicker-toggle matSuffix [for]='weekPicker'></mat-datepicker-toggle>
   <mat-date-range-picker #weekPicker></mat-date-range-picker>
