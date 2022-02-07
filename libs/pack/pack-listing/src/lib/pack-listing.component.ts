@@ -1,8 +1,21 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Pack, PackDeleteRequest, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
+import {
+  Content,
+  Lesson,
+  Pack,
+  PackDeleteRequest,
+  PackListingFilters,
+  PackStore
+} from '@hidden-innovation/pack/data-access';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { GenericDialogPrompt, PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
+import {
+  GenericDialogPrompt,
+  PackContentTypeEnum,
+  PublishStatusEnum,
+  SortingEnum,
+  StatusChipType
+} from '@hidden-innovation/shared/models';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { PageEvent } from '@angular/material/paginator';
@@ -83,6 +96,19 @@ export class PackListingComponent implements OnInit {
       published,
       nameSort
     });
+  }
+
+  getLessonsCount(pack: Pack): number {
+    if (pack && pack.content) {
+      try {
+        const contents: (Content | Lesson)[] = pack?.content ?? [];
+        return contents.filter(c => c.type === PackContentTypeEnum.LESSON).length;
+      } catch {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
   }
 
   trackById(index: number, p: Pack): number {
