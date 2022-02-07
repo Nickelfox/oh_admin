@@ -8,6 +8,7 @@ import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { skip } from 'rxjs/operators';
+import {forEach} from "lodash-es";
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -67,8 +68,8 @@ export class DashboardComponent {
     {
       backgroundColor: [
         this.colors.CARDIO,
-        this.colors.STRENGTH,
         this.colors.FUNCTION,
+        this.colors.STRENGTH,
         this.colors.MOBILE,
         this.colors.LIFESTYLE
       ]
@@ -108,6 +109,25 @@ export class DashboardComponent {
   ];
   doughnutPluginsComplete = [this.doughnutChartLabelComplete];
 
+
+
+  chartOptionsTest:ChartOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    tooltips:{
+     callbacks:{
+       label: (tooltipItem, data):any => {
+         // @ts-ignore
+         const value = data.datasets[0].data[tooltipItem.index];
+         // @ts-ignore
+         return ` ${data.labels[tooltipItem.index]}: ${value}%`;
+       }
+     }
+    }
+
+  }
+
+
   chartOptions: ChartOptions = {
     layout: {
       padding: 0
@@ -144,10 +164,14 @@ export class DashboardComponent {
 
   maxDate = DateTime.now();
 
+
+
+
   constructor(
     public store: DashboardStore
   ) {
     this.store.getStats();
+  this.store.assessmentTestEngagementLables$.subscribe(res => console.log(res))
     this.store.getCompleteTestEngagement();
     this.store.getAssessmentTestEngagement();
     this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
