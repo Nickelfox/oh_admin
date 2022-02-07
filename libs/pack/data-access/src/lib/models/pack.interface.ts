@@ -1,5 +1,5 @@
 import { Media } from '@hidden-innovation/media';
-import { Test, TestListingFilters } from '@hidden-innovation/test/data-access';
+import { Test } from '@hidden-innovation/test/data-access';
 import { Lesson, LessonCore } from './lesson.interface';
 import { CustomApiResponse, PackContentTypeEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
