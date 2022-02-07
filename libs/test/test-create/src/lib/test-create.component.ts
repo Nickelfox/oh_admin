@@ -79,6 +79,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   pointTypeEnum = PointTypeEnum;
   pointTypeEnumNumber = PointTypeEnumNumber;
+  profileInputTypeEnum = ProfileInputTypeEnum;
 
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
@@ -504,6 +505,11 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   get profileInputFormGroup(): FormGroup<RelativeProfileObject> | undefined {
     return this.testGroup.controls.relativeProfile as FormGroup<RelativeProfileObject>;
+  }
+
+  resetProfileInputUnit(): void {
+    this.profileInputFormGroup?.controls.unit?.setValue(undefined);
+    this.testGroup.updateValueAndValidity();
   }
 
   get disableEditState(): boolean {

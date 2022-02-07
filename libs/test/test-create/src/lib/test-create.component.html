@@ -1141,9 +1141,9 @@
                                   <div class='col-12'>
                                     <mat-form-field class='w-100'>
                                       <mat-label>Value y - Type</mat-label>
-                                      <mat-select [disabled]='disableEditState' formControlName='inputType'>
+                                      <mat-select [disabled]='disableEditState' formControlName='inputType' (valueChange)='resetProfileInputUnit()'>
                                         <mat-option *ngFor='let inp of profileInputTypeIte'
-                                                    [value]='inp'>{{inp | titlecase}}</mat-option>
+                                                    [value]='inp'>{{inp | distanceLength | titlecase}}</mat-option>
                                       </mat-select>
                                       <mat-error>
                                         <ng-template
@@ -1160,23 +1160,46 @@
                                 </div>
                                 <div class='row mb-2'>
                                   <div class='col-12'>
-                                    <mat-form-field class='w-100'>
-                                      <mat-label>Value y - Unit</mat-label>
-                                      <mat-select [disabled]='disableEditState' formControlName='unit'>
-                                        <mat-option *ngFor='let unit of profileInputTypeUnitIte'
-                                                    [value]='unit'>{{utilities.getUnitAbbreviation(unit)}}</mat-option>
-                                      </mat-select>
-                                      <mat-error>
-                                        <ng-template
-                                          [ngIf]='((profileInputFormGroup?.controls?.unit?.touch$ | async) || (profileInputFormGroup?.controls?.unit?.dirty$ | async)) && (profileInputFormGroup?.controls?.unit?.errors$ | async)'
-                                          let-error>
-                                          <hidden-innovation-form-field-errors
-                                            [error]='error'
-                                            [label]='"Value y - Unit"'
-                                          ></hidden-innovation-form-field-errors>
-                                        </ng-template>
-                                      </mat-error>
-                                    </mat-form-field>
+                                    <ng-template
+                                      [ngIf]='profileInputFormGroup?.controls?.inputType?.value === profileInputTypeEnum.WEIGHT'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Value y - Unit</mat-label>
+                                        <mat-select [disabled]='disableEditState' formControlName='unit'>
+                                          <mat-option *ngFor='let wType of weightTypeIte'
+                                                      [value]='wType'>{{utilities.getUnitAbbreviation(wType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((profileInputFormGroup?.controls?.unit?.touch$ | async) || (profileInputFormGroup?.controls?.unit?.dirty$ | async)) && (profileInputFormGroup?.controls?.unit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Value y - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                    <ng-template
+                                      [ngIf]='profileInputFormGroup?.controls?.inputType?.value === profileInputTypeEnum.LENGTH'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Value y - Unit</mat-label>
+                                        <mat-select [disabled]='disableEditState' formControlName='unit'>
+                                          <mat-option *ngFor='let dType of distTypeIte'
+                                                      [value]='dType'>{{utilities.getUnitAbbreviation(dType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((profileInputFormGroup?.controls?.unit?.touch$ | async) || (profileInputFormGroup?.controls?.unit?.dirty$ | async)) && (profileInputFormGroup?.controls?.unit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Value y - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
                                   </div>
                                 </div>
                                 <div class='row mb-3'>
