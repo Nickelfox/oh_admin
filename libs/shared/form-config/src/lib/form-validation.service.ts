@@ -271,7 +271,7 @@ export class FormValidationService {
           if (low !== null && low !== undefined && high !== null && high !== undefined) {
             const lowVal = DateTime.fromJSDate(low.value).toSeconds();
             const highVal = DateTime.fromJSDate(high.value).toSeconds();
-            if (Math.round(lowVal) <= Math.round(highVal)) {
+            if (Math.round(lowVal) < Math.round(highVal)) {
               low?.setErrors({ highThan: true });
               high?.setErrors({ lessThan: true });
               return null;
