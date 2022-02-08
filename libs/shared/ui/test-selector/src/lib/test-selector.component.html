@@ -102,7 +102,7 @@
                   </span>
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
-                                  [disabled]='(store.isActing$ | async) || this.categoryData.type === contentSelectorOpType.SINGLE'
+                                  [disabled]='(store.isActing$ | async) || (this.categoryData.type === contentSelectorOpType.SINGLE && !this.categoryData?.limit)'
                                   color='{{filters.controls.category?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
