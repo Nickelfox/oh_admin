@@ -41,9 +41,9 @@
         <!--        </button>-->
         <!--        <button mat-flat-button color="accent" class="mini" (click)="logoutPrompt()">Logout</button>-->
         <button mat-stroked-button class=' mx-1 mat-subheading-2 mb-0 font-weight-bolder' [matMenuTriggerFor]='userBarmenu'>
-          <div class='d-flex align-items-center'>
+          <div class='d-flex align-items-center admin-name-width '>
             <ng-template [ngIf]='(authFacade.authAdmin$ | async)' let-admin [ngIfElse]='authAdminElse'>
-              <span>{{admin.name || '--'}}</span>
+              <span class="overflow-hidden">{{admin.name || '--'}}</span>
             </ng-template>
             <ng-template #authAdminElse>
               --
