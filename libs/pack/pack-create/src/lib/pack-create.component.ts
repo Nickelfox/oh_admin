@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  ViewEncapsulation
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
 import {
@@ -34,6 +41,7 @@ import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
+import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -43,7 +51,7 @@ import {
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PackCreateComponent implements OnDestroy {
+export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   packForm: FormGroup<PackCore> = new FormGroup<PackCore>({
     name: new FormControl<string>('', [
@@ -86,6 +94,8 @@ export class PackCreateComponent implements OnDestroy {
   selectedPack?: Pack;
   private packID?: number;
   private selectedContents: ContentCore[] | LessonCore[] = [];
+
+  loaded = false;
 
   constructor(
     private matDialog: MatDialog,
@@ -139,6 +149,9 @@ export class PackCreateComponent implements OnDestroy {
       this.packForm.updateValueAndValidity();
       this.cdr.markForCheck();
     });
+    this.store.loaded$.pipe(
+      tap(res => this.loaded = res)
+    ).subscribe();
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[] | LessonCore[]> {
@@ -363,5 +376,10 @@ export class PackCreateComponent implements OnDestroy {
       ]
     });
     this.cdr.markForCheck();
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    return this.packForm.dirty ? this.loaded : true;
   }
 }
