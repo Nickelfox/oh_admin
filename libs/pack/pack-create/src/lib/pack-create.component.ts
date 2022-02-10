@@ -6,8 +6,8 @@ import {
   OnDestroy,
   ViewEncapsulation
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
+import {MatDialog} from '@angular/material/dialog';
+import {LessonCreateComponent} from '@hidden-innovation/shared/ui/lesson-create';
 import {
   Content,
   ContentCore,
@@ -18,30 +18,30 @@ import {
   PackCore,
   PackStore
 } from '@hidden-innovation/pack/data-access';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { UiStore } from '@hidden-innovation/shared/store';
-import { AspectRatio, Media } from '@hidden-innovation/media';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@ngneat/reactive-forms';
+import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
+import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators';
+import {UiStore} from '@hidden-innovation/shared/store';
+import {AspectRatio, Media} from '@hidden-innovation/media';
+import {UntilDestroy} from '@ngneat/until-destroy';
+import {filter, switchMap, tap} from 'rxjs/operators';
 import {
   ContentSelectorOpType,
   GenericDialogPrompt,
   OperationTypeEnum,
   PackContentTypeEnum
 } from '@hidden-innovation/shared/models';
-import { ActivatedRoute } from '@angular/router';
-import { HotToastService } from '@ngneat/hot-toast';
-import { TitleCasePipe, UpperCasePipe } from '@angular/common';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
-import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+import {ActivatedRoute} from '@angular/router';
+import {HotToastService} from '@ngneat/hot-toast';
+import {TitleCasePipe} from '@angular/common';
+import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog';
+import {TestSelectorComponent, TestSelectorData} from '@hidden-innovation/shared/ui/test-selector';
+import {TestGroupSelectorComponent, TestGroupSelectorData} from '@hidden-innovation/shared/ui/test-group-selector';
 import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
-import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
+import {ComponentCanDeactivate} from '@hidden-innovation/shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -202,9 +202,10 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
   }
 
   deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
+    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
     const dialogData: GenericDialogPrompt = {
-      title: `Remove ${content.type}?`,
-      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)} from Pack?`,
+      title: `Remove ${contentType}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Pack?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',

@@ -99,8 +99,6 @@ export class LineChartComponent implements OnInit {
       default:
         return ('No of  users')
     }
-
-
   }
 
 

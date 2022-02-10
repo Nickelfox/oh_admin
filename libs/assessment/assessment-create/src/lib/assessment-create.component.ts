@@ -20,6 +20,9 @@ import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
+import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+
+
 
 @Component({
   selector: 'hidden-innovation-assessment-create',
@@ -216,6 +219,19 @@ export class AssessmentCreateComponent implements OnDestroy {
       type: ContentSelectorOpType.OTHER
     };
     this.matDialog.open(QuestionnaireSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
+  }
+  openTestGroupSelector(): void {
+    const data: TestGroupSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestGroupSelectorComponent, {
       data,
       height: '100%',
       width: '100%',

@@ -31,7 +31,7 @@ export class FormValidationService {
   lockOutValidationMessage: Partial<GenericErrorMessage> = {
     required: 'field is required',
     invalid: 'Must not contain any special character or negative value',
-    minLength: `Must not be greater than zero`
+    minLength: `Must  be greater than zero`
   };
 
   pointsValidationMessage: Partial<GenericErrorMessage> = {
