@@ -27,7 +27,7 @@ import {update} from "lodash-es";
                     [datasets]='chartData'
                     [labels]='chartLabels'
                     [legend]='chartLegend'
-                    [options]='chartOptions '
+                    [options]="chartOptionType(chartOpt)"
             >
             </canvas>
             <div *ngIf='noDataCheck' class='d-flex align-items-center justify-content-center chart__no-data-con'>
@@ -49,33 +49,36 @@ export class LineChartComponent implements OnInit {
   @Input() label?: string;
   @Input() icon?: string;
   @Input() isLoading?: boolean | null;
-  chartOptions: ChartOptions = {
-    layout: {
-      padding: 0
-    },
-    elements: {
-      line: {
-        tension: 0,
-        borderWidth: 3
-      },
-      point: {
-        pointStyle: 'circle',
-        radius: 4,
-        hoverRadius: 8
-      }
-    },
-    responsive: true,
-    maintainAspectRatio: true,
-    title: {
-      display: true,
-      position: 'left',
-      text: this.getChartTitle(),
-      fontColor: '#394155',
-      fontSize: 10,
-      padding: 5
-    },
+  @Input() chartOpt?:string ;
 
-  };
+
+  // chartOptions: ChartOptions = {
+  //   layout: {
+  //     padding: 0
+  //   },
+  //   elements: {
+  //     line: {
+  //       tension: 0,
+  //       borderWidth: 3
+  //     },
+  //     point: {
+  //       pointStyle: 'circle',
+  //       radius: 4,
+  //       hoverRadius: 8
+  //     }
+  //   },
+  //   responsive: true,
+  //   maintainAspectRatio: true,
+  //   title: {
+  //     display: true,
+  //     position: 'left',
+  //     text: this.getChartTitle(),
+  //     fontColor: '#394155',
+  //     fontSize: 10,
+  //     padding: 5
+  //   },
+  //
+  // };
 
 
   chartColors: ChartColor = [
@@ -90,6 +93,38 @@ export class LineChartComponent implements OnInit {
   ];
 
   chartLegend = false;
+
+  chartOptionType(type?:string):ChartOptions{
+    return {
+      layout: {
+        padding: 0
+      },
+      elements: {
+        line: {
+          tension: 0,
+          borderWidth: 3
+        },
+        point: {
+          pointStyle: 'circle',
+          radius: 4,
+          hoverRadius: 8
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: true,
+      title: {
+        display: true,
+        position: 'left',
+        text: type,
+        fontColor: '#394155',
+        fontSize: 10,
+        padding: 5
+      },
+    }
+  }
+
+
+
 
   getChartTitle():string{
     // console.log(data)
