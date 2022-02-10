@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
+import {update} from "lodash-es";
 
 @Component({
   selector: 'hidden-innovation-line-chart',
@@ -26,7 +27,8 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
                     [datasets]='chartData'
                     [labels]='chartLabels'
                     [legend]='chartLegend'
-                    [options]='chartOptions'>
+                    [options]='chartOptions '
+            >
             </canvas>
             <div *ngIf='noDataCheck' class='d-flex align-items-center justify-content-center chart__no-data-con'>
               <h3 class='mat-h3'>No Data Available</h3>
@@ -67,12 +69,14 @@ export class LineChartComponent implements OnInit {
     title: {
       display: true,
       position: 'left',
-      text: 'No. Of Users',
+      text: this.getChartTitle(),
       fontColor: '#394155',
       fontSize: 10,
       padding: 5
-    }
+    },
+
   };
+
 
   chartColors: ChartColor = [
     {
@@ -87,6 +91,19 @@ export class LineChartComponent implements OnInit {
 
   chartLegend = false;
 
+  getChartTitle():string{
+    // console.log(data)
+    switch (this.label) {
+      case 'Registered Users':
+        return ("No of Registered");
+      default:
+        return ('No of Users')
+    }
+
+
+  }
+
+
   get noDataCheck(): boolean {
     try {
       return !this.chartData[0].data?.length;
@@ -96,6 +113,17 @@ export class LineChartComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    switch (this.label) {
+    case 'Registered Users':
+      console.log("No of Registered");
+      break
+    case 'Active Users':
+      console.log('No of Active users');
+      break
+    default:
+      console.log('hello')
+  }
   }
 
 }

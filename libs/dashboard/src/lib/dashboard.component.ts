@@ -171,7 +171,7 @@ export class DashboardComponent {
     public store: DashboardStore
   ) {
     this.store.getStats();
-  this.store.assessmentTestEngagementLables$.subscribe(res => console.log(res))
+
     this.store.getCompleteTestEngagement();
     this.store.getAssessmentTestEngagement();
     this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
