@@ -267,7 +267,9 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   openCreateLessonDialog(): void {
     const dialogRef = this.matDialog.open(LessonCreateComponent, {
-      minWidth: '25rem'
+      minWidth: '25rem',
+      disableClose:true,
+      // hasBackdrop:false
     });
     dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
       if (lesson) {
