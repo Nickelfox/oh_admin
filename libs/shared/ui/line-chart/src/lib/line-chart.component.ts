@@ -97,7 +97,7 @@ export class LineChartComponent implements OnInit {
       case 'Registered Users':
         return ("No of Registered");
       default:
-        return ('No of Users')
+        return ('No of  users')
     }
 
 
