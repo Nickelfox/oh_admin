@@ -28,6 +28,12 @@ export class FormValidationService {
     maxLength: `Must not exceed 150 character limit`
   };
 
+  lockOutValidationMessage: Partial<GenericErrorMessage> = {
+    required: 'field is required',
+    invalid: 'Must not contain any special character or negative value',
+    minLength: `Must  be greater than zero`
+  };
+
   pointsValidationMessage: Partial<GenericErrorMessage> = {
     required: 'Point field is required',
     invalid: 'Only numeric & non-floating point values allowed',

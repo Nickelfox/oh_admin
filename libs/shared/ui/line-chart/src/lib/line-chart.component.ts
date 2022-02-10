@@ -26,7 +26,8 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
                     [datasets]='chartData'
                     [labels]='chartLabels'
                     [legend]='chartLegend'
-                    [options]='chartOptions'>
+                    [options]='chartOptionType(chartOpt)'
+            >
             </canvas>
             <div *ngIf='noDataCheck' class='d-flex align-items-center justify-content-center chart__no-data-con'>
               <h3 class='mat-h3'>No Data Available</h3>
@@ -47,32 +48,37 @@ export class LineChartComponent {
   @Input() label?: string;
   @Input() icon?: string;
   @Input() isLoading?: boolean | null;
-  chartOptions: ChartOptions = {
-    layout: {
-      padding: 0
-    },
-    elements: {
-      line: {
-        tension: 0,
-        borderWidth: 3
-      },
-      point: {
-        pointStyle: 'circle',
-        radius: 4,
-        hoverRadius: 8
-      }
-    },
-    responsive: true,
-    maintainAspectRatio: true,
-    title: {
-      display: true,
-      position: 'left',
-      text: 'No. Of Users',
-      fontColor: '#394155',
-      fontSize: 10,
-      padding: 5
-    }
-  };
+  @Input() chartOpt?: string;
+
+
+  // chartOptions: ChartOptions = {
+  //   layout: {
+  //     padding: 0
+  //   },
+  //   elements: {
+  //     line: {
+  //       tension: 0,
+  //       borderWidth: 3
+  //     },
+  //     point: {
+  //       pointStyle: 'circle',
+  //       radius: 4,
+  //       hoverRadius: 8
+  //     }
+  //   },
+  //   responsive: true,
+  //   maintainAspectRatio: true,
+  //   title: {
+  //     display: true,
+  //     position: 'left',
+  //     text: this.getChartTitle(),
+  //     fontColor: '#394155',
+  //     fontSize: 10,
+  //     padding: 5
+  //   },
+  //
+  // };
+
 
   chartColors: ChartColor = [
     {
@@ -92,6 +98,59 @@ export class LineChartComponent {
       return !this.chartData[0].data?.length;
     } catch {
       return false;
+    }
+  }
+
+  chartOptionType(type?: string): ChartOptions {
+    return {
+      layout: {
+        padding: 0
+      },
+      elements: {
+        line: {
+          tension: 0,
+          borderWidth: 3
+        },
+        point: {
+          pointStyle: 'circle',
+          radius: 4,
+          hoverRadius: 8
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: true,
+      title: {
+        display: true,
+        position: 'left',
+        text: type,
+        fontColor: '#394155',
+        fontSize: 10,
+        padding: 5
+      }
+    };
+  }
+
+  getChartTitle(): string {
+    // console.log(data)
+    switch (this.label) {
+      case 'Registered Users':
+        return ('No of Registered');
+      default:
+        return ('No of  users');
+    }
+  }
+
+  ngOnInit() {
+
+    switch (this.label) {
+      case 'Registered Users':
+        console.log('No of Registered');
+        break;
+      case 'Active Users':
+        console.log('No of Active users');
+        break;
+      default:
+        console.log('hello');
     }
   }
 }

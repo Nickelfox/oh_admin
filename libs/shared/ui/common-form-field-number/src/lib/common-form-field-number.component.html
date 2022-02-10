@@ -14,6 +14,9 @@
       <ng-container *ngIf='error?.min'>
         Invalid! Must be greater than {{control.errors?.min?.min}} <br>
       </ng-container>
+      <ng-container *ngIf='error?.minNumber'>
+        {{errorMessage.minLength}} <br>
+      </ng-container>
     </ng-template>
   </mat-error>
 </mat-form-field>

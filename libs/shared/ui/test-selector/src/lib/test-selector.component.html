@@ -3,11 +3,11 @@
     <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
       <ng-template [ngIf]='this.categoryData.type === contentSelectorOpType.SINGLE' [ngIfElse]='elseTitle'>
         <ng-template [ngIf]='!this.categoryData?.limit' [ngIfElse]='elseTitle'>
-          ADD TEST OF TYPE - <b>{{categoryData ? (categoryData?.category | titlecase) : "--"}}</b>
+          ADD TEST SINGLE <span>{{categoryData ? " OF TYPE -  "+(categoryData?.category | titlecase) : "--"}}</span>
         </ng-template>
       </ng-template>
       <ng-template #elseTitle>
-        ADD TEST
+        ADD TEST SINGLE
       </ng-template>
     </h4>
     <div class='d-flex align-items-center'>
