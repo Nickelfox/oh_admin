@@ -330,7 +330,11 @@
                                         </ng-template>
                                         <ng-template
                                           [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("highThan")'>
-                                          Low must be less than high > value
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -357,7 +361,11 @@
                                           </ng-template>
                                           <ng-template
                                             [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("lessThan")'>
-                                            High must be higher than < low value
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
                                           </ng-template>
                                         </mat-error>
                                       </mat-form-field>
@@ -367,7 +375,7 @@
                                     <ng-template [ngIf]='oneRMInputFieldFormArray.errors$ | async' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && (getOneRMInputFieldGroup(i).get("low").touch$ | async) && !(getOneRMInputFieldGroup(i).get("low").hasError("required") || getOneRMInputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(getOneRMInputFieldGroup(i).get("low").hasError("required") || getOneRMInputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a higher value from previous high point</small>
@@ -442,7 +450,11 @@
                                         </ng-template>
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
-                                          Low must be less than high > value
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -468,7 +480,11 @@
                                           </ng-template>
                                           <ng-template
                                             [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
-                                            High must be higher than < low value
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
                                           </ng-template>
                                         </mat-error>
                                       </mat-form-field>
@@ -478,7 +494,7 @@
                                     <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").touch$ | async) && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a higher value from previous high point</small>
@@ -540,7 +556,11 @@
                                         </ng-template>
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
-                                          Low must be less than high > value
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -566,7 +586,11 @@
                                           </ng-template>
                                           <ng-template
                                             [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
-                                            High must be higher than < low value
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
                                           </ng-template>
                                         </mat-error>
                                       </mat-form-field>
@@ -576,7 +600,7 @@
                                     <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").touch$ | async) && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a higher value from previous high point</small>
@@ -590,6 +614,7 @@
 
                             <!--                  Time -->
                             <div *ngSwitchCase='testInputTypeEnum.TIME' class='container p-0'>
+                              <ng-container *ngTemplateOutlet='inverseScoresheetTemplate'></ng-container>
                               <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
                                            let-i='index' ngFor>
                                 <div class='row mb-2' formGroupName='{{i}}'>
@@ -618,8 +643,12 @@
                                         formControlName='low'></ngx-mat-timepicker>
                                     </div>
                                     <mat-error
-                                      *ngIf='inputFieldGroup(i).controls.low.hasError("highThan") && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))'>
-                                      <small>Must be greater than the high field value</small>
+                                      *ngIf='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                      <small>Low must be less/equal to high value</small>
+                                    </mat-error>
+                                    <mat-error
+                                      *ngIf='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                      <small>Low must be more/equal to high value</small>
                                     </mat-error>
                                   </div>
                                   <div class='col-5'>
@@ -638,16 +667,27 @@
                                           formControlName='high'></ngx-mat-timepicker>
                                       </div>
                                       <mat-error
-                                        *ngIf='inputFieldGroup(i).controls.high.hasError("lessThan") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))'>
-                                        <small>{{formValidationService.pointsValidationMessage?.lowField}}</small>
+                                        *ngIf='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                        <small>Low must be less/equal to high value</small>
+                                      </mat-error>
+                                      <mat-error
+                                        *ngIf='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                        <small>Low must be more/equal to high value</small>
                                       </mat-error>
                                     </ng-template>
                                   </div>
                                   <ng-template [ngIf]='i > 0'>
-                                    <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                    <ng-template [ngIf]='(inputFieldFormArray.errors$ | async)' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "highThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a lower value from previous high point</small>
@@ -706,7 +746,11 @@
                                         </ng-template>
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
-                                          Low must be less than high > value
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -732,7 +776,11 @@
                                           </ng-template>
                                           <ng-template
                                             [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
-                                            High must be higher than < low value
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
                                           </ng-template>
                                         </mat-error>
                                       </mat-form-field>
@@ -742,7 +790,7 @@
                                     <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").touch$ | async) && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a higher value from previous high point</small>
@@ -791,7 +839,11 @@
                                         </ng-template>
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
-                                          Low must be less than high > value
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -817,7 +869,11 @@
                                           </ng-template>
                                           <ng-template
                                             [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
-                                            High must be higher than < low value
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
                                           </ng-template>
                                         </mat-error>
                                       </mat-form-field>
@@ -827,7 +883,7 @@
                                     <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").touch$ | async) && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a higher value from previous high point</small>
@@ -1024,6 +1080,7 @@
                                   </div>
                                 </div>
                               </ng-container>
+                              <ng-container *ngTemplateOutlet='inverseScoresheetTemplate'></ng-container>
                               <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
                                            let-i='index' ngFor>
                                 <div class='row mb-2' formGroupName='{{i}}'>
@@ -1051,7 +1108,11 @@
                                         </ng-template>
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
-                                          Low must be less than high > value
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -1077,7 +1138,11 @@
                                           </ng-template>
                                           <ng-template
                                             [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
-                                            High must be higher than < low value
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
                                           </ng-template>
                                         </mat-error>
                                       </mat-form-field>
@@ -1087,10 +1152,17 @@
                                     <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").touch$ | async) && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "highThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a lower value from previous high point</small>
                                         </mat-error>
                                       </div>
                                     </ng-template>
@@ -1222,6 +1294,7 @@
                                 </div>
                               </ng-container>
 
+                              <ng-container *ngTemplateOutlet='inverseScoresheetTemplate'></ng-container>
                               <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
                                            let-i='index' ngFor>
                                 <div class='row mb-2' formGroupName='{{i}}'>
@@ -1249,7 +1322,11 @@
                                         </ng-template>
                                         <ng-template
                                           [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
-                                          Low must be less than high > value
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
                                         </ng-template>
                                       </mat-error>
                                     </mat-form-field>
@@ -1275,7 +1352,11 @@
                                           </ng-template>
                                           <ng-template
                                             [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
-                                            High must be higher than < low value
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
                                           </ng-template>
                                         </mat-error>
                                       </mat-form-field>
@@ -1285,10 +1366,17 @@
                                     <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
                                       <div class='col-2'></div>
                                       <div
-                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && (inputFieldGroup(i).get("low").touch$ | async) && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
                                         class='col-10 mb-2'>
                                         <mat-error>
                                           <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "highThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a lower value from previous high point</small>
                                         </mat-error>
                                       </div>
                                     </ng-template>
@@ -1324,3 +1412,11 @@
   </div>
 
 </form>
+
+<ng-template #inverseScoresheetTemplate>
+  <div *ngIf='!disableEditState' class='row mb-3'>
+    <div class='col-12'>
+      <mat-slide-toggle [formControl]='inverseScoreSheet'>Inverse Scoresheet</mat-slide-toggle>
+    </div>
+  </div>
+</ng-template>
