@@ -203,7 +203,7 @@ export class UiStore extends ComponentStore<UiState> {
   deleteContentPrompt(type: PackContentTypeEnum, id: number): void {
     const dialogData: GenericDialogPrompt = {
       title: `Remove ${this.titleCasePipe.transform(type)}?`,
-      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(type)} from Pack?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(type)} item from Pack?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',

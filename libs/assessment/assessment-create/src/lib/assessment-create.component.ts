@@ -20,6 +20,9 @@ import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
+import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+
+
 
 @Component({
   selector: 'hidden-innovation-assessment-create',
@@ -42,7 +45,16 @@ export class AssessmentCreateComponent implements OnDestroy {
     about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillNeed: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
-    lockout: new FormControl(undefined, [...this.formValidationService.requiredFieldValidation]),
+    lockout: new FormControl(undefined, [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.numeric({
+        allowDecimal:false,
+        acceptValue: NumericValueType.PositiveNumber,
+      }),
+      RxwebValidators.minNumber({
+        value:1,
+      })
+    ]),
     howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     imageId: new FormControl(undefined, [
       RxwebValidators.required(),
@@ -207,6 +219,19 @@ export class AssessmentCreateComponent implements OnDestroy {
       type: ContentSelectorOpType.OTHER
     };
     this.matDialog.open(QuestionnaireSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
+  }
+  openTestGroupSelector(): void {
+    const data: TestGroupSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestGroupSelectorComponent, {
       data,
       height: '100%',
       width: '100%',
