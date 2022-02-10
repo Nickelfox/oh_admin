@@ -17,30 +17,32 @@ import {PackContentCardModule} from "@hidden-innovation/shared/ui/pack-content-c
 import {AssessmentDataAccessModule} from "@hidden-innovation/assessment/data-access";
 import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
 import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
+import {CommonFormFieldNumberModule} from "@hidden-innovation/shared/ui/common-form-field-number";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule,
-    CommonFormFieldModule,
-    CommonFormFieldTextareaModule,
-    CommonFormFieldImageModule,
-    CommonFormFieldFileModule,
-    MediaModule,
-    TestDataAccessModule,
-    QuestionnaireDataAccessModule,
-    PackContentCardModule,
-    UtilsModule,
-    FormFieldErrorsModule,
-    AssessmentDataAccessModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        pathMatch: 'full',
-        component: AssessmentCreateComponent
-      }
-    ]),
-  ],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        CommonFormFieldModule,
+        CommonFormFieldTextareaModule,
+        CommonFormFieldImageModule,
+        CommonFormFieldFileModule,
+        MediaModule,
+        TestDataAccessModule,
+        QuestionnaireDataAccessModule,
+        PackContentCardModule,
+        UtilsModule,
+        FormFieldErrorsModule,
+        AssessmentDataAccessModule,
+        RouterModule.forChild([
+            {
+                path: '',
+                pathMatch: 'full',
+                component: AssessmentCreateComponent
+            }
+        ]),
+        CommonFormFieldNumberModule,
+    ],
   declarations: [
     AssessmentCreateComponent
   ],
