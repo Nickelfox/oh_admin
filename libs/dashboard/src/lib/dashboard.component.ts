@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
-import { DashboardRangeFilterEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import {DashboardRangeFilterEnum, TagCategoryEnum, UserDetails} from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { DashboardRequest } from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
@@ -9,6 +9,32 @@ import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { skip } from 'rxjs/operators';
 import {forEach} from "lodash-es";
+import {MatTableDataSource} from "@angular/material/table";
+
+
+export interface AssessmentTestEng {
+  position:number;
+  name:string;
+  id:number;
+  score:number;
+  completion:string;
+}
+export interface PackEng {
+  position:number;
+  name:string;
+  id:number;
+  totalPlays:number;
+  contentClicks:number;
+  resourcesClicks:number
+}
+
+export interface TopWatched {
+  position:number;
+  name:string;
+  id:number;
+  videoPlays:number;
+  resultLog:number;
+}
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -17,7 +43,51 @@ import {forEach} from "lodash-es";
   styleUrls: ['./dashboard.component.scss']
 })
 
+
+
 export class DashboardComponent {
+
+  _dummyAssessmentTest: AssessmentTestEng[] = [
+    {
+      position: 1,
+      name: 'Strength',
+      id: 1,
+      score: 20,
+      completion: '10%'
+    },
+  ]
+
+  _dummyTopWatchedTest: TopWatched[] = [
+    {
+      position: 1,
+      name: 'Short Sprint Test (400m Run)',
+      id: 32,
+      videoPlays: 3,
+      resultLog: 6
+    },
+  ]
+
+  _dummyPackEng: PackEng[] = [
+    {
+      position: 1,
+      name: 'Strength',
+      id: 1,
+      totalPlays: 20,
+      contentClicks: 10,
+      resourcesClicks: 20
+    }
+  ]
+
+  displayedColumnsAssessmentTest: string[] = ['position', 'name', 'id', 'score', 'completion'];
+  assessmentTestTable: MatTableDataSource<AssessmentTestEng> = new MatTableDataSource<AssessmentTestEng>();
+
+  displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'totalPlays', 'contentClicks', 'resourcesClicks'];
+  packEngTable: MatTableDataSource<PackEng> = new MatTableDataSource<PackEng>();
+
+  displayedColumnsTopWatched: string[] = ['position', 'name', 'id', 'videoPlays', 'resultLog'];
+  topWatchedTable: MatTableDataSource<TopWatched> = new MatTableDataSource<TopWatched>();
+
+
 
   chartData: ChartDatasets = [
     { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series A' }
@@ -170,6 +240,9 @@ export class DashboardComponent {
   constructor(
     public store: DashboardStore
   ) {
+    this.assessmentTestTable = new MatTableDataSource<AssessmentTestEng>(this._dummyAssessmentTest)
+    this.packEngTable = new MatTableDataSource<PackEng>(this._dummyPackEng)
+    this.topWatchedTable = new MatTableDataSource<TopWatched>(this._dummyTopWatchedTest)
     this.store.getStats();
 
     this.store.getCompleteTestEngagement();
