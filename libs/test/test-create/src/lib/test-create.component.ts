@@ -131,6 +131,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       disabled: true
     }, [...this.utilities.requiredFieldValidation]),
     isPublished: new FormControl(false),
+    inverseScoresheet: new FormControl<boolean>(false),
     oneRMInputFields: new FormArray<OneRMField>([], [
       this.formValidationService.greaterPointValidator()
     ]),
@@ -275,6 +276,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       inputFields,
       weightUnit,
       customNumericLabel,
+      inverseScoresheet,
       ratioVariable,
       relativeProfile
     } = this.testGroup.controls;
@@ -285,7 +287,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       const oneRMFArray: FormArray<OneRMField> = oneRMInputFields as FormArray<OneRMField>;
       const mCArray: FormArray<MultipleChoiceField> = multipleChoiceInputFields as FormArray<MultipleChoiceField>;
       const inputFArray: FormArray<InputField> = inputFields as FormArray<InputField>;
-      const inverse = this.inverseScoreSheet.value;
+      const inverse = inverseScoresheet.value;
       oneRMFArray.clear();
       mCArray.clear();
       inputFArray.clear();
@@ -400,10 +402,13 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
               yType: this.selectedTest.ratioVariable?.yType
             });
             resultExplanation.setValue(this.selectedTest.resultExplanation);
+            ratioTypeFormGroup.disable();
+            ratioTypeFormGroup.controls.yLabel.enable();
+            ratioTypeFormGroup.controls.xLabel.enable();
           } else {
             this.utilities.buildCommonPointFormGroup(undefined, inverse).map(fg => inputFArray.push(fg));
+            ratioGroup.enable();
           }
-          ratioGroup.enable();
           inputFArray.setValidators([this.formValidationService.greaterPointValidator(inverse)]);
           resultExplanation.enable();
           break;
@@ -416,11 +421,12 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
               inputType: this.selectedTest.relativeProfile?.inputType,
               profileInput: this.selectedTest.relativeProfile?.profileInput
             });
+            relativeGroup.controls.label.enable();
             resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
             this.utilities.buildCommonPointFormGroup(undefined, inverse).map(fg => inputFArray.push(fg));
+            relativeGroup.enable();
           }
-          relativeGroup.enable();
           inputFArray.setValidators([this.formValidationService.greaterPointValidator(inverse)]);
           resultExplanation.enable();
           break;
@@ -485,7 +491,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           });
       }
     });
-    this.inverseScoreSheet.valueChanges.subscribe(_ => {
+    inverseScoresheet.valueChanges.subscribe(_ => {
       this.testGroup.controls.inputType.updateValueAndValidity({
         emitEvent: true
       });
@@ -638,6 +644,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       isPublished,
       category,
       label,
+      inverseScoresheet,
       poster,
       thumbnail,
       video,
@@ -652,6 +659,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     this.testGroup.patchValue({
       name,
       inputType,
+      inverseScoresheet,
       difficulty,
       isPublished,
       label,
@@ -669,5 +677,6 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       this.utilities.updateTestTags(t.tagType, t);
       this.updateTagControl();
     });
+    this.testGroup.updateValueAndValidity();
   }
 }
