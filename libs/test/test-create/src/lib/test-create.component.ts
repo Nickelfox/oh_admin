@@ -83,6 +83,8 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   @ViewChild('tagsInput') tagsInput?: ElementRef<HTMLInputElement>;
 
+  inverseScoreSheet: FormControl<boolean> = new FormControl<boolean>(false);
+
   testGroup: FormGroup<CreateTest> = new FormGroup<CreateTest>({
     name: new FormControl('', [
       ...this.utilities.requiredFieldValidation,
@@ -129,6 +131,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       disabled: true
     }, [...this.utilities.requiredFieldValidation]),
     isPublished: new FormControl(false),
+    inverseScoresheet: new FormControl<boolean>(false),
     oneRMInputFields: new FormArray<OneRMField>([], [
       this.formValidationService.greaterPointValidator()
     ]),
@@ -273,6 +276,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       inputFields,
       weightUnit,
       customNumericLabel,
+      inverseScoresheet,
       ratioVariable,
       relativeProfile
     } = this.testGroup.controls;
@@ -283,6 +287,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       const oneRMFArray: FormArray<OneRMField> = oneRMInputFields as FormArray<OneRMField>;
       const mCArray: FormArray<MultipleChoiceField> = multipleChoiceInputFields as FormArray<MultipleChoiceField>;
       const inputFArray: FormArray<InputField> = inputFields as FormArray<InputField>;
+      const inverse = inverseScoresheet.value;
       oneRMFArray.clear();
       mCArray.clear();
       inputFArray.clear();
@@ -304,7 +309,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           } else {
             this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
-          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          inputFArray.setValidators([this.formValidationService.greaterPointValidator()]);
           resultExplanation.enable();
           distanceUnit.enable();
           break;
@@ -316,7 +321,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           } else {
             this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
-          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          inputFArray.setValidators([this.formValidationService.greaterPointValidator()]);
           resultExplanation.enable();
           customNumericLabel.enable();
           break;
@@ -328,7 +333,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           } else {
             this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
-          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          inputFArray.setValidators([this.formValidationService.greaterPointValidator()]);
           resultExplanation.enable();
           weightUnit.enable();
           break;
@@ -362,12 +367,12 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           break;
         case TestInputTypeEnum.TIME:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.TIME) {
-            this.utilities.buildTimeForm(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildTimeForm(this.selectedTest.inputFields, inverse).map(fg => inputFArray.push(fg));
             resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildTimeForm().map(fg => inputFArray.push(fg));
+            this.utilities.buildTimeForm(undefined, inverse).map(fg => inputFArray.push(fg));
           }
-          inputFArray.addValidators([this.formValidationService.greaterTimeValidator()]);
+          inputFArray.setValidators([this.formValidationService.greaterTimeValidator(inverse)]);
           resultExplanation.enable();
           break;
         case TestInputTypeEnum.REPS:
@@ -377,12 +382,12 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           } else {
             this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
           }
-          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          inputFArray.setValidators([this.formValidationService.greaterPointValidator()]);
           resultExplanation.enable();
           break;
         case TestInputTypeEnum.RATIO:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.RATIO) {
-            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields, inverse).map(fg => inputFArray.push(fg));
             const ratioTypeFormGroup: FormGroup<RatioSubObject> = this.testGroup.controls.ratioVariable as FormGroup<RatioSubObject>;
             ratioTypeFormGroup.patchValue({
               xLabel: this.selectedTest.ratioVariable?.xLabel,
@@ -397,28 +402,32 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
               yType: this.selectedTest.ratioVariable?.yType
             });
             resultExplanation.setValue(this.selectedTest.resultExplanation);
+            ratioTypeFormGroup.disable();
+            ratioTypeFormGroup.controls.yLabel.enable();
+            ratioTypeFormGroup.controls.xLabel.enable();
           } else {
-            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(undefined, inverse).map(fg => inputFArray.push(fg));
+            ratioGroup.enable();
           }
-          ratioGroup.enable();
-          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          inputFArray.setValidators([this.formValidationService.greaterPointValidator(inverse)]);
           resultExplanation.enable();
           break;
         case TestInputTypeEnum.RELATIVE_PROFILE:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.RELATIVE_PROFILE) {
-            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields).map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields, inverse).map(fg => inputFArray.push(fg));
             relativeGroup.patchValue({
               unit: this.selectedTest.relativeProfile?.unit,
               label: this.selectedTest.relativeProfile?.label,
               inputType: this.selectedTest.relativeProfile?.inputType,
               profileInput: this.selectedTest.relativeProfile?.profileInput
             });
+            relativeGroup.controls.label.enable();
             resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
-            this.utilities.buildCommonPointFormGroup().map(fg => inputFArray.push(fg));
+            this.utilities.buildCommonPointFormGroup(undefined, inverse).map(fg => inputFArray.push(fg));
+            relativeGroup.enable();
           }
-          relativeGroup.enable();
-          inputFArray.addValidators([this.formValidationService.greaterPointValidator()]);
+          inputFArray.setValidators([this.formValidationService.greaterPointValidator(inverse)]);
           resultExplanation.enable();
           break;
       }
@@ -482,6 +491,11 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
           });
       }
     });
+    inverseScoresheet.valueChanges.subscribe(_ => {
+      this.testGroup.controls.inputType.updateValueAndValidity({
+        emitEvent: true
+      });
+    });
     this.store.loaded$.pipe(
       tap(res => this.loaded = res)
     ).subscribe();
@@ -507,15 +521,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     return this.testGroup.controls.relativeProfile as FormGroup<RelativeProfileObject>;
   }
 
-  resetProfileInputUnit(): void {
-    this.profileInputFormGroup?.controls.unit?.setValue(undefined);
-    this.testGroup.updateValueAndValidity();
-  }
-
   get disableEditState(): boolean {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return  (this.opType === this.opTypeEnum.EDIT);
+    return (this.opType === this.opTypeEnum.EDIT);
+  }
+
+  resetProfileInputUnit(): void {
+    this.profileInputFormGroup?.controls.unit?.setValue(undefined);
+    this.testGroup.updateValueAndValidity();
   }
 
   ngOnDestroy(): void {
@@ -613,7 +627,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   updateHPHighValue($event: Event, highCtrl: AbstractControl<OneRMField['high'] | InputField['high']>): void {
     const inputElement: HTMLInputElement = $event?.srcElement as HTMLInputElement;
-    if(typeof inputElement?.valueAsNumber === 'number') {
+    if (typeof inputElement?.valueAsNumber === 'number') {
       highCtrl.setValue(inputElement.valueAsNumber);
     } else {
       highCtrl.setValue(undefined);
@@ -630,6 +644,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       isPublished,
       category,
       label,
+      inverseScoresheet,
       poster,
       thumbnail,
       video,
@@ -644,6 +659,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     this.testGroup.patchValue({
       name,
       inputType,
+      inverseScoresheet,
       difficulty,
       isPublished,
       label,
@@ -661,5 +677,6 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       this.utilities.updateTestTags(t.tagType, t);
       this.updateTagControl();
     });
+    this.testGroup.updateValueAndValidity();
   }
 }

@@ -254,7 +254,7 @@ export class TestUtilitiesService {
 
   }
 
-  buildTimeForm(data?: InputFieldExtended[]): FormGroup<InputField>[] {
+  buildTimeForm(data?: InputFieldExtended[], inverse?: boolean): FormGroup<InputField>[] {
     const coreValidations = [
       ...this.requiredFieldValidation
     ];
@@ -280,10 +280,10 @@ export class TestUtilitiesService {
         hp: timeParsedData[timeParsedData.findIndex(f => f.pointType === PointTypeEnum.HP)]
       };
     }
-    return this.buildInputFieldsForm(coreValidations, this.formValidationService.greaterTimeLowHigh, editObj);
+    return this.buildInputFieldsForm(coreValidations, this.formValidationService.greaterTimeLowHigh(inverse), editObj);
   }
 
-  buildCommonPointFormGroup(data?: InputFieldExtended[]): FormGroup<InputField>[] {
+  buildCommonPointFormGroup(data?: InputFieldExtended[], inverse?: boolean): FormGroup<InputField>[] {
     const coreValidations = [
       ...this.requiredFieldValidation,
       RxwebValidators.numeric({
@@ -303,10 +303,10 @@ export class TestUtilitiesService {
         hp: data[data.findIndex(f => f.pointType === PointTypeEnum.HP)]
       };
     }
-    return this.buildInputFieldsForm(coreValidations, this.formValidationService.greaterLowHigh, editObj);
+    return this.buildInputFieldsForm(coreValidations, this.formValidationService.greaterLowHigh(inverse), editObj);
   }
 
-  buildOneRemForm(data?: OneRMFieldExtended[]): FormGroup<OneRMField>[] {
+  buildOneRemForm(data?: OneRMFieldExtended[], inverse?: boolean): FormGroup<OneRMField>[] {
     const coreValidations = [
       ...this.requiredFieldValidation,
       RxwebValidators.numeric({
@@ -332,49 +332,49 @@ export class TestUtilitiesService {
         low: new FormControl(editObj?.zero?.low ?? undefined, coreValidations),
         high: new FormControl(editObj?.zero?.high ?? undefined, coreValidations)
       }, {
-        validators: this.formValidationService.greaterLowHigh
+        validators: this.formValidationService.greaterLowHigh(inverse)
       }),
       new FormGroup<OneRMField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.ONE),
         low: new FormControl(editObj?.one?.low ?? undefined, coreValidations),
         high: new FormControl(editObj?.one?.high ?? undefined, coreValidations)
       }, {
-        validators: this.formValidationService.greaterLowHigh
+        validators: this.formValidationService.greaterLowHigh(inverse)
       }),
       new FormGroup<OneRMField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.TWO),
         low: new FormControl(editObj?.two?.low ?? undefined, coreValidations),
         high: new FormControl(editObj?.two?.high ?? undefined, coreValidations)
       }, {
-        validators: this.formValidationService.greaterLowHigh
+        validators: this.formValidationService.greaterLowHigh(inverse)
       }),
       new FormGroup<OneRMField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.THREE),
         low: new FormControl(editObj?.three?.low ?? undefined, coreValidations),
         high: new FormControl(editObj?.three?.high ?? undefined, coreValidations)
       }, {
-        validators: this.formValidationService.greaterLowHigh
+        validators: this.formValidationService.greaterLowHigh(inverse)
       }),
       new FormGroup<OneRMField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.FOUR),
         low: new FormControl(editObj?.four?.low ?? undefined, coreValidations),
         high: new FormControl(editObj?.four?.high ?? undefined, coreValidations)
       }, {
-        validators: this.formValidationService.greaterLowHigh
+        validators: this.formValidationService.greaterLowHigh(inverse)
       }),
       new FormGroup<OneRMField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
         low: new FormControl(editObj?.five?.low ?? undefined, coreValidations),
         high: new FormControl(editObj?.five?.high ?? undefined, coreValidations)
       }, {
-        validators: this.formValidationService.greaterLowHigh
+        validators: this.formValidationService.greaterLowHigh(inverse)
       }),
       new FormGroup<OneRMField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.HP),
         low: new FormControl(editObj?.hp?.low ?? undefined, coreValidations),
         high: new FormControl(editObj?.hp?.high ?? undefined, coreValidations)
       }, {
-        validators: this.formValidationService.greaterLowHigh
+        validators: this.formValidationService.greaterLowHigh(inverse)
       })
     ];
   }
