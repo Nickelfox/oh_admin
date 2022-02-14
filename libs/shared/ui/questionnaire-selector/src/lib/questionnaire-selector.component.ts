@@ -130,7 +130,16 @@ export class QuestionnaireSelectorComponent implements OnInit {
   get paginatorIndex() {
     return this.pageIndex - 1;
   }
-
+  get Count(){
+    switch (this.questionnaireData.type) {
+      case ContentSelectorOpType.SINGLE:
+        return this.selectedQuestionnaires? this.selectedQuestionnaires.length: '-';
+        break;
+      case ContentSelectorOpType.OTHER:
+        return  this.selectedContents? this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length: '-';
+        break;
+    }
+  }
   isSelected(q: QuestionnaireExtended): boolean {
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:

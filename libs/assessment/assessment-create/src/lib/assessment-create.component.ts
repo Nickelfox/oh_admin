@@ -111,7 +111,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.store.getAssessmentDetails$(category);
     });
     this.uiStore.selectedContent$.subscribe((contents) => {
-      console.log(contents);
+      // console.log(contents);
       this.selectedContents = contents.map((c, i) => {
         return {
           ...c,
