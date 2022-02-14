@@ -22,6 +22,7 @@ import {
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
 import { PackSelectorComponent, PackSelectorData } from '@hidden-innovation/shared/ui/pack-selector';
+import {TitleCasePipe} from "@angular/common";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -81,6 +82,7 @@ export class CreateFeaturedComponent implements OnDestroy {
     private cdr: ChangeDetectorRef,
     public store: FeaturedStore,
     public router: Router,
+    private titleCasePipe: TitleCasePipe,
     public uiStore: UiStore,
     public route: ActivatedRoute,
     public constantDataService: ConstantDataService
@@ -165,6 +167,12 @@ export class CreateFeaturedComponent implements OnDestroy {
     return this.store.selectedFeatured$.pipe(
       map(featured => featured?.poster)
     );
+  }
+
+
+
+  transformFeaturedName(name:FeaturedNameEnum | undefined):string {
+    return name ? this.titleCasePipe.transform(name).replace(/_/g,' ') : '--';
   }
 
   populateFeatured(feature: Featured): void {

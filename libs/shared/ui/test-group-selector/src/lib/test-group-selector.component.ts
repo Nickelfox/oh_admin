@@ -147,6 +147,17 @@ export class TestGroupSelectorComponent implements OnInit {
     this.refreshList();
   }
 
+  get Count(){
+    switch (this.data.type) {
+      case ContentSelectorOpType.SINGLE:
+        return this.selectedTestGroups? this.selectedTestGroups.length: '-';
+        break;
+      case ContentSelectorOpType.OTHER:
+        return  this.selectedContents? this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length: '-';
+        break;
+    }
+  }
+
   ngOnInit(): void {
     this.store.testGroups$.subscribe(
       (tgs) => {

@@ -21,7 +21,7 @@ import {
   TestInputTypeEnum
 } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import {count, distinctUntilChanged, map, tap} from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
@@ -85,6 +85,7 @@ export class TestSelectorComponent implements OnInit {
 
   initialised = false;
   isLoading = false;
+  count?:number
 
   constructor(
     public matDialogRef: MatDialogRef<Test[]>,
@@ -131,11 +132,13 @@ export class TestSelectorComponent implements OnInit {
       this.cdr.markForCheck();
     }
     this.refreshList();
+    console.log(this.Count)
   }
 
   get paginatorIndex() {
     return this.pageIndex - 1;
   }
+
 
 
   resetPagination(): void {
@@ -177,6 +180,18 @@ export class TestSelectorComponent implements OnInit {
       tap(_ => this.refreshList())
     ).subscribe();
   }
+
+  get Count(){
+    switch (this.categoryData.type) {
+      case ContentSelectorOpType.SINGLE:
+          return this.selectedTests? this.selectedTests.length: '-';
+        break;
+      case ContentSelectorOpType.OTHER:
+          return  this.selectedContents? this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length: '-';
+        break;
+    }
+  }
+
 
   onPaginateChange($event: PageEvent): void {
     this.pageIndex = $event.pageIndex + 1;
@@ -251,6 +266,7 @@ export class TestSelectorComponent implements OnInit {
         break;
     }
   }
+
 
   updateSorting(fieldName: 'type' | 'category' | 'dateSort' | 'nameSort'): void {
     const { nameSort, dateSort } = this.filters.controls;
