@@ -31,18 +31,26 @@
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <hidden-innovation-common-form-field
-                    [label]='constantDataService.FIELD_NAME.LOCATION | titlecase'
-                    controlPath='location'
-                  ></hidden-innovation-common-form-field>
+<!--                  <hidden-innovation-common-form-field-->
+<!--                    [label]='constantDataService.FIELD_NAME.LOCATION | titlecase'-->
+<!--                    controlPath='location'-->
+<!--                  ></hidden-innovation-common-form-field>-->
+                  <mat-form-field class="w-100">
+                    <mat-label>{{constantDataService.FIELD_NAME.LOCATION | titlecase}}</mat-label>
+                    <input matInput disabled="true"  [value]="selectedFeatured?.location | titlecase">
+                  </mat-form-field>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <hidden-innovation-common-form-field
-                    [label]='constantDataService.FIELD_NAME.RAIL_NAME | titlecase'
-                    controlPath='name'
-                  ></hidden-innovation-common-form-field>
+<!--                  <hidden-innovation-common-form-field-->
+<!--                    [label]='constantDataService.FIELD_NAME.RAIL_NAME | titlecase'-->
+<!--                    controlPath='name'-->
+<!--                  ></hidden-innovation-common-form-field>-->
+                  <mat-form-field class="w-100">
+                    <mat-label>{{constantDataService.FIELD_NAME.RAIL_NAME | titlecase}}</mat-label>
+                    <input matInput disabled="true"  [value]="transformFeaturedName(selectedFeatured?.name) | replaceUnderscore">
+                  </mat-form-field>
                 </div>
               </div>
               <ng-template [ngIf]='selectedFeatured?.name === featuredType.SPOTLIGHT'>

@@ -10,7 +10,12 @@ import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validato
 import { map, switchMap } from 'rxjs/operators';
 import { AspectRatio, Media } from '@hidden-innovation/media';
 import { Observable } from 'rxjs';
-import { ContentSelectorOpType, GenericDialogPrompt, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  GenericDialogPrompt,
+  PackContentTypeEnum,
+  TagCategoryEnum
+} from '@hidden-innovation/shared/models';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { TitleCasePipe } from '@angular/common';
 import { ContentCore } from '@hidden-innovation/pack/data-access';
@@ -106,7 +111,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.store.getAssessmentDetails$(category);
     });
     this.uiStore.selectedContent$.subscribe((contents) => {
-      console.log(contents);
+      // console.log(contents);
       this.selectedContents = contents.map((c, i) => {
         return {
           ...c,
@@ -179,9 +184,10 @@ export class AssessmentCreateComponent implements OnDestroy {
   }
 
   deleteSelectedContentPrompt(content: ContentCore): void {
+    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
     const dialogData: GenericDialogPrompt = {
-      title: `Remove ${content.type}?`,
-      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)} from Assessment?`,
+      title: `Remove ${contentType}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Assessment?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
