@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
-import {update} from "lodash-es";
 
 @Component({
   selector: 'hidden-innovation-line-chart',
@@ -27,7 +26,7 @@ import {update} from "lodash-es";
                     [datasets]='chartData'
                     [labels]='chartLabels'
                     [legend]='chartLegend'
-                    [options]="chartOptionType(chartOpt)"
+                    [options]='chartOptionType(chartOpt)'
             >
             </canvas>
             <div *ngIf='noDataCheck' class='d-flex align-items-center justify-content-center chart__no-data-con'>
@@ -42,14 +41,14 @@ import {update} from "lodash-es";
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent {
 
   @Input() chartLabels: ChartLabel[] = [];
   @Input() chartData: ChartDatasets = [];
   @Input() label?: string;
   @Input() icon?: string;
   @Input() isLoading?: boolean | null;
-  @Input() chartOpt?:string ;
+  @Input() chartOpt?: string;
 
 
   // chartOptions: ChartOptions = {
@@ -94,7 +93,15 @@ export class LineChartComponent implements OnInit {
 
   chartLegend = false;
 
-  chartOptionType(type?:string):ChartOptions{
+  get noDataCheck(): boolean {
+    try {
+      return !this.chartData[0].data?.length;
+    } catch {
+      return false;
+    }
+  }
+
+  chartOptionType(type?: string): ChartOptions {
     return {
       layout: {
         padding: 0
@@ -119,44 +126,31 @@ export class LineChartComponent implements OnInit {
         fontColor: '#394155',
         fontSize: 10,
         padding: 5
-      },
-    }
+      }
+    };
   }
 
-
-
-
-  getChartTitle():string{
+  getChartTitle(): string {
     // console.log(data)
     switch (this.label) {
       case 'Registered Users':
-        return ("No of Registered");
+        return ('No of Registered');
       default:
-        return ('No of  users')
-    }
-  }
-
-
-  get noDataCheck(): boolean {
-    try {
-      return !this.chartData[0].data?.length;
-    } catch {
-      return false;
+        return ('No of  users');
     }
   }
 
   ngOnInit() {
 
     switch (this.label) {
-    case 'Registered Users':
-      console.log("No of Registered");
-      break
-    case 'Active Users':
-      console.log('No of Active users');
-      break
-    default:
-      console.log('hello')
+      case 'Registered Users':
+        console.log('No of Registered');
+        break;
+      case 'Active Users':
+        console.log('No of Active users');
+        break;
+      default:
+        console.log('hello');
+    }
   }
-  }
-
 }

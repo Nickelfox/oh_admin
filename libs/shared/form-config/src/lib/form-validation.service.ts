@@ -19,7 +19,7 @@ export class FormValidationService {
     USERNAME_LENGTH: 30,
     QUESTION_NAME_LENGTH: 65,
     QUESTION_DESC_LENGTH: 200,
-    ANSWER_LENGTH: 50,
+    ANSWER_LENGTH: 50
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {
@@ -169,7 +169,7 @@ export class FormValidationService {
     };
   }
 
-  greaterPointValidator(): ValidatorFn {
+  greaterPointValidator(inverse?: boolean): ValidatorFn {
     return (arr: AbstractControl) => {
       if (!arr) {
         return null;
@@ -182,9 +182,9 @@ export class FormValidationService {
         const previousValueControl = controls[i - 1].controls.high as FormControl<number>;
         const valueControl = controls[i].controls.low as FormControl<number>;
         // if error, set array error
-        if (previousValueControl.value > valueControl.value) {
+        if (!inverse ? (previousValueControl.value >= valueControl.value) : (previousValueControl.value <= valueControl.value)) {
           // array error (sum up of all errors)
-          errors[(i - 1) + 'lessThan' + (i)] = true;
+          errors[(i - 1) + (!inverse ? 'lessThan' : 'highThan') + (i)] = true;
         }
       }
       // return array errors ({} is considered an error so return null if it is the case)
@@ -192,7 +192,7 @@ export class FormValidationService {
     };
   }
 
-  greaterTimeValidator(): ValidatorFn {
+  greaterTimeValidator(inverse?: boolean): ValidatorFn {
     return (arr: AbstractControl) => {
       if (!arr) {
         return null;
@@ -207,9 +207,9 @@ export class FormValidationService {
         const prevVal = DateTime.fromJSDate(previousValueControl.value).toSeconds();
         const currVal = DateTime.fromJSDate(valueControl.value).toSeconds();
         // if error, set array error
-        if (Math.round(prevVal) < Math.round(currVal)) {
+        if (!inverse ? Math.round(prevVal) >= Math.round(currVal) : Math.round(prevVal) <= Math.round(currVal)) {
           // array error (sum up of all errors)
-          errors[(i - 1) + 'lessThan' + (i)] = true;
+          errors[(i - 1) + (!inverse ? 'lessThan' : 'highThan') + (i)] = true;
         }
       }
       // return array errors ({} is considered an error so return null if it is the case)
@@ -217,7 +217,7 @@ export class FormValidationService {
     };
   }
 
-  get greaterLowHigh(): ValidatorFn {
+  greaterLowHigh(inverse?: boolean): ValidatorFn {
     return (group: AbstractControl) => {
       if (!group) {
         return null;
@@ -236,19 +236,21 @@ export class FormValidationService {
           high?.removeError('notEqual');
           return null;
         default:
-          if (low !== null && low !== undefined && high !== null && high !== undefined && low.value >= high.value) {
-            low?.setErrors({ highThan: true });
-            high?.setErrors({ lessThan: true });
+          if (low !== null && low !== undefined && high !== null && high !== undefined && (!inverse ? (low.value > high.value) : (low.value < high.value))) {
+            low?.setErrors(!inverse ? { highThan: true } :{ lessThan: true });
+            high?.setErrors(!inverse ? { lessThan: true } : { highThan: true });
             return null;
           }
           low?.removeError('highThan');
+          low?.removeError('lessThan');
           high?.removeError('lessThan');
+          high?.removeError('highThan');
           return null;
       }
     };
   }
 
-  get greaterTimeLowHigh(): ValidatorFn {
+  greaterTimeLowHigh(inverse?: boolean): ValidatorFn {
     return (group: AbstractControl) => {
       if (!group) {
         return null;
@@ -277,7 +279,7 @@ export class FormValidationService {
           if (low !== null && low !== undefined && high !== null && high !== undefined) {
             const lowVal = DateTime.fromJSDate(low.value).toSeconds();
             const highVal = DateTime.fromJSDate(high.value).toSeconds();
-            if (Math.round(lowVal) < Math.round(highVal)) {
+            if (!inverse ? (Math.round(lowVal) > Math.round(highVal)) : (Math.round(lowVal) < Math.round(highVal))) {
               low?.setErrors({ highThan: true });
               high?.setErrors({ lessThan: true });
               return null;
