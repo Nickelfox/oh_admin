@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { DashboardData, PackEngagement, TestWatched } from './models/dashboard.interface';
+import { AssessmentEngagement, DashboardData, PackEngagement, TestWatched } from './models/dashboard.interface';
 import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { DashboardService } from './services/dashboard.service';
@@ -27,6 +27,7 @@ export interface DashboardState extends Partial<DashboardData> {
   isLineChartLoading?: boolean;
   testWatched?:TestWatched[];
   packEng:PackEngagement[];
+  assessmentEng: AssessmentEngagement[];
 }
 
 const initialState: DashboardState = {
@@ -47,7 +48,8 @@ const initialState: DashboardState = {
   activeUsersData: [{ data: [], label: '' }],
   isLineChartLoading: false,
   testWatched: [],
-  packEng:[]
+  packEng:[],
+  assessmentEng:[]
 };
 
 @Injectable()
@@ -55,6 +57,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
 
   testWatched$: Observable<TestWatched[]> = this.select(state => state.testWatched || []);
   packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packEng || [])
+  assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || [])
 
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isLineChartLoading$: Observable<boolean> = this.select(state => !!state.isLineChartLoading);
@@ -298,6 +301,32 @@ export class DashboardStore extends ComponentStore<DashboardState> {
               this.patchState({
                 isLoading: false,
                 packEng
+              });
+            },
+            _ => {
+              this.patchState({
+                isLoading: false
+              });
+            }
+          ),
+          catchError(() => EMPTY))
+      )
+    )
+  );
+  getAssessmentEngagement$ = this.effect(params$ =>
+    params$.pipe(
+      tap(() => {
+        this.patchState({
+          isLoading: true
+        });
+      }),
+      switchMap(() =>
+        this.dashboardService.getAssessmenetEng().pipe(
+          tapResponse(
+            (assessmentEng) => {
+              this.patchState({
+                isLoading: false,
+                assessmentEng
               });
             },
             _ => {

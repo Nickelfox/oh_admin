@@ -20,6 +20,14 @@ export interface PackEngagement {
   resource_clicks:number;
   content_clicks:number;
 }
+export interface AssessmentEngagement {
+  // position:number;
+  name:string;
+  id:number;
+  category:string;
+  average_score:number;
+  completion:number;
+}
 
 export interface DashboardResponse extends CustomApiResponse {
   data: DashboardData;
@@ -29,6 +37,9 @@ export  interface TestWatchedListingResponse extends  CustomApiResponse{
 }
 export  interface PackEngagementResponse extends  CustomApiResponse{
   data: PackEngagement[];
+}
+export  interface AssessmentEngagementResponse extends  CustomApiResponse{
+  data: AssessmentEngagement[];
 }
 
 export interface DashboardRequest {

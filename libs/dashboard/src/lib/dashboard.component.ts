@@ -3,7 +3,7 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataS
 import { DashboardStore } from './dashboard.store';
 import {DashboardRangeFilterEnum, TagCategoryEnum, UserDetails} from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { DashboardRequest, PackEngagement, TestWatched } from './models/dashboard.interface';
+import { AssessmentEngagement, DashboardRequest, PackEngagement, TestWatched } from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -78,8 +78,8 @@ export class DashboardComponent {
   //   }
   // ]
 
-  displayedColumnsAssessmentTest: string[] = ['position', 'name', 'id', 'score', 'completion'];
-  assessmentTestTable: MatTableDataSource<AssessmentTestEng> = new MatTableDataSource<AssessmentTestEng>();
+  displayedColumnsAssessmentTest: string[] = ['position', 'name','category', 'id', 'score', 'completion'];
+  assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
 
   displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'totalPlays', 'contentClicks', 'resourcesClicks'];
   packEngTable: MatTableDataSource<PackEngagement> = new MatTableDataSource<PackEngagement>();
@@ -247,8 +247,10 @@ export class DashboardComponent {
     this.store.packEngagement$.subscribe(res => {
       this.packEngTable = new MatTableDataSource<PackEngagement>(res)
     });
+    this.store.assessmentEng$.subscribe(res => {
+      this.assessmentTestTable = new MatTableDataSource<AssessmentEngagement>(res)
+    });
 
-    this.assessmentTestTable = new MatTableDataSource<AssessmentTestEng>(this._dummyAssessmentTest)
 
 
 
@@ -315,6 +317,7 @@ export class DashboardComponent {
   refreshList(): void {
     this.store.getTopWatched$();
     this.store.getPackEngagement$();
+    this.store.getAssessmentEngagement$();
   }
   // get calenderView(): 'month' | 'year' | 'multi-year' {
   //   const type: DashboardRangeFilterEnum = this.rangeFilterGroup.controls.type.value;

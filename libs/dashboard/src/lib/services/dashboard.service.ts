@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import {
+  AssessmentEngagement, AssessmentEngagementResponse,
   DashboardData,
   DashboardResponse, PackEngagement, PackEngagementResponse, TestWatched, TestWatchedListingResponse
 } from '../models/dashboard.interface';
@@ -32,6 +33,12 @@ export class DashboardService {
   }
   getPackEng(): Observable<PackEngagement[]> {
     return this.http.get<PackEngagementResponse>(`${this.env.baseURL}/v1/admin/get-pack-table`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+  getAssessmenetEng(): Observable<AssessmentEngagement[]> {
+    return this.http.get<AssessmentEngagementResponse>(`${this.env.baseURL}/v1/admin/get-assessment-table`).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
