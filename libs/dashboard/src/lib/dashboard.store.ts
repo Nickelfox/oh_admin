@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ComponentStore } from '@ngrx/component-store';
-import { DashboardData } from './models/dashboard.interface';
+import { ComponentStore, tapResponse } from '@ngrx/component-store';
+import { DashboardData, PackEngagement, TestWatched } from './models/dashboard.interface';
 import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { DashboardService } from './services/dashboard.service';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { ChartDatasets, ChartLabel, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardRangeFilterEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { Featured } from '@hidden-innovation/featured/data-access';
 
 export interface DashboardState extends Partial<DashboardData> {
   isLoading?: boolean;
@@ -24,6 +25,8 @@ export interface DashboardState extends Partial<DashboardData> {
   activeUsersData?: ChartDatasets;
   filterBy?: DashboardRangeFilterEnum;
   isLineChartLoading?: boolean;
+  testWatched?:TestWatched[];
+  packEng:PackEngagement[];
 }
 
 const initialState: DashboardState = {
@@ -42,11 +45,16 @@ const initialState: DashboardState = {
   registeredUsersData: [{ data: [], label: '' }],
   activeUsersLabel: [],
   activeUsersData: [{ data: [], label: '' }],
-  isLineChartLoading: false
+  isLineChartLoading: false,
+  testWatched: [],
+  packEng:[]
 };
 
 @Injectable()
 export class DashboardStore extends ComponentStore<DashboardState> {
+
+  testWatched$: Observable<TestWatched[]> = this.select(state => state.testWatched || []);
+  packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packEng || [])
 
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isLineChartLoading$: Observable<boolean> = this.select(state => !!state.isLineChartLoading);
@@ -249,6 +257,61 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
+
+  getTopWatched$ = this.effect(params$ =>
+    params$.pipe(
+      tap(() => {
+        this.patchState({
+          isLoading: true
+        });
+      }),
+      switchMap(() =>
+        this.dashboardService.getTopWatched().pipe(
+          tapResponse(
+            (testWatched) => {
+              this.patchState({
+                isLoading: false,
+                testWatched
+              });
+            },
+            _ => {
+              this.patchState({
+                isLoading: false
+              });
+            }
+          ),
+          catchError(() => EMPTY))
+      )
+    )
+  );
+  getPackEngagement$ = this.effect(params$ =>
+    params$.pipe(
+      tap(() => {
+        this.patchState({
+          isLoading: true
+        });
+      }),
+      switchMap(() =>
+        this.dashboardService.getPackEng().pipe(
+          tapResponse(
+            (packEng) => {
+              this.patchState({
+                isLoading: false,
+                packEng
+              });
+            },
+            _ => {
+              this.patchState({
+                isLoading: false
+              });
+            }
+          ),
+          catchError(() => EMPTY))
+      )
+    )
+  );
+
+
 
   constructor(
     private dashboardService: DashboardService,

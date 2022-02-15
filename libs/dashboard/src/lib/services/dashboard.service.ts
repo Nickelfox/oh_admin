@@ -1,8 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
-import { DashboardData, DashboardResponse } from '../models/dashboard.interface';
-import { catchError, map } from 'rxjs/operators';
+import {
+  DashboardData,
+  DashboardResponse, PackEngagement, PackEngagementResponse, TestWatched, TestWatchedListingResponse
+} from '../models/dashboard.interface';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
 
@@ -20,6 +23,20 @@ export class DashboardService {
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
+
+  getTopWatched(): Observable<TestWatched[]> {
+    return this.http.get<TestWatchedListingResponse>(`${this.env.baseURL}/v1/admin/get-test-table`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+  getPackEng(): Observable<PackEngagement[]> {
+    return this.http.get<PackEngagementResponse>(`${this.env.baseURL}/v1/admin/get-pack-table`).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
   getGenderStatics(): Observable<any> {
     return this.http.get<DashboardResponse>(`${this.env.baseURL}/v1/admin/user-group`).pipe(
       map(res => res.data),
