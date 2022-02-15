@@ -78,7 +78,7 @@ export class DashboardComponent {
   //   }
   // ]
 
-  displayedColumnsAssessmentTest: string[] = ['position', 'name','category', 'id', 'score', 'completion'];
+  displayedColumnsAssessmentTest: string[] = ['position', 'name', 'id', 'score', 'completion'];
   assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
 
   displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'totalPlays', 'contentClicks', 'resourcesClicks'];
