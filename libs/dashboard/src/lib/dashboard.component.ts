@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
 import {DashboardRangeFilterEnum, TagCategoryEnum, UserDetails} from '@hidden-innovation/shared/models';
@@ -7,9 +7,13 @@ import { AssessmentEngagement, DashboardRequest, PackEngagement, TestWatched } f
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { skip } from 'rxjs/operators';
+import { map, skip } from 'rxjs/operators';
 import {forEach} from "lodash-es";
 import {MatTableDataSource} from "@angular/material/table";
+import { PageEvent } from '@angular/material/paginator';
+import { ConstantDataService } from '@hidden-innovation/shared/form-config';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 
 export interface AssessmentTestEng {
@@ -47,36 +51,7 @@ export interface PackEng {
 
 export class DashboardComponent {
 
-  _dummyAssessmentTest: AssessmentTestEng[] = [
-    {
-      position: 1,
-      name: 'Strength',
-      id: 1,
-      score: 20,
-      completion: '10%'
-    },
-  ]
 
-  // _dummyTopWatchedTest: TopWatched[] = [
-  //   {
-  //     position: 1,
-  //     name: 'Short Sprint Test (400m Run)',
-  //     id: 32,
-  //     videoPlays: 3,
-  //     resultLog: 6
-  //   },
-  // ]
-
-  // _dummyPackEng: PackEng[] = [
-  //   {
-  //     position: 1,
-  //     name: 'Strength',
-  //     id: 1,
-  //     totalPlays: 20,
-  //     contentClicks: 10,
-  //     resourcesClicks: 20
-  //   }
-  // ]
 
   displayedColumnsAssessmentTest: string[] = ['position', 'name', 'id', 'score', 'completion'];
   assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
@@ -86,23 +61,9 @@ export class DashboardComponent {
 
   displayedColumnsTopWatched: string[] = ['position', 'name', 'id', 'videoPlays', 'resultLog'];
   topWatchedTable: MatTableDataSource<TestWatched> = new MatTableDataSource<TestWatched>();
+  noData?: Observable<boolean>;
 
 
-
-  chartData: ChartDatasets = [
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series A' }
-  ];
-
-  femaleData: ChartDatasets = [
-    { data: [25, 59, 13, 3], label: 'Female' }
-  ];
-  maleData: ChartDatasets = [
-    { data: [12, 53, 26, 8, 0], label: 'Male' }
-  ];
-
-  ageRatioData: SingleOrMultiDataSet = [
-    [60, 40]
-  ];
 
 
   chartLabels: ChartLabel[] = [
@@ -148,9 +109,7 @@ export class DashboardComponent {
   doughnutChartLabelTest: ChartLabel[] = [
     ...Object.values(TagCategoryEnum)
   ];
-  assestTest: SingleOrMultiDataSet = [
-    [20, 20, 20]
-  ];
+
   doughnutPlugins = [this.doughnutChartLabelTest];
 
   // Complete Test
@@ -166,18 +125,7 @@ export class DashboardComponent {
       ]
     }
   ];
-  doughnutChartLabelComplete: ChartLabel[] = [
-    'Test 1',
-    'Test 2',
-    'Test 3',
-    'Test 4',
-    'Test 5',
-    'Test 6'
-  ];
-  completeTest: SingleOrMultiDataSet = [
-    [10, 20, 30, 50, 70, 20]
-  ];
-  doughnutPluginsComplete = [this.doughnutChartLabelComplete];
+
 
 
 
@@ -235,23 +183,59 @@ export class DashboardComponent {
   maxDate = DateTime.now();
 
 
+  //Top Watched Paginator options
+  topTestPageIndex = this.constantDataService.PaginatorData.pageIndex;
+  topWatchedPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
+  topWatchedPageSize = this.constantDataService.PaginatorData.pageSize;
+  topWatchedPageEvent: PageEvent | undefined;
+
+  //Pack Engagement Paginator options
+  packEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
+  packEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
+  packEngPageSize = this.constantDataService.PaginatorData.pageSize;
+  packEngPageEvent: PageEvent | undefined;
+
+  //Assessment Engagement Paginator options
+  assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
+  assessmentEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
+  assessmentEngPageSize = this.constantDataService.PaginatorData.pageSize;
+  assessmentEngPageEvent: PageEvent | undefined;
 
 
   constructor(
-    public store: DashboardStore
+    public store: DashboardStore,
+    public constantDataService: ConstantDataService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {
-    this.refreshList();
+    this.refreshListTopTest();
+    this.refreshListPackEng();
+    this.refreshListAssessmentEng();
     this.store.testWatched$.subscribe(res => {
       this.topWatchedTable = new MatTableDataSource<TestWatched>(res)
+      this.noData = this.topWatchedTable.connect().pipe(map(data => data.length === 0));
+      if (!res?.length && (this.topTestPageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+        this.resetTopTestPagination();
+      }
+      this.cdr.markForCheck();
     });
     this.store.packEngagement$.subscribe(res => {
       this.packEngTable = new MatTableDataSource<PackEngagement>(res)
+      this.noData = this.packEngTable.connect().pipe(map(data => data.length === 0));
+      if (!res?.length && (this.packEngPageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+        this.resetPackEngPagination();
+      }
+      this.cdr.markForCheck();
     });
     this.store.assessmentEng$.subscribe(res => {
-      this.assessmentTestTable = new MatTableDataSource<AssessmentEngagement>(res)
+      this.assessmentTestTable = new MatTableDataSource<AssessmentEngagement>(res);
+      this.noData = this.assessmentTestTable.connect().pipe(map(data => data.length === 0));
+      if (!res?.length && (this.assessmentEngPageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+        this.resetAssessmentEngPagination();
+      }
+      this.cdr.markForCheck();
     });
-
-
 
 
     this.store.getStats();
@@ -314,11 +298,76 @@ export class DashboardComponent {
       }
     )
   };
-  refreshList(): void {
-    this.store.getTopWatched$();
-    this.store.getPackEngagement$();
-    this.store.getAssessmentEngagement$();
+
+// Top Watched pagination
+  refreshListTopTest(): void {
+    this.store.getTopWatched$({
+      page: this.topTestPageIndex,
+      limit: this.topWatchedPageSize
+    });
   }
+
+  get paginatorIndexTopTest() {
+    return this.topTestPageIndex - 1;
+  }
+
+  onPaginateChangeTopTest($event: PageEvent): void {
+    this.topTestPageIndex = $event.pageIndex + 1;
+    this.topWatchedPageSize = $event.pageSize;
+    this.refreshListTopTest();
+  }
+  resetTopTestPagination(): void {
+    this.topTestPageIndex = this.constantDataService.PaginatorData.pageIndex;
+    this.topWatchedPageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshListTopTest();
+  }
+  // Pack Engagement Pagination
+  refreshListPackEng(): void {
+
+    this.store.getPackEngagement$({
+      page: this.packEngPageIndex,
+      limit: this.packEngPageSize
+    });
+  }
+
+  get paginatorIndexPackEng() {
+    return this.packEngPageIndex - 1;
+  }
+
+  onPaginateChangePackEng($event: PageEvent): void {
+    this.packEngPageIndex = $event.pageIndex + 1;
+    this.packEngPageSize = $event.pageSize;
+    this.refreshListPackEng();
+  }
+  resetPackEngPagination(): void {
+    this.packEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
+    this.packEngPageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshListPackEng();
+  }
+
+  // Assessment Engagement Pagination
+  refreshListAssessmentEng(): void {
+    this.store.getAssessmentEngagement$({
+      page: this.assessmentEngPageIndex,
+      limit: this.assessmentEngPageSize
+    });
+  }
+
+  get paginatorIndexAssessmentEng() {
+    return this.assessmentEngPageIndex - 1;
+  }
+
+  onPaginateChangeAssessmentEng($event: PageEvent): void {
+    this.assessmentEngPageIndex = $event.pageIndex + 1;
+    this.assessmentEngPageSize = $event.pageSize;
+    this.refreshListPackEng();
+  }
+  resetAssessmentEngPagination(): void {
+    this.assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
+    this.assessmentEngPageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshListAssessmentEng();
+  }
+
   // get calenderView(): 'month' | 'year' | 'multi-year' {
   //   const type: DashboardRangeFilterEnum = this.rangeFilterGroup.controls.type.value;
   //   if (type === DashboardRangeFilterEnum.MONTHLY) {

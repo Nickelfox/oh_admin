@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { AssessmentEngagement, DashboardData, PackEngagement, TestWatched } from './models/dashboard.interface';
+import {
+  AssessmentEngagement, AssessmentLimitRequest,
+  DashboardData,
+  PackEngagement, PackEngLimitRequest,
+  TestWatched, TestWatchedLimitRequest
+} from './models/dashboard.interface';
 import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 import { DashboardService } from './services/dashboard.service';
@@ -28,6 +33,7 @@ export interface DashboardState extends Partial<DashboardData> {
   testWatched?:TestWatched[];
   packEng:PackEngagement[];
   assessmentEng: AssessmentEngagement[];
+  total: number;
 }
 
 const initialState: DashboardState = {
@@ -49,7 +55,8 @@ const initialState: DashboardState = {
   isLineChartLoading: false,
   testWatched: [],
   packEng:[],
-  assessmentEng:[]
+  assessmentEng:[],
+  total:0
 };
 
 @Injectable()
@@ -58,6 +65,9 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   testWatched$: Observable<TestWatched[]> = this.select(state => state.testWatched || []);
   packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packEng || [])
   assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || [])
+  readonly testWatchedCount$: Observable<number> = this.select(state => state.total || 0);
+  readonly packEngCount$: Observable<number> = this.select(state => state.total || 0);
+  readonly assessmentEngCount$: Observable<number> = this.select(state => state.total || 0);
 
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isLineChartLoading$: Observable<boolean> = this.select(state => !!state.isLineChartLoading);
@@ -261,15 +271,15 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     )
   );
 
-  getTopWatched$ = this.effect(params$ =>
+  getTopWatched$ = this.effect<TestWatchedLimitRequest>(params$ =>
     params$.pipe(
-      tap(() => {
+      tap((res) => {
         this.patchState({
           isLoading: true
         });
       }),
-      switchMap(() =>
-        this.dashboardService.getTopWatched().pipe(
+      switchMap((reqObj) =>
+        this.dashboardService.getTopWatched(reqObj).pipe(
           tapResponse(
             (testWatched) => {
               this.patchState({
@@ -287,15 +297,15 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
-  getPackEngagement$ = this.effect(params$ =>
+  getPackEngagement$ = this.effect<PackEngLimitRequest>(params$ =>
     params$.pipe(
       tap(() => {
         this.patchState({
           isLoading: true
         });
       }),
-      switchMap(() =>
-        this.dashboardService.getPackEng().pipe(
+      switchMap((reqObj) =>
+        this.dashboardService.getPackEng(reqObj).pipe(
           tapResponse(
             (packEng) => {
               this.patchState({
@@ -313,15 +323,15 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
-  getAssessmentEngagement$ = this.effect(params$ =>
+  getAssessmentEngagement$ = this.effect<AssessmentLimitRequest>(params$ =>
     params$.pipe(
       tap(() => {
         this.patchState({
           isLoading: true
         });
       }),
-      switchMap(() =>
-        this.dashboardService.getAssessmenetEng().pipe(
+      switchMap((reqObj) =>
+        this.dashboardService.getAssessmentEng(reqObj).pipe(
           tapResponse(
             (assessmentEng) => {
               this.patchState({
