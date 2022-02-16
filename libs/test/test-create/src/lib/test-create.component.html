@@ -1192,7 +1192,9 @@
                                       <mat-label>Value y - Type</mat-label>
                                       <mat-select (valueChange)='resetProfileInputUnit()' formControlName='inputType'>
                                         <mat-option *ngFor='let inp of profileInputTypeIte'
-                                                    [value]='inp'>{{inp | distanceLength | titlecase}}</mat-option>
+                                                    [value]='inp'>
+                                          {{inp === profileInputTypeEnum.LENGTH ? ('Distance/Length') : (inp | titlecase)}}
+                                        </mat-option>
                                       </mat-select>
                                       <mat-error>
                                         <ng-template
