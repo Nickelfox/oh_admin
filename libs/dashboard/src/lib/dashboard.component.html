@@ -101,7 +101,7 @@
                   </div>
                 </div>
               </div>
-              <div class='col-12'>
+              <div class='col-12  tableOverFlow'>
                 <table mat-table [dataSource]='assessmentTestTable' class='w-100'>
                   <ng-container matColumnDef='position'>
                     <th mat-header-cell *matHeaderCellDef>{{'Position' | titlecase}}</th>
@@ -113,11 +113,6 @@
                     <td mat-cell *matCellDef='let element'
                         [matTooltip]='element.name'> {{(element.name) || '--'}} </td>
                   </ng-container>
-<!--                  <ng-container matColumnDef='category'>-->
-<!--                    <th mat-header-cell  *matHeaderCellDef>{{'Assessment category' | titlecase}}</th>-->
-<!--                    <td mat-cell *matCellDef='let element'-->
-<!--                        [matTooltip]='element.category'> {{(element.category) || '&#45;&#45;'}} </td>-->
-<!--                  </ng-container>-->
                   <ng-container matColumnDef='id'>
                     <th mat-header-cell *matHeaderCellDef>{{'Assessment Id' | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'
@@ -133,7 +128,7 @@
                     <td mat-cell *matCellDef='let element'
                         > {{(element.completion) || '--'}} </td>
                   </ng-container>
-                  <tr mat-header-row *matHeaderRowDef='displayedColumnsAssessmentTest;'></tr>
+                  <tr mat-header-row *matHeaderRowDef='displayedColumnsAssessmentTest;sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsAssessmentTest;' class='row-react'></tr>
                 </table>
               </div>
@@ -167,7 +162,7 @@
                   </div>
                 </div>
               </div>
-              <div class='col-12'>
+              <div class='col-12 tableOverFlow'>
                 <table mat-table [dataSource]='packEngTable' class='w-100'>
                   <ng-container matColumnDef='position'>
                     <th mat-header-cell *matHeaderCellDef>{{'Position' | titlecase}}</th>
@@ -199,7 +194,7 @@
                     <td mat-cell *matCellDef='let element'
                     > {{(element.resourcesClicks) || '--'}} </td>
                   </ng-container>
-                  <tr mat-header-row *matHeaderRowDef='displayedColumnsPackEng'></tr>
+                  <tr mat-header-row *matHeaderRowDef='displayedColumnsPackEng;sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsPackEng;' class='row-react'></tr>
                 </table>
               </div>
@@ -234,7 +229,7 @@
                   </div>
                 </div>
               </div>
-              <div class='col-12'>
+              <div class='col-12 tableOverFlow'>
                 <table mat-table [dataSource]='topWatchedTable' class='w-100'>
                   <ng-container matColumnDef='position'>
                     <th mat-header-cell *matHeaderCellDef  >{{'Position' | titlecase}}</th>
@@ -261,7 +256,7 @@
                     <td mat-cell *matCellDef='let element'
                     > {{(element.resultLog) || '--'}} </td>
                   </ng-container>
-                  <tr mat-header-row *matHeaderRowDef='displayedColumnsTopWatched'></tr>
+                  <tr mat-header-row *matHeaderRowDef='displayedColumnsTopWatched; sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsTopWatched;' class='row-react'></tr>
                 </table>
               </div>
