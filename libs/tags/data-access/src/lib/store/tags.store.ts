@@ -75,10 +75,10 @@ export class TagsStore extends ComponentStore<TagsState> {
           role: 'status'
         });
       }),
-      exhaustMap(({ tag }) =>
+      exhaustMap(({ tag, type, category, dateSort, search, limit, nameSort, page }) =>
         this.tagsService.createTag(tag).pipe(
           tapResponse(
-            (newTag) => {
+            (_) => {
               this.patchState({
                 isActing: false
               });
@@ -87,8 +87,11 @@ export class TagsStore extends ComponentStore<TagsState> {
                 dismissible: true,
                 type: 'success'
               });
+              this.getTags$({
+                page, limit, type, category, dateSort, nameSort, search
+              });
             },
-            error => {
+            _ => {
               this.patchState({
                 isActing: false
               });

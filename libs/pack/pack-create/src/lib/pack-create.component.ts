@@ -24,7 +24,7 @@ import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators
 import {UiStore} from '@hidden-innovation/shared/store';
 import {AspectRatio, Media} from '@hidden-innovation/media';
 import {UntilDestroy} from '@ngneat/until-destroy';
-import {filter, switchMap, tap} from 'rxjs/operators';
+import { filter, mergeMap, switchMap, tap } from 'rxjs/operators';
 import {
   ContentSelectorOpType,
   GenericDialogPrompt,
@@ -114,7 +114,7 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
       tap((data) => {
         this.opType = data.type as OperationTypeEnum;
       }),
-      switchMap(_ => this.route.params)
+      mergeMap(_ => this.route.params)
     ).subscribe((res) => {
       if (this.opType === OperationTypeEnum.EDIT) {
         this.restoreSelectedState();

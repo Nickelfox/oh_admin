@@ -102,6 +102,7 @@ export class PackSelectorComponent implements OnInit {
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshList();
   }
 
 

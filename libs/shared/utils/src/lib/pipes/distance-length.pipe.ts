@@ -10,7 +10,7 @@ export class DistanceLengthPipe implements PipeTransform {
     if (!value) {
       return value;
     }
-    return value === ProfileInputTypeEnum.LENGTH ? 'DISTANCE/LENGTH' : value;
+    return value === ProfileInputTypeEnum.LENGTH ? 'distance / length' : value;
   }
 
 }

@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import {
+  CreateTagRequest,
   Tag,
   TagCore,
   TagDeleteRequest,
@@ -166,10 +167,13 @@ export class TagsComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((tag: TagCore | undefined) => {
       if (tag) {
-        this.store.createTag$({
-          tag
-        });
-        this.resetFilters();
+        const createTagObject: CreateTagRequest = {
+          tag,
+          ...this.filters.value,
+          limit: this.pageSize,
+          page: this.pageIndex
+        };
+        this.store.createTag$(createTagObject);
       }
     });
   }
