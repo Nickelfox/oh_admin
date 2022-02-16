@@ -104,14 +104,12 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       })
     ]),
     thumbnailId: new FormControl(undefined, [
-      RxwebValidators.required(),
       RxwebValidators.numeric({
         allowDecimal: false,
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
     posterId: new FormControl(undefined, [
-      RxwebValidators.required(),
       RxwebValidators.numeric({
         allowDecimal: false,
         acceptValue: NumericValueType.PositiveNumber
