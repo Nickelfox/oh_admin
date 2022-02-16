@@ -268,7 +268,7 @@
                                   <mat-select [disabled]='disableEditState' formControlName='inputType'>
                                     <mat-option value='NONE'>None</mat-option>
                                     <mat-option *ngFor='let type of testInputTypeIte'
-                                                [value]='type'>{{type | parseOneRem | replaceUnderscore | titlecase}}</mat-option>
+                                                [value]='type'>{{type === testInputTypeEnum.ONE_RM ? ('1RM') : (type | replaceUnderscore | titlecase)}}</mat-option>
                                   </mat-select>
                                   <mat-hint *ngIf='testGroup.value.inputType === testInputTypeEnum.RATIO'>Ratio
                                     calculated by Value (x) / Value (y)

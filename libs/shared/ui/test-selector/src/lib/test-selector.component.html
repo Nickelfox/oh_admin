@@ -174,7 +174,7 @@
                               <ng-template ngFor [ngForOf]='testInputTypeIte' let-type>
                                 <mat-list-option [value]='type'>
                                   <h6
-                                    class='mat-h6'>{{type | parseOneRem | replaceUnderscore | titlecase}}</h6>
+                                    class='mat-h6'>{{type === testInputTypeEnum.ONE_RM ? ('1RM') : (type | replaceUnderscore | titlecase)}}</h6>
                                 </mat-list-option>
                               </ng-template>
                             </mat-selection-list>
@@ -183,7 +183,7 @@
                       </div>
                     </th>
                     <td *matCellDef='let element'
-                        mat-cell> {{(element.inputType ? (element.inputType | parseOneRem | replaceUnderscore | titlecase) : '--')}} </td>
+                        mat-cell> {{(element.inputType ? (element.inputType === testInputTypeEnum.ONE_RM ? ('1RM') : (element.inputType | replaceUnderscore | titlecase)) : '--')}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef='status'>
