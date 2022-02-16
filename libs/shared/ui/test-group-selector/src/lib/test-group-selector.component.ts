@@ -144,6 +144,7 @@ export class TestGroupSelectorComponent implements OnInit {
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshList();
   }
 
   get Count(){
