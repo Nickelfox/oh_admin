@@ -5,6 +5,8 @@
     font-size: 14px;
 }
 .tableOverFlow{
-  max-height: 60vh;
+  width: 550px;
+  max-width: 100%;
+  max-height: 50vh;
   overflow: auto;
 }
