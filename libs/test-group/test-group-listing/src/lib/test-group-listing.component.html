@@ -76,6 +76,7 @@
                           <mat-menu #typeMenu='matMenu'>
                             <mat-selection-list color='primary' (selectionChange)='categoryFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
+                              <mat-list-option value='NONE'>None</mat-list-option>
                               <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
                                 <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>
                               </mat-list-option>
