@@ -133,7 +133,6 @@ export class TestSelectorComponent implements OnInit {
       this.cdr.markForCheck();
     }
     this.refreshList();
-    console.log(this.Count);
   }
 
   get paginatorIndex() {
@@ -143,10 +142,18 @@ export class TestSelectorComponent implements OnInit {
   get Count() {
     switch (this.categoryData.type) {
       case ContentSelectorOpType.SINGLE:
-        return this.selectedTests ? this.selectedTests.length : '-';
+        if (this.selectedTests.length === 0)
+        {
+          return '';
+        }
+        return this.selectedTests ? `SELECTED ITEMS ${this.selectedTests.length}` : '-';
         break;
       case ContentSelectorOpType.OTHER:
-        return this.selectedContents ? this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length : '-';
+        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length === 0)
+        {
+          return '';
+        }
+        return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length}` : '-';
         break;
     }
   }
