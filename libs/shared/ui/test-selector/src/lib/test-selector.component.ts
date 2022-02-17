@@ -166,12 +166,12 @@ export class TestSelectorComponent implements OnInit {
 
   refreshList(): void {
     const { type, nameSort, dateSort, search, published, level, category } = this.filters.value;
-    const categoryData: (TagCategoryEnum | 'NONE')[] | undefined = this.categoryData.type === ContentSelectorOpType.SINGLE ? (this.categoryData.category ? [this.categoryData.category] : []) : category;
+    const categoryData: (TagCategoryEnum | 'NONE')[] | undefined = this.categoryData.category ? [this.categoryData.category] : category;
     this.store.getTests$({
       page: this.pageIndex,
       limit: this.pageSize,
       type,
-      category: categoryData,
+      category: categoryData ?? [],
       dateSort,
       search,
       published,
