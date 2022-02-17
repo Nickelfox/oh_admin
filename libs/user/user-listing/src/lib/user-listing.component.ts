@@ -21,7 +21,7 @@ import { Observable } from 'rxjs';
 
 export class UserListingComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'email', 'country', 'date_of_joining', 'status', 'action'];
+  displayedColumns: string[] = ['name', 'email', 'date_of_joining', 'status', 'action'];
 
   users: MatTableDataSource<UserDetails> = new MatTableDataSource<UserDetails>();
   noData: Observable<boolean>;
