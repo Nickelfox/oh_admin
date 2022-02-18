@@ -126,7 +126,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     resultExplanation: new FormControl({
       value: '',
       disabled: true
-    }, [...this.utilities.requiredFieldValidation]),
+    }),
     isPublished: new FormControl(false),
     inverseScoresheet: new FormControl<boolean>(false),
     oneRMInputFields: new FormArray<OneRMField>([], [
@@ -136,7 +136,9 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       oneRep: new FormControl<boolean>(false),
       threeRep: new FormControl<boolean>(false),
       fiveRep: new FormControl<boolean>(false)
-    }, [...this.utilities.requiredFieldValidation]),
+    }, [
+      this.formValidationService.minOneTrue()
+    ]),
     multipleChoiceQuestion: new FormControl<string>({
       value: '',
       disabled: true
@@ -337,9 +339,8 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
         case TestInputTypeEnum.ONE_RM:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.ONE_RM) {
             this.utilities.buildOneRemForm(this.selectedTest.oneRMInputFields).map(fg => oneRMFArray.push(fg));
-            const repsGroup = reps as FormGroup<RepsCore>;
             const { oneRep, threeRep, fiveRep } = this.selectedTest.reps;
-            repsGroup.setValue({
+            reps.setValue({
               oneRep,
               fiveRep,
               threeRep
@@ -385,8 +386,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
         case TestInputTypeEnum.RATIO:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.RATIO) {
             this.utilities.buildCommonPointFormGroup(this.selectedTest.inputFields, inverse).map(fg => inputFArray.push(fg));
-            const ratioTypeFormGroup: FormGroup<RatioSubObject> = this.testGroup.controls.ratioVariable as FormGroup<RatioSubObject>;
-            ratioTypeFormGroup.patchValue({
+            ratioGroup.patchValue({
               xLabel: this.selectedTest.ratioVariable?.xLabel,
               yLabel: this.selectedTest.ratioVariable?.yLabel,
               xWeightUnit: this.selectedTest.ratioVariable?.xWeightUnit,
@@ -394,14 +394,14 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
               xDistanceUnit: this.selectedTest.ratioVariable?.xDistanceUnit,
               yDistanceUnit: this.selectedTest.ratioVariable?.yDistanceUnit
             });
-            ratioTypeFormGroup.patchValue({
+            ratioGroup.patchValue({
               xType: this.selectedTest.ratioVariable?.xType,
               yType: this.selectedTest.ratioVariable?.yType
             });
             resultExplanation.setValue(this.selectedTest.resultExplanation);
-            ratioTypeFormGroup.disable();
-            ratioTypeFormGroup.controls.yLabel.enable();
-            ratioTypeFormGroup.controls.xLabel.enable();
+            ratioGroup.disable();
+            ratioGroup.controls.yLabel.enable();
+            ratioGroup.controls.xLabel.enable();
           } else {
             this.utilities.buildCommonPointFormGroup(undefined, inverse).map(fg => inputFArray.push(fg));
             ratioGroup.enable();
@@ -518,10 +518,14 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     return this.testGroup.controls.relativeProfile as FormGroup<RelativeProfileObject>;
   }
 
+  get repsCoreGroup(): FormGroup<RepsCore> {
+    return this.testGroup.controls.reps as FormGroup<RepsCore>;
+  }
+
   get disableEditState(): boolean {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return (this.opType === this.opTypeEnum.EDIT);
+    return (this.opType === this.opTypeEnum.EDIT) && (this.selectedTest?.inputType !== "NONE");
   }
 
   resetProfileInputUnit(): void {
