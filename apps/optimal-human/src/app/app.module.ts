@@ -92,6 +92,11 @@ import { TitleCasePipe } from '@angular/common';
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
           {
+            path: 'listing',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
             path: 'listing/:size/:index',
             loadChildren: () =>
               import('@hidden-innovation/user/user-listing').then(
@@ -115,6 +120,11 @@ import { TitleCasePipe } from '@angular/common';
         children: [
           {
             path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing',
             pathMatch: 'full',
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
@@ -154,6 +164,11 @@ import { TitleCasePipe } from '@angular/common';
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
           {
+            path: 'listing',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
             path: 'listing/:size/:index',
             loadChildren: () =>
               import('@hidden-innovation/tags/tags').then(
@@ -169,6 +184,11 @@ import { TitleCasePipe } from '@angular/common';
         children: [
           {
             path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing',
             pathMatch: 'full',
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
@@ -208,6 +228,11 @@ import { TitleCasePipe } from '@angular/common';
             redirectTo: `listing/${paginatorData.pageSizeOptions[3]}/${paginatorData.pageIndex}`
           },
           {
+            path: 'listing',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSizeOptions[3]}/${paginatorData.pageIndex}`
+          },
+          {
             path: 'listing/:size/:index',
             loadChildren: () =>
               import('@hidden-innovation/test/test-listing').then(
@@ -239,6 +264,11 @@ import { TitleCasePipe } from '@angular/common';
         children: [
           {
             path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing',
             pathMatch: 'full',
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
@@ -278,6 +308,11 @@ import { TitleCasePipe } from '@angular/common';
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
           {
+            path: 'listing',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
             path: 'listing/:size/:index',
             loadChildren: () =>
               import('@hidden-innovation/assessment/assessment-listing').then(
@@ -301,6 +336,11 @@ import { TitleCasePipe } from '@angular/common';
         children: [
           {
             path: '',
+            pathMatch: 'full',
+            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
+          },
+          {
+            path: 'listing',
             pathMatch: 'full',
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
