@@ -6,6 +6,7 @@ import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DateTime } from 'luxon';
 import { PointTypeEnum } from '@hidden-innovation/shared/models';
+import { RepsCore } from '@hidden-innovation/test/data-access';
 
 @Injectable({
   providedIn: 'root'
@@ -237,7 +238,7 @@ export class FormValidationService {
           return null;
         default:
           if (low !== null && low !== undefined && high !== null && high !== undefined && (!inverse ? (low.value > high.value) : (low.value < high.value))) {
-            low?.setErrors(!inverse ? { highThan: true } :{ lessThan: true });
+            low?.setErrors(!inverse ? { highThan: true } : { lessThan: true });
             high?.setErrors(!inverse ? { lessThan: true } : { highThan: true });
             return null;
           }
@@ -292,8 +293,28 @@ export class FormValidationService {
           high?.removeError('lessThan');
           return null;
       }
+    };
+  }
 
+  minOneTrue(): ValidatorFn {
+    return (group: AbstractControl) => {
+      if (!group) {
+        return null;
+      }
+      return null;
+      // const repsGroup: FormGroup<RepsCore> = group as FormGroup<RepsCore>;
+      // let toggleCount = 0;
+      // toggleCount += repsGroup?.value?.oneRep ? 1 : 0;
+      // toggleCount += repsGroup?.value?.threeRep ? 1 : 0;
+      // toggleCount += repsGroup?.value?.fiveRep ? 1 : 0;
+      // if (toggleCount < 1) {
+      //   group.setErrors({
+      //     'minOneTrue': true
+      //   });
+      // } else {
+      //   group.setErrors({});
+      // }
+      // return null;
     };
   }
 }
-
