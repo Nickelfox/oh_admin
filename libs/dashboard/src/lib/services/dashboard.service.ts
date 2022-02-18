@@ -1,8 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
-import { DashboardData, DashboardResponse } from '../models/dashboard.interface';
-import { catchError, map } from 'rxjs/operators';
+import {
+  AssessmentEngagement,
+  AssessmentEngagementResponse, AssessmentLimitRequest,
+  DashboardData,
+  DashboardResponse,
+  PackEngagement,
+  PackEngagementResponse, PackEngLimitRequest,
+  TestWatched, TestWatchedLimitRequest,
+  TestWatchedListingResponse
+} from '../models/dashboard.interface';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
 
@@ -20,6 +29,42 @@ export class DashboardService {
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
+
+  getTopWatched(reqObj:TestWatchedLimitRequest): Observable<TestWatched[]> {
+    let params = new HttpParams();
+    params = params.appendAll({
+      'page': reqObj.page.toString(),
+      'limit': reqObj.limit.toString()
+    });
+    return this.http.get<TestWatchedListingResponse>(`${this.env.baseURL}/v1/admin/get-test-table`,{ params }).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  getPackEng(reqObj:PackEngLimitRequest): Observable<PackEngagement[]> {
+    let params = new HttpParams();
+    params = params.appendAll({
+      'page': reqObj.page.toString(),
+      'limit': reqObj.limit.toString()
+    });
+    return this.http.get<PackEngagementResponse>(`${this.env.baseURL}/v1/admin/get-pack-table`, { params }).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+  getAssessmentEng(reqObj:AssessmentLimitRequest): Observable<AssessmentEngagement[]> {
+    let params = new HttpParams();
+    params = params.appendAll({
+      'page': reqObj.page.toString(),
+      'limit': reqObj.limit.toString()
+    });
+    return this.http.get<AssessmentEngagementResponse>(`${this.env.baseURL}/v1/admin/get-assessment-table`,{ params }).pipe(
+      map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
   getGenderStatics(): Observable<any> {
     return this.http.get<DashboardResponse>(`${this.env.baseURL}/v1/admin/user-group`).pipe(
       map(res => res.data),
