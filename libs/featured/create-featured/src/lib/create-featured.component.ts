@@ -163,6 +163,10 @@ export class CreateFeaturedComponent implements OnDestroy {
     return this.selectedFeatured?.name === FeaturedNameEnum.SPOTLIGHT;
   }
 
+  get isFeaturedTest(): boolean {
+    return this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS;
+  }
+
   get selectedPosterData(): Observable<Media | undefined> {
     return this.store.selectedFeatured$.pipe(
       map(featured => featured?.poster)
@@ -243,7 +247,7 @@ export class CreateFeaturedComponent implements OnDestroy {
     }
     const data: TestSelectorData = {
       type: ContentSelectorOpType.SINGLE,
-      limit: this.isSpotlight
+      limit: this.isSpotlight || this.isFeaturedTest,
     };
     this.matDialog.open(TestSelectorComponent, {
       data,

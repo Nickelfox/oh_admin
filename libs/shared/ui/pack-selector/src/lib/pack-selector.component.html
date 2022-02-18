@@ -168,7 +168,7 @@
   <div class='row'>
     <div class='col-12'>
       <mat-card class='p-3 d-flex align-items-center justify-content-between'>
-        <h4 class='text-color__primary mat-h4 mb-0'>SELECTED ITEMS {{Count}}</h4>
+        <h4 class='text-color__primary mat-h4 mb-0'>{{Count}}</h4>
         <mat-paginator
           [disabled]='store.isLoading$ | async'
           [pageSize]='pageSize'

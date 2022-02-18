@@ -53,7 +53,7 @@
                   </ng-container>
 
                   <ng-container matColumnDef='id'>
-                    <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
+                    <th mat-header-cell [width]='70' *matHeaderCellDef>{{constantDataService.FIELD_NAME.ID | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'> {{element.id ?? '--'}} </td>
                   </ng-container>
 
@@ -100,6 +100,7 @@
                           <mat-menu #typeMenu='matMenu'>
                             <mat-selection-list color='primary' (selectionChange)='categoryFilterChange($event)'
                                                 [multiple]='true' class='pt-0'>
+                              <mat-list-option value='NONE'>None</mat-list-option>
                               <mat-list-option *ngFor='let cat of tagCategoryIte' [value]='cat'>
                                 <h6 class='mat-h6'>{{cat | replaceUnderscore | titlecase}}</h6>
                               </mat-list-option>
@@ -183,7 +184,7 @@
   <div class='row'>
     <div class='col-12'>
       <mat-card class='p-3 d-flex align-items-center justify-content-between'>
-        <h4 class='text-color__primary mat-h4 mb-0'>SELECTED ITEMS {{Count}}</h4>
+        <h4 class='text-color__primary mat-h4 mb-0'>{{Count}}</h4>
         <mat-paginator
           [disabled]='store.isLoading$ | async'
           [pageSize]='pageSize'

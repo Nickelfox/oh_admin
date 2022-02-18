@@ -119,7 +119,11 @@ export class PackSelectorComponent implements OnInit {
   }
 
   get Count(){
-    return this.selectedPacks? this.selectedPacks.length: '-';
+    if(this.selectedPacks.length === 0)
+    {
+      return '';
+    }
+    return this.selectedPacks? `SELECTED ITEMS ${this.selectedPacks.length}`: '-';
   }
 
   ngOnInit(): void {

@@ -133,10 +133,18 @@ export class QuestionnaireSelectorComponent implements OnInit {
   get Count(){
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:
-        return this.selectedQuestionnaires? this.selectedQuestionnaires.length: '-';
+        if(this.selectedQuestionnaires.length === 0)
+        {
+          return '';
+        }
+        return this.selectedQuestionnaires? `SELECTED ITEMS ${this.selectedQuestionnaires.length}`: '-';
         break;
       case ContentSelectorOpType.OTHER:
-        return  this.selectedContents? this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length: '-';
+        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length === 0)
+        {
+          return '';
+        }
+        return  this.selectedContents? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length}`: '-';
         break;
     }
   }
