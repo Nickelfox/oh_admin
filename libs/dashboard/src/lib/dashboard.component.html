@@ -17,36 +17,36 @@
                                                       cardTitle='Total App Downloads'
                                                       icon='file_download'></hidden-innovation-dashboard-count-card>
             </div>
-            <div class='col-md-12 col-lg-6 mt-lg-0 mt-3'>
+            <div class='col-md-12 col-lg-4 mt-lg-0 mt-3'>
               <mat-card class='bg-light h-100' style='padding: 10px'>
                 <div class='container-fluid p-0'>
                   <div class='row'>
-                    <div class='col-6'>
+                    <div class='col-12'>
                       <hidden-innovation-common-form-field-date
-                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.DAILY'
+
                         [maxDate]='maxDate'
                         endControlPath='end'
                         startControlPath='start'></hidden-innovation-common-form-field-date>
-                      <hidden-innovation-common-form-field-month
-                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.MONTHLY'
-                        [maxDate]='maxDate'
-                        controlPath='start'></hidden-innovation-common-form-field-month>
-                      <hidden-innovation-common-form-field-week
-                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.WEEKLY'
-                        [maxDate]='maxDate'
-                        endControlPath='end'
-                        startControlPath='start'></hidden-innovation-common-form-field-week>
+<!--                      <hidden-innovation-common-form-field-month-->
+<!--                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.MONTHLY'-->
+<!--                        [maxDate]='maxDate'-->
+<!--                        controlPath='start'></hidden-innovation-common-form-field-month>-->
+<!--                      <hidden-innovation-common-form-field-week-->
+<!--                        *ngIf='rangeFilterGroup.value.type === dashboardRangeFilterEnum.WEEKLY'-->
+<!--                        [maxDate]='maxDate'-->
+<!--                        endControlPath='end'-->
+<!--                        startControlPath='start'></hidden-innovation-common-form-field-week>-->
                     </div>
-                    <div class='col-6'>
-                      <mat-form-field class='w-100'>
-                        <mat-label>Range Filter</mat-label>
-                        <mat-select formControlName='type'>
-                          <mat-option *ngFor='let op of dashboardRangeTypes'
-                                      [value]='op'>{{op | titlecase}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                    </div>
+<!--                    <div class='col-6'>-->
+<!--                      <mat-form-field class='w-100'>-->
+<!--                        <mat-label>Range Filter</mat-label>-->
+<!--                        <mat-select formControlName='type'>-->
+<!--                          <mat-option *ngFor='let op of dashboardRangeTypes'-->
+<!--                                      [value]='op'>{{op | titlecase}}-->
+<!--                          </mat-option>-->
+<!--                        </mat-select>-->
+<!--                      </mat-form-field>-->
+<!--                    </div>-->
                   </div>
                 </div>
               </mat-card>
@@ -76,7 +76,7 @@
       </div>
     </div>
     <div class='row'>
-      <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
+      <div class='col-lg-12 col-md-12 mt-lg-0 mt-3'>
         <hidden-innovation-dashboard-user-demographic
           [femaleBarData]='store.femaleUsers$ | async'
           [isLoading]='(store.isChangeLoading$ | async)'
@@ -84,243 +84,435 @@
           [nonBinaryBarData]='store.nonBinaryUsers$ | async'
           [ratioChartData]='store.ageRatioData$ | async'></hidden-innovation-dashboard-user-demographic>
       </div>
-      <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
-        <div class='row'>
-          <ng-template [ngIfElse]='assessmentLoadingElse' [ngIf]='(store.isChangeLoading$ | async)'>
-            <div class='col-6'>
-              <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
-            </div>
-            <div class='col-6'>
-              <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>
-            </div>
-            <ng-template #dummyShimmerRef>
-              <hidden-innovation-shimmer
-                [rounded]='true'
-                height='500px'
-                width='100%'
-              ></hidden-innovation-shimmer>
-            </ng-template>
-          </ng-template>
-          <ng-template #assessmentLoadingElse>
-            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
-              <mat-card>
-                <div class='container-fluid p-0'>
-                  <div class='row'>
-                    <div class='col-12'>
-                      <div class='d-flex align-items-center mb-3'>
-                        <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
-                        <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Assessment Test
-                          Engagement</h4>
-                      </div>
-                    </div>
-                  </div>
-                  <div class='row justify-content-center'>
-                    <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>
-                      <canvas
-                        [colors]='doughnutChartColorTest'
-                        [data]='$any(store.assessmentTestEngagementData$ | async)'
-                        [labels]='$any(store.assessmentTestEngagementLables$ | async)'
-                        [legend]='chartLegendTest'
-                        [options]='chartOptionsTest'
-                        baseChart
-                        chartType='doughnut'
-                        class='w-100'
-                      ></canvas>
-                    </div>
-                    <div class='col-12 d-flex flex-column justify-content-around'>
-                      <div class='container-fluid p-0 w-100'>
-                        <ng-container *ngIf='(store.assessmentTestEngagementData$ | async) as labels'>
-                          <ng-container
-                            *ngFor='let category of (store.assessmentTestEngagementLables$ | async); let i=index'>
-                            <div class='row mb-2'>
-                              <div class='col-12'>
-                                <div [ngStyle]='{"color": colors[category]}' class='w-100'
-                                     mat-stroked-button>
-                                  <div class='d-flex align-items-center pt-1 py-0'>
-                                    <mat-icon class='test-icon'>fiber_manual_record</mat-icon>
-
-                                    <div [ngStyle]='{width: "calc(100% - 10px)"}'
-                                         class='d-flex  align-items-center justify-content-between'>
-                                      <h4 class='mat-h4 m-0 ml-2'>{{category}}</h4>
-                                      <h4 [ngStyle]='{"color": colors[category]}'
-                                          class='mat-h1 m-0'>{{labels[i]}} %</h4>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                          </ng-container>
-                        </ng-container>
-                      </div>
-                    </div>
+    </div>
+    <div class='row'>
+      <div class='col-lg-12 col-md-12  mt-4'>
+        <mat-card class='p-0'>
+          <div class='container-fluid p-0'>
+            <div class='row m-0'>
+              <div class='row m-0 px-3 mt-3 '>
+                <div class='col-12'>
+                  <div class='d-flex align-items-center mb-3'>
+                    <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
+                    <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Assessment Test
+                      Engagement</h4>
                   </div>
                 </div>
-              </mat-card>
+              </div>
+              <div class='col-12  tableOverFlow'>
+                <table mat-table [dataSource]='assessmentTestTable' class='w-100' style='width: 60vw'>
+                  <ng-container matColumnDef='position'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Position' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element,let i = index'
+                        > {{i+1 || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='name'>
+                    <th mat-header-cell  *matHeaderCellDef>{{'Assessment Name' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.name'> {{(element.name) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='id'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Assessment Id' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                     > {{(element.id) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='score'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Average Score (CPS)' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                        > {{(element.score) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='completion'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Assessment Completion' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                        > {{(element.completion) || '--'}} </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef='displayedColumnsAssessmentTest;sticky:true'></tr>
+                  <tr mat-row *matRowDef='let row; columns: displayedColumnsAssessmentTest;' class='row-react'></tr>
+                </table>
+              </div>
             </div>
-            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>
-              <mat-card>
-                <div class='container-fluid p-0'>
-                  <div class='row'>
-                    <div class='col-12'>
-                      <div class='d-flex align-items-center mb-3'>
-                        <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
-                        <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Complete Test
-                          Engagement</h4>
-                      </div>
-                    </div>
-                  </div>
-                  <div class='row justify-content-center'>
-                    <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>
-                      <canvas
-                        [colors]='doughnutChartColorComplete'
-                        [data]='$any(store.completeTestEngagementData$ | async)'
-                        [labels]='$any(store.completeTestEngagementLables$ | async)'
-                        [legend]='chartLegendComplete'
-                        [options]='chartOptionsTest'
-                        baseChart
-                        chartType='doughnut'
-                        class='w-100'
-                      ></canvas>
-                    </div>
-                    <div class='col-12 d-flex flex-column justify-content-around'>
-                      <div class='container-fluid p-0 w-100'>
-                        <ng-container *ngIf='(store.completeTestEngagementLables$ | async) as completeTestLabels'>
-                          <ng-container
-                            *ngFor='let test of (store.completeTestEngagementData$ | async);let i = index'>
-                            <div class='row mb-2'>
-                              <div class='col-12'>
-                                <div [ngStyle]='{"color": completeTestColors[i]}' class='w-100'
-                                     mat-stroked-button>
-                                  <div class='d-flex align-items-center pt-1 py-0'>
-                                    <mat-icon class='test-icon '>fiber_manual_record
-                                    </mat-icon>
-                                    <div [ngStyle]='{width: "calc(100% - 10px)"}'
-                                         class='d-flex  align-items-center justify-content-between'>
-                                      <h4
-                                        [ngStyle]='{width: "calc(100% - 60px)"}'
-                                        class='mat-h4 m-0 ml-3 text-uppercase text-nowrap text-truncate overflow-hidden'>{{completeTestLabels[i]}}</h4>
-                                      <h4 [ngStyle]='{"color": completeTestColors[i]}'
-                                          class='mat-h1 m-0'>{{test}} %</h4>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </ng-container>
-                        </ng-container>
-
-                        <!--                                            <div class='row mb-2'>-->
-                        <!--                                                <div class='col-12'>-->
-                        <!--                                                    <div class='w-100' mat-stroked-button-->
-                        <!--                                                         [ngStyle]='{"color": colors.test1}'>-->
-                        <!--                                                        <div class='d-flex align-items-center pt-1 py-0'>-->
-                        <!--                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>-->
-
-                        <!--                                                            <div class='d-flex  align-items-center justify-content-between'-->
-                        <!--                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>-->
-                        <!--                                                                <h3 class='mat-h4 m-0 ml-3'>Test 1</h3>-->
-                        <!--                                                                <h3 class='mat-h1 m-0'-->
-                        <!--                                                                    [ngStyle]='{"color": colors.test1}'>10 %</h3>-->
-                        <!--                                                            </div>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                            <div class='row mb-2'>-->
-                        <!--                                                <div class='col-12'>-->
-                        <!--                                                    <div class='w-100' mat-stroked-button-->
-                        <!--                                                         [ngStyle]='{"color": colors.test2}'>-->
-                        <!--                                                        <div class='d-flex align-items-center pt-1 py-0'>-->
-                        <!--                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>-->
-
-                        <!--                                                            <div class='d-flex  align-items-center justify-content-between'-->
-                        <!--                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>-->
-                        <!--                                                                <h3 class='mat-h4 m-0 ml-3'>Test 2</h3>-->
-                        <!--                                                                <h3 class='mat-h1 m-0'-->
-                        <!--                                                                    [ngStyle]='{"color": colors.test2}'>20 %</h3>-->
-                        <!--                                                            </div>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                            <div class='row mb-2'>-->
-                        <!--                                                <div class='col-12'>-->
-                        <!--                                                    <div class='w-100' mat-stroked-button-->
-                        <!--                                                         [ngStyle]='{"color": colors.test3}'>-->
-                        <!--                                                        <div class='d-flex align-items-center pt-1 py-0'>-->
-                        <!--                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>-->
-
-                        <!--                                                            <div class='d-flex  align-items-center justify-content-between'-->
-                        <!--                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>-->
-                        <!--                                                                <h3 class='mat-h4 m-0 ml-3'>Test 3</h3>-->
-                        <!--                                                                <h3 class='mat-h1 m-0'-->
-                        <!--                                                                    [ngStyle]='{"color": colors.test3}'>30 %</h3>-->
-                        <!--                                                            </div>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                            <div class='row mb-2'>-->
-                        <!--                                                <div class='col-12'>-->
-                        <!--                                                    <div class='w-100' mat-stroked-button-->
-                        <!--                                                         [ngStyle]='{"color": colors.test4}'>-->
-                        <!--                                                        <div class='d-flex align-items-center pt-1 py-0'>-->
-                        <!--                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>-->
-
-                        <!--                                                            <div class='d-flex  align-items-center justify-content-between'-->
-                        <!--                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>-->
-                        <!--                                                                <h3 class='mat-h4 m-0 ml-3'>Test 4</h3>-->
-                        <!--                                                                <h3 class='mat-h1 m-0'-->
-                        <!--                                                                    [ngStyle]='{"color": colors.test4}'>50 %</h3>-->
-                        <!--                                                            </div>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                            <div class='row mb-2'>-->
-                        <!--                                                <div class='col-12'>-->
-                        <!--                                                    <div class='w-100' mat-stroked-button-->
-                        <!--                                                         [ngStyle]='{"color": colors.test5}'>-->
-                        <!--                                                        <div class='d-flex align-items-center pt-1 py-0'>-->
-                        <!--                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>-->
-
-                        <!--                                                            <div class='d-flex  align-items-center justify-content-between'-->
-                        <!--                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>-->
-                        <!--                                                                <h3 class='mat-h4 m-0 ml-3'>Test 5</h3>-->
-                        <!--                                                                <h3 class='mat-h1 m-0'-->
-                        <!--                                                                    [ngStyle]='{"color": colors.test5}'>70 %</h3>-->
-                        <!--                                                            </div>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                        <!--                                            <div class='row mb-2'>-->
-                        <!--                                                <div class='col-12'>-->
-                        <!--                                                    <div class='w-100' mat-stroked-button-->
-                        <!--                                                         [ngStyle]='{"color": colors.test6}'>-->
-                        <!--                                                        <div class='d-flex align-items-center pt-1 py-0'>-->
-                        <!--                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>-->
-
-                        <!--                                                            <div class='d-flex  align-items-center justify-content-between'-->
-                        <!--                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>-->
-                        <!--                                                                <h3 class='mat-h4 m-0 ml-3'>Test 6</h3>-->
-                        <!--                                                                <h3 class='mat-h1 m-0'-->
-                        <!--                                                                    [ngStyle]='{"color": colors.test6}'>20 %</h3>-->
-                        <!--                                                            </div>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                </div>-->
-                        <!--                                            </div>-->
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </mat-card>
+            <div class='row mt-2'>
+              <div class='col'></div>
+              <div class='col-6'>
+                <mat-paginator
+                  (page)='assessmentEngPageEvent = $event; onPaginateChangeAssessmentEng($event)'
+                  [disabled]='store.isChangeLoading$ | async'
+                  [length]='store.assessmentEngCount$ | async'
+                  [pageIndex]='paginatorIndexAssessmentEng'
+                  [pageSizeOptions]='assessmentEngPageSizeOptions'
+                  [showFirstLastButtons]='false'
+                ></mat-paginator>
+              </div>
             </div>
-          </ng-template>
-        </div>
+          </div>
+        </mat-card>
       </div>
+      <div class='col-lg-12 col-md-12  mt-4'>
+        <mat-card class='p-0'>
+          <div class='container-fluid p-0'>
+            <div class='row m-0'>
+              <div class='row m-0 px-3 mt-3 '>
+                <div class='col-12'>
+                  <div class='d-flex align-items-center mb-3'>
+                    <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
+                    <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Pack
+                      Engagement</h4>
+                  </div>
+                </div>
+              </div>
+              <div class='col-12 tableOverFlow'>
+                <table mat-table [dataSource]='packEngTable'class='w-100' style='width: 60vw'>
+                  <ng-container matColumnDef='position'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Position' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element, let i = index'
+                    > {{i+1 || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='name' >
+                    <th mat-header-cell  *matHeaderCellDef >{{'Pack Name' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.name'> {{(element.name) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='id'>
+                    <th mat-header-cell [width]='100' *matHeaderCellDef >{{'Pack Id' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                    > {{(element.id) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='totalPlays'>
+                    <th mat-header-cell *matHeaderCellDef >{{'Total Video plays' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                    > {{(element.totalPlays) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='contentClicks'>
+                    <th mat-header-cell *matHeaderCellDef >{{'Total Content clicks' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                    > {{(element.contentClicks) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='resourcesClicks'>
+                    <th mat-header-cell *matHeaderCellDef >{{'Total Resources clicks' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                    > {{(element.resourcesClicks) || '--'}} </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef='displayedColumnsPackEng;sticky:true'></tr>
+                  <tr mat-row *matRowDef='let row; columns: displayedColumnsPackEng;' class='row-react'></tr>
+                </table>
+              </div>
+            </div>
+            <div class='row mt-2'>
+              <div class='col'></div>
+              <div class='col-6'>
+                <mat-paginator
+                  (page)='packEngPageEvent = $event; onPaginateChangePackEng($event)'
+                  [disabled]='store.isChangeLoading$ | async'
+                  [length]='store.packEngCount$ | async'
+                  [pageIndex]='paginatorIndexPackEng'
+                  [pageSizeOptions]='packEngPageSizeOptions'
+                  [showFirstLastButtons]='false'
+                ></mat-paginator>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+      <div class='col-lg-12 col-md-12  mt-4'>
+        <mat-card class='p-0'>
+
+          <div class='container-fluid p-0'>
+
+            <div class='row'>
+              <div class='row m-0 px-3 mt-3 '>
+                <div class='col-12'>
+                  <div class='d-flex align-items-center mb-3'>
+                    <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
+                    <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Top(10) Watched Test</h4>
+                  </div>
+                </div>
+              </div>
+              <div class='col-12 tableOverFlow'>
+                <table mat-table [dataSource]='topWatchedTable' class='w-100'>
+                  <ng-container matColumnDef='position'>
+                    <th mat-header-cell *matHeaderCellDef  >{{'Position' | titlecase}}</th>
+                    <td mat-cell  *matCellDef='let element,  let i = index'
+                    > {{(i+1) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='name'>
+                    <th mat-header-cell  *matHeaderCellDef>{{'Test Name' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                        [matTooltip]='element.name'> {{(element.name) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='id'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Test Id' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                    > {{(element.id) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='videoPlays'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Video Plays' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                    > {{(element.videoPlays) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='resultLog'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Result Log' | titlecase}}</th>
+                    <td mat-cell *matCellDef='let element'
+                    > {{(element.resultLog) || '--'}} </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef='displayedColumnsTopWatched; sticky:true'></tr>
+                  <tr mat-row *matRowDef='let row; columns: displayedColumnsTopWatched;' class='row-react'></tr>
+                </table>
+              </div>
+            </div>
+            <div class='row mt-2'>
+              <div class='col'></div>
+              <div class='col-6'>
+                <mat-paginator
+                  (page)='topWatchedPageEvent = $event; onPaginateChangeTopTest($event)'
+                  [disabled]='store.isChangeLoading$ | async'
+                  [length]='store.testWatchedCount$ | async'
+                  [pageIndex]='paginatorIndexTopTest'
+                  [pageSizeOptions]='topWatchedPageSizeOptions'
+                  [showFirstLastButtons]='false'
+                ></mat-paginator>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+
+<!--      <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>-->
+<!--        <div class='row'>-->
+<!--          <ng-template [ngIfElse]='assessmentLoadingElse' [ngIf]='(store.isChangeLoading$ | async)'>-->
+<!--            <div class='col-6'>-->
+<!--              <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>-->
+<!--            </div>-->
+<!--            <div class='col-6'>-->
+<!--              <ng-container *ngTemplateOutlet='dummyShimmerRef'></ng-container>-->
+<!--            </div>-->
+<!--            <ng-template #dummyShimmerRef>-->
+<!--              <hidden-innovation-shimmer-->
+<!--                [rounded]='true'-->
+<!--                height='500px'-->
+<!--                width='100%'-->
+<!--              ></hidden-innovation-shimmer>-->
+<!--            </ng-template>-->
+<!--          </ng-template>-->
+<!--          <ng-template #assessmentLoadingElse>-->
+<!--            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>-->
+<!--              <mat-card>-->
+<!--                <div class='container-fluid p-0'>-->
+<!--                  <div class='row'>-->
+<!--                    <div class='col-12'>-->
+<!--                      <div class='d-flex align-items-center mb-3'>-->
+<!--                        <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>-->
+<!--                        <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Assessment Test-->
+<!--                          Engagement</h4>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class='row justify-content-center'>-->
+<!--                    <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>-->
+<!--                      <canvas-->
+<!--                        [colors]='doughnutChartColorTest'-->
+<!--                        [data]='$any(store.assessmentTestEngagementData$ | async)'-->
+<!--                        [labels]='$any(store.assessmentTestEngagementLables$ | async)'-->
+<!--                        [legend]='chartLegendTest'-->
+<!--                        [options]='chartOptionsTest'-->
+<!--                        baseChart-->
+<!--                        chartType='doughnut'-->
+<!--                        class='w-100'-->
+<!--                      ></canvas>-->
+<!--                    </div>-->
+<!--                    <div class='col-12 d-flex flex-column justify-content-around'>-->
+<!--                      <div class='container-fluid p-0 w-100'>-->
+<!--                        <ng-container *ngIf='(store.assessmentTestEngagementData$ | async) as labels'>-->
+<!--                          <ng-container-->
+<!--                            *ngFor='let category of (store.assessmentTestEngagementLables$ | async); let i=index'>-->
+<!--                            <div class='row mb-2'>-->
+<!--                              <div class='col-12'>-->
+<!--                                <div [ngStyle]='{"color": colors[category]}' class='w-100'-->
+<!--                                     mat-stroked-button>-->
+<!--                                  <div class='d-flex align-items-center pt-1 py-0'>-->
+<!--                                    <mat-icon class='test-icon'>fiber_manual_record</mat-icon>-->
+
+<!--                                    <div [ngStyle]='{width: "calc(100% - 10px)"}'-->
+<!--                                         class='d-flex  align-items-center justify-content-between'>-->
+<!--                                      <h4 class='mat-h4 m-0 ml-2'>{{category}}</h4>-->
+<!--                                      <h4 [ngStyle]='{"color": colors[category]}'-->
+<!--                                          class='mat-h1 m-0'>{{labels[i]}} %</h4>-->
+<!--                                    </div>-->
+<!--                                  </div>-->
+<!--                                </div>-->
+<!--                              </div>-->
+<!--                            </div>-->
+
+<!--                          </ng-container>-->
+<!--                        </ng-container>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </mat-card>-->
+<!--            </div>-->
+<!--            <div class='col-lg-6 col-md-12 mt-lg-0 mt-3'>-->
+<!--              <mat-card>-->
+<!--                <div class='container-fluid p-0'>-->
+<!--                  <div class='row'>-->
+<!--                    <div class='col-12'>-->
+<!--                      <div class='d-flex align-items-center mb-3'>-->
+<!--                        <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>-->
+<!--                        <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Complete Test-->
+<!--                          Engagement</h4>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class='row justify-content-center'>-->
+<!--                    <div class='col-12 mb-4 d-flex align-items-center justify-content-center'>-->
+<!--                      <canvas-->
+<!--                        [colors]='doughnutChartColorComplete'-->
+<!--                        [data]='$any(store.completeTestEngagementData$ | async)'-->
+<!--                        [labels]='$any(store.completeTestEngagementLables$ | async)'-->
+<!--                        [legend]='chartLegendComplete'-->
+<!--                        [options]='chartOptionsTest'-->
+<!--                        baseChart-->
+<!--                        chartType='doughnut'-->
+<!--                        class='w-100'-->
+<!--                      ></canvas>-->
+<!--                    </div>-->
+<!--                    <div class='col-12 d-flex flex-column justify-content-around'>-->
+<!--                      <div class='container-fluid p-0 w-100'>-->
+<!--                        <ng-container *ngIf='(store.completeTestEngagementLables$ | async) as completeTestLabels'>-->
+<!--                          <ng-container-->
+<!--                            *ngFor='let test of (store.completeTestEngagementData$ | async);let i = index'>-->
+<!--                            <div class='row mb-2'>-->
+<!--                              <div class='col-12'>-->
+<!--                                <div [ngStyle]='{"color": completeTestColors[i]}' class='w-100'-->
+<!--                                     mat-stroked-button>-->
+<!--                                  <div class='d-flex align-items-center pt-1 py-0'>-->
+<!--                                    <mat-icon class='test-icon '>fiber_manual_record-->
+<!--                                    </mat-icon>-->
+<!--                                    <div [ngStyle]='{width: "calc(100% - 10px)"}'-->
+<!--                                         class='d-flex  align-items-center justify-content-between'>-->
+<!--                                      <h4-->
+<!--                                        [ngStyle]='{width: "calc(100% - 60px)"}'-->
+<!--                                        class='mat-h4 m-0 ml-3 text-uppercase text-nowrap text-truncate overflow-hidden'>{{completeTestLabels[i]}}</h4>-->
+<!--                                      <h4 [ngStyle]='{"color": completeTestColors[i]}'-->
+<!--                                          class='mat-h1 m-0'>{{test}} %</h4>-->
+<!--                                    </div>-->
+<!--                                  </div>-->
+<!--                                </div>-->
+<!--                              </div>-->
+<!--                            </div>-->
+<!--                          </ng-container>-->
+<!--                        </ng-container>-->
+
+<!--                        &lt;!&ndash;                                            <div class='row mb-2'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                <div class='col-12'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    <div class='w-100' mat-stroked-button&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                         [ngStyle]='{"color": colors.test1}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        <div class='d-flex align-items-center pt-1 py-0'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;                                                            <div class='d-flex  align-items-center justify-content-between'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h4 m-0 ml-3'>Test 1</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h1 m-0'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                    [ngStyle]='{"color": colors.test1}'>10 %</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            <div class='row mb-2'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                <div class='col-12'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    <div class='w-100' mat-stroked-button&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                         [ngStyle]='{"color": colors.test2}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        <div class='d-flex align-items-center pt-1 py-0'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;                                                            <div class='d-flex  align-items-center justify-content-between'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h4 m-0 ml-3'>Test 2</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h1 m-0'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                    [ngStyle]='{"color": colors.test2}'>20 %</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            <div class='row mb-2'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                <div class='col-12'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    <div class='w-100' mat-stroked-button&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                         [ngStyle]='{"color": colors.test3}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        <div class='d-flex align-items-center pt-1 py-0'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;                                                            <div class='d-flex  align-items-center justify-content-between'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h4 m-0 ml-3'>Test 3</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h1 m-0'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                    [ngStyle]='{"color": colors.test3}'>30 %</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            <div class='row mb-2'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                <div class='col-12'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    <div class='w-100' mat-stroked-button&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                         [ngStyle]='{"color": colors.test4}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        <div class='d-flex align-items-center pt-1 py-0'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;                                                            <div class='d-flex  align-items-center justify-content-between'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h4 m-0 ml-3'>Test 4</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h1 m-0'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                    [ngStyle]='{"color": colors.test4}'>50 %</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            <div class='row mb-2'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                <div class='col-12'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    <div class='w-100' mat-stroked-button&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                         [ngStyle]='{"color": colors.test5}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        <div class='d-flex align-items-center pt-1 py-0'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;                                                            <div class='d-flex  align-items-center justify-content-between'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h4 m-0 ml-3'>Test 5</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h1 m-0'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                    [ngStyle]='{"color": colors.test5}'>70 %</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            <div class='row mb-2'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                <div class='col-12'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    <div class='w-100' mat-stroked-button&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                         [ngStyle]='{"color": colors.test6}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        <div class='d-flex align-items-center pt-1 py-0'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            <mat-icon class='test-icon'>fiber_manual_record</mat-icon>&ndash;&gt;-->
+
+<!--                        &lt;!&ndash;                                                            <div class='d-flex  align-items-center justify-content-between'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                 [ngStyle]='{width: "calc(100% - 42px)"}'>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h4 m-0 ml-3'>Test 6</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                <h3 class='mat-h1 m-0'&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                                    [ngStyle]='{"color": colors.test6}'>20 %</h3>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                            </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                        </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                    </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                                </div>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </mat-card>-->
+<!--            </div>-->
+<!--          </ng-template>-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
   </div>
 </div>
