@@ -1,15 +1,20 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
+import { ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import { ChartColor, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
-import {DashboardRangeFilterEnum, TagCategoryEnum, UserDetails} from '@hidden-innovation/shared/models';
+import { DashboardRangeFilterEnum, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { AssessmentEngagement, DashboardRequest, PackEngagement, TestWatched } from './models/dashboard.interface';
+import {
+  AssessmentEngagement,
+  DashboardRequest,
+  PackEngagement,
+  PackEngagementFilters,
+  TestWatched
+} from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { map, skip } from 'rxjs/operators';
-import {forEach} from "lodash-es";
-import {MatTableDataSource} from "@angular/material/table";
+import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -183,6 +188,8 @@ export class DashboardComponent {
   maxDate = DateTime.now();
 
 
+  sortingEnum = SortingEnum;
+  emitSorting: EventEmitter<string> = new EventEmitter<string>();
   //Top Watched Paginator options
   topTestPageIndex = this.constantDataService.PaginatorData.pageIndex;
   topWatchedPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
@@ -194,7 +201,10 @@ export class DashboardComponent {
   packEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
   packEngPageSize = this.constantDataService.PaginatorData.pageSize;
   packEngPageEvent: PageEvent | undefined;
-
+  filtersPackEng: FormGroup<PackEngagementFilters> = new FormGroup<PackEngagementFilters>({
+    contentclicksSort: new FormControl(SortingEnum.ASC),
+    resourceclicksSort: new FormControl(undefined)
+  })
   //Assessment Engagement Paginator options
   assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
   assessmentEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
@@ -299,11 +309,12 @@ export class DashboardComponent {
     )
   };
 
+
 // Top Watched pagination
   refreshListTopTest(): void {
     this.store.getTopWatched$({
       page: this.topTestPageIndex,
-      limit: this.topWatchedPageSize
+      limit: this.topWatchedPageSize,
     });
   }
 
@@ -323,10 +334,12 @@ export class DashboardComponent {
   }
   // Pack Engagement Pagination
   refreshListPackEng(): void {
-
+    const {contentclicksSort,resourceclicksSort} = this.filtersPackEng.value;
     this.store.getPackEngagement$({
       page: this.packEngPageIndex,
-      limit: this.packEngPageSize
+      limit: this.packEngPageSize,
+      contentclicksSort,
+      resourceclicksSort
     });
   }
 
@@ -345,11 +358,35 @@ export class DashboardComponent {
     this.refreshListPackEng();
   }
 
+  updatePackSorting(fieldName: 'resourceclicksSort' | 'contentclicksSort'): void {
+    const { resourceclicksSort, contentclicksSort } = this.filtersPackEng.controls;
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+    switch (fieldName) {
+      case 'resourceclicksSort':
+        resourceclicksSort.disable();
+        updateSortingCtrl(resourceclicksSort);
+        break;
+      case 'contentclicksSort':
+        contentclicksSort.disable();
+        updateSortingCtrl(contentclicksSort);
+        break;
+    }
+  }
+
   // Assessment Engagement Pagination
   refreshListAssessmentEng(): void {
     this.store.getAssessmentEngagement$({
       page: this.assessmentEngPageIndex,
-      limit: this.assessmentEngPageSize
+      limit: this.assessmentEngPageSize,
     });
   }
 

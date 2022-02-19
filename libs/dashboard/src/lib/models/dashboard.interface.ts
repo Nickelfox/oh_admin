@@ -1,4 +1,4 @@
-import { CustomApiResponse, DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
+import { CustomApiResponse, DashboardRangeFilterEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { TestListingFilters } from '@hidden-innovation/test/data-access';
 
 export interface DashboardData {
@@ -26,7 +26,11 @@ export interface PackEngagement {
   resource_clicks:number;
   content_clicks:number;
 }
-export interface PackEngLimitRequest  {
+export  interface PackEngagementFilters{
+  contentclicksSort: SortingEnum | undefined;
+  resourceclicksSort: SortingEnum | undefined;
+}
+export interface PackEngLimitRequest extends PackEngagementFilters {
   limit: number;
   page: number;
 }
@@ -38,7 +42,8 @@ export interface AssessmentEngagement {
   average_score:number;
   completion:number;
 }
-export interface AssessmentLimitRequest  {
+
+export interface AssessmentLimitRequest {
   limit: number;
   page: number;
 }

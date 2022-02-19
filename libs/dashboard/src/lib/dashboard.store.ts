@@ -34,6 +34,8 @@ export interface DashboardState extends Partial<DashboardData> {
   packEng:PackEngagement[];
   assessmentEng: AssessmentEngagement[];
   total: number;
+  isActing?: boolean;
+  loaded?: boolean;
 }
 
 const initialState: DashboardState = {
@@ -56,7 +58,9 @@ const initialState: DashboardState = {
   testWatched: [],
   packEng:[],
   assessmentEng:[],
-  total:0
+  total:0,
+  isActing: false,
+  loaded: false
 };
 
 @Injectable()
@@ -68,6 +72,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   readonly testWatchedCount$: Observable<number> = this.select(state => state.total || 0);
   readonly packEngCount$: Observable<number> = this.select(state => state.total || 0);
   readonly assessmentEngCount$: Observable<number> = this.select(state => state.total || 0);
+  readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
+  readonly loaded$: Observable<boolean> = this.select(state => !!state.loaded);
+  readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
+
+
 
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isLineChartLoading$: Observable<boolean> = this.select(state => !!state.isLineChartLoading);
@@ -299,7 +308,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   );
   getPackEngagement$ = this.effect<PackEngLimitRequest>(params$ =>
     params$.pipe(
-      tap(() => {
+      tap((res) => {
         this.patchState({
           isLoading: true
         });

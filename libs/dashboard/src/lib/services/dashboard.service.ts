@@ -48,6 +48,12 @@ export class DashboardService {
       'page': reqObj.page.toString(),
       'limit': reqObj.limit.toString()
     });
+    if (reqObj.contentclicksSort) {
+      params = params.append('contentclicksSort', reqObj.contentclicksSort);
+    }
+    if (reqObj.resourceclicksSort) {
+      params = params.append('resourceclicksSort', reqObj.resourceclicksSort);
+    }
     return this.http.get<PackEngagementResponse>(`${this.env.baseURL}/v1/admin/get-pack-table`, { params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
