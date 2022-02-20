@@ -234,7 +234,6 @@ export class QuestionnaireSelectorComponent implements OnInit {
       ({ questionnaires }) => {
         this.questionnaires = new MatTableDataSource<QuestionnaireExtended>(questionnaires);
         this.noData = this.questionnaires.connect().pipe(map(data => data.length === 0));
-        console.log( !questionnaires?.length && this.pageIndex > this.constantDataService.PaginatorData.pageIndex);
         if (!questionnaires?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
           this.resetPagination();
         }

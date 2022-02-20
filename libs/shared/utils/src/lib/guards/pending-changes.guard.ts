@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 export interface ComponentCanDeactivate {
   canDeactivate: () => boolean;

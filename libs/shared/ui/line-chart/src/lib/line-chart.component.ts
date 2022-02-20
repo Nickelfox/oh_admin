@@ -144,13 +144,10 @@ export class LineChartComponent {
 
     switch (this.label) {
       case 'Registered Users':
-        console.log('No of Registered');
         break;
       case 'Active Users':
-        console.log('No of Active users');
         break;
       default:
-        console.log('hello');
     }
   }
 }

@@ -45,15 +45,21 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
         this.assessmentService.getAssessmentList().pipe(
           tapResponse(
             (list) => {
-              this.patchState({
-                isLoading: false,
-                assessmentList: list?.map(({ lockout, category, count }) => {
+              let assessments: AssessmentListState[] = [];
+              try {
+                assessments = list?.map(({ lockout, category, count }) => {
                   return {
                     lockout,
                     count,
                     category
                   } as AssessmentListState;
-                }) ?? []
+                });
+              } catch {
+                assessments = [];
+              }
+              this.patchState({
+                isLoading: false,
+                assessmentList: assessments ?? []
               });
             },
             _ => {
@@ -63,6 +69,9 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
             }
           ),
           catchError(() => {
+            this.patchState({
+              isLoading: false
+            });
             this.toastRef?.close();
             return EMPTY;
           })

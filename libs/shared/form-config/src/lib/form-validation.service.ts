@@ -6,7 +6,6 @@ import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DateTime } from 'luxon';
 import { PointTypeEnum } from '@hidden-innovation/shared/models';
-import { RepsCore } from '@hidden-innovation/test/data-access';
 
 @Injectable({
   providedIn: 'root'

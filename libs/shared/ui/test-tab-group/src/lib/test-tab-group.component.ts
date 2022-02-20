@@ -10,7 +10,7 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
           <div class='col-2 px-0'>
             <button mat-button
                     routerLinkActive='active'
-                    [routerLink]='["/tests", "listing", 100, pagination.pageIndex]'
+                    [routerLink]='["/tests", "listing"]'
                     class='w-100 py-2 tab-border-button'>Single
             </button>
             <mat-divider class='tab-border-bottom'></mat-divider>
@@ -18,7 +18,7 @@ import { paginatorData } from '@hidden-innovation/user/data-access';
           <div class='col-2 px-0'>
             <button mat-button
                     routerLinkActive='active'
-                    [routerLink]='["/tests-group", "listing", pagination.pageSize, pagination.pageIndex]'
+                    [routerLink]='["/tests-group", "listing"]'
                     class='w-100  py-2 tab-border-button'>Group
             </button>
             <mat-divider class='tab-border-bottom'></mat-divider>
