@@ -4,11 +4,11 @@ import { DashboardStore } from './dashboard.store';
 import { DashboardRangeFilterEnum, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
-  AssessmentEngagement,
+  AssessmentEngagement, AssessmentEngagementFilters,
   DashboardRequest,
   PackEngagement,
   PackEngagementFilters,
-  TestWatched
+  TestWatched, TestWatchedFilters
 } from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
@@ -195,7 +195,10 @@ export class DashboardComponent {
   topWatchedPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
   topWatchedPageSize = this.constantDataService.PaginatorData.pageSize;
   topWatchedPageEvent: PageEvent | undefined;
-
+  filtersTestWatched: FormGroup<TestWatchedFilters> = new FormGroup<TestWatchedFilters>({
+    videoplaySort: new FormControl(SortingEnum.ASC),
+    resultlogSort: new FormControl(SortingEnum.ASC)
+  })
   //Pack Engagement Paginator options
   packEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
   packEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
@@ -203,13 +206,17 @@ export class DashboardComponent {
   packEngPageEvent: PageEvent | undefined;
   filtersPackEng: FormGroup<PackEngagementFilters> = new FormGroup<PackEngagementFilters>({
     contentclicksSort: new FormControl(SortingEnum.ASC),
-    resourceclicksSort: new FormControl(undefined)
+    resourceclicksSort: new FormControl(SortingEnum.ASC)
   })
   //Assessment Engagement Paginator options
   assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
   assessmentEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
   assessmentEngPageSize = this.constantDataService.PaginatorData.pageSize;
   assessmentEngPageEvent: PageEvent | undefined;
+  filtersAssessmentEng: FormGroup<AssessmentEngagementFilters> = new FormGroup<AssessmentEngagementFilters>({
+    averagescoreSort: new FormControl(SortingEnum.ASC),
+    completionSort: new FormControl(SortingEnum.ASC)
+  })
 
 
   constructor(
@@ -312,9 +319,12 @@ export class DashboardComponent {
 
 // Top Watched pagination
   refreshListTopTest(): void {
+    const { videoplaySort, resultlogSort  } = this.filtersTestWatched.value
     this.store.getTopWatched$({
       page: this.topTestPageIndex,
       limit: this.topWatchedPageSize,
+      resultlogSort,
+      videoplaySort
     });
   }
 
@@ -332,6 +342,32 @@ export class DashboardComponent {
     this.topWatchedPageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshListTopTest();
   }
+  updateTopWatched(fieldName: 'videoplaySort' | 'resultlogSort'): void {
+    const { videoplaySort, resultlogSort } = this.filtersTestWatched.controls;
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+
+    switch (fieldName) {
+      case 'videoplaySort':
+        videoplaySort.disable();
+        updateSortingCtrl(videoplaySort);
+        break;
+      case 'resultlogSort':
+        resultlogSort.disable();
+        updateSortingCtrl(resultlogSort);
+        break;
+    }
+  }
+
+
   // Pack Engagement Pagination
   refreshListPackEng(): void {
     const {contentclicksSort,resourceclicksSort} = this.filtersPackEng.value;
@@ -384,9 +420,12 @@ export class DashboardComponent {
 
   // Assessment Engagement Pagination
   refreshListAssessmentEng(): void {
+    const {averagescoreSort,completionSort} = this.filtersAssessmentEng.value;
     this.store.getAssessmentEngagement$({
       page: this.assessmentEngPageIndex,
       limit: this.assessmentEngPageSize,
+      completionSort,
+      averagescoreSort
     });
   }
 
@@ -403,6 +442,29 @@ export class DashboardComponent {
     this.assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.assessmentEngPageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshListAssessmentEng();
+  }
+  updateAssessmentSorting(fieldName: 'completionSort' | 'averagescoreSort'): void {
+    const { averagescoreSort, completionSort } = this.filtersAssessmentEng.controls;
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+    switch (fieldName) {
+      case 'averagescoreSort':
+        averagescoreSort.disable();
+        updateSortingCtrl(averagescoreSort);
+        break;
+      case 'completionSort':
+        completionSort.disable();
+        updateSortingCtrl(completionSort);
+        break;
+    }
   }
 
   // get calenderView(): 'month' | 'year' | 'multi-year' {

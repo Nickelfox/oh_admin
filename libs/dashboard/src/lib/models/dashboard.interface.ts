@@ -12,8 +12,11 @@ export interface TestWatched {
   video_plays:number;
   result_logs:string;
 }
-
-export interface TestWatchedLimitRequest  {
+export  interface TestWatchedFilters{
+  videoplaySort: SortingEnum | undefined;
+  resultlogSort: SortingEnum | undefined;
+}
+export interface TestWatchedLimitRequest extends TestWatchedFilters {
   limit: number;
   page: number;
 }
@@ -42,8 +45,12 @@ export interface AssessmentEngagement {
   average_score:number;
   completion:number;
 }
+export  interface AssessmentEngagementFilters{
+  completionSort: SortingEnum | undefined;
+  averagescoreSort: SortingEnum | undefined;
+}
 
-export interface AssessmentLimitRequest {
+export interface AssessmentLimitRequest extends AssessmentEngagementFilters{
   limit: number;
   page: number;
 }

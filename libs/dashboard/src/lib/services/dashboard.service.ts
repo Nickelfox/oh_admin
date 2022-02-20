@@ -36,6 +36,12 @@ export class DashboardService {
       'page': reqObj.page.toString(),
       'limit': reqObj.limit.toString()
     });
+    if (reqObj.resultlogSort) {
+      params = params.append('resultlogSort', reqObj.resultlogSort);
+    }
+    if (reqObj.videoplaySort) {
+      params = params.append('videoplaySort', reqObj.videoplaySort);
+    }
     return this.http.get<TestWatchedListingResponse>(`${this.env.baseURL}/v1/admin/get-test-table`,{ params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
@@ -65,6 +71,12 @@ export class DashboardService {
       'page': reqObj.page.toString(),
       'limit': reqObj.limit.toString()
     });
+    if (reqObj.completionSort) {
+      params = params.append('completionSort', reqObj.completionSort);
+    }
+    if (reqObj.averagescoreSort) {
+      params = params.append('averagescoreSort', reqObj.averagescoreSort);
+    }
     return this.http.get<AssessmentEngagementResponse>(`${this.env.baseURL}/v1/admin/get-assessment-table`,{ params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
