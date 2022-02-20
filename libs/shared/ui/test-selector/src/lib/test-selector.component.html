@@ -3,11 +3,11 @@
     <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
       <ng-template [ngIf]='this.categoryData.type === contentSelectorOpType.SINGLE' [ngIfElse]='elseTitle'>
         <ng-template [ngIf]='!this.categoryData?.limit' [ngIfElse]='elseTitle'>
-          ADD TEST OF TYPE - <b>{{categoryData ? (categoryData?.category | titlecase) : "--"}}</b>
+          ADD TEST SINGLE <span>{{categoryData ? " OF TYPE -  "+(categoryData?.category | titlecase) : "--"}}</span>
         </ng-template>
       </ng-template>
       <ng-template #elseTitle>
-        ADD TEST
+        ADD TEST SINGLE
       </ng-template>
     </h4>
     <div class='d-flex align-items-center'>
@@ -102,7 +102,7 @@
                   </span>
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3' [matMenuTriggerFor]='typeMenu'
-                                  [disabled]='(store.isActing$ | async) || this.categoryData.type === contentSelectorOpType.SINGLE'
+                                  [disabled]='(store.isActing$ | async) || (this.categoryData.type === contentSelectorOpType.SINGLE && !this.categoryData?.limit)'
                                   color='{{filters.controls.category?.value ? "primary" : ""}}'>
                             <mat-icon style='font-size: 20px'>filter_list</mat-icon>
                           </button>
@@ -174,7 +174,7 @@
                               <ng-template ngFor [ngForOf]='testInputTypeIte' let-type>
                                 <mat-list-option [value]='type'>
                                   <h6
-                                    class='mat-h6'>{{type | parseOneRem | replaceUnderscore | titlecase}}</h6>
+                                    class='mat-h6'>{{type === testInputTypeEnum.ONE_RM ? ('1RM') : (type | replaceUnderscore | titlecase)}}</h6>
                                 </mat-list-option>
                               </ng-template>
                             </mat-selection-list>
@@ -183,7 +183,7 @@
                       </div>
                     </th>
                     <td *matCellDef='let element'
-                        mat-cell> {{(element.inputType ? (element.inputType | parseOneRem | replaceUnderscore | titlecase) : '--')}} </td>
+                        mat-cell> {{(element.inputType ? (element.inputType === testInputTypeEnum.ONE_RM ? ('1RM') : (element.inputType | replaceUnderscore | titlecase)) : '--')}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef='status'>
@@ -250,7 +250,8 @@
   </div>
   <div class='row'>
     <div class='col-12'>
-      <mat-card class='p-0'>
+      <mat-card class='p-3 d-flex align-items-center justify-content-between'>
+        <h4 class='text-color__primary mat-h4 mb-0'>{{Count}}</h4>
         <mat-paginator
           [disabled]='store.isLoading$ | async'
           [pageSize]='pageSize'

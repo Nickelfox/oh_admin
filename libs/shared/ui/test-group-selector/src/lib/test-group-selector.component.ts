@@ -144,7 +144,29 @@ export class TestGroupSelectorComponent implements OnInit {
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshList();
   }
+
+  get Count(){
+    switch (this.data.type) {
+      case ContentSelectorOpType.SINGLE:
+        if(this.selectedTestGroups.length ===0)
+        {
+          return '';
+        }
+        return this.selectedTestGroups? `SELECTED ITEMS ${this.selectedTestGroups.length}`: '-';
+        break;
+      case ContentSelectorOpType.OTHER:
+        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length === 0 )
+        {
+          return '';
+        }
+        return  this.selectedContents? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length}`: '-';
+        break;
+    }
+  }
+
+
 
   ngOnInit(): void {
     this.store.testGroups$.subscribe(

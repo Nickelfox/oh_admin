@@ -130,7 +130,24 @@ export class QuestionnaireSelectorComponent implements OnInit {
   get paginatorIndex() {
     return this.pageIndex - 1;
   }
-
+  get Count(){
+    switch (this.questionnaireData.type) {
+      case ContentSelectorOpType.SINGLE:
+        if(this.selectedQuestionnaires.length === 0)
+        {
+          return '';
+        }
+        return this.selectedQuestionnaires? `SELECTED ITEMS ${this.selectedQuestionnaires.length}`: '-';
+        break;
+      case ContentSelectorOpType.OTHER:
+        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length === 0)
+        {
+          return '';
+        }
+        return  this.selectedContents? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length}`: '-';
+        break;
+    }
+  }
   isSelected(q: QuestionnaireExtended): boolean {
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:
@@ -196,6 +213,7 @@ export class QuestionnaireSelectorComponent implements OnInit {
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshList();
   }
 
   refreshList(): void {

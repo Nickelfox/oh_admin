@@ -36,6 +36,7 @@ export interface Test {
   thumbnail: Media;
   video: Media;
   reps: Reps;
+  inverseScoresheet: boolean;
   tags: Tag[];
   needEquipment: boolean;
   equipment: string;
@@ -80,6 +81,7 @@ export interface CreateTest {
   tags: number[];
   // OneRemType Start
   resultExplanation: string;
+  inverseScoresheet: boolean;
   oneRMInputFields: OneRMField[];
   reps: RepsCore;
   // OneRemType End

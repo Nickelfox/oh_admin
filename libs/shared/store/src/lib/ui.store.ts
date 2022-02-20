@@ -201,9 +201,10 @@ export class UiStore extends ComponentStore<UiState> {
   }
 
   deleteContentPrompt(type: PackContentTypeEnum, id: number): void {
+    const contentType:string = type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : type
     const dialogData: GenericDialogPrompt = {
-      title: `Remove ${this.titleCasePipe.transform(type)}?`,
-      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(type)} from Pack?`,
+      title: `Remove ${this.titleCasePipe.transform(contentType)}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} item from Pack?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
@@ -234,9 +235,10 @@ export class UiStore extends ComponentStore<UiState> {
   }
 
   deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
+    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
     const dialogData: GenericDialogPrompt = {
-      title: `Remove ${content.type}`,
-      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)}?`,
+      title: `Remove ${contentType}`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)}?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',

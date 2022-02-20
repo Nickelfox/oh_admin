@@ -1,62 +1,72 @@
 <div class='p-4'>
   <div class='container-fluid p-0'>
-    <div class='row mb-3'>
-      <div class='col d-flex align-items-center justify-content-end'>
-        <mat-spinner class='mr-4' [diameter]='20' *ngIf='store.isLoading$ | async'></mat-spinner>
-      </div>
-    </div>
-    <div class='row'>
+    <div class='row mt-3'>
       <div class='col-12'>
         <mat-card class='p-0'>
           <div class='container-fluid p-0'>
             <div class='row'>
               <div class='col-12'>
-                <table mat-table [dataSource]='assessment' class='w-100'>
+                <table [dataSource]='assessment' class='w-100' mat-table>
                   <ng-container matColumnDef='category'>
-                    <th mat-header-cell *matHeaderCellDef>
+                    <th *matHeaderCellDef mat-header-cell>
                       {{constantDataService.FIELD_NAME.CATEGORY | titlecase}}
                     </th>
-                    <td mat-cell
-                        *matCellDef='let element'> {{(element.category | replaceUnderscore | titlecase) || '--'}} </td>
+                    <td *matCellDef='let element'
+                        mat-cell> {{(element.category | replaceUnderscore | titlecase) || '--'}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef='test'>
-                    <th mat-header-cell *matHeaderCellDef [width]="300">Tests</th>
-                    <td mat-cell *matCellDef='let element'> {{element.count || 0}}  </td>
+                    <th *matHeaderCellDef [width]='300' mat-header-cell>Tests</th>
+                    <td *matCellDef='let element' mat-cell> {{element.count || 0}}  </td>
                   </ng-container>
 
-<!--                  <ng-container matColumnDef='worstCase'>-->
-<!--                    <th mat-header-cell *matHeaderCellDef>Worst Case</th>-->
-<!--                    <td mat-cell *matCellDef='let element'> {{element.worstCase || 0}}  </td>-->
-<!--                  </ng-container>-->
+                  <!--                  <ng-container matColumnDef='worstCase'>-->
+                  <!--                    <th mat-header-cell *matHeaderCellDef>Worst Case</th>-->
+                  <!--                    <td mat-cell *matCellDef='let element'> {{element.worstCase || 0}}  </td>-->
+                  <!--                  </ng-container>-->
 
 
-<!--                  <ng-container matColumnDef='bestCase'>-->
-<!--                    <th mat-header-cell *matHeaderCellDef>Best Case</th>-->
-<!--                    <td mat-cell *matCellDef='let element'> {{element.bestCase || 0}}  </td>-->
-<!--                  </ng-container>-->
+                  <!--                  <ng-container matColumnDef='bestCase'>-->
+                  <!--                    <th mat-header-cell *matHeaderCellDef>Best Case</th>-->
+                  <!--                    <td mat-cell *matCellDef='let element'> {{element.bestCase || 0}}  </td>-->
+                  <!--                  </ng-container>-->
 
                   <ng-container matColumnDef='lockout'>
-                    <th mat-header-cell *matHeaderCellDef>Lockout (days)</th>
-                    <td mat-cell *matCellDef='let element'> {{element.lockout ?? 0}}  </td>
+                    <th *matHeaderCellDef mat-header-cell>Lockout (days)</th>
+                    <td *matCellDef='let element' mat-cell> {{element.lockout ?? 0}}  </td>
                   </ng-container>
 
                   <ng-container matColumnDef='action'>
-                    <th mat-header-cell *matHeaderCellDef
-                        [width]='100'>{{constantDataService.FIELD_NAME.ACTION | titlecase}}</th>
-                    <td mat-cell *matCellDef='let row'>
-                      <button mat-icon-button color='primary' class='my-2'
-                              [routerLink]="['/assessments','edit', row.category]">
+                    <th *matHeaderCellDef [width]='100'
+                        mat-header-cell>{{constantDataService.FIELD_NAME.ACTION | titlecase}}</th>
+                    <td *matCellDef='let row' mat-cell>
+                      <button [routerLink]="['/assessments','edit', row.category]" class='my-2' color='primary'
+                              mat-icon-button>
                         <mat-icon style='font-size: 16px'>create</mat-icon>
                       </button>
                     </td>
                   </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef='displayedColumns'></tr>
-                  <tr mat-row *matRowDef='let row; columns: displayedColumns;' class='row-react'></tr>
+                  <tr *matHeaderRowDef='displayedColumns' mat-header-row></tr>
+                  <tr *matRowDef='let row; columns: displayedColumns;' class='row-react' mat-row></tr>
                 </table>
               </div>
             </div>
+
+            <ng-template [ngIfElse]='noDataElse' [ngIf]='store.isLoading$ | async'>
+              <div class='row'>
+                <div class='col-12 d-flex align-items-center justify-content-center'>
+                  <mat-spinner [diameter]='20' class='my-2'></mat-spinner>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #noDataElse>
+              <div class='row'>
+                <div class='col-12 d-flex align-items-center justify-content-center'>
+                  <h4 *ngIf='noData | async' class='mat-h4 mb-0 my-2 font-calibri'>No Results Found</h4>
+                </div>
+              </div>
+            </ng-template>
           </div>
         </mat-card>
       </div>

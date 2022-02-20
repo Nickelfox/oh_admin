@@ -62,6 +62,7 @@ export class TestSelectorComponent implements OnInit {
   publishStatusEnum = PublishStatusEnum;
   sortingEnum = SortingEnum;
   contentSelectorOpType = ContentSelectorOpType;
+  testInputTypeEnum = TestInputTypeEnum;
 
   filters: FormGroup<TestListingFilters> = new FormGroup<TestListingFilters>({
     type: new FormControl(undefined),
@@ -85,6 +86,7 @@ export class TestSelectorComponent implements OnInit {
 
   initialised = false;
   isLoading = false;
+  count?: number;
 
   constructor(
     public matDialogRef: MatDialogRef<Test[]>,
@@ -137,20 +139,39 @@ export class TestSelectorComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  get Count() {
+    switch (this.categoryData.type) {
+      case ContentSelectorOpType.SINGLE:
+        if (this.selectedTests.length === 0)
+        {
+          return '';
+        }
+        return this.selectedTests ? `SELECTED ITEMS ${this.selectedTests.length}` : '-';
+        break;
+      case ContentSelectorOpType.OTHER:
+        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length === 0)
+        {
+          return '';
+        }
+        return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length}` : '-';
+        break;
+    }
+  }
 
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshList();
   }
 
   refreshList(): void {
     const { type, nameSort, dateSort, search, published, level, category } = this.filters.value;
-    const categoryData: (TagCategoryEnum | 'NONE')[] | undefined = this.categoryData.type === ContentSelectorOpType.SINGLE ? (this.categoryData.category ? [this.categoryData.category] : []) : category;
+    const categoryData: (TagCategoryEnum | 'NONE')[] | undefined = this.categoryData.category ? [this.categoryData.category] : category;
     this.store.getTests$({
       page: this.pageIndex,
       limit: this.pageSize,
       type,
-      category: categoryData,
+      category: categoryData ?? [],
       dateSort,
       search,
       published,
@@ -250,6 +271,7 @@ export class TestSelectorComponent implements OnInit {
         break;
     }
   }
+
 
   updateSorting(fieldName: 'type' | 'category' | 'dateSort' | 'nameSort'): void {
     const { nameSort, dateSort } = this.filters.controls;

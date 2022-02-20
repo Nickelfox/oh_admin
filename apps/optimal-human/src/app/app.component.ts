@@ -8,6 +8,7 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { BreadcrumbDefinition, BreadcrumbService } from 'xng-breadcrumb';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
     public breakpointObserver: BreakpointObserver,
     public authFacade: AuthFacade,
     private matDialog: MatDialog,
+    private hotToastService: HotToastService,
     public uiStore: UiStore,
     private router: Router,
     public breadcrumbService: BreadcrumbService,
@@ -102,5 +104,18 @@ export class AppComponent implements OnInit {
           break;
       }
     });
+    // if(isOnline) {
+    //   this.toastRef?.close();
+    //   this.toastRef = this.hotToastService.success('Network Online', {
+    //     dismissible: true,
+    //     role: 'status'
+    //   });
+    // } else {
+    //   this.toastRef?.close();
+    //   this.toastRef = this.hotToastService.error('Network Offline', {
+    //     dismissible: false,
+    //     role: 'status'
+    //   });
+    // }
   }
 }

@@ -48,8 +48,8 @@ export class DashboardUserDemographicComponent {
   doughnutChartColor: ChartColor = [
     {
       backgroundColor: [
-        this.colors.female,
         this.colors.male,
+        this.colors.female,
         this.colors.other
       ]
     }
@@ -63,9 +63,9 @@ export class DashboardUserDemographicComponent {
   ];
 
   doughnutChartLabel: ChartLabel[] = [
-    'Female',
     'Male',
-    'Other'
+    'Female',
+    'Non-Binary'
   ];
 
   doughnutPlugins = [this.doughnutChartLabel];
@@ -91,6 +91,16 @@ export class DashboardUserDemographicComponent {
       fontColor: '#394155',
       fontSize: 10,
       padding: 4,
+    },
+    tooltips:{
+      callbacks:{
+        label: (tooltipItem, data):any => {
+          // @ts-ignore
+          const value = data.datasets[0].data[tooltipItem.index];
+          // @ts-ignore
+          return `Female: ${value}`;
+        }
+      }
     },
     scales:{
       yAxes:[{
@@ -122,6 +132,16 @@ export class DashboardUserDemographicComponent {
       fontSize: 10,
       padding: 4,
     },
+    tooltips:{
+      callbacks:{
+        label: (tooltipItem, data):any => {
+          // @ts-ignore
+          const value = data.datasets[0].data[tooltipItem.index];
+          // @ts-ignore
+          return `Male: ${value}`;
+        }
+      }
+    },
     scales:{
       yAxes:[{
         ticks:{
@@ -152,6 +172,16 @@ export class DashboardUserDemographicComponent {
       fontSize: 10,
       padding: 4,
     },
+    tooltips:{
+      callbacks:{
+        label: (tooltipItem, data):any => {
+          // @ts-ignore
+          const value = data.datasets[0].data[tooltipItem.index];
+          // @ts-ignore
+          return `Non Binary: ${value}`;
+        }
+      }
+    },
     scales:{
       yAxes:[{
         ticks:{
@@ -161,6 +191,24 @@ export class DashboardUserDemographicComponent {
         }
       }]
     }
+  };
+
+
+  chartOptions: ChartOptions = {
+
+    tooltips:{
+      callbacks:{
+        label: (tooltipItem, data):any => {
+          // @ts-ignore
+          const value = data.datasets[0].data[tooltipItem.index];
+          // @ts-ignore
+          return ` ${data.labels[tooltipItem.index]}: ${value}%`;
+        }
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: true,
+
   };
 
 

@@ -8,7 +8,13 @@ import {
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
-import { PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  PackContentTypeEnum,
+  PublishStatusEnum,
+  SortingEnum,
+  StatusChipType
+} from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Pack, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
@@ -96,6 +102,7 @@ export class PackSelectorComponent implements OnInit {
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
+    this.refreshList();
   }
 
 
@@ -111,6 +118,13 @@ export class PackSelectorComponent implements OnInit {
     });
   }
 
+  get Count(){
+    if(this.selectedPacks.length === 0)
+    {
+      return '';
+    }
+    return this.selectedPacks? `SELECTED ITEMS ${this.selectedPacks.length}`: '-';
+  }
 
   ngOnInit(): void {
     this.store.packs$.subscribe(

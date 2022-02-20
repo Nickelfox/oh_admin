@@ -10,7 +10,12 @@ import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validato
 import { map, switchMap } from 'rxjs/operators';
 import { AspectRatio, Media } from '@hidden-innovation/media';
 import { Observable } from 'rxjs';
-import { ContentSelectorOpType, GenericDialogPrompt, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  GenericDialogPrompt,
+  PackContentTypeEnum,
+  TagCategoryEnum
+} from '@hidden-innovation/shared/models';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { TitleCasePipe } from '@angular/common';
 import { ContentCore } from '@hidden-innovation/pack/data-access';
@@ -20,6 +25,9 @@ import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
+import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+
+
 
 @Component({
   selector: 'hidden-innovation-assessment-create',
@@ -42,7 +50,16 @@ export class AssessmentCreateComponent implements OnDestroy {
     about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillNeed: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
-    lockout: new FormControl(undefined, [...this.formValidationService.requiredFieldValidation]),
+    lockout: new FormControl(undefined, [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.numeric({
+        allowDecimal:false,
+        acceptValue: NumericValueType.PositiveNumber,
+      }),
+      RxwebValidators.minNumber({
+        value:1,
+      })
+    ]),
     howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     imageId: new FormControl(undefined, [
       RxwebValidators.required(),
@@ -94,7 +111,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.store.getAssessmentDetails$(category);
     });
     this.uiStore.selectedContent$.subscribe((contents) => {
-      console.log(contents);
+      // console.log(contents);
       this.selectedContents = contents.map((c, i) => {
         return {
           ...c,
@@ -167,9 +184,10 @@ export class AssessmentCreateComponent implements OnDestroy {
   }
 
   deleteSelectedContentPrompt(content: ContentCore): void {
+    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
     const dialogData: GenericDialogPrompt = {
-      title: `Remove ${content.type}?`,
-      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)} from Assessment?`,
+      title: `Remove ${contentType}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Assessment?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
@@ -207,6 +225,19 @@ export class AssessmentCreateComponent implements OnDestroy {
       type: ContentSelectorOpType.OTHER
     };
     this.matDialog.open(QuestionnaireSelectorComponent, {
+      data,
+      height: '100%',
+      width: '100%',
+      maxHeight: '100%',
+      maxWidth: '100%',
+      role: 'dialog'
+    });
+  }
+  openTestGroupSelector(): void {
+    const data: TestGroupSelectorData = {
+      type: ContentSelectorOpType.OTHER
+    };
+    this.matDialog.open(TestGroupSelectorComponent, {
       data,
       height: '100%',
       width: '100%',

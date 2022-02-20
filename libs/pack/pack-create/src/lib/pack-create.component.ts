@@ -1,6 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  OnDestroy,
+  ViewEncapsulation
+} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {LessonCreateComponent} from '@hidden-innovation/shared/ui/lesson-create';
 import {
   Content,
   ContentCore,
@@ -11,29 +18,30 @@ import {
   PackCore,
   PackStore
 } from '@hidden-innovation/pack/data-access';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { UiStore } from '@hidden-innovation/shared/store';
-import { AspectRatio, Media } from '@hidden-innovation/media';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@ngneat/reactive-forms';
+import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
+import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators';
+import {UiStore} from '@hidden-innovation/shared/store';
+import {AspectRatio, Media} from '@hidden-innovation/media';
+import {UntilDestroy} from '@ngneat/until-destroy';
+import { filter, mergeMap, switchMap, tap } from 'rxjs/operators';
 import {
   ContentSelectorOpType,
   GenericDialogPrompt,
   OperationTypeEnum,
   PackContentTypeEnum
 } from '@hidden-innovation/shared/models';
-import { ActivatedRoute } from '@angular/router';
-import { HotToastService } from '@ngneat/hot-toast';
-import { TitleCasePipe, UpperCasePipe } from '@angular/common';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
-import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+import {ActivatedRoute} from '@angular/router';
+import {HotToastService} from '@ngneat/hot-toast';
+import {TitleCasePipe} from '@angular/common';
+import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog';
+import {TestSelectorComponent, TestSelectorData} from '@hidden-innovation/shared/ui/test-selector';
+import {TestGroupSelectorComponent, TestGroupSelectorData} from '@hidden-innovation/shared/ui/test-group-selector';
 import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
+import {ComponentCanDeactivate} from '@hidden-innovation/shared/utils';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -43,7 +51,7 @@ import {
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PackCreateComponent implements OnDestroy {
+export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
 
   packForm: FormGroup<PackCore> = new FormGroup<PackCore>({
     name: new FormControl<string>('', [
@@ -87,6 +95,8 @@ export class PackCreateComponent implements OnDestroy {
   private packID?: number;
   private selectedContents: ContentCore[] | LessonCore[] = [];
 
+  loaded = false;
+
   constructor(
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
@@ -104,7 +114,7 @@ export class PackCreateComponent implements OnDestroy {
       tap((data) => {
         this.opType = data.type as OperationTypeEnum;
       }),
-      switchMap(_ => this.route.params)
+      mergeMap(_ => this.route.params)
     ).subscribe((res) => {
       if (this.opType === OperationTypeEnum.EDIT) {
         this.restoreSelectedState();
@@ -139,6 +149,9 @@ export class PackCreateComponent implements OnDestroy {
       this.packForm.updateValueAndValidity();
       this.cdr.markForCheck();
     });
+    this.store.loaded$.pipe(
+      tap(res => this.loaded = res)
+    ).subscribe();
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[] | LessonCore[]> {
@@ -189,9 +202,10 @@ export class PackCreateComponent implements OnDestroy {
   }
 
   deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
+    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
     const dialogData: GenericDialogPrompt = {
-      title: `Remove ${content.type}?`,
-      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(content.type)} from Pack?`,
+      title: `Remove ${contentType}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Pack?`,
       action: {
         posTitle: 'Yes',
         negTitle: 'No',
@@ -253,7 +267,9 @@ export class PackCreateComponent implements OnDestroy {
 
   openCreateLessonDialog(): void {
     const dialogRef = this.matDialog.open(LessonCreateComponent, {
-      minWidth: '25rem'
+      minWidth: '25rem',
+      disableClose:true,
+      // hasBackdrop:false
     });
     dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
       if (lesson) {
@@ -363,5 +379,10 @@ export class PackCreateComponent implements OnDestroy {
       ]
     });
     this.cdr.markForCheck();
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    return this.packForm.dirty ? this.loaded : true;
   }
 }

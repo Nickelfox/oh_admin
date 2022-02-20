@@ -102,3 +102,10 @@ main {
     filter: blur(2px);
   }
 }
+
+.admin-name-width{
+  max-width: 75px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

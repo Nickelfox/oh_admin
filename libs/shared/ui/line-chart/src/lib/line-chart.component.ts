@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
 
 @Component({
@@ -26,7 +26,8 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
                     [datasets]='chartData'
                     [labels]='chartLabels'
                     [legend]='chartLegend'
-                    [options]='chartOptions'>
+                    [options]='chartOptionType(chartOpt)'
+            >
             </canvas>
             <div *ngIf='noDataCheck' class='d-flex align-items-center justify-content-center chart__no-data-con'>
               <h3 class='mat-h3'>No Data Available</h3>
@@ -40,39 +41,44 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LineChartComponent implements OnInit {
+export class LineChartComponent {
 
   @Input() chartLabels: ChartLabel[] = [];
   @Input() chartData: ChartDatasets = [];
   @Input() label?: string;
   @Input() icon?: string;
   @Input() isLoading?: boolean | null;
-  chartOptions: ChartOptions = {
-    layout: {
-      padding: 0
-    },
-    elements: {
-      line: {
-        tension: 0,
-        borderWidth: 3
-      },
-      point: {
-        pointStyle: 'circle',
-        radius: 4,
-        hoverRadius: 8
-      }
-    },
-    responsive: true,
-    maintainAspectRatio: true,
-    title: {
-      display: true,
-      position: 'left',
-      text: 'No. Of Users',
-      fontColor: '#394155',
-      fontSize: 10,
-      padding: 5
-    }
-  };
+  @Input() chartOpt?: string;
+
+
+  // chartOptions: ChartOptions = {
+  //   layout: {
+  //     padding: 0
+  //   },
+  //   elements: {
+  //     line: {
+  //       tension: 0,
+  //       borderWidth: 3
+  //     },
+  //     point: {
+  //       pointStyle: 'circle',
+  //       radius: 4,
+  //       hoverRadius: 8
+  //     }
+  //   },
+  //   responsive: true,
+  //   maintainAspectRatio: true,
+  //   title: {
+  //     display: true,
+  //     position: 'left',
+  //     text: this.getChartTitle(),
+  //     fontColor: '#394155',
+  //     fontSize: 10,
+  //     padding: 5
+  //   },
+  //
+  // };
+
 
   chartColors: ChartColor = [
     {
@@ -95,7 +101,53 @@ export class LineChartComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  chartOptionType(type?: string): ChartOptions {
+    return {
+      layout: {
+        padding: 0
+      },
+      elements: {
+        line: {
+          tension: 0,
+          borderWidth: 3
+        },
+        point: {
+          pointStyle: 'circle',
+          radius: 4,
+          hoverRadius: 8
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: true,
+      title: {
+        display: true,
+        position: 'left',
+        text: type,
+        fontColor: '#394155',
+        fontSize: 10,
+        padding: 5
+      }
+    };
   }
 
+  getChartTitle(): string {
+    // console.log(data)
+    switch (this.label) {
+      case 'Registered Users':
+        return ('No of Registered');
+      default:
+        return ('No of  users');
+    }
+  }
+
+  ngOnInit() {
+
+    switch (this.label) {
+      case 'Registered Users':
+        break;
+      case 'Active Users':
+        break;
+      default:
+    }
+  }
 }

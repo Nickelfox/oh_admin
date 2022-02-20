@@ -3,7 +3,7 @@ import { CommonModule, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { PackCreateComponent } from './pack-create.component';
 import { MaterialModule } from '@hidden-innovation/material';
 import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-field';
-import { UtilsModule } from '@hidden-innovation/shared/utils';
+import { PendingChangesGuard, UtilsModule } from '@hidden-innovation/shared/utils';
 import { RouterModule } from '@angular/router';
 import { PackDataAccessModule } from '@hidden-innovation/pack/data-access';
 import { PackContentCardModule } from '@hidden-innovation/shared/ui/pack-content-card';
@@ -40,7 +40,8 @@ import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/
       {
         path: '',
         pathMatch: 'full',
-        component: PackCreateComponent
+        component: PackCreateComponent,
+        canDeactivate: [PendingChangesGuard]
       }
     ])
   ],
