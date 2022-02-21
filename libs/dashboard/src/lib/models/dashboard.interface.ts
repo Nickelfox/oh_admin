@@ -20,6 +20,13 @@ export interface TestWatchedLimitRequest extends TestWatchedFilters {
   limit: number;
   page: number;
 }
+export  interface TestWatchedListingResponse extends  CustomApiResponse{
+  data: TestWatchedListingResponseData;
+}
+export interface TestWatchedListingResponseData{
+  test:TestWatched[],
+  totalTopWatched:number
+}
 
 export interface PackEngagement {
   // position:number;
@@ -36,6 +43,13 @@ export  interface PackEngagementFilters{
 export interface PackEngLimitRequest extends PackEngagementFilters {
   limit: number;
   page: number;
+}
+export  interface PackEngagementResponse extends  CustomApiResponse{
+  data: PackEngLimitRequestResponseData;
+}
+export interface PackEngLimitRequestResponseData{
+  packs:PackEngagement[],
+  total:number
 }
 export interface AssessmentEngagement {
   // position:number;
@@ -58,12 +72,8 @@ export interface AssessmentLimitRequest extends AssessmentEngagementFilters{
 export interface DashboardResponse extends CustomApiResponse {
   data: DashboardData;
 }
-export  interface TestWatchedListingResponse extends  CustomApiResponse{
-  data: TestWatched[];
-}
-export  interface PackEngagementResponse extends  CustomApiResponse{
-  data: PackEngagement[];
-}
+
+
 export  interface AssessmentEngagementResponse extends  CustomApiResponse{
   data: AssessmentEngagement[];
 }

@@ -61,7 +61,7 @@ export class DashboardComponent {
   displayedColumnsAssessmentTest: string[] = ['position', 'name', 'id', 'score', 'completion'];
   assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
 
-  displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'totalPlays', 'contentClicks', 'resourcesClicks'];
+  displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'video_plays', 'content_clicks', 'resource_clicks'];
   packEngTable: MatTableDataSource<PackEngagement> = new MatTableDataSource<PackEngagement>();
 
   displayedColumnsTopWatched: string[] = ['position', 'name', 'id', 'videoPlays', 'resultLog'];
@@ -238,7 +238,7 @@ export class DashboardComponent {
       this.cdr.markForCheck();
     });
     this.store.packEngagement$.subscribe(res => {
-      this.packEngTable = new MatTableDataSource<PackEngagement>(res)
+      this.packEngTable = new MatTableDataSource<PackEngagement>(res);
       this.noData = this.packEngTable.connect().pipe(map(data => data.length === 0));
       if (!res?.length && (this.packEngPageIndex > this.constantDataService.PaginatorData.pageIndex)) {
         this.resetPackEngPagination();
@@ -357,11 +357,11 @@ export class DashboardComponent {
 
     switch (fieldName) {
       case 'videoplaySort':
-        videoplaySort.disable();
+        resultlogSort.disable();
         updateSortingCtrl(videoplaySort);
         break;
       case 'resultlogSort':
-        resultlogSort.disable();
+        videoplaySort.disable();
         updateSortingCtrl(resultlogSort);
         break;
     }
@@ -408,11 +408,11 @@ export class DashboardComponent {
 
     switch (fieldName) {
       case 'resourceclicksSort':
-        resourceclicksSort.disable();
+        contentclicksSort.disable();
         updateSortingCtrl(resourceclicksSort);
         break;
       case 'contentclicksSort':
-        contentclicksSort.disable();
+        resourceclicksSort.disable();
         updateSortingCtrl(contentclicksSort);
         break;
     }
@@ -460,11 +460,11 @@ export class DashboardComponent {
 
     switch (fieldName) {
       case 'averagescoreSort':
-        averagescoreSort.disable();
+        completionSort.disable();
         updateSortingCtrl(averagescoreSort);
         break;
       case 'completionSort':
-        completionSort.disable();
+        averagescoreSort.disable();
         updateSortingCtrl(completionSort);
         break;
 

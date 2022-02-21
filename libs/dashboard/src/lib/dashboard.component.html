@@ -204,12 +204,12 @@
                     <td mat-cell *matCellDef='let element'
                     > {{(element.id) || '--'}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='totalPlays'>
+                  <ng-container matColumnDef='video_plays'>
                     <th mat-header-cell *matHeaderCellDef>{{'Total Video plays' | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.totalPlays) || '--'}} </td>
+                    > {{(element.video_plays) || '--'}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='contentClicks'>
+                  <ng-container matColumnDef='content_clicks'>
                     <th mat-header-cell *matHeaderCellDef>
                       <div class='d-flex align-items-center justify-content-between'>
                         <span>{{'Total Content clicks' | titlecase}}</span>
@@ -226,9 +226,9 @@
                     </th>
 <!--                    <th mat-header-cell *matHeaderCellDef>{{'Total Content clicks' | titlecase}}</th>-->
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.contentClicks) || '--'}} </td>
+                    > {{(element.content_clicks) || '--'}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='resourcesClicks'>
+                  <ng-container matColumnDef='resource_clicks'>
                     <th mat-header-cell *matHeaderCellDef>
                       <div class='d-flex align-items-center justify-content-between'>
                         <span>{{'Total Resources clicks' | titlecase}}</span>
@@ -244,7 +244,7 @@
                       </div>
                     </th>
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.resourcesClicks) || '--'}} </td>
+                    > {{(element.resource_clicks) || '--'}} </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef='displayedColumnsPackEng;sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsPackEng;' class='row-react'></tr>

@@ -7,9 +7,9 @@ import {
   DashboardData,
   DashboardResponse,
   PackEngagement,
-  PackEngagementResponse, PackEngLimitRequest,
+  PackEngagementResponse, PackEngLimitRequest, PackEngLimitRequestResponseData,
   TestWatched, TestWatchedLimitRequest,
-  TestWatchedListingResponse
+  TestWatchedListingResponse, TestWatchedListingResponseData
 } from '../models/dashboard.interface';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
@@ -30,7 +30,7 @@ export class DashboardService {
     );
   }
 
-  getTopWatched(reqObj:TestWatchedLimitRequest): Observable<TestWatched[]> {
+  getTopWatched(reqObj:TestWatchedLimitRequest): Observable<TestWatchedListingResponseData> {
     let params = new HttpParams();
     params = params.appendAll({
       'page': reqObj.page.toString(),
@@ -48,7 +48,7 @@ export class DashboardService {
     );
   }
 
-  getPackEng(reqObj:PackEngLimitRequest): Observable<PackEngagement[]> {
+  getPackEng(reqObj:PackEngLimitRequest): Observable<PackEngLimitRequestResponseData> {
     let params = new HttpParams();
     params = params.appendAll({
       'page': reqObj.page.toString(),

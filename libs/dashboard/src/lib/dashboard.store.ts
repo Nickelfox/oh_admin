@@ -30,12 +30,15 @@ export interface DashboardState extends Partial<DashboardData> {
   activeUsersData?: ChartDatasets;
   filterBy?: DashboardRangeFilterEnum;
   isLineChartLoading?: boolean;
-  testWatched?:TestWatched[];
-  packEng:PackEngagement[];
+  test?:TestWatched[];
+  packs:PackEngagement[];
   assessmentEng: AssessmentEngagement[];
-  total: number;
+  totalPackEng: number;
+  totalTopWatched: number;
+  totalAssessmentEng:number,
   isActing?: boolean;
   loaded?: boolean;
+  total:number;
 }
 
 const initialState: DashboardState = {
@@ -55,23 +58,26 @@ const initialState: DashboardState = {
   activeUsersLabel: [],
   activeUsersData: [{ data: [], label: '' }],
   isLineChartLoading: false,
-  testWatched: [],
-  packEng:[],
+  test: [],
+  packs:[],
   assessmentEng:[],
-  total:0,
+  totalPackEng:0,
+  totalTopWatched: 0,
+  totalAssessmentEng:0,
   isActing: false,
-  loaded: false
+  loaded: false,
+  total:0
 };
 
 @Injectable()
 export class DashboardStore extends ComponentStore<DashboardState> {
 
-  testWatched$: Observable<TestWatched[]> = this.select(state => state.testWatched || []);
-  packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packEng || [])
+  testWatched$: Observable<TestWatched[]> = this.select(state => state.test || []);
+  packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packs || [])
   assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || [])
-  readonly testWatchedCount$: Observable<number> = this.select(state => state.total || 0);
+  readonly testWatchedCount$: Observable<number> = this.select(state => state.totalTopWatched || 0);
   readonly packEngCount$: Observable<number> = this.select(state => state.total || 0);
-  readonly assessmentEngCount$: Observable<number> = this.select(state => state.total || 0);
+  readonly assessmentEngCount$: Observable<number> = this.select(state => state.totalAssessmentEng || 0);
   readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly loaded$: Observable<boolean> = this.select(state => !!state.loaded);
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
@@ -282,7 +288,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
 
   getTopWatched$ = this.effect<TestWatchedLimitRequest>(params$ =>
     params$.pipe(
-      tap((res) => {
+      tap((_) => {
         this.patchState({
           isLoading: true
         });
@@ -290,10 +296,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       switchMap((reqObj) =>
         this.dashboardService.getTopWatched(reqObj).pipe(
           tapResponse(
-            (testWatched) => {
+            ({test,totalTopWatched}) => {
               this.patchState({
                 isLoading: false,
-                testWatched
+                test,
+                totalTopWatched
               });
             },
             _ => {
@@ -308,19 +315,22 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   );
   getPackEngagement$ = this.effect<PackEngLimitRequest>(params$ =>
     params$.pipe(
-      tap(() => {
+      tap((_) => {
         this.patchState({
           isLoading: true
         });
+
       }),
       switchMap((reqObj) =>
         this.dashboardService.getPackEng(reqObj).pipe(
           tapResponse(
-            (packEng) => {
+            ({packs,total}) => {
               this.patchState({
                 isLoading: false,
-                packEng
+                packs,
+                total
               });
+
             },
             _ => {
               this.patchState({
