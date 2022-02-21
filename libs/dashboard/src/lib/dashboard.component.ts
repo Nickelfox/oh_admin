@@ -443,8 +443,11 @@ export class DashboardComponent {
     this.assessmentEngPageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshListAssessmentEng();
   }
-  updateAssessmentSorting(fieldName: 'completionSort' | 'averagescoreSort'): void {
+
+
+  updateAssessmentSorting(fieldName: 'completionSort' | 'averagescoreSort' ): void {
     const { averagescoreSort, completionSort } = this.filtersAssessmentEng.controls;
+
     const updateSortingCtrl = (ctrl: FormControl) => {
       if (ctrl.disabled) {
         ctrl.setValue(this.sortingEnum.DESC);
@@ -464,6 +467,7 @@ export class DashboardComponent {
         completionSort.disable();
         updateSortingCtrl(completionSort);
         break;
+
     }
   }
 

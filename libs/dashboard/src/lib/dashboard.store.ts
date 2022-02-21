@@ -308,7 +308,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   );
   getPackEngagement$ = this.effect<PackEngLimitRequest>(params$ =>
     params$.pipe(
-      tap((res) => {
+      tap(() => {
         this.patchState({
           isLoading: true
         });
