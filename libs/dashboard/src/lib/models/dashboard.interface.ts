@@ -25,7 +25,7 @@ export  interface TestWatchedListingResponse extends  CustomApiResponse{
 }
 export interface TestWatchedListingResponseData{
   test:TestWatched[],
-  totalTopWatched:number
+  totalTests:number
 }
 
 export interface PackEngagement {
@@ -49,7 +49,7 @@ export  interface PackEngagementResponse extends  CustomApiResponse{
 }
 export interface PackEngLimitRequestResponseData{
   packs:PackEngagement[],
-  total:number
+  totalPacks:number
 }
 export interface AssessmentEngagement {
   // position:number;

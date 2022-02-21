@@ -33,12 +33,11 @@ export interface DashboardState extends Partial<DashboardData> {
   test?:TestWatched[];
   packs:PackEngagement[];
   assessmentEng: AssessmentEngagement[];
-  totalPackEng: number;
-  totalTopWatched: number;
-  totalAssessmentEng:number,
+  totalAssessmentEng: number;
+  totalTests: number;
+  totalPacks:number,
   isActing?: boolean;
   loaded?: boolean;
-  total:number;
 }
 
 const initialState: DashboardState = {
@@ -61,12 +60,11 @@ const initialState: DashboardState = {
   test: [],
   packs:[],
   assessmentEng:[],
-  totalPackEng:0,
-  totalTopWatched: 0,
+  totalPacks:0,
+  totalTests: 0,
   totalAssessmentEng:0,
   isActing: false,
   loaded: false,
-  total:0
 };
 
 @Injectable()
@@ -75,8 +73,8 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   testWatched$: Observable<TestWatched[]> = this.select(state => state.test || []);
   packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packs || [])
   assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || [])
-  readonly testWatchedCount$: Observable<number> = this.select(state => state.totalTopWatched || 0);
-  readonly packEngCount$: Observable<number> = this.select(state => state.total || 0);
+  readonly testWatchedCount$: Observable<number> = this.select(state => state.totalTests || 0);
+  readonly packEngCount$: Observable<number> = this.select(state => state.totalPacks || 0);
   readonly assessmentEngCount$: Observable<number> = this.select(state => state.totalAssessmentEng || 0);
   readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly loaded$: Observable<boolean> = this.select(state => !!state.loaded);
@@ -296,11 +294,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       switchMap((reqObj) =>
         this.dashboardService.getTopWatched(reqObj).pipe(
           tapResponse(
-            ({test,totalTopWatched}) => {
+            ({test, totalTests}) => {
               this.patchState({
                 isLoading: false,
                 test,
-                totalTopWatched
+                totalTests
               });
             },
             _ => {
@@ -324,11 +322,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       switchMap((reqObj) =>
         this.dashboardService.getPackEng(reqObj).pipe(
           tapResponse(
-            ({packs,total}) => {
+            ({packs,totalPacks}) => {
               this.patchState({
                 isLoading: false,
                 packs,
-                total
+                totalPacks
               });
 
             },

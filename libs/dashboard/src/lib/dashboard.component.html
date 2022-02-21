@@ -219,7 +219,7 @@
                                   color='{{filtersPackEng.controls.contentclicksSort.value === sortingEnum.DESC ? "primary" : ""}}'
                                   (click)='updatePackSorting("contentclicksSort")'>
                             <mat-icon
-                              style='font-size: 20px;'>{{filtersPackEng.controls.contentclicksSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward" }}</mat-icon>
+                              style='font-size: 20px;'>{{filtersPackEng.controls.contentclicksSort?.enabled$ ? (filtersPackEng.controls.contentclicksSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "" }}</mat-icon>
                           </button>
                         </div>
                       </div>
@@ -259,8 +259,8 @@
                   [disabled]='store.isChangeLoading$ | async'
                   [length]='store.packEngCount$ | async'
                   [pageIndex]='paginatorIndexPackEng'
+                  [pageSize]='packEngPageSize'
                   [pageSizeOptions]='packEngPageSizeOptions'
-                  [showFirstLastButtons]='false'
                 ></mat-paginator>
               </div>
             </div>
