@@ -116,24 +116,24 @@
                     <td mat-cell *matCellDef='let element'
                     > {{(element.id) || '--'}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='score'>
+                  <ng-container matColumnDef='average_score'>
                     <th mat-header-cell *matHeaderCellDef>
                       <div class='d-flex align-items-center justify-content-between'>
                         <span>{{'Average Score (CPS)' | titlecase}}</span>
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3'
                                   [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersAssessmentEng.controls.averagescoreSort.value === sortingEnum.DESC ? "primary" : ""}}'
+                                  color='{{filtersAssessmentEng.controls.averagescoreSort.enabled ? "primary" : ""}}'
                                   (click)='updateAssessmentSorting("averagescoreSort")'>
                             <mat-icon
-                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.averagescoreSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward" }}</mat-icon>
+                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.averagescoreSort?.enabled ? (filtersAssessmentEng.controls.averagescoreSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>
                           </button>
                         </div>
                       </div>
                     </th>
 <!--                    <th mat-header-cell *matHeaderCellDef>{{'Average Score (CPS)' | titlecase}}</th>-->
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.score) || '--'}} </td>
+                    > {{(element.average_score) === null ? '--' : element.average_score}} </td>
                   </ng-container>
                   <ng-container matColumnDef='completion'>
                     <th mat-header-cell *matHeaderCellDef>
@@ -142,35 +142,32 @@
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3'
                                   [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersAssessmentEng.controls.completionSort.value === sortingEnum.DESC ? "primary" : ""}}'
+                                  color='{{filtersAssessmentEng.controls.completionSort?.enabled  ? "primary" : ""}}'
                                   (click)='updateAssessmentSorting("completionSort")'>
                             <mat-icon
-                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.completionSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward" }}</mat-icon>
+                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.completionSort?.enabled ? (filtersAssessmentEng.controls.completionSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>
                           </button>
                         </div>
                       </div>
                     </th>
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.completion) || '--'}} </td>
+                    > {{(element.completion) === null ?  '--' : element.completion}} </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef='displayedColumnsAssessmentTest;sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsAssessmentTest;' class='row-react'></tr>
                 </table>
               </div>
             </div>
-            <div class='row mt-2'>
-              <div class='col'></div>
-              <div class='col-6'>
-                <mat-paginator
-                  (page)='assessmentEngPageEvent = $event; onPaginateChangeAssessmentEng($event)'
-                  [disabled]='store.isChangeLoading$ | async'
-                  [length]='store.assessmentEngCount$ | async'
-                  [pageIndex]='paginatorIndexAssessmentEng'
-                  [pageSizeOptions]='assessmentEngPageSizeOptions'
-                  [showFirstLastButtons]='false'
-                ></mat-paginator>
-              </div>
-            </div>
+<!--            <div class='row mt-2'>-->
+<!--              <div class='col'></div>-->
+<!--              <div class='col-6'>-->
+<!--                <mat-paginator-->
+<!--                  (page)='assessmentEngPageEvent = $event; onPaginateChangeAssessmentEng($event)'-->
+<!--                  [disabled]='store.isChangeLoading$ | async'-->
+<!--                  [pageSizeOptions]='assessmentEngPageSizeOptions'-->
+<!--                ></mat-paginator>-->
+<!--              </div>-->
+<!--            </div>-->
           </div>
         </mat-card>
       </div>
@@ -207,7 +204,7 @@
                   <ng-container matColumnDef='video_plays'>
                     <th mat-header-cell *matHeaderCellDef>{{'Total Video plays' | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.video_plays) || '--'}} </td>
+                    > {{(element.video_plays) === null ? '--' : element.video_plays}} </td>
                   </ng-container>
                   <ng-container matColumnDef='content_clicks'>
                     <th mat-header-cell *matHeaderCellDef>
@@ -216,17 +213,17 @@
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3'
                                   [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersPackEng.controls.contentclicksSort.value === sortingEnum.DESC ? "primary" : ""}}'
+                                  color='{{filtersPackEng.controls.contentclicksSort.enabled  ? "primary" : ""}}'
                                   (click)='updatePackSorting("contentclicksSort")'>
                             <mat-icon
-                              style='font-size: 20px;'>{{filtersPackEng.controls.contentclicksSort?.enabled$ ? (filtersPackEng.controls.contentclicksSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "" }}</mat-icon>
+                              style='font-size: 20px;'>{{filtersPackEng.controls.contentclicksSort?.enabled ? (filtersPackEng.controls.contentclicksSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>
                           </button>
                         </div>
                       </div>
                     </th>
 <!--                    <th mat-header-cell *matHeaderCellDef>{{'Total Content clicks' | titlecase}}</th>-->
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.content_clicks) || '--'}} </td>
+                    > {{(element.content_clicks) === null ?  '--' : element.content_clicks }} </td>
                   </ng-container>
                   <ng-container matColumnDef='resource_clicks'>
                     <th mat-header-cell *matHeaderCellDef>
@@ -235,16 +232,16 @@
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3'
                                   [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersPackEng.controls.resourceclicksSort.value === sortingEnum.DESC ? "primary" : ""}}'
+                                  color='{{filtersPackEng.controls.resourceclicksSort.enabled  ? "primary" : ""}}'
                                   (click)='updatePackSorting("resourceclicksSort")'>
                             <mat-icon
-                              style='font-size: 20px;'>{{filtersPackEng.controls.resourceclicksSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward" }}</mat-icon>
+                              style='font-size: 20px;'>{{filtersPackEng.controls.resourceclicksSort?.enabled ? (filtersPackEng.controls.resourceclicksSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>
                           </button>
                         </div>
                       </div>
                     </th>
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.resource_clicks) || '--'}} </td>
+                    > {{(element.resource_clicks) === null ? '--' : element.resource_clicks}} </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef='displayedColumnsPackEng;sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsPackEng;' class='row-react'></tr>
@@ -298,42 +295,42 @@
                     <td mat-cell *matCellDef='let element'
                     > {{(element.id) || '--'}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='videoPlays'>
+                  <ng-container matColumnDef='video_plays'>
                     <th mat-header-cell *matHeaderCellDef>
                       <div class='d-flex align-items-center justify-content-between'>
                         <span>{{'Video Plays' | titlecase}}</span>
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3'
                                   [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersTestWatched.controls.videoplaySort.value === sortingEnum.DESC ? "primary" : ""}}'
+                                  color='{{filtersTestWatched.controls.videoplaySort.enabled ? "primary" : ""}}'
                                   (click)='updateTopWatched("videoplaySort")'>
                             <mat-icon
-                              style='font-size: 20px;'>{{filtersTestWatched.controls.videoplaySort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward" }}</mat-icon>
+                              style='font-size: 20px;'>{{filtersTestWatched.controls.videoplaySort?.enabled ? (filtersTestWatched.controls.videoplaySort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward"): "sort" }}</mat-icon>
                           </button>
                         </div>
                       </div>
                     </th>
 <!--                    <th mat-header-cell *matHeaderCellDef>{{'Video Plays' | titlecase}}</th>-->
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.videoPlays) || '--'}} </td>
+                    > {{element.video_plays === null ? '--' : element.video_plays}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='resultLog'>
+                  <ng-container matColumnDef='result_logs'>
                     <th mat-header-cell *matHeaderCellDef>
                       <div class='d-flex align-items-center justify-content-between'>
                         <span>{{'Result Log' | titlecase}}</span>
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3'
                                   [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersTestWatched.controls.resultlogSort.value === sortingEnum.DESC ? "primary" : ""}}'
+                                  color='{{filtersTestWatched.controls.resultlogSort?.enabled ? "primary" : ""}}'
                                   (click)='updateTopWatched("resultlogSort")'>
                             <mat-icon
-                              style='font-size: 20px;'>{{filtersTestWatched.controls.resultlogSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward" }}</mat-icon>
+                              style='font-size: 20px;'>{{filtersTestWatched.controls.resultlogSort?.enabled ? (filtersTestWatched.controls.resultlogSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>
                           </button>
                         </div>
                       </div>
                     </th>
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.resultLog) || '--'}} </td>
+                    > {{element.result_logs === null ? "--" : element.result_logs}} </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef='displayedColumnsTopWatched; sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsTopWatched;' class='row-react'></tr>

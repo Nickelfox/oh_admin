@@ -290,6 +290,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
+        console.log(_)
       }),
       switchMap((reqObj) =>
         this.dashboardService.getTopWatched(reqObj).pipe(
@@ -317,7 +318,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
-
       }),
       switchMap((reqObj) =>
         this.dashboardService.getPackEng(reqObj).pipe(
@@ -342,7 +342,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   );
   getAssessmentEngagement$ = this.effect<AssessmentLimitRequest>(params$ =>
     params$.pipe(
-      tap(() => {
+      tap((_) => {
         this.patchState({
           isLoading: true
         });
