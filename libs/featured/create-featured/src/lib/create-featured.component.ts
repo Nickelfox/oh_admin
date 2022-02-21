@@ -47,7 +47,12 @@ export class CreateFeaturedComponent implements OnDestroy {
       value: undefined,
       disabled: true
     }, [...this.formValidationService.requiredFieldValidation]),
-    bottomText: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
+    bottomText: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.SPOTLIGHT_BUTTON_LENGTH
+      })
+    ]),
     heading: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation
     ]),
