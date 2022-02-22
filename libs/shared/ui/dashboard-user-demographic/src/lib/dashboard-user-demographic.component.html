@@ -30,7 +30,7 @@
 <ng-template #statsLoadingElse>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
-      <div class='col-lg-4 mb-2'>
+      <div class='col-lg-6 mb-4'>
         <mat-card class='pl-1'>
           <div class='container-fluid p-0'>
             <div class='row'>
@@ -62,7 +62,7 @@
           </div>
         </mat-card>
       </div>
-      <div class='col-lg-4 mb-2'>
+      <div class='col-lg-6 mb-4'>
         <mat-card class='pl-2'>
           <div class='container-fluid p-0'>
             <div class='row'>
@@ -94,7 +94,7 @@
           </div>
         </mat-card>
       </div>
-      <div class='col-lg-4 mb-2'>
+      <div class='col-lg-7 mb-2'>
         <mat-card class='pl-1'>
           <div class='container-fluid p-0'>
             <div class='row'>
@@ -126,10 +126,8 @@
           </div>
         </mat-card>
       </div>
-    </div>
-    <div class='row'>
-      <div class='col-lg-8 col-md-6'>
-        <mat-card>
+      <div class='col-lg-5 mb-2 col-md-6'>
+        <mat-card class='h-100'>
           <div class='container-fluid p-0'>
             <div class='row'>
               <div class='col-12'>
@@ -139,8 +137,8 @@
                 </div>
               </div>
             </div>
-            <div class='row'>
-              <div class='col-6 d-flex align-items-center justify-content-center'>
+            <div class='row justify-content-center'>
+              <div class='col-10 d-flex align-items-center justify-content-center'>
                 <canvas
                   class='w-100'
                   baseChart
@@ -152,7 +150,7 @@
                   [options]='chartOptions'
                 ></canvas>
               </div>
-              <div class='col-6 mt-4 d-flex flex-column justify-content-around'>
+              <div class='col-12 mt-4 d-flex flex-column justify-content-around'>
                 <div class='container-fluid p-0 w-100'>
                   <div class='row mb-2'>
                     <div class='col-12'>
@@ -199,6 +197,7 @@
           </div>
         </mat-card>
       </div>
+
     </div>
   </div>
 </ng-template>
