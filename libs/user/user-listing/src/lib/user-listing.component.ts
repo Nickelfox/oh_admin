@@ -55,12 +55,27 @@ export class UserListingComponent implements OnInit {
       distinctUntilChanged(),
       debounceTime(500)
     ).subscribe(_ => {
+      this.resetRoute();
       this.refreshList();
     });
   }
 
   get paginatorIndex() {
     return this.pageIndex - 1;
+  }
+
+
+  trackById(index: number, user: UserDetails): number {
+    return user.id;
+  }
+
+
+  resetRoute(): void {
+    this.router.navigate([
+      this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
+    ], {
+      relativeTo: this.route
+    });
   }
 
   refreshList(): void {
@@ -76,6 +91,9 @@ export class UserListingComponent implements OnInit {
       ({ users }) => {
         this.users = new MatTableDataSource<UserDetails>(users);
         this.noData = this.users.connect().pipe(map(data => data.length === 0));
+        if (!users?.length && (this.pageIndex > this.constantDataService.PaginatorData.pageIndex)) {
+          this.resetRoute();
+        }
         this.cdr.markForCheck();
       }
     );

@@ -50,6 +50,7 @@ export class AssessmentCreateComponent implements OnDestroy {
     about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillNeed: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
+    howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     lockout: new FormControl(undefined, [
       ...this.formValidationService.requiredFieldValidation,
       RxwebValidators.numeric({
@@ -60,7 +61,6 @@ export class AssessmentCreateComponent implements OnDestroy {
         value:1,
       })
     ]),
-    howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     imageId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
