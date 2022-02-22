@@ -20,7 +20,7 @@
     <div class='container-fluid p-0'>
       <div class='row'>
         <div class='col-12'>
-          <table mat-table [dataSource]='users' class='w-100'>
+          <table mat-table [dataSource]='users' class='w-100' [trackBy]='trackById'>
 
             <ng-container matColumnDef='name'>
               <th mat-header-cell *matHeaderCellDef>{{constantDataService.FIELD_NAME.FIRST_NAME | titlecase}}</th>
