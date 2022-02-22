@@ -117,6 +117,22 @@ export class LineChartComponent {
           hoverRadius: 8
         }
       },
+      tooltips:{
+        titleSpacing: 20,
+        // bodyAlign: "center",
+        titleFontSize: 14,
+        titleMarginBottom: 10,
+        xPadding: 10,
+        yPadding: 10,
+        callbacks:{
+          label(tooltipItem: Chart.ChartTooltipItem, data: Chart.ChartData): any {
+            // @ts-ignore
+            const value = data.datasets[0].data[tooltipItem.index];
+            return `  ${value}`;
+          }
+        }
+      },
+
       responsive: true,
       maintainAspectRatio: true,
       title: {
@@ -141,13 +157,5 @@ export class LineChartComponent {
   }
 
   ngOnInit() {
-
-    switch (this.label) {
-      case 'Registered Users':
-        break;
-      case 'Active Users':
-        break;
-      default:
-    }
   }
 }
