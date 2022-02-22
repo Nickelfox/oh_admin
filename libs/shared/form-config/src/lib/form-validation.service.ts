@@ -20,7 +20,8 @@ export class FormValidationService {
     QUESTION_NAME_LENGTH: 65,
     QUESTION_DESC_LENGTH: 200,
     ANSWER_LENGTH: 50,
-    SPOTLIGHT_BUTTON_LENGTH: 30
+    SPOTLIGHT_BUTTON_LENGTH: 30,
+    ASSESSMENT_ABOUT_LENGTH: 200
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {

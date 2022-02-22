@@ -28,7 +28,6 @@ import {
 import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
 
 
-
 @Component({
   selector: 'hidden-innovation-assessment-create',
   templateUrl: './assessment-create.component.html',
@@ -47,18 +46,23 @@ export class AssessmentCreateComponent implements OnDestroy {
     ]),
     count: new FormControl<number>(undefined),
     category: new FormControl<TagCategoryEnum>(undefined),
-    about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
+    about: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.ASSESSMENT_ABOUT_LENGTH
+      })
+    ]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillNeed: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     lockout: new FormControl(undefined, [
       ...this.formValidationService.requiredFieldValidation,
       RxwebValidators.numeric({
-        allowDecimal:false,
-        acceptValue: NumericValueType.PositiveNumber,
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
       }),
       RxwebValidators.minNumber({
-        value:1,
+        value: 1
       })
     ]),
     imageId: new FormControl(undefined, [
@@ -184,7 +188,7 @@ export class AssessmentCreateComponent implements OnDestroy {
   }
 
   deleteSelectedContentPrompt(content: ContentCore): void {
-    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
+    const contentType: string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type;
     const dialogData: GenericDialogPrompt = {
       title: `Remove ${contentType}?`,
       desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Assessment?`,
@@ -233,6 +237,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       role: 'dialog'
     });
   }
+
   openTestGroupSelector(): void {
     const data: TestGroupSelectorData = {
       type: ContentSelectorOpType.OTHER
