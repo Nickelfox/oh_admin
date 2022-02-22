@@ -7,7 +7,7 @@
         <img src='assets/white_logo.svg' alt='' class='oh-logo img-fluid'>
         <h4 class='font-calibri--bold mat-h4 mb-0 mt-2 oh-logo__text'>Optimal Humans</h4>
       </div>
-      <mat-list>
+      <mat-list style='height: calc(100vh - 300px)'>
         <ng-template ngFor [ngForOf]='uiStore.navItems$ | async' let-navData>
           <ng-template [ngIf]='navData.navItems.length > 1'>
             <mat-divider></mat-divider>
