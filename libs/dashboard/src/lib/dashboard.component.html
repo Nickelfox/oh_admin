@@ -118,18 +118,19 @@
                   </ng-container>
                   <ng-container matColumnDef='average_score'>
                     <th mat-header-cell *matHeaderCellDef>
-                      <div class='d-flex align-items-center justify-content-between'>
-                        <span>{{'Average Score (CPS)'}}</span>
-                        <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3'
-                                  [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersAssessmentEng.controls.averagescoreSort.enabled ? "primary" : ""}}'
-                                  (click)='updateAssessmentSorting("averagescoreSort")'>
-                            <mat-icon
-                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.averagescoreSort?.enabled ? (filtersAssessmentEng.controls.averagescoreSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>
-                          </button>
-                        </div>
-                      </div>
+                      <span>{{'Average Score (CPS)'}}</span>
+<!--                      <div class='d-flex align-items-center justify-content-between'>-->
+<!--                        <span>{{'Average Score (CPS)'}}</span>-->
+<!--                        <div class='d-flex align-items-center'>-->
+<!--                          <button mat-icon-button class='mr-3'-->
+<!--                                  [disabled]='(store.isActing$ | async)'-->
+<!--                                  color='{{filtersAssessmentEng.controls.averagescoreSort.enabled ? "primary" : ""}}'-->
+<!--                                  (click)='updateAssessmentSorting("averagescoreSort")'>-->
+<!--                            <mat-icon-->
+<!--                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.averagescoreSort?.enabled ? (filtersAssessmentEng.controls.averagescoreSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>-->
+<!--                          </button>-->
+<!--                        </div>-->
+<!--                      </div>-->
                     </th>
 <!--                    <th mat-header-cell *matHeaderCellDef>{{'Average Score (CPS)' | titlecase}}</th>-->
                     <td mat-cell *matCellDef='let element'
@@ -137,18 +138,19 @@
                   </ng-container>
                   <ng-container matColumnDef='completion'>
                     <th mat-header-cell *matHeaderCellDef>
-                      <div class='d-flex align-items-center justify-content-between'>
-                        <span>{{'Assessment Completion' | titlecase}}</span>
-                        <div class='d-flex align-items-center'>
-                          <button mat-icon-button class='mr-3'
-                                  [disabled]='(store.isActing$ | async)'
-                                  color='{{filtersAssessmentEng.controls.completionSort?.enabled  ? "primary" : ""}}'
-                                  (click)='updateAssessmentSorting("completionSort")'>
-                            <mat-icon
-                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.completionSort?.enabled ? (filtersAssessmentEng.controls.completionSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>
-                          </button>
-                        </div>
-                      </div>
+                      <span>{{'Assessment Completion' | titlecase}}</span>
+<!--                      <div class='d-flex align-items-center justify-content-between'>-->
+<!--                        <span>{{'Assessment Completion' | titlecase}}</span>-->
+<!--                        <div class='d-flex align-items-center'>-->
+<!--                          <button mat-icon-button class='mr-3'-->
+<!--                                  [disabled]='(store.isActing$ | async)'-->
+<!--                                  color='{{filtersAssessmentEng.controls.completionSort?.enabled  ? "primary" : ""}}'-->
+<!--                                  (click)='updateAssessmentSorting("completionSort")'>-->
+<!--                            <mat-icon-->
+<!--                              style='font-size: 20px;'>{{filtersAssessmentEng.controls.completionSort?.enabled ? (filtersAssessmentEng.controls.completionSort?.value === sortingEnum.ASC ? "arrow_upward" : "arrow_downward") : "sort" }}</mat-icon>-->
+<!--                          </button>-->
+<!--                        </div>-->
+<!--                      </div>-->
                     </th>
                     <td mat-cell *matCellDef='let element'
                     > {{(element.completion) === null ?  '--' : element.completion}} </td>
