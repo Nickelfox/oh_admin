@@ -117,6 +117,14 @@ export class LineChartComponent {
           hoverRadius: 8
         }
       },
+      tooltips:{
+        titleSpacing: 20,
+        // bodyAlign: "center",
+        titleFontSize: 10,
+        titleMarginBottom: 10,
+        xPadding: 10,
+        yPadding: 10,
+      },
       responsive: true,
       maintainAspectRatio: true,
       title: {

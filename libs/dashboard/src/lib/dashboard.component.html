@@ -99,7 +99,7 @@
                   </div>
                 </div>
               </div>
-              <div class='col-12  tableOverFlow'>
+              <div class='col-12  tableOverFlow p-0'>
                 <table mat-table [dataSource]='assessmentTestTable' class='w-100' style='width: 60vw'>
                   <ng-container matColumnDef='position'>
                     <th mat-header-cell *matHeaderCellDef>{{'Position' | titlecase}}</th>
@@ -119,7 +119,7 @@
                   <ng-container matColumnDef='average_score'>
                     <th mat-header-cell *matHeaderCellDef>
                       <div class='d-flex align-items-center justify-content-between'>
-                        <span>{{'Average Score (CPS)' | titlecase}}</span>
+                        <span>{{'Average Score (CPS)'}}</span>
                         <div class='d-flex align-items-center'>
                           <button mat-icon-button class='mr-3'
                                   [disabled]='(store.isActing$ | async)'
@@ -184,7 +184,7 @@
                   </div>
                 </div>
               </div>
-              <div class='col-12 tableOverFlow'>
+              <div class='col-12 tableOverFlow p-0'>
                 <table mat-table [dataSource]='packEngTable' class='w-100' style='width: 60vw'>
                   <ng-container matColumnDef='position'>
                     <th mat-header-cell *matHeaderCellDef>{{'Position' | titlecase}}</th>
