@@ -293,9 +293,11 @@
                                                 formControlName='fiveRep'>5 rep
                                   </mat-checkbox>
                                 </div>
-                                <div class='col-12' *ngIf='repsCoreGroup?.errors$ | async'>
-                                  <mat-error><small>Minimum 1 selection is required</small></mat-error>
-                                </div>
+                                <ng-template [ngIf]='repsCoreGroup.errors$ | async' let-error>
+                                  <div class='col-12' *ngIf='error?.minOneTrue'>
+                                    <mat-error><small>Minimum 1 selection is required</small></mat-error>
+                                  </div>
+                                </ng-template>
                               </div>
                               <div class='row mb-3'>
                                 <div class='col-12'>

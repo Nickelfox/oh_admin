@@ -133,9 +133,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       this.formValidationService.greaterPointValidator()
     ]),
     reps: new FormGroup({
-      oneRep: new FormControl<boolean>(false),
-      threeRep: new FormControl<boolean>(false),
-      fiveRep: new FormControl<boolean>(false)
+      oneRep: new FormControl<boolean>(true, [
+        RxwebValidators.required()
+      ]),
+      threeRep: new FormControl<boolean>(false, [
+        RxwebValidators.required()
+      ]),
+      fiveRep: new FormControl<boolean>(false, [
+        RxwebValidators.required()
+      ])
     }, [
       this.formValidationService.minOneTrue()
     ]),
@@ -525,7 +531,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   get disableEditState(): boolean {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return (this.opType === this.opTypeEnum.EDIT) && (this.selectedTest?.inputType !== "NONE");
+    return (this.opType === this.opTypeEnum.EDIT) && (this.selectedTest?.inputType !== 'NONE');
   }
 
   resetProfileInputUnit(): void {
