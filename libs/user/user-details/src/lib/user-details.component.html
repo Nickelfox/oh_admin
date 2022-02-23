@@ -121,21 +121,21 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.AGE'
-              [value]='user.age'
+              [value]='user?.age ? (user.age + " year") : null'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.HEIGHT'
-              [value]='user.height'
+              [value]='user?.height ? (user.height + " cm") : null'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.WEIGHT'
-              [value]='user.weight'
+              [value]='user?.weight ? (user.weight + " kg") : null'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
