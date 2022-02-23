@@ -18,6 +18,7 @@ import {
   ProfileInputTypeEnum,
   ProfileInputTypeUnitEnum,
   RatioTestTypeEnum,
+  RepsCore,
   TagCategoryEnum,
   TagTypeEnum,
   TestInputTypeEnum,
@@ -31,7 +32,6 @@ import {
   OneRMField,
   RatioSubObject,
   RelativeProfileObject,
-  RepsCore,
   Test,
   TestStore,
   TestUtilitiesService
