@@ -1,14 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
+import { GenericDialogInfo, GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { BreadcrumbDefinition, BreadcrumbService } from 'xng-breadcrumb';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { HotToastService } from '@ngneat/hot-toast';
+import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
+import { fromEvent, merge, of, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { InfoDialogComponent } from '@hidden-innovation/shared/ui/info-dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -17,7 +20,7 @@ import { HotToastService } from '@ngneat/hot-toast';
   styleUrls: ['./app.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   sideBarOpen = true;
   isLoading = false;
@@ -27,6 +30,10 @@ export class AppComponent implements OnInit {
     exact: true
   };
 
+  networkStatus$: Subscription = Subscription.EMPTY;
+  private networkStatus: unknown;
+  private toastRef?: CreateHotToastRef<unknown>;
+
   constructor(
     public breakpointObserver: BreakpointObserver,
     public authFacade: AuthFacade,
@@ -35,7 +42,7 @@ export class AppComponent implements OnInit {
     public uiStore: UiStore,
     private router: Router,
     public breadcrumbService: BreadcrumbService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     breakpointObserver.observe([
       Breakpoints.Tablet,
@@ -45,6 +52,10 @@ export class AppComponent implements OnInit {
       this.isTablet = result.matches;
       this.cdr.markForCheck();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.networkStatus$.unsubscribe();
   }
 
   sideBarToggle(): void {
@@ -104,18 +115,35 @@ export class AppComponent implements OnInit {
           break;
       }
     });
-    // if(isOnline) {
-    //   this.toastRef?.close();
-    //   this.toastRef = this.hotToastService.success('Network Online', {
-    //     dismissible: true,
-    //     role: 'status'
-    //   });
-    // } else {
-    //   this.toastRef?.close();
-    //   this.toastRef = this.hotToastService.error('Network Offline', {
-    //     dismissible: false,
-    //     role: 'status'
-    //   });
-    // }
+    this.checkNetworkStatus();
   }
+
+  checkNetworkStatus() {
+    this.networkStatus = navigator.onLine;
+    this.networkStatus$ = merge(
+      of(null),
+      fromEvent(window, 'online'),
+      fromEvent(window, 'offline')
+    )
+      .pipe(map(() => navigator.onLine))
+      .subscribe(status => {
+        this.networkStatus = status;
+        if (this.networkStatus) {
+          this.toastRef?.close();
+          this.toastRef = this.hotToastService.success('Network Online', {
+            dismissible: true,
+            role: 'status'
+          });
+        } else {
+          this.toastRef?.close();
+          this.toastRef = this.hotToastService.error('Network Offline', {
+            dismissible: false,
+            role: 'status',
+            duration: undefined
+          });
+        }
+      });
+  }
+
+
 }
