@@ -59,7 +59,7 @@ export interface PackEng {
 
 export class DashboardComponent implements OnInit {
 
-  displayedColumnsAssessmentTest: string[] = ['position', 'name', 'id', 'average_score', 'completion'];
+  displayedColumnsAssessmentTest: string[] = ['position', 'category', 'id', 'average_score', 'completion'];
   assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
 
   displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'video_plays', 'content_clicks', 'resource_clicks'];

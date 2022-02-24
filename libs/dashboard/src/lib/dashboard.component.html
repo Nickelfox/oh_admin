@@ -106,10 +106,10 @@
                     <td mat-cell *matCellDef='let element,let i = index'
                     > {{i + 1 || '--'}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='name'>
+                  <ng-container matColumnDef='category'>
                     <th mat-header-cell *matHeaderCellDef>{{'Assessment Name' | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'
-                        [matTooltip]='element.name'> {{(element.name) || '--'}} </td>
+                        [matTooltip]='element.category'> {{(element.category) || '--' | titlecase}} </td>
                   </ng-container>
                   <ng-container matColumnDef='id'>
                     <th mat-header-cell *matHeaderCellDef>{{'Assessment Id' | titlecase}}</th>
