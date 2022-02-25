@@ -444,3 +444,7 @@ table.mat-table {
 .mat-tooltip {
   margin-top: -5px !important;
 }
+
+.paginationButton > .mat-paginator-outer-container > .mat-paginator-container > .mat-paginator-range-actions > button {
+  display: none !important;
+}
