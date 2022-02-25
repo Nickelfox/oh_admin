@@ -253,7 +253,7 @@
             <div class='row mt-2'>
               <div class='col'></div>
               <div class='col-6'>
-                <mat-paginator
+                <mat-paginator class='paginationButton'
                   (page)='packEngPageEvent = $event; onPaginateChangePackEng($event)'
                   [disabled]='store.isChangeLoading$ | async'
                   [length]='store.packEngCount$ | async'
@@ -342,13 +342,14 @@
             <div class='row mt-2'>
               <div class='col'></div>
               <div class='col-6'>
-                <mat-paginator
+                <mat-paginator class='paginationButton'
                   (page)='topWatchedPageEvent = $event; onPaginateChangeTopTest($event)'
                   [disabled]='store.isChangeLoading$ | async'
                   [length]='store.testWatchedCount$ | async'
                   [pageIndex]='paginatorIndexTopTest'
                   [pageSizeOptions]='topWatchedPageSizeOptions'
                   [showFirstLastButtons]='false'
+
                 ></mat-paginator>
               </div>
             </div>
