@@ -85,6 +85,10 @@ export class TestListingComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  isPublishable(test: Test): boolean {
+    return test.isPublished || (!!test.video && !!test.thumbnail && !!test.poster);
+  }
+
   resetRoute(): void {
     this.router.navigate([
       this.listingRoute, this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex
