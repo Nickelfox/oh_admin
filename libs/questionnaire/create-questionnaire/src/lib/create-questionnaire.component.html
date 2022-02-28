@@ -23,12 +23,28 @@
     <div class='row justify-content-between'>
       <div class='col-lg-5'>
         <div class='container-fluid p-0 m-0 h-100'>
-          <div class='row mb-2'>
+          <div class='row'>
             <div class='col-12'>
               <hidden-innovation-common-form-field
                 label='Questionnaire Name'
                 controlPath='name'
               ></hidden-innovation-common-form-field>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-12'>
+              <hidden-innovation-common-form-field-textarea
+                label='{{"overview" | titlecase}}'
+                controlPath='overview'
+              ></hidden-innovation-common-form-field-textarea>
+            </div>
+          </div>
+          <div class='row mb-2'>
+            <div class='col-12'>
+              <hidden-innovation-common-form-field-textarea
+                label='{{"What you will get out of it" | titlecase}}'
+                controlPath='whatYouWillGetOutOfIt'
+              ></hidden-innovation-common-form-field-textarea>
             </div>
           </div>
           <div class='row'>

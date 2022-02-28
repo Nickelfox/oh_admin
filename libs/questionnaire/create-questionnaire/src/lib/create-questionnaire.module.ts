@@ -8,6 +8,7 @@ import { CommonFormFieldModule } from '@hidden-innovation/shared/ui/common-form-
 import { QuestionnaireQuestionFormModule } from '@hidden-innovation/shared/ui/questionnaire-question-form';
 import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
 import { PendingChangesGuard, UtilsModule } from '@hidden-innovation/shared/utils';
+import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/common-form-field-textarea';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { PendingChangesGuard, UtilsModule } from '@hidden-innovation/shared/util
     UtilsModule,
     MaterialModule,
     CommonFormFieldModule,
+    CommonFormFieldTextareaModule,
     QuestionnaireQuestionFormModule,
     QuestionnaireDataAccessModule,
     RouterModule.forChild([
