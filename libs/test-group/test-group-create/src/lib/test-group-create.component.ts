@@ -23,6 +23,7 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { isEqual } from 'lodash-es';
 import { Validators } from '@angular/forms';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -163,7 +164,7 @@ export class TestGroupCreateComponent implements OnDestroy {
   get isCategoryValid(): boolean {
     const { category } = this.testGroup.controls;
     return category.valid;
-  // && category.value !== 'NONE'
+    // && category.value !== 'NONE'
   }
 
   categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
@@ -280,6 +281,14 @@ export class TestGroupCreateComponent implements OnDestroy {
     });
   }
 
+  testGroupDragEvent($event: CdkDragDrop<Test>): void {
+    const selectedTests: Test[] = this.selectedTests ? [...this.selectedTests] : [];
+    moveItemInArray(selectedTests, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedTests
+    });
+  }
+
   private populateTest(testGroup: TestGroup): void {
     const { isVisible, category, imageId, thumbnailId, subCategory, name, description } = testGroup;
     this.selectedTestGroup = testGroup;
@@ -299,6 +308,4 @@ export class TestGroupCreateComponent implements OnDestroy {
     this.testGroup.updateValueAndValidity();
     this.cdr.markForCheck();
   }
-
-
 }
