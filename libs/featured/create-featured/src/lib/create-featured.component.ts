@@ -163,7 +163,6 @@ export class CreateFeaturedComponent implements OnDestroy {
         resetContentCtrls();
         setPacksCtrl(state.selectedPacks as Pack[] ?? []);
       }
-      console.log(this.featuredGroup.value);
     });
   }
 
