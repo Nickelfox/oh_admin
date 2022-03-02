@@ -22,7 +22,8 @@ import {
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
 import { PackSelectorComponent, PackSelectorData } from '@hidden-innovation/shared/ui/pack-selector';
-import {TitleCasePipe} from "@angular/common";
+import { TitleCasePipe } from '@angular/common';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -80,6 +81,9 @@ export class CreateFeaturedComponent implements OnDestroy {
   selectedFeatured: Featured | undefined;
   type: PackContentTypeEnum | undefined;
 
+  private selectedTests: Test[] = [];
+  private selectedPacks: Pack[] = [];
+
   constructor(
     private hotToastService: HotToastService,
     public formValidationService: FormValidationService,
@@ -111,6 +115,8 @@ export class CreateFeaturedComponent implements OnDestroy {
     });
     const { packIds, testGroupIds, singleTestIds, questionnaireIds } = this.featuredGroup.controls;
     this.uiStore.state$.subscribe((state) => {
+      this.selectedTests = state.selectedTests ?? [];
+      this.selectedPacks = state.selectedPacks ?? [];
       const resetContentCtrls = () => {
         this.featuredGroup.patchValue({
           packIds: [],
@@ -179,9 +185,8 @@ export class CreateFeaturedComponent implements OnDestroy {
   }
 
 
-
-  transformFeaturedName(name:FeaturedNameEnum | undefined):string {
-    return name ? this.titleCasePipe.transform(name).replace(/_/g,' ') : '--';
+  transformFeaturedName(name: FeaturedNameEnum | undefined): string {
+    return name ? this.titleCasePipe.transform(name).replace(/_/g, ' ') : '--';
   }
 
   populateFeatured(feature: Featured): void {
@@ -252,7 +257,7 @@ export class CreateFeaturedComponent implements OnDestroy {
     }
     const data: TestSelectorData = {
       type: ContentSelectorOpType.SINGLE,
-      limit: this.isSpotlight || this.isFeaturedTest,
+      limit: this.isSpotlight || this.isFeaturedTest
     };
     this.matDialog.open(TestSelectorComponent, {
       data,
@@ -346,4 +351,19 @@ export class CreateFeaturedComponent implements OnDestroy {
     });
   }
 
+  packDragEvent($event: CdkDragDrop<Pack>): void {
+    const selectedPacks = this.selectedPacks ? [...this.selectedPacks] : [];
+    moveItemInArray(selectedPacks, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedPacks
+    });
+  }
+
+  testDragEvent($event: CdkDragDrop<Test>): void {
+    const selectedTests = this.selectedTests ? [...this.selectedTests] : [];
+    moveItemInArray(selectedTests, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedTests
+    });
+  }
 }

@@ -19,7 +19,9 @@ export interface QuestionExtended extends Question {
 
 // Final Questionnaire Interface
 export interface Questionnaire {
-  name: string; // req
+  name: string;
+  whatYouWillGetOutOfIt: string;
+  overview: string;
   isScoring: boolean;
   questions: Question[];
 }
