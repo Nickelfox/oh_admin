@@ -26,6 +26,7 @@ import {
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
 import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -80,8 +81,6 @@ export class AssessmentCreateComponent implements OnDestroy {
   aspectRatio = AspectRatio;
   selectedAssessment: Assessment | undefined;
 
-  private selectedContents: ContentCore[] = [];
-
   constructor(
     public constantDataService: ConstantDataService,
     private matDialog: MatDialog,
@@ -115,7 +114,6 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.store.getAssessmentDetails$(category);
     });
     this.uiStore.selectedContent$.subscribe((contents) => {
-      // console.log(contents);
       this.selectedContents = contents.map((c, i) => {
         return {
           ...c,
@@ -130,6 +128,15 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.assessmentGroup.updateValueAndValidity();
       this.cdr.markForCheck();
     });
+  }
+
+  private _selectedContents: ContentCore[] = [];
+  get selectedContents(): ContentCore[] {
+    return this._selectedContents ?? [];
+  }
+
+  set selectedContents(content) {
+    this._selectedContents = content ?? [];
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[]> {
@@ -264,5 +271,13 @@ export class AssessmentCreateComponent implements OnDestroy {
       return;
     }
     this.store.updateAssessment$(this.assessmentGroup.value);
+  }
+
+  assessmentDragEvent($event: CdkDragDrop<ContentCore>): void {
+    const selectedContent = this.selectedContents ? [...this.selectedContents] : [];
+    moveItemInArray(selectedContent, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedContent
+    });
   }
 }

@@ -95,8 +95,9 @@
               <h3 class='mat-h3 mb-0 font-sf-pro mb-0 mt-2'>Tests</h3>
             </mat-card-title>
             <mat-divider></mat-divider>
-            <mat-card-content class='content-container'>
+            <mat-card-content class='content-container' (cdkDropListDropped)='assessmentDragEvent($event)' cdkDropList>
               <hidden-innovation-pack-content-card
+                cdkDrag
                 (emitDeleteEvent)='uiStore.deleteSelectedContentPrompt(content)'
                 *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
                 [category]='content.type'
