@@ -84,7 +84,6 @@ export class TestGroupCreateComponent implements OnDestroy {
   });
 
   opType?: OperationTypeEnum;
-  selectedTests: Test[] = [];
   private testGroupID?: number;
 
   constructor(
@@ -143,6 +142,15 @@ export class TestGroupCreateComponent implements OnDestroy {
         selectedTests: []
       });
     });
+  }
+
+  _selectedTests: Test[] = [];
+  get selectedTests(): Test[] {
+    return this._selectedTests ?? [];
+  }
+
+  set selectedTests(tests: Test[]) {
+    this._selectedTests = tests ?? [];
   }
 
   get testsIsValid(): boolean {
