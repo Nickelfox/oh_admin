@@ -149,6 +149,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.dashboardService.getGenderStatics().pipe(
           tap(
             (apiRes) => {
+
               const ageRatioData = this.convertToPercentage(apiRes.femaleUsers, apiRes.maleUsers, apiRes.nonBinaryUsers, apiRes.totalUsers);
               const f = this.convertToChartData(apiRes.femaleUsers);
               this.patchState({
@@ -456,9 +457,9 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     if (!totalUsers) {
       return [[0, 0, 0]];
     }
-    const noOfMaleUsers = parseInt(((male.length / totalUsers) * 100).toFixed(2));
-    const noOfFemaleUsers = parseInt(((female.length / totalUsers) * 100).toFixed(2));
-    const noOfOtherUsers = parseInt(((other.length / totalUsers) * 100).toFixed(2));
+    const noOfMaleUsers = parseFloat(((male.length / totalUsers) * 100).toFixed(2));
+    const noOfFemaleUsers = parseFloat(((female.length / totalUsers) * 100).toFixed(2));
+    const noOfOtherUsers = parseFloat(((other.length / totalUsers) * 100).toFixed(2));
     return [[noOfMaleUsers, noOfFemaleUsers, noOfOtherUsers]];
   }
 
