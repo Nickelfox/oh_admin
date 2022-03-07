@@ -250,6 +250,8 @@ export class DashboardComponent implements OnInit {
       }
       this.cdr.markForCheck();
     });
+    this.showActiveUserData(DashboardRangeFilterEnum.WEEKLY);
+    this.showRegisteredUserData(DashboardRangeFilterEnum.WEEKLY);
 
 
     this.store.getStats();
