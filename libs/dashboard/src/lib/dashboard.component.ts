@@ -331,9 +331,70 @@ export class DashboardComponent implements OnInit {
         });
       }
     );
-
   };
 
+  showActiveUserData(rangeFilter:DashboardRangeFilterEnum){
+    switch (rangeFilter) {
+      case DashboardRangeFilterEnum.MONTHLY:
+        this.store.getActiveUsers({
+          filterBy: DashboardRangeFilterEnum.MONTHLY,
+          startDate: DateTime.now().minus({
+            months: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        })
+        break;
+      case DashboardRangeFilterEnum.WEEKLY:
+        this.store.getActiveUsers({
+          filterBy: DashboardRangeFilterEnum.WEEKLY,
+          startDate: DateTime.now().minus({
+            days: 7
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        })
+        break;
+      case DashboardRangeFilterEnum.DAILY:
+        this.store.getActiveUsers({
+          filterBy: DashboardRangeFilterEnum.DAILY,
+          startDate: DateTime.now().minus({
+            days: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        })
+        break;
+    }
+  }
+  showRegisteredUserData(rangeFilter:DashboardRangeFilterEnum){
+    switch (rangeFilter) {
+      case DashboardRangeFilterEnum.MONTHLY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.MONTHLY,
+          startDate: DateTime.now().minus({
+            months: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        })
+        break;
+      case DashboardRangeFilterEnum.WEEKLY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.WEEKLY,
+          startDate: DateTime.now().minus({
+            days: 7
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        })
+        break;
+      case DashboardRangeFilterEnum.DAILY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.DAILY,
+          startDate: DateTime.now().minus({
+            days: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        })
+        break;
+    }
+  }
 
 // Top Watched pagination
   refreshListTopTest(): void {

@@ -108,8 +108,8 @@ export class LineChartComponent {
       },
       elements: {
         line: {
-          tension: 0,
-          borderWidth: 3
+          // tension: 0,
+          borderWidth: 3,
         },
         point: {
           pointStyle: 'circle',

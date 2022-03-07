@@ -67,21 +67,21 @@
                 </div>
 
                 <div class='col-lg-2 p-0 d-flex flex-column '>
-                  <mat-card class='bg-light mb-5' >
+                  <mat-card class='bg-light mb-5' (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)' >
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>
                       <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>16k</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>+12.1%</h4>
                     </mat-card-content>
                   </mat-card>
-                  <mat-card class='bg-light mb-5' >
+                  <mat-card class='bg-light mb-5' (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>
                       <h1 class='mb-2 mat-h1  font-calibri' style='color: #C49ED4'>5.8k</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>+9.4%</h4>
                     </mat-card-content>
                   </mat-card>
-                  <mat-card class='bg-light mb-5' >
+                  <mat-card class='bg-light mb-5' (click)='showRegisteredUserData(dashboardRangeFilterEnum.DAILY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>
                       <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>1.6k</h1>
@@ -104,20 +104,20 @@
                 </div>
                 <div class='col-lg-2 p-0 d-flex flex-column '>
                   <mat-card class='bg-light mb-5' >
-                    <mat-card-content class='text-center'>
+                    <mat-card-content class='text-center' (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>
                       <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>16k</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>+12.1%</h4>
                     </mat-card-content>
                   </mat-card>
-                  <mat-card class='bg-light mb-5' >
+                  <mat-card class='bg-light mb-5' (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>
                       <h1 class='mb-2 mat-h1  font-calibri' style='color: #C49ED4'>5.8k</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>+9.4%</h4>
                     </mat-card-content>
                   </mat-card>
-                  <mat-card class='bg-light mb-5' >
+                  <mat-card class='bg-light mb-5' (click)='showActiveUserData(dashboardRangeFilterEnum.DAILY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>
                       <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>1.6k</h1>
