@@ -41,6 +41,21 @@ export interface PackEng {
   resourcesClicks: number
 }
 
+export interface UserGraphType {
+  total: string;
+  changePer: number;
+  data: {
+    count:number;
+    date: string;
+  }[];
+}
+
+export  interface  UserGraphData{
+  monthly: UserGraphType;
+  weekly: UserGraphType;
+  daily: UserGraphType;
+}
+
 // export interface TopWatched {
 //   position:number;
 //   name:string;
@@ -216,6 +231,7 @@ export class DashboardComponent implements OnInit {
   });
 
 
+
   constructor(
     public store: DashboardStore,
     public constantDataService: ConstantDataService,
@@ -223,6 +239,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {
+
     this.refreshListTopTest();
     this.refreshListPackEng();
     this.refreshListAssessmentEng();
@@ -257,16 +274,16 @@ export class DashboardComponent implements OnInit {
     this.store.getStats();
     this.store.getCompleteTestEngagement();
     this.store.getAssessmentTestEngagement();
-    this.store.getRegisteredUsers({
-      filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
-        days: 7
-      }).toISODate()
-    });
-    this.store.getActiveUsers({
-      filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
-        days: 7
-      }).toISODate()
-    });
+    // this.store.getRegisteredUsers({
+    //   filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
+    //     days: 7
+    //   }).toISODate()
+    // });
+    // this.store.getActiveUsers({
+    //   filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
+    //     days: 7
+    //   }).toISODate()
+    // });
     this.rangeFilterGroup.controls.type.valueChanges.subscribe(res => {
       switch (res) {
         case DashboardRangeFilterEnum.WEEKLY:
@@ -333,6 +350,8 @@ export class DashboardComponent implements OnInit {
         });
       }
     );
+    this.store.registeredUsersData$.subscribe((res) => console.log(res[0].data))
+    // this.store.registeredUsersData$.subscribe((res) => console.log(res[0].data))
   };
 
   showActiveUserData(rangeFilter:DashboardRangeFilterEnum){
@@ -397,6 +416,20 @@ export class DashboardComponent implements OnInit {
         break;
     }
   }
+
+  registerUserData(rangeFilter:DashboardRangeFilterEnum):string
+  {
+    switch (rangeFilter) {
+      case DashboardRangeFilterEnum.MONTHLY:
+        return `16k`;
+      case DashboardRangeFilterEnum.WEEKLY:
+        return `5.8k`;
+      case DashboardRangeFilterEnum.DAILY:
+        return '1.6k';
+    }
+  }
+
+
 
 // Top Watched pagination
   refreshListTopTest(): void {

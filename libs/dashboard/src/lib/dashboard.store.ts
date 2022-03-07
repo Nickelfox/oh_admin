@@ -291,7 +291,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.patchState({
           isLoading: true
         });
-        console.log(_)
       }),
       switchMap((reqObj) =>
         this.dashboardService.getTopWatched(reqObj).pipe(
@@ -377,10 +376,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     super(initialState);
   }
 
-  public convertDataFormat(
-    users: { id: number; name: string; created_at?: string; lastActive?: string }[],
-    reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum },
-    activeUser?: false): { dataSet: ChartDatasets; labels: ChartLabel } {
+  public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): { dataSet: ChartDatasets; labels: ChartLabel } {
     const filterBy = reqObj.filterBy;
     let dataLabels: ChartLabel = [];
     let dataSet: number[] = [];
