@@ -48,6 +48,10 @@
 
                   <ng-container matColumnDef='select'>
                     <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="null"
+                                    [checked]="isAllSelected()"
+                                    [indeterminate]="!isAllSelected()">
+                      </mat-checkbox>
                     </th>
                     <td mat-cell *matCellDef='let test'>
                       <mat-checkbox

@@ -25,7 +25,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { isEqual } from 'lodash-es';
+import { isEqual, sortBy } from 'lodash-es';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
@@ -142,15 +142,13 @@ export class TestSelectorComponent implements OnInit {
   get Count() {
     switch (this.categoryData.type) {
       case ContentSelectorOpType.SINGLE:
-        if (this.selectedTests.length === 0)
-        {
+        if (this.selectedTests.length === 0) {
           return '';
         }
         return this.selectedTests ? `SELECTED ITEMS ${this.selectedTests.length}` : '-';
         break;
       case ContentSelectorOpType.OTHER:
-        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length === 0)
-        {
+        if (this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length === 0) {
           return '';
         }
         return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length}` : '-';
@@ -206,6 +204,24 @@ export class TestSelectorComponent implements OnInit {
 
   trackById(index: number, test: Test): number {
     return test.id;
+  }
+
+  isAllSelected(): boolean {
+    let numSelected: number[] = [];
+    try {
+      if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
+        numSelected = this.selectedTests.map(t => t.id);
+      } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
+        numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.SINGLE).map(t => t.contentId as number);
+      }
+      const numRows: number[] = this.tests.data.map(t => t.id);
+      const commonIds = numRows.filter(i1 => numSelected.includes(i1));
+      const sortedRows = sortBy(numRows);
+      const sortedSelection = sortBy(commonIds);
+      return isEqual(sortedSelection, sortedRows);
+    } catch {
+      return false;
+    }
   }
 
   isSelected(test: Test): boolean {
