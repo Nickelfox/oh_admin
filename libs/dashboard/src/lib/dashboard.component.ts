@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit } from '@angular/core';
-import { ChartColor, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
+import { ChartColor, ChartDataset, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
 import { DashboardRangeFilterEnum, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
@@ -10,7 +10,7 @@ import {
   PackEngagement,
   PackEngagementFilters,
   TestWatched,
-  TestWatchedFilters
+  TestWatchedFilters, UserGraphData
 } from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
@@ -41,20 +41,6 @@ export interface PackEng {
   resourcesClicks: number
 }
 
-export interface UserGraphType {
-  total: string;
-  changePer: number;
-  data: {
-    count:number;
-    date: string;
-  }[];
-}
-
-export  interface  UserGraphData{
-  monthly: UserGraphType;
-  weekly: UserGraphType;
-  daily: UserGraphType;
-}
 
 // export interface TopWatched {
 //   position:number;
@@ -74,6 +60,97 @@ export  interface  UserGraphData{
 
 export class DashboardComponent implements OnInit {
 
+  public _dummyRegisteresUserData: UserGraphData = {
+    monthly: {
+      total: '16k',
+      changePer: -20,
+      data: [
+        {
+          count: 3,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 4,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 6,
+          date: DateTime.now().toISODate()
+        }
+      ]
+    },
+    weekly: {
+      total: '5.2k',
+      changePer: +50,
+      data: [
+        {
+          count: 5,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 20,
+          date: DateTime.now().toISODate()
+        }
+      ]
+    },
+    daily: {
+      total: '1.6k',
+      changePer: +30,
+      data: [
+        {
+          count: 10,
+          date: DateTime.now().toISODate()
+        },
+      ]
+    }
+  };
+  public _dummyActiveUserData: UserGraphData = {
+    monthly: {
+      total: '16k',
+      changePer: -20,
+      data: [
+        {
+          count: 3,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 4,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 6,
+          date: DateTime.now().toISODate()
+        }
+      ]
+    },
+    weekly: {
+      total: '5.2k',
+      changePer: +50,
+      data: [
+        {
+          count: 5,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 20,
+          date: DateTime.now().toISODate()
+        }
+      ]
+    },
+    daily: {
+      total: '1.6k',
+      changePer: +30,
+      data: [
+        {
+          count: 10,
+          date: DateTime.now().toISODate()
+        },
+      ]
+    }
+  };
+
+
+
   displayedColumnsAssessmentTest: string[] = ['position', 'category', 'id', 'average_score', 'completion'];
   assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
 
@@ -84,21 +161,6 @@ export class DashboardComponent implements OnInit {
   topWatchedTable: MatTableDataSource<TestWatched> = new MatTableDataSource<TestWatched>();
   noData?: Observable<boolean>;
 
-
-  chartLabels: ChartLabel[] = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
 
   colors: { [key: string]: string } = {
     CARDIO: '#3297E0',
@@ -113,7 +175,6 @@ export class DashboardComponent implements OnInit {
     '#BFC4C8',
     '#CADF6E',
     '#54DBDF'];
-
   doughnutChartColorTest: ChartColor = [
     {
       backgroundColor: [
@@ -128,9 +189,7 @@ export class DashboardComponent implements OnInit {
   doughnutChartLabelTest: ChartLabel[] = [
     ...Object.values(TagCategoryEnum)
   ];
-
   doughnutPlugins = [this.doughnutChartLabelTest];
-
   // Complete Test
   doughnutChartColorComplete: ChartColor = [
     {
@@ -144,8 +203,6 @@ export class DashboardComponent implements OnInit {
       ]
     }
   ];
-
-
   chartOptionsTest: ChartOptions = {
     responsive: true,
     maintainAspectRatio: true,
@@ -161,8 +218,6 @@ export class DashboardComponent implements OnInit {
     }
 
   };
-
-
   chartOptions: ChartOptions = {
     layout: {
       padding: 0
@@ -176,10 +231,10 @@ export class DashboardComponent implements OnInit {
     responsive: true,
     maintainAspectRatio: true
   };
-
-
   chartLegendTest = false;
   chartLegendComplete = false;
+
+  registeredDataSet: ChartDatasets = [];
 
 
   dashboardRangeTypes: string[] = Object.keys(DashboardRangeFilterEnum);
@@ -196,7 +251,6 @@ export class DashboardComponent implements OnInit {
       Validators.required
     ])
   });
-
   maxDate = DateTime.now();
 
 
@@ -231,7 +285,6 @@ export class DashboardComponent implements OnInit {
   });
 
 
-
   constructor(
     public store: DashboardStore,
     public constantDataService: ConstantDataService,
@@ -239,6 +292,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {
+
 
     this.refreshListTopTest();
     this.refreshListPackEng();
@@ -350,11 +404,12 @@ export class DashboardComponent implements OnInit {
         });
       }
     );
-    this.store.registeredUsersData$.subscribe((res) => console.log(res[0].data))
+    this.store.registeredUsersData$.subscribe((res) => console.log(res[0].data));
     // this.store.registeredUsersData$.subscribe((res) => console.log(res[0].data))
+    console.log(this._dummyRegisteresUserData);
   };
 
-  showActiveUserData(rangeFilter:DashboardRangeFilterEnum){
+  showActiveUserData(rangeFilter: DashboardRangeFilterEnum) {
     switch (rangeFilter) {
       case DashboardRangeFilterEnum.MONTHLY:
         this.store.getActiveUsers({
@@ -363,7 +418,7 @@ export class DashboardComponent implements OnInit {
             months: 1
           }).toISODate(),
           endDate: DateTime.now().toISODate()
-        })
+        });
         break;
       case DashboardRangeFilterEnum.WEEKLY:
         this.store.getActiveUsers({
@@ -372,7 +427,7 @@ export class DashboardComponent implements OnInit {
             days: 7
           }).toISODate(),
           endDate: DateTime.now().toISODate()
-        })
+        });
         break;
       case DashboardRangeFilterEnum.DAILY:
         this.store.getActiveUsers({
@@ -381,44 +436,44 @@ export class DashboardComponent implements OnInit {
             days: 1
           }).toISODate(),
           endDate: DateTime.now().toISODate()
-        })
-        break;
-    }
-  }
-  showRegisteredUserData(rangeFilter:DashboardRangeFilterEnum){
-    switch (rangeFilter) {
-      case DashboardRangeFilterEnum.MONTHLY:
-        this.store.getRegisteredUsers({
-          filterBy: DashboardRangeFilterEnum.MONTHLY,
-          startDate: DateTime.now().minus({
-            months: 1
-          }).toISODate(),
-          endDate: DateTime.now().toISODate()
-        })
-        break;
-      case DashboardRangeFilterEnum.WEEKLY:
-        this.store.getRegisteredUsers({
-          filterBy: DashboardRangeFilterEnum.WEEKLY,
-          startDate: DateTime.now().minus({
-            days: 7
-          }).toISODate(),
-          endDate: DateTime.now().toISODate()
-        })
-        break;
-      case DashboardRangeFilterEnum.DAILY:
-        this.store.getRegisteredUsers({
-          filterBy: DashboardRangeFilterEnum.DAILY,
-          startDate: DateTime.now().minus({
-            days: 1
-          }).toISODate(),
-          endDate: DateTime.now().toISODate()
-        })
+        });
         break;
     }
   }
 
-  registerUserData(rangeFilter:DashboardRangeFilterEnum):string
-  {
+  showRegisteredUserData(rangeFilter: DashboardRangeFilterEnum) {
+    switch (rangeFilter) {
+      case DashboardRangeFilterEnum.MONTHLY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.MONTHLY,
+          startDate: DateTime.now().minus({
+            months: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+      case DashboardRangeFilterEnum.WEEKLY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.WEEKLY,
+          startDate: DateTime.now().minus({
+            days: 7
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+      case DashboardRangeFilterEnum.DAILY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.DAILY,
+          startDate: DateTime.now().minus({
+            days: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+    }
+  }
+
+  registerUserData(rangeFilter: DashboardRangeFilterEnum): string {
     switch (rangeFilter) {
       case DashboardRangeFilterEnum.MONTHLY:
         return `16k`;
@@ -428,7 +483,6 @@ export class DashboardComponent implements OnInit {
         return '1.6k';
     }
   }
-
 
 
 // Top Watched pagination
