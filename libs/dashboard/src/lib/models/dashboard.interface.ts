@@ -94,6 +94,7 @@ export interface UserGraphType {
   }[];
 }
 
+
 export  interface  UserGraphData{
   monthly: UserGraphType;
   weekly: UserGraphType;

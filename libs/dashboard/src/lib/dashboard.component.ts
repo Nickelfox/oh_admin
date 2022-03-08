@@ -404,9 +404,7 @@ export class DashboardComponent implements OnInit {
         });
       }
     );
-    this.store.registeredUsersData$.subscribe((res) => console.log(res[0].data));
-    // this.store.registeredUsersData$.subscribe((res) => console.log(res[0].data))
-    console.log(this._dummyRegisteresUserData);
+
   };
 
   showActiveUserData(rangeFilter: DashboardRangeFilterEnum) {
