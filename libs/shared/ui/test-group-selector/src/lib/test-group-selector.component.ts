@@ -30,12 +30,13 @@ import {
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { isEqual, sortBy } from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { MatSelectionListChange } from '@angular/material/list';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
+import { ContentSelectionService } from '../../../../utils/src/lib/services/content-selection.service';
 
 export interface TestGroupSelectorData {
   type: ContentSelectorOpType;
@@ -97,7 +98,8 @@ export class TestGroupSelectorComponent implements OnInit {
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
     public uiStore: UiStore,
-    private hotToastService: HotToastService
+    private hotToastService: HotToastService,
+    private contentSelectionService: ContentSelectionService
   ) {
     if (!this.data) {
       this.hotToastService.error('Application Error! Type data needs to to sent before selecting any test group');
@@ -141,32 +143,28 @@ export class TestGroupSelectorComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  get Count() {
+    switch (this.data.type) {
+      case ContentSelectorOpType.SINGLE:
+        if (this.selectedTestGroups.length === 0) {
+          return '';
+        }
+        return this.selectedTestGroups ? `SELECTED ITEMS ${this.selectedTestGroups.length}` : '-';
+        break;
+      case ContentSelectorOpType.OTHER:
+        if (this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length === 0) {
+          return '';
+        }
+        return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length}` : '-';
+        break;
+    }
+  }
+
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshList();
   }
-
-  get Count(){
-    switch (this.data.type) {
-      case ContentSelectorOpType.SINGLE:
-        if(this.selectedTestGroups.length ===0)
-        {
-          return '';
-        }
-        return this.selectedTestGroups? `SELECTED ITEMS ${this.selectedTestGroups.length}`: '-';
-        break;
-      case ContentSelectorOpType.OTHER:
-        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length === 0 )
-        {
-          return '';
-        }
-        return  this.selectedContents? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length}`: '-';
-        break;
-    }
-  }
-
-
 
   ngOnInit(): void {
     this.store.testGroups$.subscribe(
@@ -207,20 +205,12 @@ export class TestGroupSelectorComponent implements OnInit {
 
   isAllSelected(): boolean {
     let numSelected: number[] = [];
-    try {
-      if (this.data.type === ContentSelectorOpType.SINGLE) {
-        numSelected = this.selectedTestGroups.map(tg => tg.id);
-      } else if (this.data.type === ContentSelectorOpType.OTHER) {
-        numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.GROUP).map(t => t.contentId as number);
-      }
-      const numRows: number[] = this.testGroup.data.map(t => t.id);
-      const commonIds = numRows.filter(i1 => numSelected.includes(i1));
-      const sortedRows = sortBy(numRows);
-      const sortedSelection = sortBy(commonIds);
-      return isEqual(sortedSelection, sortedRows);
-    } catch {
-      return false;
+    if (this.data.type === ContentSelectorOpType.SINGLE) {
+      numSelected = this.selectedTestGroups.map(tg => tg.id);
+    } else if (this.data.type === ContentSelectorOpType.OTHER) {
+      numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.GROUP).map(t => t.contentId as number);
     }
+    return this.contentSelectionService.isContentEqual(this.testGroup.data.map(t => t.id), numSelected);
   }
 
   isSelected(tg: TestGroup): boolean {

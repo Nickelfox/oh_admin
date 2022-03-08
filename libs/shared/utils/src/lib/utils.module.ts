@@ -7,6 +7,7 @@ import { PendingChangesGuard } from './guards/pending-changes.guard';
 import { ImagePreloaderDirective } from './directives/image-preloader.directive';
 import { ParseOneRemPipe } from './pipes/parse-one-rem.pipe';
 import { DistanceLengthPipe } from './pipes/distance-length.pipe';
+import { ContentSelectionService } from './services/content-selection.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -27,7 +28,8 @@ import { DistanceLengthPipe } from './pipes/distance-length.pipe';
     DistanceLengthPipe
   ],
   providers:[
-    PendingChangesGuard
+    PendingChangesGuard,
+    ContentSelectionService,
   ]
 })
 export class UtilsModule {}

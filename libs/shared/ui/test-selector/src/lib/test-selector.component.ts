@@ -25,11 +25,12 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MatSelectionListChange } from '@angular/material/list';
-import { isEqual, sortBy } from 'lodash-es';
+import { isEqual } from 'lodash-es';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
+import { ContentSelectionService } from '../../../../utils/src/lib/services/content-selection.service';
 
 export interface TestSelectorData {
   type: ContentSelectorOpType;
@@ -96,7 +97,8 @@ export class TestSelectorComponent implements OnInit {
     public store: TestStore,
     private cdr: ChangeDetectorRef,
     public uiStore: UiStore,
-    private hotToastService: HotToastService
+    private hotToastService: HotToastService,
+    private contentSelectionService: ContentSelectionService
   ) {
     if (this.categoryData === undefined || this.categoryData === null) {
       this.hotToastService.error('Application Error! Category data needs to to sent before selecting any tests');
@@ -208,20 +210,12 @@ export class TestSelectorComponent implements OnInit {
 
   isAllSelected(): boolean {
     let numSelected: number[] = [];
-    try {
-      if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
-        numSelected = this.selectedTests.map(t => t.id);
-      } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
-        numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.SINGLE).map(t => t.contentId as number);
-      }
-      const numRows: number[] = this.tests.data.map(t => t.id);
-      const commonIds = numRows.filter(i1 => numSelected.includes(i1));
-      const sortedRows = sortBy(numRows);
-      const sortedSelection = sortBy(commonIds);
-      return isEqual(sortedSelection, sortedRows);
-    } catch {
-      return false;
+    if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
+      numSelected = this.selectedTests.map(t => t.id);
+    } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
+      numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.SINGLE).map(t => t.contentId as number);
     }
+    return this.contentSelectionService.isContentEqual(this.tests.data.map(t => t.id), numSelected);
   }
 
   isSelected(test: Test): boolean {
