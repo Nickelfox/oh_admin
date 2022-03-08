@@ -30,7 +30,7 @@ import {
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { isEqual } from 'lodash-es';
+import { isEqual, sortBy } from 'lodash-es';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { MatSelectionListChange } from '@angular/material/list';
 import { UntilDestroy } from '@ngneat/until-destroy';
@@ -203,6 +203,24 @@ export class TestGroupSelectorComponent implements OnInit {
       published,
       nameSort
     });
+  }
+
+  isAllSelected(): boolean {
+    let numSelected: number[] = [];
+    try {
+      if (this.data.type === ContentSelectorOpType.SINGLE) {
+        numSelected = this.selectedTestGroups.map(tg => tg.id);
+      } else if (this.data.type === ContentSelectorOpType.OTHER) {
+        numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.GROUP).map(t => t.contentId as number);
+      }
+      const numRows: number[] = this.testGroup.data.map(t => t.id);
+      const commonIds = numRows.filter(i1 => numSelected.includes(i1));
+      const sortedRows = sortBy(numRows);
+      const sortedSelection = sortBy(commonIds);
+      return isEqual(sortedSelection, sortedRows);
+    } catch {
+      return false;
+    }
   }
 
   isSelected(tg: TestGroup): boolean {
