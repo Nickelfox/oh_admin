@@ -257,7 +257,7 @@ export class CreateFeaturedComponent implements OnDestroy {
     }
     const data: TestSelectorData = {
       type: ContentSelectorOpType.SINGLE,
-      limit: this.isSpotlight || this.isFeaturedTest
+      limit: this.isSpotlight
     };
     this.matDialog.open(TestSelectorComponent, {
       data,

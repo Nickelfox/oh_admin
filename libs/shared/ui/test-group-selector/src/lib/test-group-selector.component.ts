@@ -150,20 +150,102 @@ export class TestGroupSelectorComponent implements OnInit {
           return '';
         }
         return this.selectedTestGroups ? `SELECTED ITEMS ${this.selectedTestGroups.length}` : '-';
-        break;
       case ContentSelectorOpType.OTHER:
         if (this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length === 0) {
           return '';
         }
         return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.GROUP).length}` : '-';
-        break;
     }
+  }
+
+  get isAllSelected(): boolean {
+    let numSelected: number[] = [];
+    if (this.data.type === ContentSelectorOpType.SINGLE) {
+      numSelected = this.selectedTestGroups.map(tg => tg.id);
+    } else if (this.data.type === ContentSelectorOpType.OTHER) {
+      numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.GROUP).map(t => t.contentId as number);
+    }
+    return this.contentSelectionService.isContentEqual(this.testGroup.data.map(t => t.id), numSelected);
   }
 
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshList();
+  }
+
+  masterToggleStackError(): void {
+    this.hotToastService.error('Application Error! Select All module stack issue');
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected) {
+      if (this.data.type === ContentSelectorOpType.SINGLE) {
+        try {
+          const clearedTestGroups: TestGroup[] = this.selectedTestGroups.filter(t => !this.testGroup.data.find(t2 => t2.id === t.id));
+          this.uiStore.patchState({
+            selectedTestGroups: clearedTestGroups
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      } else if (this.data.type === ContentSelectorOpType.OTHER) {
+        try {
+          const clearedTestGroups: (ContentCore | LessonCore)[] = this.selectedContents.filter(t => !this.testGroup.data.find(tg => (t.contentId === tg.id && t.type === PackContentTypeEnum.GROUP)));
+          this.uiStore.patchState({
+            selectedContent: clearedTestGroups
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      }
+    } else {
+      if (this.data.type === ContentSelectorOpType.SINGLE) {
+        try {
+          const leftOutTestGroups: TestGroup[] = this.testGroup.data.filter(t1 => this.selectedTestGroups.findIndex(t2 => t2.id === t1.id) === -1);
+          this.uiStore.patchState({
+            selectedTestGroups: [
+              ...this.selectedTestGroups,
+              ...leftOutTestGroups
+            ]
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      } else if (this.data.type === ContentSelectorOpType.OTHER) {
+        try {
+          let clearedTestGroups: ContentCore[] = [];
+          if (this.selectedContents.filter(t => t.type === PackContentTypeEnum.GROUP).length) {
+            clearedTestGroups = this.testGroup.data.filter((tg) =>
+              this.selectedContents
+                .find(({ contentId, type }) => contentId !== tg.id && type === PackContentTypeEnum.GROUP)
+            ).map(({ id, name }) => {
+              return {
+                contentId: id,
+                type: PackContentTypeEnum.GROUP,
+                name
+              } as ContentCore;
+            });
+          } else {
+            clearedTestGroups = this.testGroup.data.map(t => {
+              return {
+                contentId: t.id,
+                type: PackContentTypeEnum.GROUP,
+                name: t.name
+              } as ContentCore;
+            });
+          }
+          this.uiStore.patchState({
+            selectedContent: [
+              ...this.selectedContents,
+              ...clearedTestGroups
+            ]
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      }
+    }
   }
 
   ngOnInit(): void {
@@ -184,11 +266,9 @@ export class TestGroupSelectorComponent implements OnInit {
     ).subscribe();
   }
 
-
   trackById(index: number, tg: TestGroup): number {
     return tg.id;
   }
-
 
   refreshList(): void {
     const { category, nameSort, dateSort, search, published } = this.filters.value;
@@ -201,16 +281,6 @@ export class TestGroupSelectorComponent implements OnInit {
       published,
       nameSort
     });
-  }
-
-  isAllSelected(): boolean {
-    let numSelected: number[] = [];
-    if (this.data.type === ContentSelectorOpType.SINGLE) {
-      numSelected = this.selectedTestGroups.map(tg => tg.id);
-    } else if (this.data.type === ContentSelectorOpType.OTHER) {
-      numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.GROUP).map(t => t.contentId as number);
-    }
-    return this.contentSelectionService.isContentEqual(this.testGroup.data.map(t => t.id), numSelected);
   }
 
   isSelected(tg: TestGroup): boolean {
