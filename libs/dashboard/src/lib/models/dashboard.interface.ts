@@ -100,3 +100,4 @@ export  interface  UserGraphData{
   weekly: UserGraphType;
   daily: UserGraphType;
 }
+

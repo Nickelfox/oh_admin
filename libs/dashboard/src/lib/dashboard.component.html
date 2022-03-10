@@ -67,23 +67,23 @@
                 </div>
                 <div class='col-lg-2 p-0 d-flex flex-column' *ngIf='store.registeredStatus$ | async; let user'>
                   <mat-card class='mb-5'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)' >
-                    <mat-card-content  class='text-center' >
+                    <mat-card-content mat-ripple  class='text-center' >
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>
-                      <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>{{user.monthly.total || '--'}}</h1>
+                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{user.monthly.total || '--'}}</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri' >{{user.monthly.changePer || 0}}%</h4>
                     </mat-card-content>
                   </mat-card>
                   <mat-card class=' mb-5' mat-ripple (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>
-                      <h1 class='mb-2 mat-h1  font-calibri' style='color: #C49ED4'>{{user.weekly.total || '--'}}</h1>
+                      <h1 class='mb-2 mat-h1  text-color__primary--light  font-calibri' >{{user.weekly.total || '--'}}</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{user.weekly.changePer || 0}}%</h4>
                     </mat-card-content>
                   </mat-card>
                   <mat-card class=' mb-5' mat-ripple (click)='showRegisteredUserData(dashboardRangeFilterEnum.DAILY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>
-                      <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>{{user.daily.total || '--'}}</h1>
+                      <h1 class='mb-2 mat-h1  text-color__primary--light  font-calibri' >{{user.daily.total || '--'}}</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{user.daily.changePer || 0}}%</h4>
                     </mat-card-content>
                   </mat-card>
@@ -105,21 +105,21 @@
                   <mat-card class=' mb-5' mat-ripple (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)'>
                     <mat-card-content class='text-center' >
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>
-                      <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>{{_dummyActiveUserData.monthly.total}}</h1>
+                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{_dummyActiveUserData.monthly.total}}</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.monthly.changePer}}%</h4>
                     </mat-card-content>
                   </mat-card>
                   <mat-card class=' mb-5' mat-ripple (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>
-                      <h1 class='mb-2 mat-h1  font-calibri' style='color: #C49ED4'>{{_dummyActiveUserData.weekly.total}}</h1>
+                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{_dummyActiveUserData.weekly.total}}</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.weekly.changePer}}%</h4>
                     </mat-card-content>
                   </mat-card>
                   <mat-card class=' mb-5' mat-ripple (click)='showActiveUserData(dashboardRangeFilterEnum.DAILY)'>
                     <mat-card-content class='text-center'>
                       <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>
-                      <h1 class='mb-2 mat-h1  font-calibri' style='color: #8CB4EA'>{{_dummyActiveUserData.daily.total}}</h1>
+                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{_dummyActiveUserData.daily.total}}</h1>
                       <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.daily.changePer}}%</h4>
                     </mat-card-content>
                   </mat-card>

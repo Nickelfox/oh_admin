@@ -4,7 +4,7 @@ import {
   AssessmentEngagement, AssessmentLimitRequest,
   DashboardData,
   PackEngagement, PackEngLimitRequest,
-  TestWatched, TestWatchedLimitRequest, UserGraphData
+  TestWatched, TestWatchedLimitRequest, UserGraphData,
 } from './models/dashboard.interface';
 import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
@@ -45,7 +45,7 @@ export interface DashboardState extends Partial<DashboardData> {
   totalPacks:number,
   isActing?: boolean;
   loaded?: boolean;
-  registeredStatus?: UserGraphData;
+  registeredStatus?: Partial<UserGraphData>;
 }
 
 const initialState: DashboardState = {
@@ -77,18 +77,18 @@ const initialState: DashboardState = {
     {
       monthly:{
         total:'',
-        data:[],
-        changePer: 0
+        changePer: 0,
+        data:[]
       },
       weekly:{
         total:'',
-        data:[],
-        changePer: 0
+        changePer: 0,
+        data:[]
       },
       daily:{
         total:'',
-        data:[],
-        changePer:0
+        changePer:0,
+        data:[]
       }
     }
 };
@@ -141,22 +141,22 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   };
 
 
-  registeredStatus$: Observable<UserGraphData> = this.select(state => state.registeredStatus ??
+  registeredStatus$: Observable<any> = this.select(state => state.registeredStatus ??
     {
       monthly:{
         total:'',
-        data:[],
-        changePer: 0
+        changePer: 0,
+        data:[]
       },
       weekly:{
         total:'',
-        data:[],
-        changePer: 0
+        changePer: 0,
+        data:[]
       },
       daily:{
         total:'',
-        data:[],
-        changePer:0
+        changePer:0,
+        data:[]
       }
     }
   )
@@ -322,6 +322,8 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
+
+
   readonly getRegisteredUsers = this.effect<{ filterBy: DashboardRangeFilterEnum; startDate: string; endDate: string }>(params$ =>
     params$.pipe(
       tap((req) => {
@@ -522,6 +524,21 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   {
     let dataLabels: ChartLabel = [];
     let dataSet: number[] = [];
+    // if (filter.monthly)
+    // {
+    //   dataSet = filter.monthly.data.map(res => res.count);
+    //   dataLabels = filter.monthly.data.map(res => res.date);
+    // }
+    // else if(filter.weekly)
+    // {
+    //   dataSet = filter.weekly.data.map(res => res.count);
+    //   dataLabels = filter.weekly.data.map(res => res.date);
+    // }
+    // else if(filter.daily)
+    // {
+    //   dataSet = filter.daily.data.map(res => res.count);
+    //   dataLabels = filter.daily.data.map(res => res.date);
+    // }
     switch (filter) {
       case DashboardRangeFilterEnum.WEEKLY:
         dataSet = this._dummyRegisteresUserData.weekly.data.map(res => res.count);
