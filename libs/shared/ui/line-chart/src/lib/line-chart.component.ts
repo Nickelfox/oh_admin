@@ -13,13 +13,13 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
       ></hidden-innovation-shimmer>
     </ng-template>
     <ng-template #statsLoadingElse>
-      <mat-card>
-        <mat-card-content>
+      <div  >
+        <div>
           <div class='d-flex align-items-center mb-3'>
             <mat-icon color='primary' class='mr-1 card-icon'>{{icon || '--'}}</mat-icon>
             <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>{{label || '--'}}</h4>
           </div>
-          <div class='chart__container-main'>
+          <div class='chart__container-main' >
             <canvas baseChart
                     chartType='line'
                     [colors]='chartColors'
@@ -33,8 +33,8 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
               <h3 class='mat-h3'>No Data Available</h3>
             </div>
           </div>
-        </mat-card-content>
-      </mat-card>
+        </div>
+      </div>
     </ng-template>
   `,
   styleUrls: ['./line-chart.component.scss'],

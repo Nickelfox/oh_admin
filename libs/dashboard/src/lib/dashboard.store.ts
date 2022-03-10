@@ -337,64 +337,64 @@ export class DashboardStore extends ComponentStore<DashboardState> {
           tap(
             (apiRes) => {
 
-              this.patchState({
-                registeredStatus:{
-                  monthly:{
-                    total:this._dummyRegisteresUserData.monthly.total,
-                    changePer: this._dummyRegisteresUserData.monthly.changePer,
-                    data:[]
-                  },
-                  weekly:{
-                    total:this._dummyRegisteresUserData.weekly.total,
-                    changePer: this._dummyRegisteresUserData.weekly.changePer,
-                    data:[]
-                  },
-                  daily:{
-                    total:this._dummyRegisteresUserData.daily.total,
-                    changePer: this._dummyRegisteresUserData.daily.changePer,
-                    data:[]
-                  },
-                }
-              })
-
-              switch (req.filterBy)
-              {
-                case DashboardRangeFilterEnum.MONTHLY: {
-                  const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.MONTHLY);
-                  this.patchState({
-                    isLineChartLoading: false,
-                    registeredUsersData: localDataSet.datasets,
-                    registeredUsersLabel: localDataSet.label
-                  })
-                }
-                break;
-                case DashboardRangeFilterEnum.WEEKLY: {
-                  const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.WEEKLY);
-                  this.patchState({
-                    isLineChartLoading: false,
-                    registeredUsersData: localDataSet.datasets,
-                    registeredUsersLabel: localDataSet.label
-                  })
-                }
-                break;
-                case DashboardRangeFilterEnum.DAILY: {
-                  const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.DAILY);
-                  this.patchState({
-                    isLineChartLoading: false,
-                    registeredUsersData: localDataSet.datasets,
-                    registeredUsersLabel: localDataSet.label
-                  })
-                }
-                break;
-              }
-
-              // const dataSet = this.convertDataFormat(apiRes.users, req);
-              //
               // this.patchState({
-              //   isLineChartLoading: false,
-              //   registeredUsersData: dataSet.dataSet,
-              //   registeredUsersLabel: dataSet.labels
-              // });
+              //   registeredStatus:{
+              //     monthly:{
+              //       total:this._dummyRegisteresUserData.monthly.total,
+              //       changePer: this._dummyRegisteresUserData.monthly.changePer,
+              //       data:[]
+              //     },
+              //     weekly:{
+              //       total:this._dummyRegisteresUserData.weekly.total,
+              //       changePer: this._dummyRegisteresUserData.weekly.changePer,
+              //       data:[]
+              //     },
+              //     daily:{
+              //       total:this._dummyRegisteresUserData.daily.total,
+              //       changePer: this._dummyRegisteresUserData.daily.changePer,
+              //       data:[]
+              //     },
+              //   }
+              // })
+              //
+              // switch (req.filterBy)
+              // {
+              //   case DashboardRangeFilterEnum.MONTHLY: {
+              //     const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.MONTHLY);
+              //     this.patchState({
+              //       isLineChartLoading: false,
+              //       registeredUsersData: localDataSet.datasets,
+              //       registeredUsersLabel: localDataSet.label
+              //     })
+              //   }
+              //   break;
+              //   case DashboardRangeFilterEnum.WEEKLY: {
+              //     const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.WEEKLY);
+              //     this.patchState({
+              //       isLineChartLoading: false,
+              //       registeredUsersData: localDataSet.datasets,
+              //       registeredUsersLabel: localDataSet.label
+              //     })
+              //   }
+              //   break;
+              //   case DashboardRangeFilterEnum.DAILY: {
+              //     const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.DAILY);
+              //     this.patchState({
+              //       isLineChartLoading: false,
+              //       registeredUsersData: localDataSet.datasets,
+              //       registeredUsersLabel: localDataSet.label
+              //     })
+              //   }
+              //   break;
+              // }
+
+              const dataSet = this.convertDataFormat(apiRes.users, req);
+
+              this.patchState({
+                isLineChartLoading: false,
+                registeredUsersData: dataSet.dataSet,
+                registeredUsersLabel: dataSet.labels
+              });
             },
             err => {
               this.patchState({

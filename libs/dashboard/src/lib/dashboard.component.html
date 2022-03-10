@@ -55,7 +55,19 @@
           <div class='row mb-4'>
             <div class='col-lg-12 col-md-12 mt-lg-0 mt-3 mb-5 d-flex'>
               <div class='row w-100'>
-                <div class='col-lg-10'>
+                <mat-card class='col-lg-12 mat-card' >
+                  <mat-card-content >
+                    <div class='d-flex justify-content-end'>
+                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)'  class='ml-2' color='primary' mat-flat-button>
+                        <mat-icon class='mr-2'>calendar_month</mat-icon>
+                        {{"Monthly"}}
+                      </button>
+                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)'  class='ml-2' color='primary' mat-flat-button>
+                        <mat-icon class='mr-2'>calendar_view_week</mat-icon>
+                        {{"Weekly"}}
+                      </button>
+                    </div>
+
                   <hidden-innovation-line-chart
                     [chartData]='$any(store.registeredUsersData$ | async)'
                     [chartLabels]='$any(store.registeredUsersLabel$ | async)'
@@ -64,66 +76,79 @@
                     icon='how_to_reg'
                     label='Registered Users'>
                   </hidden-innovation-line-chart>
-                </div>
-                <div class='col-lg-2 p-0 d-flex flex-column' *ngIf='store.registeredStatus$ | async; let user'>
-                  <mat-card class='mb-5 p-0'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)' >
-                    <mat-card-content mat-ripple  class='text-center p-3' >
-                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>
-                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{user.monthly.total || '--'}}</h1>
-                      <h4 class='mb-2 mat-h4 text-color__success font-calibri' >{{user.monthly.changePer || 0}}%</h4>
-                    </mat-card-content>
-                  </mat-card>
-                  <mat-card class=' mb-5 p-0'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)'>
-                    <mat-card-content mat-ripple class='text-center p-3'>
-                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>
-                      <h1 class='mb-2 mat-h1  text-color__primary--light  font-calibri' >{{user.weekly.total || '--'}}</h1>
-                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{user.weekly.changePer || 0}}%</h4>
-                    </mat-card-content>
-                  </mat-card>
-                  <mat-card class=' mb-5 p-0'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.DAILY)'>
-                    <mat-card-content mat-ripple class='text-center p-3'>
-                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>
-                      <h1 class='mb-2 mat-h1  text-color__primary--light  font-calibri' >{{user.daily.total || '--'}}</h1>
-                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{user.daily.changePer || 0}}%</h4>
-                    </mat-card-content>
-                  </mat-card>
-                </div>
+                  </mat-card-content>
+                </mat-card>
+<!--                <div class='col-lg-2 p-0 d-flex flex-column' *ngIf='store.registeredStatus$ | async; let user'>-->
+<!--                  <mat-card class='mb-5 p-0'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)' >-->
+<!--                    <mat-card-content mat-ripple  class='text-center p-3' >-->
+<!--                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>-->
+<!--                      <h1 class='mb-2 mat-h1 text-color__primary&#45;&#45;light  font-calibri' >{{user.monthly.total || '&#45;&#45;'}}</h1>-->
+<!--                      <h4 class='mb-2 mat-h4 text-color__success font-calibri' >{{user.monthly.changePer || 0}}%</h4>-->
+<!--                    </mat-card-content>-->
+<!--                  </mat-card>-->
+<!--                  <mat-card class=' mb-5 p-0'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)'>-->
+<!--                    <mat-card-content mat-ripple class='text-center p-3'>-->
+<!--                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>-->
+<!--                      <h1 class='mb-2 mat-h1  text-color__primary&#45;&#45;light  font-calibri' >{{user.weekly.total || '&#45;&#45;'}}</h1>-->
+<!--                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{user.weekly.changePer || 0}}%</h4>-->
+<!--                    </mat-card-content>-->
+<!--                  </mat-card>-->
+<!--                  <mat-card class=' mb-5 p-0'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.DAILY)'>-->
+<!--                    <mat-card-content mat-ripple class='text-center p-3'>-->
+<!--                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>-->
+<!--                      <h1 class='mb-2 mat-h1  text-color__primary&#45;&#45;light  font-calibri' >{{user.daily.total || '&#45;&#45;'}}</h1>-->
+<!--                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{user.daily.changePer || 0}}%</h4>-->
+<!--                    </mat-card-content>-->
+<!--                  </mat-card>-->
+<!--                </div>-->
               </div>
             </div>
             <div class='col-lg-12 col-md-12 mt-lg-0 mt-3 mb-3'>
               <div class='row w-100'>
-                <div class='col-lg-10'>
-                  <hidden-innovation-line-chart
-                    [chartData]='$any(store.activeUserData$ | async)'
-                    [chartLabels]='$any(store.activeUserLabel$ | async)'
-                    [isLoading]='(store.isLineChartLoading$ | async)'
-                    chartOpt='No. of Active users'
-                    icon='sports_martial_arts'
-                    label='Active Users'></hidden-innovation-line-chart>
-                </div>
-                <div class='col-lg-2 p-0 d-flex flex-column '>
-                  <mat-card class=' mb-5 p-0'  (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)'>
-                    <mat-card-content mat-ripple class='text-center p-3' >
-                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>
-                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{_dummyActiveUserData.monthly.total}}</h1>
-                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.monthly.changePer}}%</h4>
-                    </mat-card-content>
-                  </mat-card>
-                  <mat-card class=' mb-5 p-0'  (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)'>
-                    <mat-card-content mat-ripple class='text-center p-3'>
-                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>
-                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{_dummyActiveUserData.weekly.total}}</h1>
-                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.weekly.changePer}}%</h4>
-                    </mat-card-content>
-                  </mat-card>
-                  <mat-card class=' mb-5 p-0'  (click)='showActiveUserData(dashboardRangeFilterEnum.DAILY)'>
-                    <mat-card-content mat-ripple class='text-center p-3'>
-                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>
-                      <h1 class='mb-2 mat-h1 text-color__primary--light  font-calibri' >{{_dummyActiveUserData.daily.total}}</h1>
-                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.daily.changePer}}%</h4>
-                    </mat-card-content>
-                  </mat-card>
-                </div>
+                <mat-card class='col-lg-12'>
+                  <mat-card-content>
+                    <div class='d-flex justify-content-end'>
+                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)'  class='ml-2' color='primary' mat-flat-button>
+                        <mat-icon class='mr-2'>calendar_month</mat-icon>
+                        {{"Monthly"}}
+                      </button>
+                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)'  class='ml-2' color='primary' mat-flat-button>
+                        <mat-icon class='mr-2'>calendar_view_week</mat-icon>
+                        {{"Weekly"}}
+                      </button>
+                    </div>
+                    <hidden-innovation-line-chart
+                      [chartData]='$any(store.activeUserData$ | async)'
+                      [chartLabels]='$any(store.activeUserLabel$ | async)'
+                      [isLoading]='(store.isLineChartLoading$ | async)'
+                      chartOpt='No. of Active users'
+                      icon='sports_martial_arts'
+                      label='Active Users'></hidden-innovation-line-chart>
+                  </mat-card-content>
+                </mat-card>
+<!--                <div class='col-lg-2 p-0 d-flex flex-column '>-->
+<!--                  <mat-card class=' mb-5 p-0'  (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)'>-->
+<!--                    <mat-card-content mat-ripple class='text-center p-3' >-->
+<!--                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Monthly</h3>-->
+<!--                      <h1 class='mb-2 mat-h1 text-color__primary&#45;&#45;light  font-calibri' >{{_dummyActiveUserData.monthly.total}}</h1>-->
+<!--                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.monthly.changePer}}%</h4>-->
+<!--                    </mat-card-content>-->
+<!--                  </mat-card>-->
+<!--                  <mat-card class=' mb-5 p-0'  (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)'>-->
+<!--                    <mat-card-content mat-ripple class='text-center p-3'>-->
+<!--                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Weekly</h3>-->
+<!--                      <h1 class='mb-2 mat-h1 text-color__primary&#45;&#45;light  font-calibri' >{{_dummyActiveUserData.weekly.total}}</h1>-->
+<!--                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.weekly.changePer}}%</h4>-->
+<!--                    </mat-card-content>-->
+<!--                  </mat-card>-->
+<!--                  <mat-card class=' mb-5 p-0'  (click)='showActiveUserData(dashboardRangeFilterEnum.DAILY)'>-->
+<!--                    <mat-card-content mat-ripple class='text-center p-3'>-->
+<!--                      <h3 class='m-0 mb-2 mat-h3 text-color__primary font-calibri'>Daily</h3>-->
+<!--                      <h1 class='mb-2 mat-h1 text-color__primary&#45;&#45;light  font-calibri' >{{_dummyActiveUserData.daily.total}}</h1>-->
+<!--                      <h4 class='mb-2 mat-h4 text-color__success font-calibri'>{{_dummyActiveUserData.daily.changePer}}%</h4>-->
+<!--                    </mat-card-content>-->
+<!--                  </mat-card>-->
+<!--                </div>-->
               </div>
 
             </div>
