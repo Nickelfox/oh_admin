@@ -17,7 +17,7 @@ import { ContentSelectionService } from './services/content-selection.service';
     ReplaceUnderscorePipe,
     ImagePreloaderDirective,
     ParseOneRemPipe,
-    DistanceLengthPipe,
+    DistanceLengthPipe
   ],
   exports: [
     DisableCopyPasteDirective,
@@ -27,9 +27,10 @@ import { ContentSelectionService } from './services/content-selection.service';
     ImagePreloaderDirective,
     DistanceLengthPipe
   ],
-  providers:[
+  providers: [
     PendingChangesGuard,
-    ContentSelectionService,
+    ContentSelectionService
   ]
 })
-export class UtilsModule {}
+export class UtilsModule {
+}

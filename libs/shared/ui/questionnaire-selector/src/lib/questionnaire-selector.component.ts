@@ -32,7 +32,7 @@ import { MatSelectionListChange } from '@angular/material/list';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
-import { ContentSelectionService } from '../../../../utils/src/lib/services/content-selection.service';
+import { ContentSelectionService } from '@hidden-innovation/shared/utils';
 
 export interface QuestionnaireSelectorData {
   type: ContentSelectorOpType;

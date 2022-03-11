@@ -19,7 +19,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
-import { ContentSelectionService } from '../../../../utils/src/lib/services/content-selection.service';
+import { ContentSelectionService } from '@hidden-innovation/shared/utils';
 
 export interface PackSelectorData {
   limit?: boolean;
