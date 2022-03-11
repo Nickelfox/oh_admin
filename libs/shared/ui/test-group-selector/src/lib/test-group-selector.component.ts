@@ -36,7 +36,7 @@ import { MatSelectionListChange } from '@angular/material/list';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
-import { ContentSelectionService } from '../../../../utils/src/lib/services/content-selection.service';
+import { ContentSelectionService } from '@hidden-innovation/shared/utils';
 
 export interface TestGroupSelectorData {
   type: ContentSelectorOpType;
