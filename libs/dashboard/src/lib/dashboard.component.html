@@ -58,11 +58,11 @@
                 <mat-card class='col-lg-12 mat-card' >
                   <mat-card-content >
                     <div class='d-flex justify-content-end'>
-                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)'  class='ml-2' color='primary' mat-flat-button>
+                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)' mat-button class='ml-2' color='primary' [class.mat-stroked-button]='toggleRegBtn' [class.mat-flat-button]='!toggleRegBtn'  >
                         <mat-icon class='mr-2'>calendar_month</mat-icon>
                         {{"Monthly"}}
                       </button>
-                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)'  class='ml-2' color='primary' mat-flat-button>
+                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)' mat-button class='ml-2' color='primary' [class.mat-flat-button]='toggleRegBtn' [class.mat-stroked-button]='!toggleRegBtn'>
                         <mat-icon class='mr-2'>calendar_view_week</mat-icon>
                         {{"Weekly"}}
                       </button>
@@ -108,11 +108,11 @@
                 <mat-card class='col-lg-12'>
                   <mat-card-content>
                     <div class='d-flex justify-content-end'>
-                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)'  class='ml-2' color='primary' mat-flat-button>
+                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)' class='ml-2' color='primary' mat-button [class.mat-stroked-button]='toggleActiveBtn' [class.mat-flat-button]='!toggleActiveBtn' >
                         <mat-icon class='mr-2'>calendar_month</mat-icon>
                         {{"Monthly"}}
                       </button>
-                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)'  class='ml-2' color='primary' mat-flat-button>
+                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)' class='ml-2' color='primary' mat-button [class.mat-flat-button]='toggleActiveBtn' [class.mat-stroked-button]='!toggleActiveBtn'>
                         <mat-icon class='mr-2'>calendar_view_week</mat-icon>
                         {{"Weekly"}}
                       </button>

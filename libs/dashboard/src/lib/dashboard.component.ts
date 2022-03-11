@@ -60,97 +60,8 @@ export interface PackEng {
 
 export class DashboardComponent implements OnInit {
 
-  public _dummyRegisteresUserData: UserGraphData = {
-    monthly: {
-      total: '16k',
-      changePer: -20,
-      data: [
-        {
-          count: 3,
-          date: DateTime.now().toISODate()
-        },
-        {
-          count: 4,
-          date: DateTime.now().toISODate()
-        },
-        {
-          count: 6,
-          date: DateTime.now().toISODate()
-        }
-      ]
-    },
-    weekly: {
-      total: '5.2k',
-      changePer: +50,
-      data: [
-        {
-          count: 5,
-          date: DateTime.now().toISODate()
-        },
-        {
-          count: 20,
-          date: DateTime.now().toISODate()
-        }
-      ]
-    },
-    daily: {
-      total: '1.6k',
-      changePer: +30,
-      data: [
-        {
-          count: 10,
-          date: DateTime.now().toISODate()
-        },
-      ]
-    }
-  };
-  public _dummyActiveUserData: UserGraphData = {
-    monthly: {
-      total: '16k',
-      changePer: -20,
-      data: [
-        {
-          count: 3,
-          date: DateTime.now().toISODate()
-        },
-        {
-          count: 4,
-          date: DateTime.now().toISODate()
-        },
-        {
-          count: 6,
-          date: DateTime.now().toISODate()
-        }
-      ]
-    },
-    weekly: {
-      total: '5.2k',
-      changePer: +50,
-      data: [
-        {
-          count: 5,
-          date: DateTime.now().toISODate()
-        },
-        {
-          count: 20,
-          date: DateTime.now().toISODate()
-        }
-      ]
-    },
-    daily: {
-      total: '1.6k',
-      changePer: +30,
-      data: [
-        {
-          count: 10,
-          date: DateTime.now().toISODate()
-        },
-      ]
-    }
-  };
-
-
-
+  toggleRegBtn?:boolean = false;
+  toggleActiveBtn?:boolean = false;
   displayedColumnsAssessmentTest: string[] = ['position', 'category', 'id', 'average_score', 'completion'];
   assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
 
@@ -324,7 +235,6 @@ export class DashboardComponent implements OnInit {
     this.showActiveUserData(DashboardRangeFilterEnum.WEEKLY);
     this.showRegisteredUserData(DashboardRangeFilterEnum.WEEKLY);
 
-
     this.store.getStats();
     this.store.getCompleteTestEngagement();
     this.store.getAssessmentTestEngagement();
@@ -408,6 +318,7 @@ export class DashboardComponent implements OnInit {
   };
 
   showActiveUserData(rangeFilter: DashboardRangeFilterEnum) {
+    this.toggleActiveBtn = !this.toggleActiveBtn
     switch (rangeFilter) {
       case DashboardRangeFilterEnum.MONTHLY:
         this.store.getActiveUsers({
@@ -440,6 +351,7 @@ export class DashboardComponent implements OnInit {
   }
 
   showRegisteredUserData(rangeFilter: DashboardRangeFilterEnum) {
+    this.toggleRegBtn = !this.toggleRegBtn
     switch (rangeFilter) {
       case DashboardRangeFilterEnum.MONTHLY:
         this.store.getRegisteredUsers({
