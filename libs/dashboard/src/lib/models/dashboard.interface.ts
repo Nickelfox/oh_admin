@@ -84,3 +84,20 @@ export interface DashboardRequest {
   start: string;
   end: string;
 }
+
+export interface UserGraphType {
+  total: string;
+  changePer: number;
+  data: {
+    count:number;
+    date: string;
+  }[];
+}
+
+
+export  interface  UserGraphData{
+  monthly: UserGraphType;
+  weekly: UserGraphType;
+  daily: UserGraphType;
+}
+
