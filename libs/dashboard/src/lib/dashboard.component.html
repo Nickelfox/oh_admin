@@ -57,15 +57,12 @@
               <div class='row w-100'>
                 <mat-card class='col-lg-12 mat-card' >
                   <mat-card-content >
+
                     <div class='d-flex justify-content-end'>
-                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)' mat-button class='ml-2' color='primary' [class.mat-stroked-button]='toggleRegBtn' [class.mat-flat-button]='!toggleRegBtn'  >
-                        <mat-icon class='mr-2'>calendar_month</mat-icon>
-                        {{"Monthly"}}
-                      </button>
-                      <button (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)' mat-button class='ml-2' color='primary' [class.mat-flat-button]='toggleRegBtn' [class.mat-stroked-button]='!toggleRegBtn'>
-                        <mat-icon class='mr-2'>calendar_view_week</mat-icon>
-                        {{"Weekly"}}
-                      </button>
+                      <mat-button-toggle-group appearance="standard" name="fontStyle" aria-label="Font Style">
+                        <mat-button-toggle (click)='showRegisteredUserData(dashboardRangeFilterEnum.MONTHLY)'><mat-icon class='mr-2'>calendar_month</mat-icon> {{"Monthly"}}</mat-button-toggle>
+                        <mat-button-toggle [checked]='true'  (click)='showRegisteredUserData(dashboardRangeFilterEnum.WEEKLY)' > <mat-icon class='mr-2'>calendar_view_week</mat-icon> {{"Weekly"}}</mat-button-toggle>
+                      </mat-button-toggle-group>
                     </div>
 
                   <hidden-innovation-line-chart
@@ -108,14 +105,11 @@
                 <mat-card class='col-lg-12'>
                   <mat-card-content>
                     <div class='d-flex justify-content-end'>
-                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)' class='ml-2' color='primary' mat-button [class.mat-stroked-button]='toggleActiveBtn' [class.mat-flat-button]='!toggleActiveBtn' >
-                        <mat-icon class='mr-2'>calendar_month</mat-icon>
-                        {{"Monthly"}}
-                      </button>
-                      <button (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)' class='ml-2' color='primary' mat-button [class.mat-flat-button]='toggleActiveBtn' [class.mat-stroked-button]='!toggleActiveBtn'>
-                        <mat-icon class='mr-2'>calendar_view_week</mat-icon>
-                        {{"Weekly"}}
-                      </button>
+                      <mat-button-toggle-group appearance="standard" name="fontStyle" aria-label="Font Style">
+                        <mat-button-toggle (click)='showActiveUserData(dashboardRangeFilterEnum.MONTHLY)'><mat-icon class='mr-2'>calendar_month</mat-icon> {{"Monthly"}}</mat-button-toggle>
+                        <mat-button-toggle [checked]='true'  (click)='showActiveUserData(dashboardRangeFilterEnum.WEEKLY)' > <mat-icon class='mr-2'>calendar_view_week</mat-icon> {{"Weekly"}}</mat-button-toggle>
+                      </mat-button-toggle-group>
+
                     </div>
                     <hidden-innovation-line-chart
                       [chartData]='$any(store.activeUserData$ | async)'
