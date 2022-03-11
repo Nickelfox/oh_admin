@@ -191,19 +191,19 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
         })
       ]),
       xWeightUnit: new FormControl({
-        value: undefined,
+        value: WeightTypeEnum.GRAM,
         disabled: true
       }, [...this.utilities.requiredFieldValidation]),
       yWeightUnit: new FormControl({
-        value: undefined,
+        value: WeightTypeEnum.GRAM,
         disabled: true
       }, [...this.utilities.requiredFieldValidation]),
       xDistanceUnit: new FormControl({
-        value: undefined,
+        value: DistanceTypeEnum.CENTIMETRE,
         disabled: true
       }, [...this.utilities.requiredFieldValidation]),
       yDistanceUnit: new FormControl({
-        value: undefined,
+        value: DistanceTypeEnum.CENTIMETRE,
         disabled: true
       }, [...this.utilities.requiredFieldValidation])
     }),
@@ -577,6 +577,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   submit(): void {
     this.testGroup.markAllAsDirty();
     this.testGroup.markAllAsTouched();
+    console.log(this.testGroup);
     if (this.testGroup.invalid) {
       this.hotToastService.error(this.formValidationService.formSubmitError);
       return;

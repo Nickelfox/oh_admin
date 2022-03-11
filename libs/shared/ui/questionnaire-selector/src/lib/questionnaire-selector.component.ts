@@ -32,6 +32,7 @@ import { MatSelectionListChange } from '@angular/material/list';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
+import { ContentSelectionService } from '../../../../utils/src/lib/services/content-selection.service';
 
 export interface QuestionnaireSelectorData {
   type: ContentSelectorOpType;
@@ -88,7 +89,8 @@ export class QuestionnaireSelectorComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private matDialog: MatDialog,
     public uiStore: UiStore,
-    private hotToastService: HotToastService
+    private hotToastService: HotToastService,
+    private contentSelectionService: ContentSelectionService
   ) {
     if (!this.questionnaireData) {
       this.hotToastService.error('Application Error! Category data needs to to sent before selecting any questionnaires');
@@ -130,24 +132,24 @@ export class QuestionnaireSelectorComponent implements OnInit {
   get paginatorIndex() {
     return this.pageIndex - 1;
   }
-  get Count(){
+
+  get Count() {
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:
-        if(this.selectedQuestionnaires.length === 0)
-        {
+        if (this.selectedQuestionnaires.length === 0) {
           return '';
         }
-        return this.selectedQuestionnaires? `SELECTED ITEMS ${this.selectedQuestionnaires.length}`: '-';
+        return this.selectedQuestionnaires ? `SELECTED ITEMS ${this.selectedQuestionnaires.length}` : '-';
         break;
       case ContentSelectorOpType.OTHER:
-        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length === 0)
-        {
+        if (this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length === 0) {
           return '';
         }
-        return  this.selectedContents? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length}`: '-';
+        return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.QUESTIONNAIRE).length}` : '-';
         break;
     }
   }
+
   isSelected(q: QuestionnaireExtended): boolean {
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:
@@ -155,6 +157,16 @@ export class QuestionnaireSelectorComponent implements OnInit {
       case ContentSelectorOpType.OTHER:
         return !!this.selectedContents.find(value => (value.contentId === q.id) && (value.type === PackContentTypeEnum.QUESTIONNAIRE));
     }
+  }
+
+  isAllSelected(): boolean {
+    let numSelected: number[] = [];
+    if (this.questionnaireData.type === ContentSelectorOpType.SINGLE) {
+      numSelected = this.selectedQuestionnaires.map(t => t.id);
+    } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
+      numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.QUESTIONNAIRE).map(t => t.contentId as number);
+    }
+    return this.contentSelectionService.isContentEqual(this.questionnaires.data.map(q => q.id), numSelected);
   }
 
   addToList(q: QuestionnaireExtended): void {

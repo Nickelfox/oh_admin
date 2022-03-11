@@ -30,6 +30,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
+import { ContentSelectionService } from '../../../../utils/src/lib/services/content-selection.service';
 
 export interface TestSelectorData {
   type: ContentSelectorOpType;
@@ -96,7 +97,8 @@ export class TestSelectorComponent implements OnInit {
     public store: TestStore,
     private cdr: ChangeDetectorRef,
     public uiStore: UiStore,
-    private hotToastService: HotToastService
+    private hotToastService: HotToastService,
+    private contentSelectionService: ContentSelectionService
   ) {
     if (this.categoryData === undefined || this.categoryData === null) {
       this.hotToastService.error('Application Error! Category data needs to to sent before selecting any tests');
@@ -142,20 +144,26 @@ export class TestSelectorComponent implements OnInit {
   get Count() {
     switch (this.categoryData.type) {
       case ContentSelectorOpType.SINGLE:
-        if (this.selectedTests.length === 0)
-        {
+        if (this.selectedTests.length === 0) {
           return '';
         }
         return this.selectedTests ? `SELECTED ITEMS ${this.selectedTests.length}` : '-';
-        break;
       case ContentSelectorOpType.OTHER:
-        if(this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length === 0)
-        {
+        if (this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length === 0) {
           return '';
         }
         return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length}` : '-';
-        break;
     }
+  }
+
+  get isAllSelected(): boolean {
+    let numSelected: number[] = [];
+    if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
+      numSelected = this.selectedTests.map(t => t.id);
+    } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
+      numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.SINGLE).map(t => t.contentId as number);
+    }
+    return this.contentSelectionService.isContentEqual(this.tests.data.map(t => t.id), numSelected);
   }
 
   resetPagination(): void {
@@ -202,6 +210,80 @@ export class TestSelectorComponent implements OnInit {
     this.pageIndex = $event.pageIndex + 1;
     this.pageSize = $event.pageSize;
     this.refreshList();
+  }
+
+  masterToggleStackError(): void {
+    this.hotToastService.error('Application Error! Select All module stack issue');
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected) {
+      if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
+        try {
+          const clearedTests: Test[] = this.selectedTests.filter(t => !this.tests.data.find(t2 => t2.id === t.id));
+          this.uiStore.patchState({
+            selectedTests: clearedTests
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
+        try {
+          const clearedTests: (ContentCore | LessonCore)[] = this.selectedContents.filter(t => !this.tests.data.find(test => (t.contentId === test.id && t.type === PackContentTypeEnum.SINGLE)));
+          this.uiStore.patchState({
+            selectedContent: clearedTests
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      }
+    } else {
+      if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
+        try {
+          const leftOutTests: Test[] = this.tests.data.filter(t1 => this.selectedTests.findIndex(t2 => t2.id === t1.id) === -1);
+          this.uiStore.patchState({
+            selectedTests: [
+              ...this.selectedTests,
+              ...leftOutTests
+            ]
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
+        try {
+          let clearedTests: ContentCore[] = [];
+          if (this.selectedContents.filter(t => t.type === PackContentTypeEnum.SINGLE).length) {
+            clearedTests = this.tests.data.filter((t) =>
+              this.selectedContents
+                .find(({ contentId, type }) => contentId !== t.id && type === PackContentTypeEnum.SINGLE)
+            ).map(t => {
+              return {
+                contentId: t.id,
+                type: PackContentTypeEnum.SINGLE,
+                name: t.name
+              } as ContentCore;
+            });
+          } else {
+            clearedTests = this.tests.data.map(t => {
+              return {
+                contentId: t.id,
+                type: PackContentTypeEnum.SINGLE,
+                name: t.name
+              } as ContentCore;
+            });
+          }
+          this.uiStore.patchState({
+            selectedContent: [
+              ...this.selectedContents,
+              ...clearedTests
+            ]
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      }
+    }
   }
 
   trackById(index: number, test: Test): number {
