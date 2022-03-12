@@ -81,7 +81,6 @@ export class TestGroupSelectorComponent implements OnInit {
     published: new FormControl(undefined)
   });
 
-
   selectedTestGroups: TestGroup[] = [];
   dummyTestGroups: TestGroup[] = [];
   selectedContents: (ContentCore | LessonCore)[] = [];
