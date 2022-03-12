@@ -20,6 +20,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
 import { ContentSelectionService } from '@hidden-innovation/shared/utils';
+import { TestGroup } from '@hidden-innovation/test-group/data-access';
 
 export interface PackSelectorData {
   limit?: boolean;
@@ -142,9 +143,38 @@ export class PackSelectorComponent implements OnInit {
     return !!this.selectedPacks.find(value => value.id === pack.id);
   }
 
-  isAllSelected(): boolean {
+  get isAllSelected(): boolean {
     const numSelected: number[] = this.selectedPacks?.map(p => p.id) ?? [];
     return this.contentSelectionService.isContentEqual(this.packs.data.map(p => p.id), numSelected);
+  }
+
+  masterToggleStackError(): void {
+    this.hotToastService.error('Application Error! Select All module stack issue');
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected) {
+      try {
+        const clearedPacks: Pack[] = this.selectedPacks.filter(p => !this.packs.data.find(p2 => p2.id === p.id));
+        this.uiStore.patchState({
+          selectedPacks: clearedPacks
+        });
+      } catch {
+        this.masterToggleStackError();
+      }
+    } else {
+      try {
+        const leftOutPacks: Pack[] = this.packs.data.filter(p1 => this.selectedPacks.findIndex(p2 => p2.id === p1.id) === -1);
+        this.uiStore.patchState({
+          selectedPacks: [
+            ...this.selectedPacks,
+            ...leftOutPacks
+          ]
+        });
+      } catch {
+        this.masterToggleStackError();
+      }
+    }
   }
 
   addToList(pack: Pack): void {
