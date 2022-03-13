@@ -20,7 +20,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
 import { ContentSelectionService } from '@hidden-innovation/shared/utils';
-import { TestGroup } from '@hidden-innovation/test-group/data-access';
+import { Test } from '@hidden-innovation/test/data-access';
 
 export interface PackSelectorData {
   limit?: boolean;
@@ -103,6 +103,23 @@ export class PackSelectorComponent implements OnInit {
     return this.selectedPacks ? `SELECTED ITEMS ${this.selectedPacks.length}` : '-';
   }
 
+  get isAllSelected(): boolean {
+    const numSelected: number[] = this.selectedPacks?.map(p => p.id) ?? [];
+    return this.contentSelectionService.isContentEqual(this.packs.data.map(p => p.id), numSelected);
+  }
+
+  get someSelected(): boolean {
+    try {
+      if (this.selectedPacks?.length <= 0) {
+        return false;
+      }
+      const currentSelectedItems: Pack[] = this.packs.data.filter(t1 => this.selectedPacks.findIndex(t2 => t1.id === t2.id) !== -1);
+      return currentSelectedItems.length !== this.packs.data.length;
+    } catch {
+      return false;
+    }
+  }
+
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
@@ -141,11 +158,6 @@ export class PackSelectorComponent implements OnInit {
 
   isSelected(pack: Pack): boolean {
     return !!this.selectedPacks.find(value => value.id === pack.id);
-  }
-
-  get isAllSelected(): boolean {
-    const numSelected: number[] = this.selectedPacks?.map(p => p.id) ?? [];
-    return this.contentSelectionService.isContentEqual(this.packs.data.map(p => p.id), numSelected);
   }
 
   masterToggleStackError(): void {
