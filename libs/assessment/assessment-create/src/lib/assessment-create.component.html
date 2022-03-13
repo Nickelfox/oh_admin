@@ -111,6 +111,7 @@
             </mat-card-content>
             <mat-card-actions>
               <button [matMenuTriggerFor]='menuPack'
+                      [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
                       class='w-100' color='accent' mat-flat-button type='button'>
                 <mat-icon class='mr-2 mb-1'>add</mat-icon>
                 Add

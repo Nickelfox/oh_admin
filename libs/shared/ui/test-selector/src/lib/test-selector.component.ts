@@ -166,6 +166,32 @@ export class TestSelectorComponent implements OnInit {
     return this.contentSelectionService.isContentEqual(this.tests.data.map(t => t.id), numSelected);
   }
 
+  get someSelected(): boolean {
+    if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
+      try {
+        if (this.selectedTests?.length <= 0) {
+          return false;
+        }
+        const currentSelectedItems: Test[] = this.tests.data.filter(t1 => this.selectedTests.findIndex(t2 => t1.id === t2.id) !== -1);
+        return currentSelectedItems.length !== this.tests.data.length;
+      } catch {
+        return false;
+      }
+    } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
+      try {
+        const selectedTests: ContentCore[] = this.selectedContents?.filter(t => t.type === PackContentTypeEnum.SINGLE);
+        const currentSelectedItems: Test[] = this.tests.data.filter(t1 => selectedTests.findIndex(t2 => t1.id === t2.contentId) !== -1);
+        if (currentSelectedItems?.length <= 0) {
+          return false;
+        }
+        return currentSelectedItems.length !== this.tests.data.length;
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  }
+
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
