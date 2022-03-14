@@ -174,6 +174,7 @@ export class TestGroupSelectorComponent implements OnInit {
           return false;
         }
         const currentSelectedItems: TestGroup[] = this.testGroup.data.filter(t1 => this.selectedTestGroups.findIndex(t2 => t1.id === t2.id) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
         return currentSelectedItems.length !== this.testGroup.data.length;
       } catch {
         return false;
@@ -182,9 +183,7 @@ export class TestGroupSelectorComponent implements OnInit {
       try {
         const selectedTestGroups: ContentCore[] = this.selectedContents?.filter(t => t.type === PackContentTypeEnum.GROUP);
         const currentSelectedItems: TestGroup[] = this.testGroup.data.filter(t1 => selectedTestGroups.findIndex(t2 => t1.id === t2.contentId) !== -1);
-        if (currentSelectedItems?.length <= 0) {
-          return false;
-        }
+        if (currentSelectedItems?.length <= 0) return false;
         return currentSelectedItems.length !== this.testGroup.data.length;
       } catch {
         return false;

@@ -20,7 +20,6 @@ import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
 import { ContentSelectionService } from '@hidden-innovation/shared/utils';
-import { Test } from '@hidden-innovation/test/data-access';
 
 export interface PackSelectorData {
   limit?: boolean;
@@ -114,6 +113,7 @@ export class PackSelectorComponent implements OnInit {
         return false;
       }
       const currentSelectedItems: Pack[] = this.packs.data.filter(t1 => this.selectedPacks.findIndex(t2 => t1.id === t2.id) !== -1);
+      if (currentSelectedItems.length <= 0) return false;
       return currentSelectedItems.length !== this.packs.data.length;
     } catch {
       return false;

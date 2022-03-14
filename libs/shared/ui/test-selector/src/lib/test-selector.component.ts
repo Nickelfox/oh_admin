@@ -169,10 +169,9 @@ export class TestSelectorComponent implements OnInit {
   get someSelected(): boolean {
     if (this.categoryData.type === ContentSelectorOpType.SINGLE) {
       try {
-        if (this.selectedTests?.length <= 0) {
-          return false;
-        }
+        if (this.selectedTests?.length <= 0) return false;
         const currentSelectedItems: Test[] = this.tests.data.filter(t1 => this.selectedTests.findIndex(t2 => t1.id === t2.id) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
         return currentSelectedItems.length !== this.tests.data.length;
       } catch {
         return false;
@@ -181,9 +180,7 @@ export class TestSelectorComponent implements OnInit {
       try {
         const selectedTests: ContentCore[] = this.selectedContents?.filter(t => t.type === PackContentTypeEnum.SINGLE);
         const currentSelectedItems: Test[] = this.tests.data.filter(t1 => selectedTests.findIndex(t2 => t1.id === t2.contentId) !== -1);
-        if (currentSelectedItems?.length <= 0) {
-          return false;
-        }
+        if (currentSelectedItems?.length <= 0) return false;
         return currentSelectedItems.length !== this.tests.data.length;
       } catch {
         return false;

@@ -33,7 +33,6 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ContentCore, LessonCore } from '@hidden-innovation/pack/data-access';
 import { ContentSelectionService } from '@hidden-innovation/shared/utils';
-import { Test } from '@hidden-innovation/test/data-access';
 
 export interface QuestionnaireSelectorData {
   type: ContentSelectorOpType;
@@ -161,6 +160,29 @@ export class QuestionnaireSelectorComponent implements OnInit {
     return this.contentSelectionService.isContentEqual(this.questionnaires.data.map(q => q.id), numSelected);
   }
 
+  get someSelected(): boolean {
+    if (this.questionnaireData.type === ContentSelectorOpType.SINGLE) {
+      try {
+        if (this.selectedQuestionnaires?.length <= 0) return false;
+        const currentSelectedItems: Questionnaire[] = this.questionnaires.data.filter(t1 => this.selectedQuestionnaires.findIndex(t2 => t1.id === t2.id) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
+        return currentSelectedItems.length !== this.questionnaires.data.length;
+      } catch {
+        return false;
+      }
+    } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
+      try {
+        const selectedTests: ContentCore[] = this.selectedContents?.filter(t => t.type === PackContentTypeEnum.QUESTIONNAIRE);
+        const currentSelectedItems: Questionnaire[] = this.questionnaires.data.filter(t1 => selectedTests.findIndex(t2 => t1.id === t2.contentId) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
+        return currentSelectedItems.length !== this.questionnaires.data.length;
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  }
+
   isSelected(q: QuestionnaireExtended): boolean {
     switch (this.questionnaireData.type) {
       case ContentSelectorOpType.SINGLE:
@@ -227,32 +249,6 @@ export class QuestionnaireSelectorComponent implements OnInit {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshList();
-  }
-
-  get someSelected(): boolean {
-    if (this.questionnaireData.type === ContentSelectorOpType.SINGLE) {
-      try {
-        if (this.selectedQuestionnaires?.length <= 0) {
-          return false;
-        }
-        const currentSelectedItems: Questionnaire[] = this.questionnaires.data.filter(t1 => this.selectedQuestionnaires.findIndex(t2 => t1.id === t2.id) !== -1);
-        return currentSelectedItems.length !== this.questionnaires.data.length;
-      } catch {
-        return false;
-      }
-    } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
-      try {
-        const selectedTests: ContentCore[] = this.selectedContents?.filter(t => t.type === PackContentTypeEnum.QUESTIONNAIRE);
-        const currentSelectedItems: Questionnaire[] = this.questionnaires.data.filter(t1 => selectedTests.findIndex(t2 => t1.id === t2.contentId) !== -1);
-        if (currentSelectedItems?.length <= 0) {
-          return false;
-        }
-        return currentSelectedItems.length !== this.questionnaires.data.length;
-      } catch {
-        return false;
-      }
-    }
-    return false;
   }
 
   masterToggleStackError(): void {
