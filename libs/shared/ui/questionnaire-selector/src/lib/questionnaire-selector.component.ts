@@ -150,16 +150,7 @@ export class QuestionnaireSelectorComponent implements OnInit {
     }
   }
 
-  isSelected(q: QuestionnaireExtended): boolean {
-    switch (this.questionnaireData.type) {
-      case ContentSelectorOpType.SINGLE:
-        return !!this.selectedQuestionnaires.find(value => value.id === q.id);
-      case ContentSelectorOpType.OTHER:
-        return !!this.selectedContents.find(value => (value.contentId === q.id) && (value.type === PackContentTypeEnum.QUESTIONNAIRE));
-    }
-  }
-
-  isAllSelected(): boolean {
+  get isAllSelected(): boolean {
     let numSelected: number[] = [];
     if (this.questionnaireData.type === ContentSelectorOpType.SINGLE) {
       numSelected = this.selectedQuestionnaires.map(t => t.id);
@@ -167,6 +158,38 @@ export class QuestionnaireSelectorComponent implements OnInit {
       numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.QUESTIONNAIRE).map(t => t.contentId as number);
     }
     return this.contentSelectionService.isContentEqual(this.questionnaires.data.map(q => q.id), numSelected);
+  }
+
+  get someSelected(): boolean {
+    if (this.questionnaireData.type === ContentSelectorOpType.SINGLE) {
+      try {
+        if (this.selectedQuestionnaires?.length <= 0) return false;
+        const currentSelectedItems: Questionnaire[] = this.questionnaires.data.filter(t1 => this.selectedQuestionnaires.findIndex(t2 => t1.id === t2.id) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
+        return currentSelectedItems.length !== this.questionnaires.data.length;
+      } catch {
+        return false;
+      }
+    } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
+      try {
+        const selectedTests: ContentCore[] = this.selectedContents?.filter(t => t.type === PackContentTypeEnum.QUESTIONNAIRE);
+        const currentSelectedItems: Questionnaire[] = this.questionnaires.data.filter(t1 => selectedTests.findIndex(t2 => t1.id === t2.contentId) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
+        return currentSelectedItems.length !== this.questionnaires.data.length;
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  isSelected(q: QuestionnaireExtended): boolean {
+    switch (this.questionnaireData.type) {
+      case ContentSelectorOpType.SINGLE:
+        return !!this.selectedQuestionnaires.find(value => value.id === q.id);
+      case ContentSelectorOpType.OTHER:
+        return !!this.selectedContents.find(value => (value.contentId === q.id) && (value.type === PackContentTypeEnum.QUESTIONNAIRE));
+    }
   }
 
   addToList(q: QuestionnaireExtended): void {
@@ -226,6 +249,80 @@ export class QuestionnaireSelectorComponent implements OnInit {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshList();
+  }
+
+  masterToggleStackError(): void {
+    this.hotToastService.error('Application Error! Select All module stack issue');
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected) {
+      if (this.questionnaireData.type === ContentSelectorOpType.SINGLE) {
+        try {
+          const clearedQuestionnaires: QuestionnaireExtended[] = this.selectedQuestionnaires.filter(q => !this.questionnaires.data.find(q2 => q2.id === q.id));
+          this.uiStore.patchState({
+            selectedQuestionnaires: clearedQuestionnaires
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
+        try {
+          const clearedContent: (ContentCore | LessonCore)[] = this.selectedContents.filter(q => !this.questionnaires.data.find(q2 => (q.contentId === q2.id && q.type === PackContentTypeEnum.QUESTIONNAIRE)));
+          this.uiStore.patchState({
+            selectedContent: clearedContent
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      }
+    } else {
+      if (this.questionnaireData.type === ContentSelectorOpType.SINGLE) {
+        try {
+          const leftOutQuestionnaires: QuestionnaireExtended[] = this.questionnaires.data.filter(q1 => this.selectedQuestionnaires.findIndex(q2 => q2.id === q1.id) === -1);
+          this.uiStore.patchState({
+            selectedQuestionnaires: [
+              ...this.selectedQuestionnaires,
+              ...leftOutQuestionnaires
+            ]
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
+        try {
+          let clearedContents: ContentCore[] = [];
+          if (this.selectedContents.filter(t => t.type === PackContentTypeEnum.QUESTIONNAIRE).length) {
+            clearedContents = this.questionnaires.data.filter((q) =>
+              this.selectedContents
+                .find(({ contentId, type }) => contentId !== q.id && type === PackContentTypeEnum.QUESTIONNAIRE)
+            ).map(({ id, name }) => {
+              return {
+                contentId: id,
+                type: PackContentTypeEnum.QUESTIONNAIRE,
+                name
+              } as ContentCore;
+            });
+          } else {
+            clearedContents = this.questionnaires.data.map(t => {
+              return {
+                contentId: t.id,
+                type: PackContentTypeEnum.QUESTIONNAIRE,
+                name: t.name
+              } as ContentCore;
+            });
+          }
+          this.uiStore.patchState({
+            selectedContent: [
+              ...this.selectedContents,
+              ...clearedContents
+            ]
+          });
+        } catch {
+          this.masterToggleStackError();
+        }
+      }
+    }
   }
 
   refreshList(): void {

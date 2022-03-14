@@ -102,6 +102,24 @@ export class PackSelectorComponent implements OnInit {
     return this.selectedPacks ? `SELECTED ITEMS ${this.selectedPacks.length}` : '-';
   }
 
+  get isAllSelected(): boolean {
+    const numSelected: number[] = this.selectedPacks?.map(p => p.id) ?? [];
+    return this.contentSelectionService.isContentEqual(this.packs.data.map(p => p.id), numSelected);
+  }
+
+  get someSelected(): boolean {
+    try {
+      if (this.selectedPacks?.length <= 0) {
+        return false;
+      }
+      const currentSelectedItems: Pack[] = this.packs.data.filter(t1 => this.selectedPacks.findIndex(t2 => t1.id === t2.id) !== -1);
+      if (currentSelectedItems.length <= 0) return false;
+      return currentSelectedItems.length !== this.packs.data.length;
+    } catch {
+      return false;
+    }
+  }
+
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
@@ -142,9 +160,33 @@ export class PackSelectorComponent implements OnInit {
     return !!this.selectedPacks.find(value => value.id === pack.id);
   }
 
-  isAllSelected(): boolean {
-    const numSelected: number[] = this.selectedPacks?.map(p => p.id) ?? [];
-    return this.contentSelectionService.isContentEqual(this.packs.data.map(p => p.id), numSelected);
+  masterToggleStackError(): void {
+    this.hotToastService.error('Application Error! Select All module stack issue');
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected) {
+      try {
+        const clearedPacks: Pack[] = this.selectedPacks.filter(p => !this.packs.data.find(p2 => p2.id === p.id));
+        this.uiStore.patchState({
+          selectedPacks: clearedPacks
+        });
+      } catch {
+        this.masterToggleStackError();
+      }
+    } else {
+      try {
+        const leftOutPacks: Pack[] = this.packs.data.filter(p1 => this.selectedPacks.findIndex(p2 => p2.id === p1.id) === -1);
+        this.uiStore.patchState({
+          selectedPacks: [
+            ...this.selectedPacks,
+            ...leftOutPacks
+          ]
+        });
+      } catch {
+        this.masterToggleStackError();
+      }
+    }
   }
 
   addToList(pack: Pack): void {

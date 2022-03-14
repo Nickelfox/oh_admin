@@ -45,7 +45,7 @@
                         (change)='masterToggle()'
                         [checked]='isAllSelected'
                         [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
-                        [indeterminate]='!isAllSelected'
+                        [indeterminate]='someSelected'
                         color='primary'>
                       </mat-checkbox>
                     </th>

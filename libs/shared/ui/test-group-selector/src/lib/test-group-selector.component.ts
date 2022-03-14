@@ -81,7 +81,6 @@ export class TestGroupSelectorComponent implements OnInit {
     published: new FormControl(undefined)
   });
 
-
   selectedTestGroups: TestGroup[] = [];
   dummyTestGroups: TestGroup[] = [];
   selectedContents: (ContentCore | LessonCore)[] = [];
@@ -166,6 +165,31 @@ export class TestGroupSelectorComponent implements OnInit {
       numSelected = this.selectedContents.filter(c => c.type === PackContentTypeEnum.GROUP).map(t => t.contentId as number);
     }
     return this.contentSelectionService.isContentEqual(this.testGroup.data.map(t => t.id), numSelected);
+  }
+
+  get someSelected(): boolean {
+    if (this.data.type === ContentSelectorOpType.SINGLE) {
+      try {
+        if (this.selectedTestGroups?.length <= 0) {
+          return false;
+        }
+        const currentSelectedItems: TestGroup[] = this.testGroup.data.filter(t1 => this.selectedTestGroups.findIndex(t2 => t1.id === t2.id) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
+        return currentSelectedItems.length !== this.testGroup.data.length;
+      } catch {
+        return false;
+      }
+    } else if (this.data.type === ContentSelectorOpType.OTHER) {
+      try {
+        const selectedTestGroups: ContentCore[] = this.selectedContents?.filter(t => t.type === PackContentTypeEnum.GROUP);
+        const currentSelectedItems: TestGroup[] = this.testGroup.data.filter(t1 => selectedTestGroups.findIndex(t2 => t1.id === t2.contentId) !== -1);
+        if (currentSelectedItems?.length <= 0) return false;
+        return currentSelectedItems.length !== this.testGroup.data.length;
+      } catch {
+        return false;
+      }
+    }
+    return false;
   }
 
   resetPagination(): void {

@@ -45,15 +45,14 @@
             <div class='row'>
               <div class='col-12'>
                 <table [dataSource]='tests' [trackBy]='trackById' class='w-100' mat-table>
-
                   <ng-container matColumnDef='select'>
                     <th *matHeaderCellDef mat-header-cell>
                       <mat-checkbox
-                        *ngIf='!categoryData?.limit'
                         (change)='masterToggle()'
+                        *ngIf='!categoryData?.limit'
                         [checked]='isAllSelected'
                         [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
-                        [indeterminate]='!isAllSelected'
+                        [indeterminate]='someSelected'
                         color='primary'>
                       </mat-checkbox>
                     </th>
