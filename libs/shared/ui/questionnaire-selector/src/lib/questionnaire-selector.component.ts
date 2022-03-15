@@ -292,17 +292,16 @@ export class QuestionnaireSelectorComponent implements OnInit {
       } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
         try {
           let clearedContents: ContentCore[] = [];
-          if (this.selectedContents.filter(t => t.type === PackContentTypeEnum.QUESTIONNAIRE).length) {
-            clearedContents = this.questionnaires.data.filter((q) =>
-              this.selectedContents
-                .find(({ contentId, type }) => contentId !== q.id && type === PackContentTypeEnum.QUESTIONNAIRE)
-            ).map(({ id, name }) => {
-              return {
-                contentId: id,
-                type: PackContentTypeEnum.QUESTIONNAIRE,
-                name
-              } as ContentCore;
-            });
+          if (this.questionnaires.data.filter((t) => !!this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.QUESTIONNAIRE)).length) {
+              clearedContents = this.questionnaires.data
+              .filter((t) => !this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.QUESTIONNAIRE))
+              .map(t => {
+                return {
+                  contentId: t.id,
+                  type: PackContentTypeEnum.QUESTIONNAIRE,
+                  name: t.name
+                } as ContentCore;
+              });
           } else {
             clearedContents = this.questionnaires.data.map(t => {
               return {
