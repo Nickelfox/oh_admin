@@ -546,6 +546,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
     this.utilities.resetTagsState();
   }
 
+  removeMediaCtrlAndValidate(ctrl: FormControl | undefined): void {
+    if(ctrl) {
+      ctrl.reset();
+      this.testGroup.patchValue({
+        isPublished: false
+      })
+    }
+  }
+
   getOneRMInputFieldGroup(i: number): FormGroup<OneRMField> {
     return this.oneRMInputFieldFormArray.controls[i] as FormGroup<OneRMField>;
   }

@@ -79,7 +79,7 @@
                               <p class='text-muted mb-2'>Video File</p>
                               <div class='d-flex align-items-center'>
                                 <hidden-innovation-common-form-field-video
-                                  (emitRemoveVideo)='testGroup.controls.videoId?.reset($event)'
+                                  (emitRemoveVideo)='removeMediaCtrlAndValidate(testGroup.controls.videoId)'
                                   (emitVideoCtrlData)='testGroup.controls.videoId?.setValue($event)'
                                   [parentCtrl]='testGroup.controls.videoId'
                                   [videoData]='selectedTest?.video'
@@ -102,7 +102,7 @@
                               <p class='text-muted mb-2'>Thumbnail</p>
                               <hidden-innovation-common-form-field-image
                                 (emitImageCtrlData)='testGroup.controls.thumbnailId?.setValue($event)'
-                                (emitRemoveImage)='testGroup.controls.thumbnailId?.reset($event)'
+                                (emitRemoveImage)='removeMediaCtrlAndValidate(testGroup.controls.thumbnailId)'
                                 [aspectRatio]='aspectRatio.STANDARD'
                                 [parentCtrl]='testGroup.controls.thumbnailId'
                                 [setImageData]='selectedTest?.thumbnail'
@@ -115,7 +115,7 @@
                               <p class='text-muted mb-2'>Poster</p>
                               <hidden-innovation-common-form-field-image
                                 (emitImageCtrlData)='testGroup.controls.posterId?.setValue($event)'
-                                (emitRemoveImage)='testGroup.controls.posterId?.reset($event)'
+                                (emitRemoveImage)='removeMediaCtrlAndValidate(testGroup.controls.posterId)'
                                 [aspectRatio]='aspectRatio.CUBE'
                                 [parentCtrl]='testGroup.controls.posterId'
                                 [setImageData]='selectedTest?.poster'
