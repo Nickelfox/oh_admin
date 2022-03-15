@@ -142,17 +142,20 @@ export class TestSelectorComponent implements OnInit {
   }
 
   get Count() {
+    let length: number;
     switch (this.categoryData.type) {
       case ContentSelectorOpType.SINGLE:
-        if (this.selectedTests.length === 0) {
+        length = this.selectedTests?.length ?? 0;
+        if (length <= 0) {
           return '';
         }
-        return this.selectedTests ? `SELECTED ITEMS ${this.selectedTests.length}` : '-';
+        return this.selectedTests ? `SELECTED ITEMS ${length}` : '-';
       case ContentSelectorOpType.OTHER:
-        if (this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length === 0) {
+        length = this.selectedContents?.filter(value => value.type === PackContentTypeEnum.SINGLE)?.length ?? 0;
+        if (length <= 0) {
           return '';
         }
-        return this.selectedContents ? `SELECTED ITEMS ${this.selectedContents.filter(value => value.type === PackContentTypeEnum.SINGLE).length}` : '-';
+        return this.selectedContents ? `SELECTED ITEMS ${length}` : '-';
     }
   }
 
@@ -276,11 +279,10 @@ export class TestSelectorComponent implements OnInit {
       } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
         try {
           let clearedTests: ContentCore[] = [];
-          if (this.selectedContents.filter(t => t.type === PackContentTypeEnum.SINGLE).length) {
-            clearedTests = this.tests.data.filter((t) =>
-              this.selectedContents
-                .find(({ contentId, type }) => contentId !== t.id && type === PackContentTypeEnum.SINGLE)
-            ).map(t => {
+          if (this.tests.data.filter((t) => !!this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.SINGLE)).length) {
+            clearedTests = this.tests.data
+              .filter((t) => !this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.SINGLE))
+              .map(t => {
               return {
                 contentId: t.id,
                 type: PackContentTypeEnum.SINGLE,

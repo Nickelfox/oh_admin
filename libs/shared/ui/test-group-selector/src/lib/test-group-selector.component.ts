@@ -239,11 +239,10 @@ export class TestGroupSelectorComponent implements OnInit {
       } else if (this.data.type === ContentSelectorOpType.OTHER) {
         try {
           let clearedTestGroups: ContentCore[] = [];
-          if (this.selectedContents.filter(t => t.type === PackContentTypeEnum.GROUP).length) {
-            clearedTestGroups = this.testGroup.data.filter((tg) =>
-              this.selectedContents
-                .find(({ contentId, type }) => contentId !== tg.id && type === PackContentTypeEnum.GROUP)
-            ).map(({ id, name }) => {
+          if (this.testGroup.data.filter((t) => !!this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.GROUP)).length) {
+            clearedTestGroups = this.testGroup.data
+              .filter((tg) => !this.selectedContents.find(({ contentId, type }) => contentId !== tg.id && type === PackContentTypeEnum.GROUP))
+              .map(({ id, name }) => {
               return {
                 contentId: id,
                 type: PackContentTypeEnum.GROUP,
