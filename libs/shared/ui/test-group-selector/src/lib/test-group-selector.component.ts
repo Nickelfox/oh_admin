@@ -239,9 +239,9 @@ export class TestGroupSelectorComponent implements OnInit {
       } else if (this.data.type === ContentSelectorOpType.OTHER) {
         try {
           let clearedTestGroups: ContentCore[] = [];
-          if (this.testGroup.data.filter((t) => !!this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.GROUP)).length) {
+          if (this.testGroup.data.filter((t) => this.selectedContents.findIndex(c => t.id === c.contentId && c.type === PackContentTypeEnum.GROUP) !== -1).length) {
             clearedTestGroups = this.testGroup.data
-              .filter((tg) => !this.selectedContents.find(({ contentId, type }) => contentId !== tg.id && type === PackContentTypeEnum.GROUP))
+              .filter((tg) => !this.selectedContents.find(({ contentId, type }) => tg.id === contentId && type === PackContentTypeEnum.GROUP))
               .map(({ id, name }) => {
               return {
                 contentId: id,
