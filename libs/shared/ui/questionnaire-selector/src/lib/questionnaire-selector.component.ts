@@ -292,7 +292,7 @@ export class QuestionnaireSelectorComponent implements OnInit {
       } else if (this.questionnaireData.type === ContentSelectorOpType.OTHER) {
         try {
           let clearedContents: ContentCore[] = [];
-          if (this.questionnaires.data.filter((t) => !!this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.QUESTIONNAIRE)).length) {
+          if (this.questionnaires.data.filter((t) => this.selectedContents.findIndex(c => t.id === c.contentId && c.type === PackContentTypeEnum.QUESTIONNAIRE) !== -1).length) {
               clearedContents = this.questionnaires.data
               .filter((t) => !this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.QUESTIONNAIRE))
               .map(t => {

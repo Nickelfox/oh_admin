@@ -279,9 +279,9 @@ export class TestSelectorComponent implements OnInit {
       } else if (this.categoryData.type === ContentSelectorOpType.OTHER) {
         try {
           let clearedTests: ContentCore[] = [];
-          if (this.tests.data.filter((t) => !!this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.SINGLE)).length) {
+          if (this.tests.data.filter((t) => this.selectedContents.findIndex(c => t.id === c.contentId && c.type === PackContentTypeEnum.SINGLE) !== -1).length) {
             clearedTests = this.tests.data
-              .filter((t) => !this.selectedContents.find(c => t.id === c.contentId && c.type === PackContentTypeEnum.SINGLE))
+              .filter((t) => !this.selectedContents.find(({contentId, type}) => t.id === contentId && type === PackContentTypeEnum.SINGLE))
               .map(t => {
               return {
                 contentId: t.id,
