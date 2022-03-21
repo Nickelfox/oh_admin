@@ -152,9 +152,9 @@ export class DashboardComponent implements OnInit {
   dashboardRangeFilterEnum = DashboardRangeFilterEnum;
 
   rangeFilterGroup: FormGroup<DashboardRequest> = new FormGroup<DashboardRequest>({
-    type: new FormControl<DashboardRangeFilterEnum>(DashboardRangeFilterEnum.WEEKLY),
+    type: new FormControl<DashboardRangeFilterEnum>(DashboardRangeFilterEnum.DAILY),
     start: new FormControl<string>(DateTime.now().minus({
-      days: 7
+      days: 1
     }).toISODate(), [
       Validators.required
     ]),
@@ -289,7 +289,7 @@ export class DashboardComponent implements OnInit {
       this.rangeFilterGroup.markAsUntouched();
     });
     this.store.getGenderData();
-    this.rangeFilterGroup.controls.start.valueChanges.pipe(skip(1)).subscribe((value) => {
+    this.rangeFilterGroup.controls.start.valueChanges.subscribe((value) => {
         this.store.getRegisteredUsers({
           filterBy: this.rangeFilterGroup.get('type').value,
           startDate: this.rangeFilterGroup.get('start').value,
@@ -302,7 +302,7 @@ export class DashboardComponent implements OnInit {
         });
       }
     );
-    this.rangeFilterGroup.controls.end.valueChanges.pipe(skip(1)).subscribe((value) => {
+    this.rangeFilterGroup.controls.end.valueChanges.subscribe((value) => {
         this.store.getRegisteredUsers({
           filterBy: this.rangeFilterGroup.get('type').value,
           startDate: this.rangeFilterGroup.get('start').value,
