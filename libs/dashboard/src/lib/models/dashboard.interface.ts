@@ -43,6 +43,7 @@ export interface PackEngagement {
 export interface PackEngagementFilters {
   contentclicksSort: SortingEnum | undefined;
   resourceclicksSort: SortingEnum | undefined;
+  videoplaySort: SortingEnum | undefined;
 }
 
 export interface PackEngLimitRequest extends PackEngagementFilters {

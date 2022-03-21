@@ -183,7 +183,8 @@ export class DashboardComponent implements OnInit {
   packEngPageEvent: PageEvent | undefined;
   filtersPackEng: FormGroup<PackEngagementFilters> = new FormGroup<PackEngagementFilters>({
     contentclicksSort: new FormControl(SortingEnum.DESC),
-    resourceclicksSort: new FormControl({ value: undefined, disabled: true })
+    resourceclicksSort: new FormControl({ value: undefined, disabled: true }),
+    videoplaySort:new FormControl({ value:undefined, disabled:true})
   });
   //Assessment Engagement Paginator options
   assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
@@ -450,12 +451,13 @@ export class DashboardComponent implements OnInit {
 
   // Pack Engagement Pagination
   refreshListPackEng(): void {
-    const { contentclicksSort, resourceclicksSort } = this.filtersPackEng.value;
+    const { contentclicksSort, resourceclicksSort, videoplaySort } = this.filtersPackEng.value;
     this.store.getPackEngagement$({
       page: this.packEngPageIndex,
       limit: this.packEngPageSize,
       contentclicksSort,
-      resourceclicksSort
+      resourceclicksSort,
+      videoplaySort
     });
   }
 
@@ -475,8 +477,8 @@ export class DashboardComponent implements OnInit {
     this.refreshListPackEng();
   }
 
-  updatePackSorting(fieldName: 'resourceclicksSort' | 'contentclicksSort'): void {
-    const { resourceclicksSort, contentclicksSort } = this.filtersPackEng.controls;
+  updatePackSorting(fieldName: 'resourceclicksSort' | 'contentclicksSort'| 'videoplaySort'): void {
+    const { resourceclicksSort, contentclicksSort, videoplaySort } = this.filtersPackEng.controls;
     const updateSortingCtrl = (ctrl: FormControl) => {
       if (ctrl.disabled) {
         ctrl.setValue(this.sortingEnum.DESC);
@@ -490,11 +492,18 @@ export class DashboardComponent implements OnInit {
     switch (fieldName) {
       case 'resourceclicksSort':
         contentclicksSort.disable();
+        videoplaySort.disable()
         updateSortingCtrl(resourceclicksSort);
         break;
       case 'contentclicksSort':
         resourceclicksSort.disable();
+        videoplaySort.disable()
         updateSortingCtrl(contentclicksSort);
+        break;
+      case 'videoplaySort':
+        resourceclicksSort.disable();
+        contentclicksSort.disable();
+        updateSortingCtrl(videoplaySort);
         break;
     }
   }

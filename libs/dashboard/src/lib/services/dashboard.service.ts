@@ -60,6 +60,7 @@ export class DashboardService {
     if (reqObj.resourceclicksSort) {
       params = params.append('resourceclicksSort', reqObj.resourceclicksSort);
     }
+    console.log(reqObj);
     return this.http.get<PackEngagementResponse>(`${this.env.baseURL}/v1/admin/get-pack-table`, { params }).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
