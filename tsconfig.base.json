@@ -45,6 +45,12 @@
       "@hidden-innovation/forgot-password": [
         "libs/forgot-password/src/index.ts"
       ],
+      "@hidden-innovation/goals/create-goals": [
+        "libs/goals/create-goals/src/index.ts"
+      ],
+      "@hidden-innovation/goals/data-access": [
+        "libs/goals/data-access/src/index.ts"
+      ],
       "@hidden-innovation/libs/ui/login/login": [
         "libs/libs/ui/login/login/src/index.ts"
       ],
