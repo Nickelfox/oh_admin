@@ -71,6 +71,12 @@ const initialState: UiState = {
       ]
     },
     {
+      name: 'Goals',
+      navItems: [
+        { label: 'Goals', path: '/goals', icon: 'beenhere' }
+      ]
+    },
+    {
       name: 'Admin',
       navItems: [
         {
