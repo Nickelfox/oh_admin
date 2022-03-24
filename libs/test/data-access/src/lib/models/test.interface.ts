@@ -1,7 +1,7 @@
 import {
   CustomApiResponse,
   DifficultyEnum,
-  DistanceTypeEnum,
+  DistanceTypeEnum, Reps, RepsCore,
   SortingEnum,
   TagCategoryEnum,
   TestInputTypeEnum,
@@ -147,19 +147,6 @@ export interface TestResponse extends CustomApiResponse {
   data: {
     test: Test;
   };
-}
-
-export interface RepsCore {
-  oneRep: boolean;
-  threeRep: boolean;
-  fiveRep: boolean;
-}
-
-export interface Reps extends RepsCore {
-  id: number;
-  deletedAt: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface TestPublishToggleRequest {

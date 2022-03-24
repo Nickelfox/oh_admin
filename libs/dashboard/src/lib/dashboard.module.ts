@@ -16,32 +16,34 @@ import { LineChartModule } from '@hidden-innovation/shared/ui/line-chart';
 import { ChartsModule } from '@rinminase/ng-charts';
 import { ShimmerModule } from '@hidden-innovation/shared/ui/shimmer';
 import {UtilsModule} from "@hidden-innovation/shared/utils";
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 // import {AuthGuard} from "@hidden-innovation/auth";
 
 @NgModule({
   declarations: [DashboardComponent],
-    imports: [
-        CommonModule,
-        MaterialModule,
-        DashboardCountCardModule,
-        LineChartModule,
-        DashboardUserDemographicModule,
-        CommonFormFieldDateRangeModule,
-        CommonFormFieldWeekModule,
-        CommonFormFieldDateModule,
-        CommonFormFieldMonthModule,
-        ChartsModule,
-        RouterModule.forChild([
-            {
-                path: '',
-                pathMatch: 'full',
-                // canActivate: [AuthGuard],
-                component: DashboardComponent
-            }
-        ]),
-        ShimmerModule,
-        UtilsModule
-    ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    DashboardCountCardModule,
+    LineChartModule,
+    DashboardUserDemographicModule,
+    CommonFormFieldDateRangeModule,
+    CommonFormFieldWeekModule,
+    CommonFormFieldDateModule,
+    CommonFormFieldMonthModule,
+    ChartsModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        pathMatch: 'full',
+        // canActivate: [AuthGuard],
+        component: DashboardComponent
+      }
+    ]),
+    ShimmerModule,
+    UtilsModule,
+    MatButtonToggleModule
+  ],
   providers: [
     DashboardService,
     DashboardStore]

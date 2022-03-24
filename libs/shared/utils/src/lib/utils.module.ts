@@ -7,6 +7,7 @@ import { PendingChangesGuard } from './guards/pending-changes.guard';
 import { ImagePreloaderDirective } from './directives/image-preloader.directive';
 import { ParseOneRemPipe } from './pipes/parse-one-rem.pipe';
 import { DistanceLengthPipe } from './pipes/distance-length.pipe';
+import { ContentSelectionService } from './services/content-selection.service';
 
 @NgModule({
   imports: [CommonModule],
@@ -16,7 +17,7 @@ import { DistanceLengthPipe } from './pipes/distance-length.pipe';
     ReplaceUnderscorePipe,
     ImagePreloaderDirective,
     ParseOneRemPipe,
-    DistanceLengthPipe,
+    DistanceLengthPipe
   ],
   exports: [
     DisableCopyPasteDirective,
@@ -26,8 +27,10 @@ import { DistanceLengthPipe } from './pipes/distance-length.pipe';
     ImagePreloaderDirective,
     DistanceLengthPipe
   ],
-  providers:[
-    PendingChangesGuard
+  providers: [
+    PendingChangesGuard,
+    ContentSelectionService
   ]
 })
-export class UtilsModule {}
+export class UtilsModule {
+}

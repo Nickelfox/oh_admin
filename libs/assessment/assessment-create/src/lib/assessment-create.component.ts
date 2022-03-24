@@ -26,7 +26,7 @@ import {
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
 import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
-
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -47,20 +47,25 @@ export class AssessmentCreateComponent implements OnDestroy {
     ]),
     count: new FormControl<number>(undefined),
     category: new FormControl<TagCategoryEnum>(undefined),
-    about: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
+    about: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.ASSESSMENT_ABOUT_LENGTH
+      })
+    ]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillNeed: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
+    howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     lockout: new FormControl(undefined, [
       ...this.formValidationService.requiredFieldValidation,
       RxwebValidators.numeric({
-        allowDecimal:false,
-        acceptValue: NumericValueType.PositiveNumber,
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
       }),
       RxwebValidators.minNumber({
-        value:1,
+        value: 1
       })
     ]),
-    howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     imageId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
@@ -75,8 +80,6 @@ export class AssessmentCreateComponent implements OnDestroy {
 
   aspectRatio = AspectRatio;
   selectedAssessment: Assessment | undefined;
-
-  private selectedContents: ContentCore[] = [];
 
   constructor(
     public constantDataService: ConstantDataService,
@@ -111,7 +114,6 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.store.getAssessmentDetails$(category);
     });
     this.uiStore.selectedContent$.subscribe((contents) => {
-      // console.log(contents);
       this.selectedContents = contents.map((c, i) => {
         return {
           ...c,
@@ -126,6 +128,15 @@ export class AssessmentCreateComponent implements OnDestroy {
       this.assessmentGroup.updateValueAndValidity();
       this.cdr.markForCheck();
     });
+  }
+
+  private _selectedContents: ContentCore[] = [];
+  get selectedContents(): ContentCore[] {
+    return this._selectedContents ?? [];
+  }
+
+  set selectedContents(content) {
+    this._selectedContents = content ?? [];
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[]> {
@@ -184,7 +195,7 @@ export class AssessmentCreateComponent implements OnDestroy {
   }
 
   deleteSelectedContentPrompt(content: ContentCore): void {
-    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
+    const contentType: string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type;
     const dialogData: GenericDialogPrompt = {
       title: `Remove ${contentType}?`,
       desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Assessment?`,
@@ -233,6 +244,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       role: 'dialog'
     });
   }
+
   openTestGroupSelector(): void {
     const data: TestGroupSelectorData = {
       type: ContentSelectorOpType.OTHER
@@ -259,5 +271,13 @@ export class AssessmentCreateComponent implements OnDestroy {
       return;
     }
     this.store.updateAssessment$(this.assessmentGroup.value);
+  }
+
+  assessmentDragEvent($event: CdkDragDrop<ContentCore>): void {
+    const selectedContent = this.selectedContents ? [...this.selectedContents] : [];
+    moveItemInArray(selectedContent, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedContent
+    });
   }
 }

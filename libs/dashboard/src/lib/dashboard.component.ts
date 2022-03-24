@@ -1,36 +1,46 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { ChartColor, ChartDatasets, ChartLabel, ChartOptions, SingleOrMultiDataSet } from '@rinminase/ng-charts';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit } from '@angular/core';
+import { ChartColor, ChartDataset, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/ng-charts';
 import { DashboardStore } from './dashboard.store';
-import {DashboardRangeFilterEnum, TagCategoryEnum, UserDetails} from '@hidden-innovation/shared/models';
+import { DashboardRangeFilterEnum, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { AssessmentEngagement, DashboardRequest, PackEngagement, TestWatched } from './models/dashboard.interface';
+import {
+  AssessmentEngagement,
+  AssessmentEngagementFilters,
+  DashboardRequest,
+  PackEngagement,
+  PackEngagementFilters,
+  TestWatched,
+  TestWatchedFilters, UserGraphData
+} from './models/dashboard.interface';
 import { Validators } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { map, skip } from 'rxjs/operators';
-import {forEach} from "lodash-es";
-import {MatTableDataSource} from "@angular/material/table";
+import { distinctUntilChanged, map, skip, tap } from 'rxjs/operators';
+import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { isEqual } from 'lodash-es';
 
 
 export interface AssessmentTestEng {
-  position:number;
-  name:string;
-  id:number;
-  score:number;
-  completion:string;
+  position: number;
+  name: string;
+  id: number;
+  score: number;
+  completion: string;
 }
+
 export interface PackEng {
-  position:number;
-  name:string;
-  id:number;
-  totalPlays:number;
-  contentClicks:number;
-  resourcesClicks:number
+  position: number;
+  name: string;
+  id: number;
+  totalPlays: number;
+  contentClicks: number;
+  resourcesClicks: number
 }
+
 
 // export interface TopWatched {
 //   position:number;
@@ -48,40 +58,22 @@ export interface PackEng {
 })
 
 
+export class DashboardComponent implements OnInit {
 
-export class DashboardComponent {
-
-
-
-  displayedColumnsAssessmentTest: string[] = ['position', 'name', 'id', 'score', 'completion'];
+  toggleRegBtn?:boolean = false;
+  toggleActiveBtn?:boolean = false;
+  displayedColumnsAssessmentTest: string[] = ['position', 'category', 'id', 'average_score', 'completion'];
   assessmentTestTable: MatTableDataSource<AssessmentEngagement> = new MatTableDataSource<AssessmentEngagement>();
 
-  displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'totalPlays', 'contentClicks', 'resourcesClicks'];
+  displayedColumnsPackEng: string[] = ['position', 'name', 'id', 'video_plays', 'content_clicks', 'resource_clicks'];
   packEngTable: MatTableDataSource<PackEngagement> = new MatTableDataSource<PackEngagement>();
 
-  displayedColumnsTopWatched: string[] = ['position', 'name', 'id', 'videoPlays', 'resultLog'];
+  displayedColumnsTopWatched: string[] = ['position', 'name', 'id', 'video_plays', 'result_logs'];
   topWatchedTable: MatTableDataSource<TestWatched> = new MatTableDataSource<TestWatched>();
   noData?: Observable<boolean>;
 
 
-
-
-  chartLabels: ChartLabel[] = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
-
-  colors: {[key: string]: string} = {
+  colors: { [key: string]: string } = {
     CARDIO: '#3297E0',
     STRENGTH: '#4EBC9C',
     FUNCTION: '#394155',
@@ -93,8 +85,7 @@ export class DashboardComponent {
     '#9C5AB6',
     '#BFC4C8',
     '#CADF6E',
-    '#54DBDF']
-
+    '#54DBDF'];
   doughnutChartColorTest: ChartColor = [
     {
       backgroundColor: [
@@ -109,9 +100,7 @@ export class DashboardComponent {
   doughnutChartLabelTest: ChartLabel[] = [
     ...Object.values(TagCategoryEnum)
   ];
-
   doughnutPlugins = [this.doughnutChartLabelTest];
-
   // Complete Test
   doughnutChartColorComplete: ChartColor = [
     {
@@ -125,27 +114,21 @@ export class DashboardComponent {
       ]
     }
   ];
-
-
-
-
-  chartOptionsTest:ChartOptions = {
+  chartOptionsTest: ChartOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    tooltips:{
-     callbacks:{
-       label: (tooltipItem, data):any => {
-         // @ts-ignore
-         const value = data.datasets[0].data[tooltipItem.index];
-         // @ts-ignore
-         return ` ${data.labels[tooltipItem.index]}: ${value}%`;
-       }
-     }
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem, data): any => {
+          // @ts-ignore
+          const value = data.datasets[0].data[tooltipItem.index];
+          // @ts-ignore
+          return ` ${data.labels[tooltipItem.index]}: ${value}%`;
+        }
+      }
     }
 
-  }
-
-
+  };
   chartOptions: ChartOptions = {
     layout: {
       padding: 0
@@ -159,19 +142,19 @@ export class DashboardComponent {
     responsive: true,
     maintainAspectRatio: true
   };
-
-
   chartLegendTest = false;
   chartLegendComplete = false;
+
+  registeredDataSet: ChartDatasets = [];
 
 
   dashboardRangeTypes: string[] = Object.keys(DashboardRangeFilterEnum);
   dashboardRangeFilterEnum = DashboardRangeFilterEnum;
 
   rangeFilterGroup: FormGroup<DashboardRequest> = new FormGroup<DashboardRequest>({
-    type: new FormControl<DashboardRangeFilterEnum>(DashboardRangeFilterEnum.WEEKLY),
+    type: new FormControl<DashboardRangeFilterEnum>(DashboardRangeFilterEnum.DAILY),
     start: new FormControl<string>(DateTime.now().minus({
-      days: 7
+      days: 1
     }).toISODate(), [
       Validators.required
     ]),
@@ -179,27 +162,39 @@ export class DashboardComponent {
       Validators.required
     ])
   });
-
   maxDate = DateTime.now();
 
 
+  sortingEnum = SortingEnum;
+  emitSorting: EventEmitter<string> = new EventEmitter<string>();
   //Top Watched Paginator options
   topTestPageIndex = this.constantDataService.PaginatorData.pageIndex;
   topWatchedPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
   topWatchedPageSize = this.constantDataService.PaginatorData.pageSize;
   topWatchedPageEvent: PageEvent | undefined;
-
+  filtersTestWatched: FormGroup<TestWatchedFilters> = new FormGroup<TestWatchedFilters>({
+    videoplaySort: new FormControl(SortingEnum.DESC),
+    resultlogSort: new FormControl({ value: undefined, disabled: true })
+  });
   //Pack Engagement Paginator options
   packEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
   packEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
   packEngPageSize = this.constantDataService.PaginatorData.pageSize;
   packEngPageEvent: PageEvent | undefined;
-
+  filtersPackEng: FormGroup<PackEngagementFilters> = new FormGroup<PackEngagementFilters>({
+    contentclicksSort: new FormControl({ value:undefined, disabled:true}),
+    resourceclicksSort: new FormControl({ value: undefined, disabled: true }),
+    videoplaySort:new FormControl(SortingEnum.DESC)
+  });
   //Assessment Engagement Paginator options
   assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
   assessmentEngPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
   assessmentEngPageSize = this.constantDataService.PaginatorData.pageSize;
   assessmentEngPageEvent: PageEvent | undefined;
+  filtersAssessmentEng: FormGroup<AssessmentEngagementFilters> = new FormGroup<AssessmentEngagementFilters>({
+    averagescoreSort: new FormControl(SortingEnum.DESC),
+    completionSort: new FormControl({ value: undefined, disabled: true })
+  });
 
 
   constructor(
@@ -207,13 +202,15 @@ export class DashboardComponent {
     public constantDataService: ConstantDataService,
     private route: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {
+
+
     this.refreshListTopTest();
     this.refreshListPackEng();
     this.refreshListAssessmentEng();
     this.store.testWatched$.subscribe(res => {
-      this.topWatchedTable = new MatTableDataSource<TestWatched>(res)
+      this.topWatchedTable = new MatTableDataSource<TestWatched>(res);
       this.noData = this.topWatchedTable.connect().pipe(map(data => data.length === 0));
       if (!res?.length && (this.topTestPageIndex > this.constantDataService.PaginatorData.pageIndex)) {
         this.resetTopTestPagination();
@@ -221,7 +218,7 @@ export class DashboardComponent {
       this.cdr.markForCheck();
     });
     this.store.packEngagement$.subscribe(res => {
-      this.packEngTable = new MatTableDataSource<PackEngagement>(res)
+      this.packEngTable = new MatTableDataSource<PackEngagement>(res);
       this.noData = this.packEngTable.connect().pipe(map(data => data.length === 0));
       if (!res?.length && (this.packEngPageIndex > this.constantDataService.PaginatorData.pageIndex)) {
         this.resetPackEngPagination();
@@ -236,17 +233,22 @@ export class DashboardComponent {
       }
       this.cdr.markForCheck();
     });
-
+    this.showActiveUserData(DashboardRangeFilterEnum.WEEKLY);
+    this.showRegisteredUserData(DashboardRangeFilterEnum.WEEKLY);
 
     this.store.getStats();
     this.store.getCompleteTestEngagement();
     this.store.getAssessmentTestEngagement();
-    this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
-        days: 7
-      }).toISODate()})
-    this.store.getActiveUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
-        days: 7
-      }).toISODate()})
+    // this.store.getRegisteredUsers({
+    //   filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
+    //     days: 7
+    //   }).toISODate()
+    // });
+    // this.store.getActiveUsers({
+    //   filterBy: DashboardRangeFilterEnum.WEEKLY, endDate: DateTime.now().toISODate(), startDate: DateTime.now().minus({
+    //     days: 7
+    //   }).toISODate()
+    // });
     this.rangeFilterGroup.controls.type.valueChanges.subscribe(res => {
       switch (res) {
         case DashboardRangeFilterEnum.WEEKLY:
@@ -256,54 +258,152 @@ export class DashboardComponent {
               days: 7
             }).toISODate()
           });
-          this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: this.rangeFilterGroup.get('start').value, endDate: this.rangeFilterGroup.get('end').value})
-          this.store.getActiveUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: this.rangeFilterGroup.get('start').value, endDate: this.rangeFilterGroup.get('end').value})
+          this.store.getRegisteredUsers({
+            filterBy: DashboardRangeFilterEnum.WEEKLY,
+            startDate: this.rangeFilterGroup.get('start').value,
+            endDate: this.rangeFilterGroup.get('end').value
+          });
+          this.store.getActiveUsers({
+            filterBy: DashboardRangeFilterEnum.WEEKLY,
+            startDate: this.rangeFilterGroup.get('start').value,
+            endDate: this.rangeFilterGroup.get('end').value
+          });
           break;
         case (DashboardRangeFilterEnum.MONTHLY || DashboardRangeFilterEnum.DAILY):
           this.rangeFilterGroup.patchValue({
             end: DateTime.now().toISODate(),
             start: DateTime.now().toISODate()
           });
-          this.store.getRegisteredUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: this.rangeFilterGroup.get('start').value, endDate: this.rangeFilterGroup.get('end').value})
-          this.store.getActiveUsers({filterBy: DashboardRangeFilterEnum.WEEKLY, startDate: this.rangeFilterGroup.get('start').value, endDate: this.rangeFilterGroup.get('end').value})
+          this.store.getRegisteredUsers({
+            filterBy: DashboardRangeFilterEnum.WEEKLY,
+            startDate: this.rangeFilterGroup.get('start').value,
+            endDate: this.rangeFilterGroup.get('end').value
+          });
+          this.store.getActiveUsers({
+            filterBy: DashboardRangeFilterEnum.WEEKLY,
+            startDate: this.rangeFilterGroup.get('start').value,
+            endDate: this.rangeFilterGroup.get('end').value
+          });
           break;
       }
       this.rangeFilterGroup.markAsUntouched();
     });
     this.store.getGenderData();
-    this.rangeFilterGroup.controls.start.valueChanges.pipe(skip(1)).subscribe((value) => {
+    this.rangeFilterGroup.controls.start.valueChanges.subscribe((value) => {
         this.store.getRegisteredUsers({
           filterBy: this.rangeFilterGroup.get('type').value,
           startDate: this.rangeFilterGroup.get('start').value,
           endDate: this.rangeFilterGroup.get('end').value
-        })
+        });
         this.store.getActiveUsers({
           filterBy: this.rangeFilterGroup.get('type').value,
           startDate: this.rangeFilterGroup.get('start').value,
           endDate: this.rangeFilterGroup.get('end').value
-        })
+        });
       }
-    )
-    this.rangeFilterGroup.controls.end.valueChanges.pipe(skip(1)).subscribe((value) => {
+    );
+    this.rangeFilterGroup.controls.end.valueChanges.subscribe((value) => {
         this.store.getRegisteredUsers({
           filterBy: this.rangeFilterGroup.get('type').value,
           startDate: this.rangeFilterGroup.get('start').value,
           endDate: this.rangeFilterGroup.get('end').value
-        })
+        });
         this.store.getActiveUsers({
           filterBy: this.rangeFilterGroup.get('type').value,
           startDate: this.rangeFilterGroup.get('start').value,
           endDate: this.rangeFilterGroup.get('end').value
-        })
+        });
       }
-    )
+    );
+
   };
+
+  showActiveUserData(rangeFilter: DashboardRangeFilterEnum) {
+    this.toggleActiveBtn = !this.toggleActiveBtn
+    switch (rangeFilter) {
+      case DashboardRangeFilterEnum.MONTHLY:
+        this.store.getActiveUsers({
+          filterBy: DashboardRangeFilterEnum.MONTHLY,
+          startDate: DateTime.now().minus({
+            months: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+      case DashboardRangeFilterEnum.WEEKLY:
+        this.store.getActiveUsers({
+          filterBy: DashboardRangeFilterEnum.WEEKLY,
+          startDate: DateTime.now().minus({
+            days: 7
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+      case DashboardRangeFilterEnum.DAILY:
+        this.store.getActiveUsers({
+          filterBy: DashboardRangeFilterEnum.DAILY,
+          startDate: DateTime.now().minus({
+            days: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+    }
+  }
+
+  showRegisteredUserData(rangeFilter: DashboardRangeFilterEnum) {
+    this.toggleRegBtn = !this.toggleRegBtn
+    switch (rangeFilter) {
+      case DashboardRangeFilterEnum.MONTHLY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.MONTHLY,
+          startDate: DateTime.now().minus({
+            months: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+      case DashboardRangeFilterEnum.WEEKLY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.WEEKLY,
+          startDate: DateTime.now().minus({
+            days: 7
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+      case DashboardRangeFilterEnum.DAILY:
+        this.store.getRegisteredUsers({
+          filterBy: DashboardRangeFilterEnum.DAILY,
+          startDate: DateTime.now().minus({
+            days: 1
+          }).toISODate(),
+          endDate: DateTime.now().toISODate()
+        });
+        break;
+    }
+  }
+
+  registerUserData(rangeFilter: DashboardRangeFilterEnum): string {
+    switch (rangeFilter) {
+      case DashboardRangeFilterEnum.MONTHLY:
+        return `16k`;
+      case DashboardRangeFilterEnum.WEEKLY:
+        return `5.8k`;
+      case DashboardRangeFilterEnum.DAILY:
+        return '1.6k';
+    }
+  }
+
 
 // Top Watched pagination
   refreshListTopTest(): void {
+    const { videoplaySort, resultlogSort } = this.filtersTestWatched.value;
     this.store.getTopWatched$({
       page: this.topTestPageIndex,
-      limit: this.topWatchedPageSize
+      limit: this.topWatchedPageSize,
+      resultlogSort,
+      videoplaySort
     });
   }
 
@@ -316,17 +416,48 @@ export class DashboardComponent {
     this.topWatchedPageSize = $event.pageSize;
     this.refreshListTopTest();
   }
+
   resetTopTestPagination(): void {
     this.topTestPageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.topWatchedPageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshListTopTest();
   }
+
+  updateTopWatched(fieldName: 'videoplaySort' | 'resultlogSort'): void {
+    const { videoplaySort, resultlogSort } = this.filtersTestWatched.controls;
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+
+    switch (fieldName) {
+      case 'videoplaySort':
+        resultlogSort.disable();
+        updateSortingCtrl(videoplaySort);
+        break;
+      case 'resultlogSort':
+        videoplaySort.disable();
+        updateSortingCtrl(resultlogSort);
+        break;
+    }
+  }
+
+
   // Pack Engagement Pagination
   refreshListPackEng(): void {
-
+    const { contentclicksSort, resourceclicksSort, videoplaySort } = this.filtersPackEng.value;
     this.store.getPackEngagement$({
       page: this.packEngPageIndex,
-      limit: this.packEngPageSize
+      limit: this.packEngPageSize,
+      contentclicksSort,
+      resourceclicksSort,
+      videoplaySort
     });
   }
 
@@ -339,17 +470,52 @@ export class DashboardComponent {
     this.packEngPageSize = $event.pageSize;
     this.refreshListPackEng();
   }
+
   resetPackEngPagination(): void {
     this.packEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.packEngPageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshListPackEng();
   }
 
+  updatePackSorting(fieldName: 'resourceclicksSort' | 'contentclicksSort'| 'videoplaySort'): void {
+    const { resourceclicksSort, contentclicksSort, videoplaySort } = this.filtersPackEng.controls;
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+    switch (fieldName) {
+      case 'resourceclicksSort':
+        contentclicksSort.disable();
+        videoplaySort.disable()
+        updateSortingCtrl(resourceclicksSort);
+        break;
+      case 'contentclicksSort':
+        resourceclicksSort.disable();
+        videoplaySort.disable()
+        updateSortingCtrl(contentclicksSort);
+        break;
+      case 'videoplaySort':
+        resourceclicksSort.disable();
+        contentclicksSort.disable();
+        updateSortingCtrl(videoplaySort);
+        break;
+    }
+  }
+
   // Assessment Engagement Pagination
   refreshListAssessmentEng(): void {
+    const { averagescoreSort, completionSort } = this.filtersAssessmentEng.value;
     this.store.getAssessmentEngagement$({
       page: this.assessmentEngPageIndex,
-      limit: this.assessmentEngPageSize
+      limit: this.assessmentEngPageSize,
+      completionSort,
+      averagescoreSort
     });
   }
 
@@ -362,10 +528,38 @@ export class DashboardComponent {
     this.assessmentEngPageSize = $event.pageSize;
     this.refreshListPackEng();
   }
+
   resetAssessmentEngPagination(): void {
     this.assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.assessmentEngPageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshListAssessmentEng();
+  }
+
+
+  updateAssessmentSorting(fieldName: 'completionSort' | 'averagescoreSort'): void {
+    const { averagescoreSort, completionSort } = this.filtersAssessmentEng.controls;
+
+    const updateSortingCtrl = (ctrl: FormControl) => {
+      if (ctrl.disabled) {
+        ctrl.setValue(this.sortingEnum.DESC);
+        ctrl.enable();
+      } else {
+        ctrl.value === SortingEnum.DESC ? ctrl.setValue(this.sortingEnum.ASC) : ctrl.setValue(this.sortingEnum.DESC);
+      }
+      this.cdr.markForCheck();
+    };
+
+    switch (fieldName) {
+      case 'averagescoreSort':
+        completionSort.disable();
+        updateSortingCtrl(averagescoreSort);
+        break;
+      case 'completionSort':
+        averagescoreSort.disable();
+        updateSortingCtrl(completionSort);
+        break;
+
+    }
   }
 
   // get calenderView(): 'month' | 'year' | 'multi-year' {
@@ -374,6 +568,27 @@ export class DashboardComponent {
   //     return 'month';
   //   }
   // }
+
+  ngOnInit(): void {
+    this.filtersPackEng.valueChanges.pipe(
+      distinctUntilChanged((x, y) => isEqual(x, y)),
+      tap(res => {
+        this.refreshListPackEng();
+      })
+    ).subscribe();
+    this.filtersTestWatched.valueChanges.pipe(
+      distinctUntilChanged((x, y) => isEqual(x, y)),
+      tap(res => {
+        this.refreshListTopTest();
+      })
+    ).subscribe();
+    this.filtersAssessmentEng.valueChanges.pipe(
+      distinctUntilChanged((x, y) => isEqual(x, y)),
+      tap(res => {
+        this.refreshListAssessmentEng();
+      })
+    ).subscribe();
+  }
 
 
 }

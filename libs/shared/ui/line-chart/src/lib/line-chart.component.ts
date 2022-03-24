@@ -8,18 +8,18 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
       <hidden-innovation-shimmer
         [rounded]='true'
         class='mb-2'
-        height='344px'
+        height='500px'
         width='100%'
       ></hidden-innovation-shimmer>
     </ng-template>
     <ng-template #statsLoadingElse>
-      <mat-card>
-        <mat-card-content>
+      <div  >
+        <div>
           <div class='d-flex align-items-center mb-3'>
             <mat-icon color='primary' class='mr-1 card-icon'>{{icon || '--'}}</mat-icon>
             <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>{{label || '--'}}</h4>
           </div>
-          <div class='chart__container-main'>
+          <div class='chart__container-main' >
             <canvas baseChart
                     chartType='line'
                     [colors]='chartColors'
@@ -33,8 +33,8 @@ import { ChartColor, ChartDatasets, ChartLabel, ChartOptions } from '@rinminase/
               <h3 class='mat-h3'>No Data Available</h3>
             </div>
           </div>
-        </mat-card-content>
-      </mat-card>
+        </div>
+      </div>
     </ng-template>
   `,
   styleUrls: ['./line-chart.component.scss'],
@@ -108,8 +108,8 @@ export class LineChartComponent {
       },
       elements: {
         line: {
-          tension: 0,
-          borderWidth: 3
+          // tension: 0,
+          borderWidth: 3,
         },
         point: {
           pointStyle: 'circle',
@@ -117,6 +117,22 @@ export class LineChartComponent {
           hoverRadius: 8
         }
       },
+      tooltips:{
+        titleSpacing: 20,
+        // bodyAlign: "center",
+        titleFontSize: 14,
+        titleMarginBottom: 10,
+        xPadding: 10,
+        yPadding: 10,
+        callbacks:{
+          label(tooltipItem: Chart.ChartTooltipItem, data: Chart.ChartData): any {
+            // @ts-ignore
+            const value = data.datasets[0].data[tooltipItem.index];
+            return `  ${value}`;
+          }
+        }
+      },
+
       responsive: true,
       maintainAspectRatio: true,
       title: {
@@ -141,13 +157,5 @@ export class LineChartComponent {
   }
 
   ngOnInit() {
-
-    switch (this.label) {
-      case 'Registered Users':
-        break;
-      case 'Active Users':
-        break;
-      default:
-    }
   }
 }

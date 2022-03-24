@@ -21,7 +21,7 @@ import {
 } from '@hidden-innovation/questionnaire/data-access';
 import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { FormValidationService } from '@hidden-innovation/shared/form-config';
+import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { ActivatedRoute } from '@angular/router';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
@@ -42,12 +42,10 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
 
   questionnaire: FormGroup<Questionnaire> = new FormGroup<Questionnaire>({
     name: new FormControl<string>('', [
-      RxwebValidators.required(),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.minLength({
-        value: 1
-      }),
+      ...this.formValidationService.requiredFieldValidation
     ]),
+    whatYouWillGetOutOfIt: new FormControl<string>(''),
+    overview: new FormControl<string>(''),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
       Validators.required,
@@ -70,6 +68,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     private hotToastService: HotToastService,
     public formValidationService: FormValidationService,
     public store: QuestionnaireStore,
+    public constantDataService: ConstantDataService,
     private route: ActivatedRoute,
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
@@ -126,10 +125,12 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   }
 
   populateQuestionnaire(obj: QuestionnaireExtended): void {
-    const { name, isScoring, questions } = obj;
+    const { name, isScoring, questions, whatYouWillGetOutOfIt, overview } = obj;
     this.questionnaire.patchValue({
       name,
-      isScoring
+      isScoring,
+      whatYouWillGetOutOfIt,
+      overview
     });
     const tempQuestions: Question[] = this.parseQuestionType(questions).map(q => {
       if (q.questionType !== QuestionTypeEnum.IMAGE_SELECT) {
@@ -207,8 +208,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       return;
     }
     const alteredQuestionnaire: Questionnaire = {
-      name: this.questionnaire.value.name,
-      isScoring: this.questionnaire.value.isScoring,
+      ...this.questionnaire.value,
       questions: this.changedQuestionType(this.questionnaire.value.questions)
     };
     if (this.opType === OperationTypeEnum.CREATE) {
@@ -243,7 +243,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     let answer: FormGroup<MultipleChoiceAnswer | ImageSelectAnswer | AnswerCore>;
 
     switch (question.type) {
-        case QuestionTypeEnum.MULTIPLE_CHOICE:
+      case QuestionTypeEnum.MULTIPLE_CHOICE:
         answerFormArray = this.questionFormGroup(parseInt(question.index)).controls.answer as FormArray<MultipleChoiceAnswer>;
         answer = new FormGroup<MultipleChoiceAnswer>({
           name: new FormControl<string>(multipleChoice?.name ?? '', [

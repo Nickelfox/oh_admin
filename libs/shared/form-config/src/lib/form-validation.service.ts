@@ -5,7 +5,7 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { DateTime } from 'luxon';
-import { PointTypeEnum } from '@hidden-innovation/shared/models';
+import { PointTypeEnum, RepsCore } from '@hidden-innovation/shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,9 @@ export class FormValidationService {
     USERNAME_LENGTH: 30,
     QUESTION_NAME_LENGTH: 65,
     QUESTION_DESC_LENGTH: 200,
-    ANSWER_LENGTH: 50
+    ANSWER_LENGTH: 50,
+    SPOTLIGHT_BUTTON_LENGTH: 30,
+    ASSESSMENT_ABOUT_LENGTH: 200
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {
@@ -297,23 +299,23 @@ export class FormValidationService {
 
   minOneTrue(): ValidatorFn {
     return (group: AbstractControl) => {
-      if (!group) {
+      try {
+        if (!group || group.disabled) {
+          return null;
+        }
+        const errors: any = {};
+        const repsGroup: FormGroup<RepsCore> = group as FormGroup<RepsCore>;
+        let toggleCount = 0;
+        toggleCount += repsGroup?.value?.oneRep ? 1 : 0;
+        toggleCount += repsGroup?.value?.threeRep ? 1 : 0;
+        toggleCount += repsGroup?.value?.fiveRep ? 1 : 0;
+        if (toggleCount < 1) {
+          errors['minOneTrue'] = true;
+        }
+        return errors;
+      } catch {
         return null;
       }
-      return null;
-      // const repsGroup: FormGroup<RepsCore> = group as FormGroup<RepsCore>;
-      // let toggleCount = 0;
-      // toggleCount += repsGroup?.value?.oneRep ? 1 : 0;
-      // toggleCount += repsGroup?.value?.threeRep ? 1 : 0;
-      // toggleCount += repsGroup?.value?.fiveRep ? 1 : 0;
-      // if (toggleCount < 1) {
-      //   group.setErrors({
-      //     'minOneTrue': true
-      //   });
-      // } else {
-      //   group.setErrors({});
-      // }
-      // return null;
     };
   }
 }

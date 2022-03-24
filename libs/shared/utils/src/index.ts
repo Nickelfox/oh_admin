@@ -6,3 +6,4 @@ export * from './lib/pipes/distance-length.pipe';
 export * from './lib/pipes/replace-underscore.pipe';
 export * from './lib/pipes/parse-one-rem.pipe';
 export * from './lib/guards/pending-changes.guard';
+export * from './lib/services/content-selection.service';

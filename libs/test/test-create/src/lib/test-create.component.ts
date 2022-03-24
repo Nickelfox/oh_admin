@@ -18,6 +18,7 @@ import {
   ProfileInputTypeEnum,
   ProfileInputTypeUnitEnum,
   RatioTestTypeEnum,
+  RepsCore,
   TagCategoryEnum,
   TagTypeEnum,
   TestInputTypeEnum,
@@ -31,7 +32,6 @@ import {
   OneRMField,
   RatioSubObject,
   RelativeProfileObject,
-  RepsCore,
   Test,
   TestStore,
   TestUtilitiesService
@@ -133,9 +133,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       this.formValidationService.greaterPointValidator()
     ]),
     reps: new FormGroup({
-      oneRep: new FormControl<boolean>(false),
-      threeRep: new FormControl<boolean>(false),
-      fiveRep: new FormControl<boolean>(false)
+      oneRep: new FormControl<boolean>(true, [
+        RxwebValidators.required()
+      ]),
+      threeRep: new FormControl<boolean>(false, [
+        RxwebValidators.required()
+      ]),
+      fiveRep: new FormControl<boolean>(false, [
+        RxwebValidators.required()
+      ])
     }, [
       this.formValidationService.minOneTrue()
     ]),
@@ -185,19 +191,19 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
         })
       ]),
       xWeightUnit: new FormControl({
-        value: undefined,
+        value: WeightTypeEnum.GRAM,
         disabled: true
       }, [...this.utilities.requiredFieldValidation]),
       yWeightUnit: new FormControl({
-        value: undefined,
+        value: WeightTypeEnum.GRAM,
         disabled: true
       }, [...this.utilities.requiredFieldValidation]),
       xDistanceUnit: new FormControl({
-        value: undefined,
+        value: DistanceTypeEnum.CENTIMETRE,
         disabled: true
       }, [...this.utilities.requiredFieldValidation]),
       yDistanceUnit: new FormControl({
-        value: undefined,
+        value: DistanceTypeEnum.CENTIMETRE,
         disabled: true
       }, [...this.utilities.requiredFieldValidation])
     }),
@@ -525,7 +531,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   get disableEditState(): boolean {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return (this.opType === this.opTypeEnum.EDIT) && (this.selectedTest?.inputType !== "NONE");
+    return (this.opType === this.opTypeEnum.EDIT) && (this.selectedTest?.inputType !== 'NONE');
   }
 
   resetProfileInputUnit(): void {
@@ -538,6 +544,15 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       selectedTest: undefined
     });
     this.utilities.resetTagsState();
+  }
+
+  removeMediaCtrlAndValidate(ctrl: FormControl | undefined): void {
+    if(ctrl) {
+      ctrl.reset();
+      this.testGroup.patchValue({
+        isPublished: false
+      })
+    }
   }
 
   getOneRMInputFieldGroup(i: number): FormGroup<OneRMField> {
@@ -571,6 +586,7 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
   submit(): void {
     this.testGroup.markAllAsDirty();
     this.testGroup.markAllAsTouched();
+    console.log(this.testGroup);
     if (this.testGroup.invalid) {
       this.hotToastService.error(this.formValidationService.formSubmitError);
       return;

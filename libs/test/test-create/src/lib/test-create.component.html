@@ -79,7 +79,7 @@
                               <p class='text-muted mb-2'>Video File</p>
                               <div class='d-flex align-items-center'>
                                 <hidden-innovation-common-form-field-video
-                                  (emitRemoveVideo)='testGroup.controls.videoId?.reset($event)'
+                                  (emitRemoveVideo)='removeMediaCtrlAndValidate(testGroup.controls.videoId)'
                                   (emitVideoCtrlData)='testGroup.controls.videoId?.setValue($event)'
                                   [parentCtrl]='testGroup.controls.videoId'
                                   [videoData]='selectedTest?.video'
@@ -102,7 +102,7 @@
                               <p class='text-muted mb-2'>Thumbnail</p>
                               <hidden-innovation-common-form-field-image
                                 (emitImageCtrlData)='testGroup.controls.thumbnailId?.setValue($event)'
-                                (emitRemoveImage)='testGroup.controls.thumbnailId?.reset($event)'
+                                (emitRemoveImage)='removeMediaCtrlAndValidate(testGroup.controls.thumbnailId)'
                                 [aspectRatio]='aspectRatio.STANDARD'
                                 [parentCtrl]='testGroup.controls.thumbnailId'
                                 [setImageData]='selectedTest?.thumbnail'
@@ -115,7 +115,7 @@
                               <p class='text-muted mb-2'>Poster</p>
                               <hidden-innovation-common-form-field-image
                                 (emitImageCtrlData)='testGroup.controls.posterId?.setValue($event)'
-                                (emitRemoveImage)='testGroup.controls.posterId?.reset($event)'
+                                (emitRemoveImage)='removeMediaCtrlAndValidate(testGroup.controls.posterId)'
                                 [aspectRatio]='aspectRatio.CUBE'
                                 [parentCtrl]='testGroup.controls.posterId'
                                 [setImageData]='selectedTest?.poster'
@@ -293,9 +293,11 @@
                                                 formControlName='fiveRep'>5 rep
                                   </mat-checkbox>
                                 </div>
-                                <div class='col-12' *ngIf='repsCoreGroup?.errors$ | async'>
-                                  <mat-error><small>Minimum 1 selection is required</small></mat-error>
-                                </div>
+                                <ng-template [ngIf]='repsCoreGroup.errors$ | async' let-error>
+                                  <div class='col-12' *ngIf='error?.minOneTrue'>
+                                    <mat-error><small>Minimum 1 selection is required</small></mat-error>
+                                  </div>
+                                </ng-template>
                               </div>
                               <div class='row mb-3'>
                                 <div class='col-12'>
@@ -507,7 +509,8 @@
                                 <div class='col-12'>
                                   <mat-form-field class='w-100'>
                                     <mat-label>Units</mat-label>
-                                    <mat-select [disabled]='disableEditState' formControlName='distanceUnit'>
+                                    <mat-select [disabled]='disableEditState' formControlName='distanceUnit' placeholder='Select An Option'>
+                                      <mat-option disabled>Select An Option</mat-option>
                                       <mat-option [value]='distanceTypeEnum.MILLIMETRE'>
                                         {{distanceTypeEnum.MILLIMETRE | titlecase}} (mm)
                                       </mat-option>
@@ -696,6 +699,7 @@
                                   <mat-form-field class='w-100'>
                                     <mat-label>Units</mat-label>
                                     <mat-select [disabled]='disableEditState' formControlName='weightUnit'>
+                                      <mat-option disabled>Select An Option</mat-option>
                                       <mat-option
                                         [value]='weightTypeEnum.MILLIGRAM'>{{weightTypeEnum.MILLIGRAM | titlecase}} (mg)
                                       </mat-option>
@@ -893,6 +897,7 @@
                                     <mat-form-field class='w-100'>
                                       <mat-label>Variable(x) Type</mat-label>
                                       <mat-select [disabled]='disableEditState' formControlName='xType'>
+                                        <mat-option disabled>Select An Option</mat-option>
                                         <mat-option *ngFor='let ratioType of ratioTestTypeIte' [value]='ratioType'>
                                           {{ratioType === ratioTestTypeEnum.DISTANCE_LENGTH ? "Distance/Length" : (ratioType | titlecase)}}
                                         </mat-option>
@@ -917,6 +922,7 @@
                                       <mat-form-field class='w-100'>
                                         <mat-label>Variable (x) - Unit</mat-label>
                                         <mat-select [disabled]='disableEditState' formControlName='xWeightUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
                                           <mat-option *ngFor='let wType of weightTypeIte'
                                                       [value]='wType'>{{utilities.getUnitAbbreviation(wType)}}</mat-option>
                                         </mat-select>
@@ -937,6 +943,7 @@
                                       <mat-form-field class='w-100'>
                                         <mat-label>Variable (x) - Unit</mat-label>
                                         <mat-select [disabled]='disableEditState' formControlName='xDistanceUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
                                           <mat-option *ngFor='let dType of distTypeIte'
                                                       [value]='dType'>{{utilities.getUnitAbbreviation(dType)}}</mat-option>
                                         </mat-select>
@@ -984,6 +991,7 @@
                                     <mat-form-field class='w-100'>
                                       <mat-label>Variable(y) Type</mat-label>
                                       <mat-select [disabled]='disableEditState' formControlName='yType'>
+                                        <mat-option disabled>Select An Option</mat-option>
                                         <mat-option *ngFor='let ratioType of ratioTestTypeIte'
                                                     [value]='ratioType'>{{ratioType === ratioTestTypeEnum.DISTANCE_LENGTH ? "Distance/Length" : (ratioType | titlecase)}}</mat-option>
                                       </mat-select>
@@ -1007,6 +1015,7 @@
                                       <mat-form-field class='w-100'>
                                         <mat-label>Variable (y) - Unit</mat-label>
                                         <mat-select [disabled]='disableEditState' formControlName='yWeightUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
                                           <mat-option *ngFor='let wType of weightTypeIte'
                                                       [value]='wType'>{{utilities.getUnitAbbreviation(wType)}}</mat-option>
                                         </mat-select>
@@ -1027,6 +1036,7 @@
                                       <mat-form-field class='w-100'>
                                         <mat-label>Variable (y) - Unit</mat-label>
                                         <mat-select [disabled]='disableEditState' formControlName='yDistanceUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
                                           <mat-option *ngFor='let dType of distTypeIte'
                                                       [value]='dType'>{{utilities.getUnitAbbreviation(dType)}}</mat-option>
                                         </mat-select>
@@ -1166,6 +1176,7 @@
                                     <mat-form-field class='w-100'>
                                       <mat-label>Profile Input</mat-label>
                                       <mat-select formControlName='profileInput'>
+                                        <mat-option disabled>Select An Option</mat-option>
                                         <mat-option *ngFor='let inp of profileInputIte'
                                                     [value]='inp'>{{inp | replaceUnderscore | titlecase}}</mat-option>
                                       </mat-select>
@@ -1194,6 +1205,7 @@
                                     <mat-form-field class='w-100'>
                                       <mat-label>Value y - Type</mat-label>
                                       <mat-select (valueChange)='resetProfileInputUnit()' formControlName='inputType'>
+                                        <mat-option disabled>Select An Option</mat-option>
                                         <mat-option *ngFor='let inp of profileInputTypeIte'
                                                     [value]='inp'>
                                           {{inp === profileInputTypeEnum.LENGTH ? ('Distance/Length') : (inp | titlecase)}}
@@ -1219,6 +1231,7 @@
                                       <mat-form-field class='w-100'>
                                         <mat-label>Value y - Unit</mat-label>
                                         <mat-select formControlName='unit'>
+                                          <mat-option disabled>Select An Option</mat-option>
                                           <mat-option *ngFor='let wType of weightTypeIte'
                                                       [value]='wType'>{{utilities.getUnitAbbreviation(wType)}}</mat-option>
                                         </mat-select>
@@ -1239,6 +1252,7 @@
                                       <mat-form-field class='w-100'>
                                         <mat-label>Value y - Unit</mat-label>
                                         <mat-select formControlName='unit'>
+                                          <mat-option disabled>Select An Option</mat-option>
                                           <mat-option *ngFor='let dType of distTypeIte'
                                                       [value]='dType'>{{utilities.getUnitAbbreviation(dType)}}</mat-option>
                                         </mat-select>

@@ -19,7 +19,6 @@ import { AuthLayoutModule } from '@hidden-innovation/shared/ui/auth-layout';
 import { UtilsModule } from '@hidden-innovation/shared/utils';
 import { ErrorService } from './services/error.service';
 import { ErrorHandlerService } from './handler/error-handler.service';
-import { OfflineInterceptor } from './interceptors/offline.interceptor';
 
 @NgModule({
 
@@ -56,11 +55,6 @@ import { OfflineInterceptor } from './interceptors/offline.interceptor';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: OfflineInterceptor,
       multi: true
     },
     {

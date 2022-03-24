@@ -6,8 +6,8 @@ import {
   OnDestroy,
   ViewEncapsulation
 } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {LessonCreateComponent} from '@hidden-innovation/shared/ui/lesson-create';
+import { MatDialog } from '@angular/material/dialog';
+import { LessonCreateComponent } from '@hidden-innovation/shared/ui/lesson-create';
 import {
   Content,
   ContentCore,
@@ -18,30 +18,31 @@ import {
   PackCore,
   PackStore
 } from '@hidden-innovation/pack/data-access';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@ngneat/reactive-forms';
-import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
-import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators';
-import {UiStore} from '@hidden-innovation/shared/store';
-import {AspectRatio, Media} from '@hidden-innovation/media';
-import {UntilDestroy} from '@ngneat/until-destroy';
-import { filter, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
+import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
+import { UiStore } from '@hidden-innovation/shared/store';
+import { AspectRatio, Media } from '@hidden-innovation/media';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { filter, mergeMap, tap } from 'rxjs/operators';
 import {
   ContentSelectorOpType,
   GenericDialogPrompt,
   OperationTypeEnum,
   PackContentTypeEnum
 } from '@hidden-innovation/shared/models';
-import {ActivatedRoute} from '@angular/router';
-import {HotToastService} from '@ngneat/hot-toast';
-import {TitleCasePipe} from '@angular/common';
-import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog';
-import {TestSelectorComponent, TestSelectorData} from '@hidden-innovation/shared/ui/test-selector';
-import {TestGroupSelectorComponent, TestGroupSelectorData} from '@hidden-innovation/shared/ui/test-group-selector';
+import { ActivatedRoute } from '@angular/router';
+import { HotToastService } from '@ngneat/hot-toast';
+import { TitleCasePipe } from '@angular/common';
+import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
+import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
 import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
-import {ComponentCanDeactivate} from '@hidden-innovation/shared/utils';
+import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -92,10 +93,8 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
   aspectRatio = AspectRatio;
   opType?: OperationTypeEnum;
   selectedPack?: Pack;
-  private packID?: number;
-  private selectedContents: ContentCore[] | LessonCore[] = [];
-
   loaded = false;
+  private packID?: number;
 
   constructor(
     private matDialog: MatDialog,
@@ -107,7 +106,7 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
     public uiStore: UiStore,
     private titleCasePipe: TitleCasePipe,
     private hotToastService: HotToastService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     this.route.data.pipe(
       filter(data => data?.type !== undefined),
@@ -152,6 +151,16 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
     this.store.loaded$.pipe(
       tap(res => this.loaded = res)
     ).subscribe();
+  }
+
+  private _selectedContents: ContentCore[] | LessonCore[] = [];
+
+  get selectedContents(): (ContentCore | LessonCore)[] {
+    return this._selectedContents ?? [];
+  }
+
+  set selectedContents(content) {
+    this._selectedContents = content ?? [];
   }
 
   get contentArrayCtrl(): FormControl<ContentCore[] | LessonCore[]> {
@@ -202,7 +211,7 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
   }
 
   deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
-    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
+    const contentType: string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type;
     const dialogData: GenericDialogPrompt = {
       title: `Remove ${contentType}?`,
       desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Pack?`,
@@ -268,7 +277,7 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
   openCreateLessonDialog(): void {
     const dialogRef = this.matDialog.open(LessonCreateComponent, {
       minWidth: '25rem',
-      disableClose:true,
+      disableClose: true
       // hasBackdrop:false
     });
     dialogRef.afterClosed().subscribe((lesson: LessonCore) => {
@@ -339,6 +348,19 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
     }
   }
 
+  @HostListener('window:beforeunload')
+  canDeactivate(): boolean {
+    return this.packForm.dirty ? this.loaded : true;
+  }
+
+  packDragEvent($event: CdkDragDrop<(ContentCore | LessonCore)[]>) {
+    const selectedContent = this.selectedContents ? [...this.selectedContents] : [];
+    moveItemInArray(selectedContent, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedContent
+    });
+  }
+
   private populatePack(pack: Pack): void {
     const { name, description, thumbnailId, posterId, subTitle } = pack;
     this.selectedPack = pack;
@@ -379,10 +401,5 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
       ]
     });
     this.cdr.markForCheck();
-  }
-
-  @HostListener('window:beforeunload')
-  canDeactivate(): boolean {
-    return this.packForm.dirty ? this.loaded : true;
   }
 }

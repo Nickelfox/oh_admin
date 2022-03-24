@@ -8,13 +8,7 @@ import {
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
-import {
-  ContentSelectorOpType,
-  PackContentTypeEnum,
-  PublishStatusEnum,
-  SortingEnum,
-  StatusChipType
-} from '@hidden-innovation/shared/models';
+import { PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { Pack, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
@@ -25,6 +19,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { isEqual } from 'lodash-es';
 import { MatSelectionListChange } from '@angular/material/list';
+import { ContentSelectionService } from '@hidden-innovation/shared/utils';
 
 export interface PackSelectorData {
   limit?: boolean;
@@ -73,7 +68,8 @@ export class PackSelectorComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: PackSelectorData,
     private cdr: ChangeDetectorRef,
     public uiStore: UiStore,
-    private hotToastService: HotToastService
+    private hotToastService: HotToastService,
+    private contentSelectionService: ContentSelectionService
   ) {
     if (this.data === undefined || this.data === null) {
       this.hotToastService.error('Application Error! Data needs to to sent before selecting any tests');
@@ -99,12 +95,36 @@ export class PackSelectorComponent implements OnInit {
     return this.pageIndex - 1;
   }
 
+  get Count() {
+    if (this.selectedPacks.length === 0) {
+      return '';
+    }
+    return this.selectedPacks ? `SELECTED ITEMS ${this.selectedPacks.length}` : '-';
+  }
+
+  get isAllSelected(): boolean {
+    const numSelected: number[] = this.selectedPacks?.map(p => p.id) ?? [];
+    return this.contentSelectionService.isContentEqual(this.packs.data.map(p => p.id), numSelected);
+  }
+
+  get someSelected(): boolean {
+    try {
+      if (this.selectedPacks?.length <= 0) {
+        return false;
+      }
+      const currentSelectedItems: Pack[] = this.packs.data.filter(t1 => this.selectedPacks.findIndex(t2 => t1.id === t2.id) !== -1);
+      if (currentSelectedItems.length <= 0) return false;
+      return currentSelectedItems.length !== this.packs.data.length;
+    } catch {
+      return false;
+    }
+  }
+
   resetPagination(): void {
     this.pageIndex = this.constantDataService.PaginatorData.pageIndex;
     this.pageSize = this.constantDataService.PaginatorData.pageSize;
     this.refreshList();
   }
-
 
   refreshList(): void {
     const { nameSort, dateSort, search, published } = this.filters.value;
@@ -116,14 +136,6 @@ export class PackSelectorComponent implements OnInit {
       published,
       nameSort
     });
-  }
-
-  get Count(){
-    if(this.selectedPacks.length === 0)
-    {
-      return '';
-    }
-    return this.selectedPacks? `SELECTED ITEMS ${this.selectedPacks.length}`: '-';
   }
 
   ngOnInit(): void {
@@ -146,6 +158,35 @@ export class PackSelectorComponent implements OnInit {
 
   isSelected(pack: Pack): boolean {
     return !!this.selectedPacks.find(value => value.id === pack.id);
+  }
+
+  masterToggleStackError(): void {
+    this.hotToastService.error('Application Error! Select All module stack issue');
+  }
+
+  masterToggle(): void {
+    if (this.isAllSelected) {
+      try {
+        const clearedPacks: Pack[] = this.selectedPacks.filter(p => !this.packs.data.find(p2 => p2.id === p.id));
+        this.uiStore.patchState({
+          selectedPacks: clearedPacks
+        });
+      } catch {
+        this.masterToggleStackError();
+      }
+    } else {
+      try {
+        const leftOutPacks: Pack[] = this.packs.data.filter(p1 => this.selectedPacks.findIndex(p2 => p2.id === p1.id) === -1);
+        this.uiStore.patchState({
+          selectedPacks: [
+            ...this.selectedPacks,
+            ...leftOutPacks
+          ]
+        });
+      } catch {
+        this.masterToggleStackError();
+      }
+    }
   }
 
   addToList(pack: Pack): void {

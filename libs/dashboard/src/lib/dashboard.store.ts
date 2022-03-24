@@ -4,7 +4,7 @@ import {
   AssessmentEngagement, AssessmentLimitRequest,
   DashboardData,
   PackEngagement, PackEngLimitRequest,
-  TestWatched, TestWatchedLimitRequest
+  TestWatched, TestWatchedLimitRequest, UserGraphData,
 } from './models/dashboard.interface';
 import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
@@ -13,6 +13,13 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { ChartDatasets, ChartLabel, SingleOrMultiDataSet } from '@rinminase/ng-charts';
 import { DashboardRangeFilterEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { Featured } from '@hidden-innovation/featured/data-access';
+import { DateTime } from 'luxon';
+
+export  interface  ActiveData
+{
+  total:string;
+  changePer: number;
+}
 
 export interface DashboardState extends Partial<DashboardData> {
   isLoading?: boolean;
@@ -30,10 +37,15 @@ export interface DashboardState extends Partial<DashboardData> {
   activeUsersData?: ChartDatasets;
   filterBy?: DashboardRangeFilterEnum;
   isLineChartLoading?: boolean;
-  testWatched?:TestWatched[];
-  packEng:PackEngagement[];
+  test?:TestWatched[];
+  packs:PackEngagement[];
   assessmentEng: AssessmentEngagement[];
-  total: number;
+  totalAssessmentEng: number;
+  totalTests: number;
+  totalPacks:number,
+  isActing?: boolean;
+  loaded?: boolean;
+  registeredStatus?: Partial<UserGraphData>;
 }
 
 const initialState: DashboardState = {
@@ -53,21 +65,114 @@ const initialState: DashboardState = {
   activeUsersLabel: [],
   activeUsersData: [{ data: [], label: '' }],
   isLineChartLoading: false,
-  testWatched: [],
-  packEng:[],
+  test: [],
+  packs:[],
   assessmentEng:[],
-  total:0
+  totalPacks:0,
+  totalTests: 0,
+  totalAssessmentEng:0,
+  isActing: false,
+  loaded: false,
+  registeredStatus:
+    {
+      monthly:{
+        total:'',
+        changePer: 0,
+        data:[]
+      },
+      weekly:{
+        total:'',
+        changePer: 0,
+        data:[]
+      },
+      daily:{
+        total:'',
+        changePer:0,
+        data:[]
+      }
+    }
 };
 
 @Injectable()
 export class DashboardStore extends ComponentStore<DashboardState> {
+  public _dummyRegisteresUserData: UserGraphData = {
+    monthly: {
+      total: '16k',
+      changePer: -20,
+      data: [
+        {
+          count: 3,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 4,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 6,
+          date: DateTime.now().toISODate()
+        }
+      ]
+    },
+    weekly: {
+      total: '5.2k',
+      changePer: +50,
+      data: [
+        {
+          count: 5,
+          date: DateTime.now().toISODate()
+        },
+        {
+          count: 20,
+          date: DateTime.now().toISODate()
+        }
+      ]
+    },
+    daily: {
+      total: '1.6k',
+      changePer: +30,
+      data: [
+        {
+          count: 10,
+          date: DateTime.now().toISODate()
+        },
+      ]
+    }
+  };
 
-  testWatched$: Observable<TestWatched[]> = this.select(state => state.testWatched || []);
-  packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packEng || [])
+
+  registeredStatus$: Observable<any> = this.select(state => state.registeredStatus ??
+    {
+      monthly:{
+        total:'',
+        changePer: 0,
+        data:[]
+      },
+      weekly:{
+        total:'',
+        changePer: 0,
+        data:[]
+      },
+      daily:{
+        total:'',
+        changePer:0,
+        data:[]
+      }
+    }
+  )
+
+
+  testWatched$: Observable<TestWatched[]> = this.select(state => state.test || []);
+  packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packs || [])
   assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || [])
-  readonly testWatchedCount$: Observable<number> = this.select(state => state.total || 0);
-  readonly packEngCount$: Observable<number> = this.select(state => state.total || 0);
-  readonly assessmentEngCount$: Observable<number> = this.select(state => state.total || 0);
+  readonly testWatchedCount$: Observable<number> = this.select(state => state.totalTests || 0);
+  readonly packEngCount$: Observable<number> = this.select(state => state.totalPacks || 0);
+  readonly assessmentEngCount$: Observable<number> = this.select(state => state.totalAssessmentEng || 0);
+  readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
+  readonly loaded$: Observable<boolean> = this.select(state => !!state.loaded);
+  readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
+
+
 
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isLineChartLoading$: Observable<boolean> = this.select(state => !!state.isLineChartLoading);
@@ -96,6 +201,10 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     label: ''
   }]));
   readonly activeUserLabel$: Observable<ChartLabel> = this.select((state => state.activeUsersLabel ?? []));
+
+
+
+
   readonly getStats = this.effect(params$ =>
     params$.pipe(
       tap(() => {
@@ -136,6 +245,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.dashboardService.getGenderStatics().pipe(
           tap(
             (apiRes) => {
+
               const ageRatioData = this.convertToPercentage(apiRes.femaleUsers, apiRes.maleUsers, apiRes.nonBinaryUsers, apiRes.totalUsers);
               const f = this.convertToChartData(apiRes.femaleUsers);
               this.patchState({
@@ -212,6 +322,8 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
+
+
   readonly getRegisteredUsers = this.effect<{ filterBy: DashboardRangeFilterEnum; startDate: string; endDate: string }>(params$ =>
     params$.pipe(
       tap((req) => {
@@ -224,7 +336,60 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.dashboardService.getRegisteredUsers(req).pipe(
           tap(
             (apiRes) => {
+
+              // this.patchState({
+              //   registeredStatus:{
+              //     monthly:{
+              //       total:this._dummyRegisteresUserData.monthly.total,
+              //       changePer: this._dummyRegisteresUserData.monthly.changePer,
+              //       data:[]
+              //     },
+              //     weekly:{
+              //       total:this._dummyRegisteresUserData.weekly.total,
+              //       changePer: this._dummyRegisteresUserData.weekly.changePer,
+              //       data:[]
+              //     },
+              //     daily:{
+              //       total:this._dummyRegisteresUserData.daily.total,
+              //       changePer: this._dummyRegisteresUserData.daily.changePer,
+              //       data:[]
+              //     },
+              //   }
+              // })
+              //
+              // switch (req.filterBy)
+              // {
+              //   case DashboardRangeFilterEnum.MONTHLY: {
+              //     const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.MONTHLY);
+              //     this.patchState({
+              //       isLineChartLoading: false,
+              //       registeredUsersData: localDataSet.datasets,
+              //       registeredUsersLabel: localDataSet.label
+              //     })
+              //   }
+              //   break;
+              //   case DashboardRangeFilterEnum.WEEKLY: {
+              //     const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.WEEKLY);
+              //     this.patchState({
+              //       isLineChartLoading: false,
+              //       registeredUsersData: localDataSet.datasets,
+              //       registeredUsersLabel: localDataSet.label
+              //     })
+              //   }
+              //   break;
+              //   case DashboardRangeFilterEnum.DAILY: {
+              //     const localDataSet = this.registeredDataSets(DashboardRangeFilterEnum.DAILY);
+              //     this.patchState({
+              //       isLineChartLoading: false,
+              //       registeredUsersData: localDataSet.datasets,
+              //       registeredUsersLabel: localDataSet.label
+              //     })
+              //   }
+              //   break;
+              // }
+
               const dataSet = this.convertDataFormat(apiRes.users, req);
+
               this.patchState({
                 isLineChartLoading: false,
                 registeredUsersData: dataSet.dataSet,
@@ -273,7 +438,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
 
   getTopWatched$ = this.effect<TestWatchedLimitRequest>(params$ =>
     params$.pipe(
-      tap((res) => {
+      tap((_) => {
         this.patchState({
           isLoading: true
         });
@@ -281,10 +446,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       switchMap((reqObj) =>
         this.dashboardService.getTopWatched(reqObj).pipe(
           tapResponse(
-            (testWatched) => {
+            ({test, totalTests}) => {
               this.patchState({
                 isLoading: false,
-                testWatched
+                test,
+                totalTests
               });
             },
             _ => {
@@ -299,7 +465,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   );
   getPackEngagement$ = this.effect<PackEngLimitRequest>(params$ =>
     params$.pipe(
-      tap(() => {
+      tap((_) => {
         this.patchState({
           isLoading: true
         });
@@ -307,11 +473,13 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       switchMap((reqObj) =>
         this.dashboardService.getPackEng(reqObj).pipe(
           tapResponse(
-            (packEng) => {
+            ({packs,totalPacks}) => {
               this.patchState({
                 isLoading: false,
-                packEng
+                packs,
+                totalPacks
               });
+
             },
             _ => {
               this.patchState({
@@ -325,7 +493,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   );
   getAssessmentEngagement$ = this.effect<AssessmentLimitRequest>(params$ =>
     params$.pipe(
-      tap(() => {
+      tap((_) => {
         this.patchState({
           isLoading: true
         });
@@ -352,12 +520,51 @@ export class DashboardStore extends ComponentStore<DashboardState> {
 
 
 
+  public registeredDataSets(filter:DashboardRangeFilterEnum):{datasets:ChartDatasets, label:ChartLabel}
+  {
+    let dataLabels: ChartLabel = [];
+    let dataSet: number[] = [];
+    // if (filter.monthly)
+    // {
+    //   dataSet = filter.monthly.data.map(res => res.count);
+    //   dataLabels = filter.monthly.data.map(res => res.date);
+    // }
+    // else if(filter.weekly)
+    // {
+    //   dataSet = filter.weekly.data.map(res => res.count);
+    //   dataLabels = filter.weekly.data.map(res => res.date);
+    // }
+    // else if(filter.daily)
+    // {
+    //   dataSet = filter.daily.data.map(res => res.count);
+    //   dataLabels = filter.daily.data.map(res => res.date);
+    // }
+    switch (filter) {
+      case DashboardRangeFilterEnum.WEEKLY:
+        dataSet = this._dummyRegisteresUserData.weekly.data.map(res => res.count);
+        dataLabels = this._dummyRegisteresUserData.weekly.data.map(res => res.date);
+        break;
+      case DashboardRangeFilterEnum.MONTHLY:
+        dataSet = this._dummyRegisteresUserData.monthly.data.map(res => res.count);
+        dataLabels = this._dummyRegisteresUserData.monthly.data.map(res => res.date);
+        break;
+      case DashboardRangeFilterEnum.DAILY:
+        dataSet = this._dummyRegisteresUserData.daily.data.map(res => res.count);
+        dataLabels = this._dummyRegisteresUserData.daily.data.map(res => res.date);
+        break;
+    }
+    return { datasets: [{ data: dataSet}], label: dataLabels };
+  }
+
+
   constructor(
     private dashboardService: DashboardService,
     private uiStore: UiStore
   ) {
     super(initialState);
   }
+
+
 
   public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): { dataSet: ChartDatasets; labels: ChartLabel } {
     const filterBy = reqObj.filterBy;
@@ -439,9 +646,9 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     if (!totalUsers) {
       return [[0, 0, 0]];
     }
-    const noOfMaleUsers = parseInt(((male.length / totalUsers) * 100).toFixed(2));
-    const noOfFemaleUsers = parseInt(((female.length / totalUsers) * 100).toFixed(2));
-    const noOfOtherUsers = parseInt(((other.length / totalUsers) * 100).toFixed(2));
+    const noOfMaleUsers = parseFloat(((male.length / totalUsers) * 100).toFixed(2));
+    const noOfFemaleUsers = parseFloat(((female.length / totalUsers) * 100).toFixed(2));
+    const noOfOtherUsers = parseFloat(((other.length / totalUsers) * 100).toFixed(2));
     return [[noOfMaleUsers, noOfFemaleUsers, noOfOtherUsers]];
   }
 
