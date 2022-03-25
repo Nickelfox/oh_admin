@@ -365,34 +365,12 @@ import { TitleCasePipe } from '@angular/common';
       {
         path: 'goals',
         canActivate: [AuthGuard],
-        children: [
-          {
-            path: '',
-            pathMatch: 'full',
-            loadChildren: () =>
-              import('@hidden-innovation/goals/create-goals').then(
-                (m) => m.CreateGoalsModule
-              ),
-            data: { breadcrumb: 'Create Goals', type: OperationTypeEnum.CREATE }
-          },
-          {
-            path: '',
-            pathMatch: 'full',
-            loadChildren: () =>
-              import('@hidden-innovation/goals/create-goals').then(
-                (m) => m.CreateGoalsModule
-              ),
-            data: { breadcrumb: 'Create Goals', type: OperationTypeEnum.CREATE }
-          },
-          {
-            path: 'edit/:id',
-            loadChildren: () =>
-              import('@hidden-innovation/goals/create-goals').then(
-                (m) => m.CreateGoalsModule
-              ),
-            data: { breadcrumb: 'Edit Goals', type: OperationTypeEnum.EDIT }
-          }
-        ]
+        pathMatch: 'full',
+        loadChildren: () =>
+          import('@hidden-innovation/goals/create-goals').then(
+            (m) => m.CreateGoalsModule
+          ),
+        data: { breadcrumb: 'Goals'}
       },
 
 
