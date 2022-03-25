@@ -448,3 +448,9 @@ table.mat-table {
 .paginationButton > .mat-paginator-outer-container > .mat-paginator-container > .mat-paginator-range-actions > button {
   display: none !important;
 }
+
+.no-network-dialog {
+  .mat-dialog-container {
+    padding: 0.5rem !important;
+  }
+}
