@@ -21,10 +21,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { MatRippleModule } from '@angular/material/core';
 import { paginatorData } from '@hidden-innovation/user/data-access';
-import {FeaturedNameEnum, OperationTypeEnum} from '@hidden-innovation/shared/models';
+import { OperationTypeEnum } from '@hidden-innovation/shared/models';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { TitleCasePipe } from '@angular/common';
+import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-status-dialog';
 
 @NgModule({
   imports: [
@@ -326,7 +327,7 @@ import { TitleCasePipe } from '@angular/common';
               import('@hidden-innovation/assessment/assessment-create').then(
                 (m) => m.AssessmentCreateModule
               ),
-            data: { breadcrumb: '--'}
+            data: { breadcrumb: '--' }
           }
         ]
       },
@@ -359,7 +360,7 @@ import { TitleCasePipe } from '@angular/common';
                 (m) => m.CreateFeaturedModule
               ),
             data: { breadcrumb: 'Edit Featured' }
-          },
+          }
         ]
       },
       {
@@ -406,7 +407,8 @@ import { TitleCasePipe } from '@angular/common';
     MatMenuModule,
     MatRippleModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    NetworkStatusDialogModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

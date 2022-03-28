@@ -182,9 +182,9 @@ export class DashboardComponent implements OnInit {
   packEngPageSize = this.constantDataService.PaginatorData.pageSize;
   packEngPageEvent: PageEvent | undefined;
   filtersPackEng: FormGroup<PackEngagementFilters> = new FormGroup<PackEngagementFilters>({
-    contentclicksSort: new FormControl(SortingEnum.DESC),
+    contentclicksSort: new FormControl({ value:undefined, disabled:true}),
     resourceclicksSort: new FormControl({ value: undefined, disabled: true }),
-    videoplaySort:new FormControl({ value:undefined, disabled:true})
+    videoplaySort:new FormControl(SortingEnum.DESC)
   });
   //Assessment Engagement Paginator options
   assessmentEngPageIndex = this.constantDataService.PaginatorData.pageIndex;

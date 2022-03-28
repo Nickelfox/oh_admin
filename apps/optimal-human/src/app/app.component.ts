@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthFacade } from '@hidden-innovation/auth';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { GenericDialogInfo, GenericDialogPrompt } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { UiStore } from '@hidden-innovation/shared/store';
 import { BreadcrumbDefinition, BreadcrumbService } from 'xng-breadcrumb';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { fromEvent, merge, of, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { InfoDialogComponent } from '@hidden-innovation/shared/ui/info-dialog';
+import { NetworkStatusDialogComponent } from '@hidden-innovation/shared/ui/network-status-dialog';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -33,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   networkStatus$: Subscription = Subscription.EMPTY;
   private networkStatus: unknown;
   private toastRef?: CreateHotToastRef<unknown>;
+  private matNetworkRef?: MatDialogRef<NetworkStatusDialogComponent>;
 
   constructor(
     public breakpointObserver: BreakpointObserver,
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public uiStore: UiStore,
     private router: Router,
     public breadcrumbService: BreadcrumbService,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef
   ) {
     breakpointObserver.observe([
       Breakpoints.Tablet,
@@ -130,16 +131,17 @@ export class AppComponent implements OnInit, OnDestroy {
         this.networkStatus = status;
         if (this.networkStatus) {
           this.toastRef?.close();
+          this.matNetworkRef?.close();
           this.toastRef = this.hotToastService.success('Network Online', {
             dismissible: true,
             role: 'status'
           });
         } else {
           this.toastRef?.close();
-          this.toastRef = this.hotToastService.error('Network Offline', {
-            dismissible: false,
-            role: 'status',
-            duration: undefined
+          this.matNetworkRef = this.matDialog.open(NetworkStatusDialogComponent, {
+            disableClose: true,
+            panelClass: 'no-network-dialog',
+            role: 'alertdialog'
           });
         }
       });
