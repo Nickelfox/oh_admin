@@ -88,7 +88,7 @@
 
           </mat-card-title>
           <mat-divider></mat-divider>
-          <ng-template ngFor let-i='index'>
+          <div>
             <div class='row ' >
               <div class='col-12'>
                 <mat-card class='mat-elevation-z1'>
@@ -98,7 +98,7 @@
                       controlPath='point'
                     ></hidden-innovation-common-form-field-number>
                     <hidden-innovation-common-form-field
-                      label='Answer {{i + 1}}'
+                      label='Answer '
                       controlPath='name'
                     ></hidden-innovation-common-form-field>
                     <button type='button' mat-icon-button color='warn' >
@@ -115,7 +115,7 @@
                 </mat-card>
               </div>
             </div>
-          </ng-template>
+          </div>
         </mat-card>
       </div>
     </div>
