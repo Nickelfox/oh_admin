@@ -1,4 +1,4 @@
-import { CustomApiResponse, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { CustomApiResponse, OrderedContent, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
 import { Media } from '@hidden-innovation/media';
 import { Test } from '@hidden-innovation/test/data-access';
 import { Tag } from '@hidden-innovation/tags/data-access';
@@ -11,7 +11,7 @@ export interface TestGroupCore {
   imageId: number | undefined;
   description: string;
   isVisible: boolean;
-  tests: Test[] | number[];
+  tests: Test[] | OrderedContent[];
 }
 
 export interface TestGroup extends TestGroupCore {
