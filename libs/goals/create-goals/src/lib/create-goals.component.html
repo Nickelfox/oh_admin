@@ -1,4 +1,4 @@
-<form [formGroup]='goalsGroup'  class='p-4'>
+<form   class='p-4'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -98,11 +98,11 @@
                   <div class='answersGrid'>
                     <hidden-innovation-common-form-field-number
                       [errorMessage]='formValidationService.pointsValidationMessage'
-                      controlPath='point'
+
                     ></hidden-innovation-common-form-field-number>
                     <hidden-innovation-common-form-field
                       label='Answer '
-                      controlPath='name'
+
                     ></hidden-innovation-common-form-field>
                     <button type='button' mat-icon-button color='warn' >
                       <mat-icon>delete</mat-icon>
@@ -111,7 +111,7 @@
                       <div></div>
                       <hidden-innovation-common-form-field
                         label='Font Awesome Icon 6 Code'
-                        controlPath='iconName'
+
                       ></hidden-innovation-common-form-field>
                     </ng-template>
                   </div>
