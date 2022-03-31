@@ -5,8 +5,9 @@ import { UiStore } from '@hidden-innovation/shared/store';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
-import { GoalAnswer, GoalsCore } from '@hidden-innovation/goals/data-access';
+import { GoalAnswer, GoalsCore, GoalStore } from '@hidden-innovation/goals/data-access';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { GoalsService } from '../../../data-access/src/lib/services/goals.service';
 
 @Component({
   selector: 'hidden-innovation-create-goals',
@@ -21,7 +22,6 @@ export class CreateGoalsComponent implements OnInit {
     question: new FormControl<string>(undefined),
     body: new FormControl<string>(undefined),
     description: new FormControl<string>(undefined),
-    goalAnswer: new FormControl<GoalAnswer[]>([]),
     header: new FormControl<string>(undefined),
     reminder: new FormControl<number>(undefined)
   })
@@ -31,15 +31,30 @@ export class CreateGoalsComponent implements OnInit {
     private titleCasePipe: TitleCasePipe,
     public uiStore: UiStore,
     public route: ActivatedRoute,
+    public store: GoalStore,
     public constantDataService: ConstantDataService,
     private hotToastService: HotToastService,
     public formValidationService: FormValidationService,
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef,
+    public service: GoalsService
   ) { }
 
 
+  // populateGoals(goals: GoalsCore) {
+  //   const { question, body, description, goalAnswer, header, reminder } = goals;
+  //   this.goalsGroup.patchValue({
+  //     question,
+  //     body,
+  //     description,
+  //     goalAnswer,
+  //     header,
+  //     reminder
+  //   });
+  // }
+
   ngOnInit(): void {
+
   }
 
 }

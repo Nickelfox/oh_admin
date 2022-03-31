@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { Observable, throwError } from 'rxjs';
 import {catchError, map, tap} from 'rxjs/operators';
-import { FeaturedResponse, FeaturedResponseData } from '@hidden-innovation/featured/data-access';
+import { GoalResponse, Goals } from '@hidden-innovation/goals/data-access';
 
 @Injectable()
 export class GoalsService {
@@ -13,8 +13,8 @@ export class GoalsService {
   ) {
   }
 
-  getFeatured(id: number): Observable<FeaturedResponseData> {
-    return this.http.get<FeaturedResponse>(`${this.env.baseURL}/v1/admin/get-featured/${id}`).pipe(
+  getGoal(id: number): Observable<Goals> {
+    return this.http.get<GoalResponse>(`${this.env.baseURL}/v1/admin/get-goal-question`).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
