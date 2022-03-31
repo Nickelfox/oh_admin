@@ -17,3 +17,8 @@ export enum ContentSelectorOpType {
   SINGLE,
   OTHER
 }
+
+export interface OrderedContent {
+  order: number;
+  id: number;
+}

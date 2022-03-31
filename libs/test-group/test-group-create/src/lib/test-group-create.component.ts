@@ -9,6 +9,7 @@ import {
   ContentSelectorOpType,
   GenericDialogPrompt,
   OperationTypeEnum,
+  OrderedContent,
   TagCategoryEnum,
   TagTypeEnum
 } from '@hidden-innovation/shared/models';
@@ -77,7 +78,7 @@ export class TestGroupCreateComponent implements OnDestroy {
       })
     ]),
     isVisible: new FormControl(false),
-    tests: new FormArray<number>([], Validators.compose([
+    tests: new FormArray<OrderedContent>([], Validators.compose([
       Validators.required,
       Validators.minLength(2)
     ]))
@@ -122,12 +123,15 @@ export class TestGroupCreateComponent implements OnDestroy {
       }
     });
     const { category, tests, subCategory } = this.testGroup.controls;
-    const testFormArray: FormArray<number> = tests as FormArray<number>;
+    const testFormArray: FormArray<OrderedContent> = tests as FormArray<OrderedContent>;
     this.uiStore.selectedTests$.subscribe(newTests => {
       this.selectedTests = newTests;
       testFormArray.clear();
-      newTests.forEach(t => {
-        testFormArray.push(new FormControl<number>(t.id, [RxwebValidators.required()]));
+      newTests.forEach((t, i) => {
+        testFormArray.push(new FormControl<OrderedContent>({
+          id: t.id,
+          order: i + 1
+        }, [RxwebValidators.required()]));
         testFormArray.updateValueAndValidity();
       });
     });
@@ -150,7 +154,10 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   set selectedTests(tests: Test[]) {
-    this._selectedTests = tests ?? [];
+    if (tests === undefined || tests === null) {
+      return;
+    }
+    this._selectedTests = tests;
   }
 
   get testsIsValid(): boolean {
