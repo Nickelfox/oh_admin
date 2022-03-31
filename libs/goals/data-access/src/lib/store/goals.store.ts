@@ -42,8 +42,8 @@ export class GoalStore extends ComponentStore<GoalState> {
           role: 'status'
         });
       }),
-      switchMap(({ id }) =>
-        this.goalsService.getGoal(id).pipe(
+      switchMap(() =>
+        this.goalsService.getGoal().pipe(
           tapResponse(
             (selectedGoal) => {
               this.patchState({
@@ -51,7 +51,6 @@ export class GoalStore extends ComponentStore<GoalState> {
                 loaded: true,
                 selectedGoal
               });
-              console.log('hello')
               this.toastRef?.close();
             },
             (_) => {

@@ -13,7 +13,7 @@ export class GoalsService {
   ) {
   }
 
-  getGoal(id: number): Observable<Goals> {
+  getGoal(): Observable<Goals> {
     return this.http.get<GoalResponse>(`${this.env.baseURL}/v1/admin/get-goal-question`).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
