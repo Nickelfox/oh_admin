@@ -92,14 +92,19 @@
           </mat-card-title>
           <mat-divider></mat-divider>
           <div>
+            <div class='row mb-3 pt-3'>
+              <div class='col-12'>
+                <mat-checkbox formControlName='showIcon' color='primary'>
+                  <h4 class='text-muted m-0 ml-2'>Icons</h4>
+                </mat-checkbox>
+              </div>
+            </div>
             <div class='row ' >
               <div class='col-12'>
                 <mat-card class='mat-elevation-z1'>
                   <div class='answersGrid'>
-                    <hidden-innovation-common-form-field-number
-                      [errorMessage]='formValidationService.pointsValidationMessage'
 
-                    ></hidden-innovation-common-form-field-number>
+
                     <hidden-innovation-common-form-field
                       label='Answer '
 
@@ -107,13 +112,13 @@
                     <button type='button' mat-icon-button color='warn' >
                       <mat-icon>delete</mat-icon>
                     </button>
-                    <ng-template>
-                      <div></div>
+
+
                       <hidden-innovation-common-form-field
                         label='Font Awesome Icon 6 Code'
 
                       ></hidden-innovation-common-form-field>
-                    </ng-template>
+
                   </div>
                 </mat-card>
               </div>
