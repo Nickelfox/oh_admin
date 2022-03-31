@@ -3,9 +3,14 @@ import { Featured, FeaturedCore, FeaturedStore } from '@hidden-innovation/featur
 import { MatDialog } from '@angular/material/dialog';
 import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
 import { Test } from '@hidden-innovation/test/data-access';
-import { ContentSelectorOpType, FeaturedNameEnum, PackContentTypeEnum } from '@hidden-innovation/shared/models';
+import {
+  ContentSelectorOpType,
+  FeaturedNameEnum,
+  OrderedContent,
+  PackContentTypeEnum
+} from '@hidden-innovation/shared/models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { map, switchMap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
@@ -67,10 +72,10 @@ export class CreateFeaturedComponent implements OnDestroy {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    packIds: new FormControl([]),
-    questionnaireIds: new FormControl([]),
-    singleTestIds: new FormControl([]),
-    testGroupIds: new FormControl([])
+    packIds: new FormControl<OrderedContent[]>([]),
+    questionnaireIds: new FormControl<OrderedContent[]>([]),
+    singleTestIds: new FormControl<OrderedContent[]>([]),
+    testGroupIds: new FormControl<OrderedContent[]>([])
   });
 
   aspectRatio = AspectRatio;
@@ -114,6 +119,10 @@ export class CreateFeaturedComponent implements OnDestroy {
       });
     });
     const { packIds, testGroupIds, singleTestIds, questionnaireIds } = this.featuredGroup.controls;
+    const packCtrl: FormArray<OrderedContent> = packIds as FormArray<OrderedContent>;
+    const testGroupCtrl: FormArray<OrderedContent> = testGroupIds as FormArray<OrderedContent>;
+    const testCtrl: FormArray<OrderedContent> = singleTestIds as FormArray<OrderedContent>;
+    const questionnaireCtrl: FormArray<OrderedContent> = questionnaireIds as FormArray<OrderedContent>;
     this.uiStore.state$.subscribe((state) => {
       this.selectedTests = state.selectedTests ?? [];
       this.selectedPacks = state.selectedPacks ?? [];
@@ -126,16 +135,36 @@ export class CreateFeaturedComponent implements OnDestroy {
         });
       };
       const setTestCtrl = (selectedTests: Test[]) => {
-        singleTestIds.setValue(selectedTests.map(t => t.id));
+        testCtrl.setValue(selectedTests.map(({ id }, i) => {
+          return {
+            id,
+            order: i + 1
+          };
+        }));
       };
       const setTestGroupCtrl = (selectedTestGroups: TestGroup[]) => {
-        testGroupIds.setValue(selectedTestGroups.map(t => t.id));
+        testGroupCtrl.setValue(selectedTestGroups.map(({ id }, i) => {
+          return {
+            id,
+            order: i + 1
+          };
+        }));
       };
       const setPacksCtrl = (selectedPacks: Pack[]) => {
-        packIds.setValue(selectedPacks.map(t => t.id));
+        packCtrl.setValue(selectedPacks.map(({ id }, i) => {
+          return {
+            id,
+            order: i + 1
+          };
+        }));
       };
       const setQuestionnaireCtrl = (selectedQuestionnaires: QuestionnaireExtended[]) => {
-        questionnaireIds.setValue(selectedQuestionnaires.map(t => t.id));
+        questionnaireCtrl.setValue(selectedQuestionnaires.map(({ id }, i) => {
+          return {
+            id,
+            order: i + 1
+          };
+        }));
       };
       if (this.selectedFeatured?.name === FeaturedNameEnum.SPOTLIGHT && this.type) {
         switch (this.type) {

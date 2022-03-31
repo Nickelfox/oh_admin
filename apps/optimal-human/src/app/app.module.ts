@@ -34,6 +34,9 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
     BreadcrumbModule,
     AuthModule,
     NxModule.forRoot(),
+    /**
+     * Application core router along with guards and lazy-load configuration
+     **/
     RouterModule.forRoot([
       {
         path: '',
@@ -42,6 +45,9 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
       },
       {
         path: 'reset-password',
+        /**
+         * Guard to prevent admin to access authentication routes on authorised state
+         **/
         canActivate: [LoggedInGuard],
         loadChildren: () =>
           import('@hidden-innovation/reset-password').then(
@@ -60,6 +66,9 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
       },
       {
         path: 'dashboard',
+        /**
+         * Guard to prevent admin to access secured/authorised routes from an un-authorised admin state
+         **/
         canActivate: [AuthGuard],
         loadChildren: () =>
           import('@hidden-innovation/dashboard').then((m) => m.DashboardModule),
@@ -87,11 +96,9 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
         path: 'users',
         canActivate: [AuthGuard],
         children: [
-          {
-            path: '',
-            pathMatch: 'full',
-            redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
-          },
+          /**
+           * Default route configuration to re-route the /users url to /listing by default
+           */
           {
             path: 'listing',
             pathMatch: 'full',
@@ -381,13 +388,22 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
     }),
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
+    /**
+     * Dev  tools state access based on environment
+     */
     !environment.production ? StoreDevtoolsModule.instrument() : [],
+    /**
+     * Default configuration for HotTost's Snackbar
+     */
     HotToastModule.forRoot({
       theme: 'snackbar',
       position: 'bottom-right',
       autoClose: true,
       duration: 3000
     }),
+    /**
+     * Few Material dependencies required in core application
+     */
     MatButtonModule,
     MatSidenavModule,
     MatToolbarModule,
