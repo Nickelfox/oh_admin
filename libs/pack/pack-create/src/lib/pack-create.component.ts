@@ -374,32 +374,36 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
       posterId,
       subTitle
     });
-    urls.forEach(u => this.addUrlCtrl(u));
-    resources.forEach(r => this.addResourceCtrl(r.id));
-    this.uiStore.patchState({
-      selectedContent: [
-        ...selectedContent.map((c) => {
-          if (c.type === PackContentTypeEnum.LESSON) {
-            const contentLesson: Lesson = c as Lesson;
-            return {
-              contentId: contentLesson.contentId,
-              type: contentLesson.type,
-              name: contentLesson.name,
-              tagIds: contentLesson.tagIds,
-              category: contentLesson.category,
-              videoId: contentLesson.videoId,
-              thumbnailId: contentLesson.thumbnailId
-            } as LessonCore;
-          } else {
-            return {
-              contentId: c.contentId,
-              type: c.type,
-              name: c.name
-            } as ContentCore;
-          }
-        })
-      ]
-    });
-    this.cdr.markForCheck();
+    try {
+      urls.forEach(u => this.addUrlCtrl(u));
+      resources.forEach(r => this.addResourceCtrl(r.id));
+    } catch {
+      this.hotToastService.error('URL/Resource population error');
+    }
+      this.uiStore.patchState({
+        selectedContent: [
+          ...selectedContent.map((c) => {
+            if (c.type === PackContentTypeEnum.LESSON) {
+              const contentLesson: Lesson = c as Lesson;
+              return {
+                contentId: contentLesson.contentId,
+                type: contentLesson.type,
+                name: contentLesson.name,
+                tagIds: contentLesson.tagIds,
+                category: contentLesson.category,
+                videoId: contentLesson.videoId,
+                thumbnailId: contentLesson.thumbnailId
+              } as LessonCore;
+            } else {
+              return {
+                contentId: c.contentId,
+                type: c.type,
+                name: c.name
+              } as ContentCore;
+            }
+          })
+        ]
+      });
+      this.cdr.markForCheck();
   }
 }
