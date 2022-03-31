@@ -1,4 +1,4 @@
-<div  class='p-4'>
+<form [formGroup]='goalsGroup'  class='p-4'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -30,15 +30,16 @@
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>{{constantDataService.FIELD_NAME.GOAL_HEADER | titlecase}}</mat-label>
-                    <input   matInput>
-                  </mat-form-field>
+                  <hidden-innovation-common-form-field
+                    label='Goal Header'
+                    controlPath='header'
+                  ></hidden-innovation-common-form-field>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
                   <hidden-innovation-common-form-field-textarea
+                    controlPath='description'
                     [label]="'Description'"
                   ></hidden-innovation-common-form-field-textarea>
                 </div>
@@ -52,22 +53,24 @@
               <div class='row mb-2'>
                 <div class='col-12'>
                   <hidden-innovation-common-form-field-textarea
+                    controlPath='body'
                     [label]="'Body'"
                   ></hidden-innovation-common-form-field-textarea>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
-                  <mat-form-field class='w-100'>
-                    <mat-label>{{constantDataService.FIELD_NAME.QUESTIONS | titlecase}}</mat-label>
-                    <input   matInput>
-                  </mat-form-field>
+                  <hidden-innovation-common-form-field
+                    [label]='constantDataService.FIELD_NAME.QUESTIONS | titlecase'
+                    controlPath='question'
+                  ></hidden-innovation-common-form-field>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
                   <hidden-innovation-common-form-field-number
                     label='Reminder(Days)'
+                    controlPath='reminder'
                     [errorMessage]=formValidationService.lockOutValidationMessage
                   ></hidden-innovation-common-form-field-number>
                 </div>
@@ -120,4 +123,4 @@
       </div>
     </div>
   </div>
-</div>
+</form>
