@@ -10,6 +10,7 @@ import { ContentCore, Lesson, LessonCore, Pack } from '@hidden-innovation/pack/d
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { TitleCasePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
+import { GoalAnswer } from '@hidden-innovation/goals/data-access';
 
 export interface UiState {
   navData: {
@@ -23,6 +24,7 @@ export interface UiState {
   selectedPacks?: Pack[];
   selectedLessons?: Lesson[];
   selectedContent?: (ContentCore | LessonCore)[];
+  selectedGoalAns?: GoalAnswer[];
 }
 
 const initialState: UiState = {
@@ -107,6 +109,7 @@ export class UiStore extends ComponentStore<UiState> {
   readonly lessonsExists$: Observable<boolean> = this.select(state => !!state.selectedLessons?.length);
   readonly selectedContent$: Observable<(ContentCore | LessonCore)[]> = this.select(state => state.selectedContent || []);
   readonly contentsExists$: Observable<boolean> = this.select(state => !!state.selectedContent?.length);
+  readonly selectedGoalAns$: Observable<GoalAnswer[]> = this.select(state => state.selectedGoalAns || []);
 
   removeContent$ = this.effect<ContentCore | LessonCore>(origin$ =>
     origin$.pipe(
@@ -207,7 +210,7 @@ export class UiStore extends ComponentStore<UiState> {
   }
 
   deleteContentPrompt(type: PackContentTypeEnum, id: number): void {
-    const contentType:string = type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : type
+    const contentType: string = type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : type;
     const dialogData: GenericDialogPrompt = {
       title: `Remove ${this.titleCasePipe.transform(contentType)}?`,
       desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} item from Pack?`,
@@ -241,7 +244,7 @@ export class UiStore extends ComponentStore<UiState> {
   }
 
   deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
-    const contentType:string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type
+    const contentType: string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type;
     const dialogData: GenericDialogPrompt = {
       title: `Remove ${contentType}`,
       desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)}?`,

@@ -5,22 +5,24 @@ export  interface GoalsCore {
   description: string;
   header: string;
   body: string;
-  reminder: number;
-
+  reminder: number | undefined;
+  id: number | undefined;
+  goalanswer: GoalAnswer[];
+  showIcon: boolean;
 }
 
 export interface Goals extends GoalsCore {
   deleted_at: string;
   created_at: string;
   updatedAt: string;
-  goalAnswer: GoalAnswer[];
 }
 
 export interface GoalAnswer {
-  order?: number;
+  order: number | undefined;
   answerString: string;
-  iconName?: string;
-  point?: number;
+  iconName: string;
+  answerId: number | undefined;
+  id: number | undefined;
 }
 
 export interface GoalResponse extends CustomApiResponse {

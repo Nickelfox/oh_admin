@@ -1,4 +1,4 @@
-<form   class='p-4'>
+<form class='p-4'>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
       <div class='col-12 d-flex align-items-center justify-content-end'>
@@ -16,7 +16,7 @@
       </div>
     </div>
   </div>
-  <div class='container-fluid p-0'>
+  <div [formGroup]='goalsGroup' class='container-fluid p-0'>
     <div class='row'>
       <div class='col-lg-6 col-12'>
         <mat-card>
@@ -31,8 +31,8 @@
               <div class='row mb-2'>
                 <div class='col-12'>
                   <hidden-innovation-common-form-field
-                    label='Goal Header'
                     controlPath='header'
+                    label='Goal Header'
                   ></hidden-innovation-common-form-field>
                 </div>
               </div>
@@ -40,7 +40,7 @@
                 <div class='col-12'>
                   <hidden-innovation-common-form-field-textarea
                     controlPath='description'
-                    [label]="'Description'"
+                    label='Description'
                   ></hidden-innovation-common-form-field-textarea>
                 </div>
               </div>
@@ -54,24 +54,24 @@
                 <div class='col-12'>
                   <hidden-innovation-common-form-field-textarea
                     controlPath='body'
-                    [label]="'Body'"
+                    label='Body'
                   ></hidden-innovation-common-form-field-textarea>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
                   <hidden-innovation-common-form-field
-                    [label]='constantDataService.FIELD_NAME.QUESTIONS | titlecase'
                     controlPath='question'
+                    label='{{constantDataService.FIELD_NAME.QUESTIONS | titlecase}}'
                   ></hidden-innovation-common-form-field>
                 </div>
               </div>
               <div class='row mb-2'>
                 <div class='col-12'>
                   <hidden-innovation-common-form-field-number
-                    label='Reminder(Days)'
-                    controlPath='reminder'
                     [errorMessage]=formValidationService.lockOutValidationMessage
+                    controlPath='reminder'
+                    label='Reminder(Days)'
                   ></hidden-innovation-common-form-field-number>
                 </div>
               </div>
@@ -84,6 +84,7 @@
           <mat-card-title class='d-flex justify-content-between align-items-center'>
             <h3 class='mat-h3 mb-0 font-sf-pro'>Goals</h3>
             <button
+              (click)='addNewAnswer()'
               class='ml-3'
               color='primary' mat-flat-button type='button'>
               Add
@@ -94,31 +95,28 @@
           <div>
             <div class='row mb-3 pt-3'>
               <div class='col-12'>
-                <mat-checkbox formControlName='showIcon' color='primary'>
+                <mat-checkbox color='primary' formControlName='showIcon'>
                   <h4 class='text-muted m-0 ml-2'>Icons</h4>
                 </mat-checkbox>
               </div>
             </div>
-            <div class='row ' >
-              <div class='col-12'>
+            <div *ngFor='let ans of answersCtrl.controls; let i=index' class='row mb-2'>
+              <div class='col-12' [formGroup]='answerFormGroup(i)'>
                 <mat-card class='mat-elevation-z1'>
                   <div class='answersGrid'>
-
-
                     <hidden-innovation-common-form-field
+                      controlPath='answerString'
                       label='Answer '
-
                     ></hidden-innovation-common-form-field>
-                    <button type='button' mat-icon-button color='warn' >
+                    <button color='warn' mat-icon-button type='button' (click)='removeAnswer(i)'>
                       <mat-icon>delete</mat-icon>
                     </button>
-
-
-                      <hidden-innovation-common-form-field
-                        label='Font Awesome Icon 6 Code'
-
-                      ></hidden-innovation-common-form-field>
-
+                    <hidden-innovation-common-form-field
+                      *ngIf='goalsGroup.value.showIcon'
+                      [disabled]='!goalsGroup.value.showIcon'
+                      label='Font Awesome Icon 6 Code'
+                      controlPath='iconName'
+                    ></hidden-innovation-common-form-field>
                   </div>
                 </mat-card>
               </div>
