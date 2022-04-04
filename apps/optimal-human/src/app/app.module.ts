@@ -370,6 +370,16 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
           }
         ]
       },
+      {
+        path: 'goals',
+        canActivate: [AuthGuard],
+        pathMatch: 'full',
+        loadChildren: () =>
+          import('@hidden-innovation/goals/create-goals').then(
+            (m) => m.CreateGoalsModule
+          ),
+        data: { breadcrumb: 'Goals'}
+      },
 
 
       // {
