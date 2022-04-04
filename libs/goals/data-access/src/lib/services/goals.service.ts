@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { GoalResponse, Goals } from '../models/goals.interface';
+import { GoalResponse, Goals, GoalsCore } from '../models/goals.interface';
 
 @Injectable()
 export class GoalsService {
@@ -20,8 +20,8 @@ export class GoalsService {
     );
   }
 
-  updateGoal(): Observable<Goals> {
-    return this.http.get<GoalResponse>(`${this.env.baseURL}/v1/admin/get-goal-question`).pipe(
+  updateGoal(goalObj: GoalsCore): Observable<Goals> {
+    return this.http.post<GoalResponse>(`${this.env.baseURL}/v1/admin/goal/create`, goalObj).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );

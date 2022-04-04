@@ -7,7 +7,7 @@ export  interface GoalsCore {
   body: string;
   reminder: number | undefined;
   id: number | undefined;
-  goalanswer: GoalAnswer[];
+  goalAnswer: GoalAnswer[];
   showIcon: boolean;
 }
 
@@ -27,5 +27,9 @@ export interface GoalAnswer {
 
 export interface GoalResponse extends CustomApiResponse {
   data: Goals;
+}
+
+export interface UpdateGoalAnswers {
+
 }
 

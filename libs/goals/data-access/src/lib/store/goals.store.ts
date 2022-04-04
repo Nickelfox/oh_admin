@@ -4,8 +4,8 @@ import { EMPTY, Observable } from 'rxjs';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
 import { GoalsService } from '../services/goals.service';
-import { catchError, switchMap, tap } from 'rxjs/operators';
-import { Goals } from '../models/goals.interface';
+import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
+import { Goals, GoalsCore } from '../models/goals.interface';
 
 export interface GoalState {
   selectedGoal?: Goals;
@@ -63,6 +63,45 @@ export class GoalStore extends ComponentStore<GoalState> {
             this.toastRef?.close();
             return EMPTY;
           })
+        )
+      )
+    )
+  );
+
+  updateGoals$ = this.effect<GoalsCore>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Updating Goals...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap((goalObj) =>
+        this.goalsService.updateGoal(goalObj).pipe(
+          tapResponse(
+            _ => {
+              this.patchState({
+                isActing: false,
+                loaded: true,
+              });
+              this.toastRef?.updateMessage('Goals Updated!');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success',
+              });
+            },
+            _ => {
+              this.toastRef?.close();
+              this.patchState({
+                isActing: false
+              });
+            }
+          ),
+          catchError(() => EMPTY)
         )
       )
     )

@@ -10,7 +10,7 @@
         </button>
         <button
           class='ml-3'
-          color='primary' mat-flat-button type='submit'>
+          color='primary' mat-flat-button type='submit' (click)='submit()'>
           Save
         </button>
       </div>
@@ -89,7 +89,6 @@
               color='primary' mat-flat-button type='button'>
               Add
             </button>
-
           </mat-card-title>
           <mat-divider></mat-divider>
           <div>
@@ -108,12 +107,12 @@
                       controlPath='answerString'
                       label='Answer '
                     ></hidden-innovation-common-form-field>
-                    <button color='warn' mat-icon-button type='button' (click)='removeAnswer(i)'>
-                      <mat-icon>delete</mat-icon>
-                    </button>
+                    <div>
+                      <button color='warn' mat-icon-button type='button' (click)='removeAnswer(i)' *ngIf='false'>
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                     <hidden-innovation-common-form-field
-                      *ngIf='goalsGroup.value.showIcon'
-                      [disabled]='!goalsGroup.value.showIcon'
                       label='Font Awesome Icon 6 Code'
                       controlPath='iconName'
                     ></hidden-innovation-common-form-field>

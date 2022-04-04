@@ -8,9 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { GoalAnswer, Goals, GoalsCore, GoalStore } from '@hidden-innovation/goals/data-access';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { GenericDialogPrompt, QuestionTypeEnum } from '@hidden-innovation/shared/models';
+import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { AnswerCore, ImageSelectAnswer, Question } from '@hidden-innovation/questionnaire/data-access';
 
 @Component({
   selector: 'hidden-innovation-create-goals',
@@ -46,7 +45,7 @@ export class CreateGoalsComponent implements OnInit {
       })
     ]),
     showIcon: new FormControl(false),
-    goalanswer: new FormArray([]),
+    goalAnswer: new FormArray([]),
     id: new FormControl(undefined)
   });
 
@@ -64,27 +63,10 @@ export class CreateGoalsComponent implements OnInit {
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef
   ) {
-    this.store.selectedGoal$.subscribe((goal: Goals | undefined) => {
-      if (goal) {
-        this.populateGoals(goal);
-      }
-    });
-    this.uiStore.selectedGoalAns$.subscribe((ans) => {
-      this.selectedGoals = ans.map((a, i) => {
-        return {
-          ...a,
-          order: i,
-          answerId: a.id,
-          id: undefined
-        };
-      });
-      this.selectedGoals.forEach((a) => this.answersCtrl.push(this.buildGoalAnswer(a)));
-      console.log(this.answersCtrl.value);
-    });
   }
 
   get answersCtrl(): FormArray<GoalAnswer> {
-    return this.goalsGroup.controls.goalanswer as FormArray<GoalAnswer>;
+    return this.goalsGroup.controls.goalAnswer as FormArray<GoalAnswer>;
   }
 
   answerFormGroup(i: number): FormGroup<GoalAnswer> {
@@ -93,7 +75,7 @@ export class CreateGoalsComponent implements OnInit {
 
   addNewAnswer(): void {
     this.answersCtrl.push(this.buildGoalAnswer());
-    this.answersCtrl.updateValueAndValidity();
+    this.goalsGroup.updateValueAndValidity();
     this.cdr.markForCheck();
   }
 
@@ -109,7 +91,10 @@ export class CreateGoalsComponent implements OnInit {
         })
       ]),
       order: new FormControl(ans?.order ?? undefined),
-      iconName: new FormControl(ans?.iconName ?? '', [
+      iconName: new FormControl({
+        value: ans?.iconName ?? '',
+        disabled: !this.goalsGroup.controls.showIcon.value
+      }, [
         RxwebValidators.required(),
         RxwebValidators.notEmpty()
       ]),
@@ -129,7 +114,7 @@ export class CreateGoalsComponent implements OnInit {
       reminder,
       showIcon,
       id,
-      goalanswer
+      goalAnswer
     } = goals;
     this.goalsGroup.patchValue({
       question,
@@ -141,7 +126,7 @@ export class CreateGoalsComponent implements OnInit {
       id
     });
     this.uiStore.patchState({
-      selectedGoalAns: goalanswer ?? []
+      selectedGoalAns: goalAnswer ?? []
     });
     this.goalsGroup.updateValueAndValidity();
     this.cdr.markForCheck();
@@ -164,7 +149,7 @@ export class CreateGoalsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((proceed: boolean) => {
       if (proceed) {
         // const goal: FormGroup<GoalAnswer> = this.answerFormGroup(index);
-        const answerArray: FormArray<GoalAnswer> = this.goalsGroup.controls.goalanswer as FormArray<GoalAnswer>;
+        const answerArray: FormArray<GoalAnswer> = this.goalsGroup.controls.goalAnswer as FormArray<GoalAnswer>;
         answerArray.removeAt(index);
         this.cdr.markForCheck();
         this.cdr.detectChanges();
@@ -175,7 +160,54 @@ export class CreateGoalsComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.store.selectedGoal$.subscribe((goal: Goals | undefined) => {
+      if (goal) {
+        this.populateGoals(goal);
+      }
+    });
+    this.uiStore.selectedGoalAns$.subscribe((ans) => {
+      this.selectedGoals = ans.map(({ id, iconName, answerString, answerId }, i) => {
+        return {
+          iconName,
+          answerString,
+          order: undefined,
+          answerId: id,
+          id
+        };
+      });
+      this.answersCtrl.clear();
+      this.selectedGoals.forEach((a) => {
+        this.answersCtrl.push(this.buildGoalAnswer(a));
+        this.goalsGroup.updateValueAndValidity();
+        this.cdr.markForCheck();
+      });
+    });
+    this.goalsGroup.controls.showIcon.valueChanges.subscribe((isChecked) => {
+      this.answersCtrl.controls.forEach((ctrls) => {
+        const ansGroup: FormGroup<GoalAnswer> = ctrls as FormGroup<GoalAnswer>;
+        !isChecked ? ansGroup.controls.iconName.disable() : ansGroup.controls.iconName.enable();
+      });
+    });
     this.store.getGoalDetail$();
+  }
+
+  submit(): void {
+    this.goalsGroup.markAllAsDirty();
+    this.goalsGroup.markAllAsTouched();
+    if (this.goalsGroup.invalid) {
+      this.hotToastService.error(this.formValidationService.formSubmitError);
+      return;
+    }
+    const updatedGoalObj: GoalsCore = {
+      ...this.goalsGroup.value,
+      goalAnswer: this.goalsGroup.value.goalAnswer.map((a, i) => {
+        return {
+          ...a,
+          order: i + 1
+        };
+      })
+    };
+    this.store.updateGoals$(updatedGoalObj);
   }
 
 }
