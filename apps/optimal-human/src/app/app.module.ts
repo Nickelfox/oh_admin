@@ -100,7 +100,7 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
            * Default route configuration to re-route the /users url to /listing by default
            */
           {
-            path: 'listing',
+            path: '',
             pathMatch: 'full',
             redirectTo: `listing/${paginatorData.pageSize}/${paginatorData.pageIndex}`
           },
