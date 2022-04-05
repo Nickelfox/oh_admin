@@ -22,16 +22,20 @@ export class CreateGoalsComponent implements OnInit {
 
   goalsGroup: FormGroup<GoalsCore> = new FormGroup<GoalsCore>({
     question: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({ value: 100 })
     ]),
     body: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({ value: 300 })
     ]),
     description: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({ value: 300 })
     ]),
     header: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({ value: 120 })
     ]),
     reminder: new FormControl(undefined, [
       ...this.formValidationService.requiredFieldValidation,
