@@ -11,7 +11,7 @@ export interface TestGroupCore {
   imageId: number | undefined;
   description: string;
   isVisible: boolean;
-  tests: Test[] | OrderedContent[];
+  tests: Test[] | OrderedContent[] | number[];
 }
 
 export interface TestGroup extends TestGroupCore {
