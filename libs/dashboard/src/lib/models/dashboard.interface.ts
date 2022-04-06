@@ -60,6 +60,19 @@ export interface PackEngLimitRequestResponseData {
   totalPacks: number
 }
 
+export interface GoalsList{
+  id: number;
+  goalAnswerString: string;
+  count: number;
+}
+
+export interface GoalsListResponse extends CustomApiResponse {
+  data: GoalsListRequestResponse;
+}
+export interface GoalsListRequestResponse{
+  goals:GoalsList[];
+}
+
 export interface AssessmentEngagement {
   // position:number;
   name: string;

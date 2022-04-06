@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
   AssessmentEngagement,
   AssessmentEngagementFilters,
-  DashboardRequest,
+  DashboardRequest, GoalsList,
   PackEngagement,
   PackEngagementFilters,
   TestWatched,
@@ -70,6 +70,11 @@ export class DashboardComponent implements OnInit {
 
   displayedColumnsTopWatched: string[] = ['position', 'name', 'id', 'video_plays', 'result_logs'];
   topWatchedTable: MatTableDataSource<TestWatched> = new MatTableDataSource<TestWatched>();
+
+  displayedColumnsGoals: string[] = ['position','goalAnswerString','id' , 'count'];
+  goalsTable: MatTableDataSource<GoalsList> = new MatTableDataSource<GoalsList>();
+
+
   noData?: Observable<boolean>;
 
 
@@ -195,7 +200,11 @@ export class DashboardComponent implements OnInit {
     averagescoreSort: new FormControl(SortingEnum.DESC),
     completionSort: new FormControl({ value: undefined, disabled: true })
   });
-
+  //Goals Paginators options
+  // goalsPageIndex = this.constantDataService.PaginatorData.pageIndex;
+  // goalsPageSizeOptions = this.constantDataService.PaginatorData.pageSizeOptions;
+  // goalsPageSize = this.constantDataService.PaginatorData.pageSize;
+  // goalsPageEvent: PageEvent | undefined;
 
   constructor(
     public store: DashboardStore,
@@ -209,6 +218,14 @@ export class DashboardComponent implements OnInit {
     this.refreshListTopTest();
     this.refreshListPackEng();
     this.refreshListAssessmentEng();
+    // this.resetGoalsPagination();
+    this.refreshGoalsList();
+
+    this.store.goalsList$.subscribe(res => {
+      this.goalsTable = new MatTableDataSource<GoalsList>(res);
+      this.noData = this.goalsTable.connect().pipe(map(data => data.length === 0));
+      this.cdr.markForCheck();
+    })
     this.store.testWatched$.subscribe(res => {
       this.topWatchedTable = new MatTableDataSource<TestWatched>(res);
       this.noData = this.topWatchedTable.connect().pipe(map(data => data.length === 0));
@@ -561,6 +578,27 @@ export class DashboardComponent implements OnInit {
 
     }
   }
+
+  // Goals List
+  refreshGoalsList(): void {
+    this.store.getGoals$();
+  }
+  //
+  // get paginatorIndexGoals() {
+  //   return this.goalsPageIndex - 1;
+  // }
+  //
+  // onPaginateChangeGoals($event: PageEvent): void {
+  //   this.goalsPageIndex = $event.pageIndex + 1;
+  //   this.goalsPageSize = $event.pageSize;
+  //   // this.refreshGoalsList();
+  // }
+  //
+  // resetGoalsPagination(): void {
+  //   this.goalsPageIndex = this.constantDataService.PaginatorData.pageIndex;
+  //   this.goalsPageSize = this.constantDataService.PaginatorData.pageSize;
+  //   // this.refreshGoalsList();
+  // }
 
   // get calenderView(): 'month' | 'year' | 'multi-year' {
   //   const type: DashboardRangeFilterEnum = this.rangeFilterGroup.controls.type.value;

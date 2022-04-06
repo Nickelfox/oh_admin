@@ -5,7 +5,7 @@ import {
   AssessmentEngagement,
   AssessmentEngagementResponse, AssessmentLimitRequest,
   DashboardData,
-  DashboardResponse,
+  DashboardResponse, GoalsList, GoalsListRequestResponse, GoalsListResponse,
   PackEngagement,
   PackEngagementResponse, PackEngLimitRequest, PackEngLimitRequestResponseData,
   TestWatched, TestWatchedLimitRequest,
@@ -83,6 +83,12 @@ export class DashboardService {
     }
     return this.http.get<AssessmentEngagementResponse>(`${this.env.baseURL}/v1/admin/get-assessment-table`,{ params }).pipe(
       map(res => res.data),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+  getGoalsList():Observable<GoalsList[]>{
+    return this.http.get<GoalsListResponse>(`${this.env.baseURL}/v1/admin/get-goal-table`).pipe(
+      map(res => res.data.goals),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
