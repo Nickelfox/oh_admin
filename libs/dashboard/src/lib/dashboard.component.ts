@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit {
   displayedColumnsTopWatched: string[] = ['position', 'name', 'id', 'video_plays', 'result_logs'];
   topWatchedTable: MatTableDataSource<TestWatched> = new MatTableDataSource<TestWatched>();
 
-  displayedColumnsGoals: string[] = ['position','goalAnswerString','id' , 'count'];
+  displayedColumnsGoals: string[] = ['goalAnswerString','id' , 'count'];
   goalsTable: MatTableDataSource<GoalsList> = new MatTableDataSource<GoalsList>();
 
 

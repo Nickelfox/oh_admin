@@ -459,11 +459,6 @@
               </div>
               <div class='col-12 tableOverFlow'>
                 <table mat-table [dataSource]='goalsTable' class='w-100'>
-                  <ng-container matColumnDef='position'>
-                    <th mat-header-cell *matHeaderCellDef >{{'Position' | titlecase}}</th>
-                    <td mat-cell *matCellDef='let element,  let i = index'
-                    > {{(i + 1) || '--'}} </td>
-                  </ng-container>
                   <ng-container matColumnDef='goalAnswerString'>
                     <th mat-header-cell *matHeaderCellDef>{{'Goal Anwser' | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'

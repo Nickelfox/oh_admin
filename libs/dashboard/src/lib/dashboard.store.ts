@@ -339,7 +339,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.dashboardService.getRegisteredUsers(req).pipe(
           tap(
             (apiRes) => {
-
               // this.patchState({
               //   registeredStatus:{
               //     monthly:{
@@ -668,6 +667,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         obj[key]++;
       }
       dataSet = Object.values(obj);
+
     }
     return { dataSet: [{ data: dataSet, label: label }], labels: dataLabels };
   }
