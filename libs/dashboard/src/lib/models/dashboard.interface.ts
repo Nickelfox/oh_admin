@@ -60,10 +60,14 @@ export interface PackEngLimitRequestResponseData {
   totalPacks: number
 }
 
+export interface GoalsListFilters{
+  countSort: SortingEnum | undefined;
+}
+
 export interface GoalsList{
   id: number;
-  goalAnswerString: string;
-  count: number;
+  answerString: string;
+  usedcount: number;
 }
 
 export interface GoalsListResponse extends CustomApiResponse {

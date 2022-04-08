@@ -5,7 +5,7 @@ import {
   AssessmentEngagement,
   AssessmentEngagementResponse, AssessmentLimitRequest,
   DashboardData,
-  DashboardResponse, GoalsList, GoalsListRequestResponse, GoalsListResponse,
+  DashboardResponse, GoalsList, GoalsListFilters, GoalsListRequestResponse, GoalsListResponse,
   PackEngagement,
   PackEngagementResponse, PackEngLimitRequest, PackEngLimitRequestResponseData,
   TestWatched, TestWatchedLimitRequest,
@@ -14,6 +14,7 @@ import {
 import { catchError, map, tap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { DashboardRangeFilterEnum } from '@hidden-innovation/shared/models';
+import * as moment from 'moment';
 
 @Injectable()
 export class DashboardService {
@@ -86,8 +87,12 @@ export class DashboardService {
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
-  getGoalsList():Observable<GoalsList[]>{
-    return this.http.get<GoalsListResponse>(`${this.env.baseURL}/v1/admin/get-goal-table`).pipe(
+  getGoalsList(reqObj:GoalsListFilters):Observable<GoalsList[]>{
+    let params = new HttpParams();
+    if (reqObj.countSort) {
+      params = params.append('countSort', reqObj.countSort);
+    }
+    return this.http.get<GoalsListResponse>(`${this.env.baseURL}/v1/admin/get-goal-table`,{ params }).pipe(
       map(res => res.data.goals),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
@@ -114,7 +119,7 @@ export class DashboardService {
   getRegisteredUsers(reqObj: {startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum}): Observable<any> {
     let params = new HttpParams();
     let startDate = new Date(reqObj.startDate).toISOString();
-    let endDate = new Date(reqObj.endDate).toISOString();
+    let endDate = moment((new Date(reqObj.endDate))).add(1,'day').toISOString();
     if(reqObj.filterBy === DashboardRangeFilterEnum.MONTHLY){
       const year = new Date(startDate).getFullYear();
       const month = new Date(startDate).getMonth();
