@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import {
   AssessmentEngagement, AssessmentLimitRequest,
-  DashboardData, GoalsList,
+  DashboardData, GoalsList, GoalsListFilters,
   PackEngagement, PackEngLimitRequest,
   TestWatched, TestWatchedLimitRequest, UserGraphData
 } from './models/dashboard.interface';
@@ -493,7 +493,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
-  getGoals$ = this.effect(params$ =>
+  getGoals$ = this.effect<GoalsListFilters>(params$ =>
     params$.pipe(
       tap((_) => {
         this.patchState({
@@ -501,7 +501,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         });
       }),
       switchMap((reqObj) =>
-        this.dashboardService.getGoalsList().pipe(
+        this.dashboardService.getGoalsList(reqObj).pipe(
           tapResponse(
             (goalsList) => {
               this.patchState({

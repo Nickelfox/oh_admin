@@ -453,26 +453,40 @@
                 <div class='col-12'>
                   <div class='d-flex align-items-center mb-3'>
                     <mat-icon class='mr-1 card-icon' color='primary'>people_alt</mat-icon>
-                    <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Goals List</h4>
+                    <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Goals </h4>
                   </div>
                 </div>
               </div>
               <div class='col-12 tableOverFlow'>
                 <table mat-table [dataSource]='goalsTable' class='w-100'>
-                  <ng-container matColumnDef='goalAnswerString'>
-                    <th mat-header-cell *matHeaderCellDef>{{'Goal Anwser' | titlecase}}</th>
+                  <ng-container matColumnDef='answerString'>
+                    <th mat-header-cell *matHeaderCellDef>{{'Goal Answer' | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'
-                        [matTooltip]='element.goalAnswerString'> {{(element.goalAnswerString) || '--'}} </td>
+                        [matTooltip]='element.answerString'> {{(element.answerString) || '--'}} </td>
                   </ng-container>
                   <ng-container matColumnDef='id'>
                     <th mat-header-cell *matHeaderCellDef [width]='150'>{{' Id' | titlecase}}</th>
                     <td mat-cell *matCellDef='let element'
                     > {{(element.id) || '--'}} </td>
                   </ng-container>
-                  <ng-container matColumnDef='count'>
-                    <th mat-header-cell *matHeaderCellDef>{{' Count' | titlecase}}</th>
+                  <ng-container matColumnDef='usedcount'>
+                    <th mat-header-cell *matHeaderCellDef>
+                      <div class='d-flex align-items-center justify-content-between'>
+                        <span>{{'Goals Count' | titlecase}}</span>
+                        <div class='d-flex align-items-center'>
+                          <button mat-icon-button class='mr-3'
+                                  [disabled]='(store.isActing$ | async)'
+                                  color='{{filtersGoalsList.controls.countSort?.enabled ? "primary" : ""}}'
+                                  (click)='updateGoalsList("countSort")'>
+
+                            <mat-icon
+                              style='font-size: 20px;'>{{ filtersGoalsList.controls.countSort?.value === sortingEnum.ASC ? "arrow_upward": "arrow_downward"   }}</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </th>
                     <td mat-cell *matCellDef='let element'
-                    > {{(element.count) || '--  '}} </td>
+                    > {{(element.usedcount) || '--  '}} </td>
                   </ng-container>
                   <tr mat-header-row *matHeaderRowDef='displayedColumnsGoals; sticky:true'></tr>
                   <tr mat-row *matRowDef='let row; columns: displayedColumnsGoals;' class='row-react'></tr>
