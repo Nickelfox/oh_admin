@@ -132,7 +132,13 @@ export class LineChartComponent {
           }
         }
       },
-
+      scales:{
+        yAxes:[{
+          ticks:{
+            beginAtZero: true,
+          }
+        }]
+      },
       responsive: true,
       maintainAspectRatio: true,
       title: {
