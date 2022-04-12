@@ -414,7 +414,13 @@
                                       <mat-label>Answer {{i + 1}}</mat-label>
                                       <input autocomplete='no' formControlName='answer' matInput type='text'>
                                       <mat-error>
-                                        Answer {{formValidationService.fieldValidationMessage.required}}</mat-error>
+                                        <ng-template [ngIf]='((mcRMInputFieldFieldGroup(i).controls.answer.touch$ | async) || (mcRMInputFieldFieldGroup(i).controls.answer.dirty$ | async)) && (mcRMInputFieldFieldGroup(i).controls.answer.errors$ | async)' let-error>
+                                          <hidden-innovation-form-field-errors
+                                            label='answer'
+                                            [error]='error'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
                                     </mat-form-field>
                                   </div>
                                 </div>

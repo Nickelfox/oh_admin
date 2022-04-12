@@ -88,6 +88,7 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
     urls: new FormArray<ContentUrl>([]),
     content: new FormControl<ContentCore[] | LessonCore[]>([]),
     imagesAndPdfsIds: new FormArray<number>([])
+
   });
 
   aspectRatio = AspectRatio;
@@ -366,7 +367,7 @@ export class PackCreateComponent implements OnDestroy, ComponentCanDeactivate {
     this.selectedPack = pack;
     const selectedContent: Content[] | Lesson[] = (this.selectedPack.content as (Content[] | Lesson[])) ?? [];
     const resources: Media[] = this.selectedPack.imagesAndPdfs as Media[] ?? [];
-    const urls: ContentUrl[] = this.selectedPack.urls as ContentUrl[] ?? [];
+    const urls: ContentUrl[] = this.selectedPack.ContentUrl as ContentUrl[] ?? [];
     this.packForm.patchValue({
       name,
       description,
