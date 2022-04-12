@@ -86,12 +86,12 @@ const initialState: UiState = {
           path: `/users`,
           icon: 'supervisor_account'
         },
-        { label: 'Reports', path: '/reports', icon: 'show_chart' },
-        { label: 'App Releases', path: '/app-release', icon: 'file_download' }
+        // { label: 'Reports', path: '/reports', icon: 'show_chart' },
+        // { label: 'App Releases', path: '/app-release', icon: 'file_download' }
       ]
     }
   ]
-};
+};  
 
 @Injectable({ providedIn: 'root' })
 export class UiStore extends ComponentStore<UiState> {
