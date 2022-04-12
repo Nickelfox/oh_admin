@@ -67,7 +67,7 @@ export interface Pack extends PackCore {
   questionnaires: QuestionnaireExtended[];
   imagesAndPdfs: Media[];
   poster: Media;
-  urls: ContentUrl[];
+  ContentUrl: ContentUrl[];
   content: Content[] | Lesson[];
   deleted_at: string;
   created_at: string;
