@@ -251,7 +251,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
             RxwebValidators.notEmpty(),
             RxwebValidators.unique(),
             RxwebValidators.maxLength({
-              value: this.formValidationService.FIELD_VALIDATION_VALUES.ANSWER_LENGTH
+              value: 150
             })
           ]),
           point: new FormControl<number>(multipleChoice?.point ?? undefined, this.formValidationService.pointValidations),

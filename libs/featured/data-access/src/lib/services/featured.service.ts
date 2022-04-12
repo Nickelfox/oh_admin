@@ -29,7 +29,6 @@ export class FeaturedService {
 
   getFeatured(id: number): Observable<FeaturedResponseData> {
     return this.http.get<FeaturedResponse>(`${this.env.baseURL}/v1/admin/get-featured/${id}`).pipe(
-      tap(ss => console.log(ss)),
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
