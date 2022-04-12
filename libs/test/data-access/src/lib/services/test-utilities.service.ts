@@ -199,7 +199,11 @@ export class TestUtilitiesService {
   buildMultiChoiceForm(data?: MultipleChoiceFieldExtended[]): FormGroup<MultipleChoiceField>[] {
     const answerValidation = [
       RxwebValidators.required(),
-      RxwebValidators.notEmpty()
+      RxwebValidators.notEmpty(),
+      RxwebValidators.maxLength({
+        value:150,
+        message: 'Answer cannot be more than 150 characters'
+      }),
     ];
     let editObj: {
       zero: MultipleChoiceFieldExtended,
