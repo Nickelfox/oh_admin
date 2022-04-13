@@ -138,7 +138,7 @@ export class DashboardService {
   getActiveUsers(reqObj: {startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum}): Observable<any> {
     let params = new HttpParams();
     let startDate = new Date(reqObj.startDate).toISOString();
-    let endDate = new Date(reqObj.endDate).toISOString();
+    let endDate = moment((new Date(reqObj.endDate))).add(1,'day').toISOString();
     if(reqObj.filterBy === DashboardRangeFilterEnum.MONTHLY){
       const year = new Date(startDate).getFullYear();
       const month = new Date(startDate).getMonth();
