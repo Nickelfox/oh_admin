@@ -9,6 +9,7 @@ import { QuestionnaireQuestionFormModule } from '@hidden-innovation/shared/ui/qu
 import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
 import { PendingChangesGuard, UtilsModule } from '@hidden-innovation/shared/utils';
 import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/common-form-field-textarea';
+import { CommonFormFieldImageModule } from '@hidden-innovation/shared/ui/common-form-field-image';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/comm
       }
     ]),
     A11yModule,
+    CommonFormFieldImageModule
   ],
   declarations: [
     CreateQuestionnaireComponent

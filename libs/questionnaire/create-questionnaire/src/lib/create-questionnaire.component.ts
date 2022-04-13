@@ -23,12 +23,14 @@ import { Validators } from '@angular/forms';
 import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
 import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
 import { ActivatedRoute } from '@angular/router';
-import { filter, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { ComponentCanDeactivate } from '@hidden-innovation/shared/utils';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { AspectRatio, Media } from '@hidden-innovation/media';
+import { Observable } from 'rxjs';
 
 @UntilDestroy({ checkProperties: true })
 @Component({
@@ -45,6 +47,13 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       ...this.formValidationService.requiredFieldValidation
     ]),
     whatYouWillGetOutOfIt: new FormControl<string>(''),
+    imageId: new FormControl(undefined, [
+      RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]),
     overview: new FormControl<string>(''),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
@@ -63,6 +72,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   operationTypeEnum = OperationTypeEnum;
   loaded = false;
   private questionnaireID?: number;
+  aspectRatio = AspectRatio;
 
   constructor(
     private hotToastService: HotToastService,
@@ -106,6 +116,16 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
     return this.questionnaire.controls.questions as FormArray<Question>;
   }
 
+  get imagePosterIDctrl(): FormControl<number | undefined> {
+    return this.questionnaire.controls.imageId;
+  }
+
+  get selectedPosterImageData(): Observable<Media | undefined> {
+    return this.store.selectedQuestionnaire$.pipe(
+      map(res => res?.image)
+    );
+  }
+
   changedQuestionType(questions: Question[]): Question[] {
     return questions?.map(question => {
       return {
@@ -125,12 +145,13 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   }
 
   populateQuestionnaire(obj: QuestionnaireExtended): void {
-    const { name, isScoring, questions, whatYouWillGetOutOfIt, overview } = obj;
+    const { name, isScoring, questions, whatYouWillGetOutOfIt, overview, image } = obj;
     this.questionnaire.patchValue({
       name,
       isScoring,
       whatYouWillGetOutOfIt,
-      overview
+      overview,
+      imageId: image?.id
     });
     const tempQuestions: Question[] = this.parseQuestionType(questions).map(q => {
       if (q.questionType !== QuestionTypeEnum.IMAGE_SELECT) {
