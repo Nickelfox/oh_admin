@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import {
   AssessmentEngagement, AssessmentLimitRequest,
-  DashboardData,
+  DashboardData, GoalsList, GoalsListFilters,
   PackEngagement, PackEngLimitRequest,
-  TestWatched, TestWatchedLimitRequest, UserGraphData,
+  TestWatched, TestWatchedLimitRequest, UserGraphData
 } from './models/dashboard.interface';
 import { combineLatest, EMPTY, Observable } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
@@ -40,6 +40,7 @@ export interface DashboardState extends Partial<DashboardData> {
   test?:TestWatched[];
   packs:PackEngagement[];
   assessmentEng: AssessmentEngagement[];
+  goalsList: GoalsList[];
   totalAssessmentEng: number;
   totalTests: number;
   totalPacks:number,
@@ -68,6 +69,7 @@ const initialState: DashboardState = {
   test: [],
   packs:[],
   assessmentEng:[],
+  goalsList:[],
   totalPacks:0,
   totalTests: 0,
   totalAssessmentEng:0,
@@ -165,6 +167,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   testWatched$: Observable<TestWatched[]> = this.select(state => state.test || []);
   packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packs || [])
   assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || [])
+  goalsList$: Observable<GoalsList[]> = this.select(state => state.goalsList || [])
   readonly testWatchedCount$: Observable<number> = this.select(state => state.totalTests || 0);
   readonly packEngCount$: Observable<number> = this.select(state => state.totalPacks || 0);
   readonly assessmentEngCount$: Observable<number> = this.select(state => state.totalAssessmentEng || 0);
@@ -336,7 +339,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         this.dashboardService.getRegisteredUsers(req).pipe(
           tap(
             (apiRes) => {
-
               // this.patchState({
               //   registeredStatus:{
               //     monthly:{
@@ -491,6 +493,33 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
+  getGoals$ = this.effect<GoalsListFilters>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isLoading: true
+        });
+      }),
+      switchMap((reqObj) =>
+        this.dashboardService.getGoalsList(reqObj).pipe(
+          tapResponse(
+            (goalsList) => {
+              this.patchState({
+                isLoading: false,
+                goalsList
+              });
+            },
+            _ => {
+              this.patchState({
+                isLoading: false
+              });
+            }
+          ),
+          catchError(() => EMPTY))
+      )
+    )
+  );
+
   getAssessmentEngagement$ = this.effect<AssessmentLimitRequest>(params$ =>
     params$.pipe(
       tap((_) => {
@@ -638,6 +667,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         obj[key]++;
       }
       dataSet = Object.values(obj);
+
     }
     return { dataSet: [{ data: dataSet, label: label }], labels: dataLabels };
   }

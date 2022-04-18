@@ -1,0 +1,128 @@
+<form class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button
+          [routerLink]="['/dashboard']" class='ml-3'
+          mat-stroked-button
+          type='button'>
+          Cancel
+        </button>
+        <button
+          class='ml-3'
+          color='primary' mat-flat-button type='submit' (click)='submit()'>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <div [formGroup]='goalsGroup' class='container-fluid p-0'>
+    <div class='row'>
+      <div class='col-lg-6 col-12'>
+        <mat-card>
+          <mat-card-content>
+            <div class='container-fluid p-0 '>
+              <div class='row mb-3'>
+                <div class='col-12'>
+                  <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
+                    General</h5>
+                </div>
+              </div>
+              <div class='row mb-2'>
+                <div class='col-12'>
+                  <hidden-innovation-common-form-field
+                    controlPath='header'
+                    label='Goal Header'
+                  ></hidden-innovation-common-form-field>
+                </div>
+              </div>
+              <div class='row mb-2'>
+                <div class='col-12'>
+                  <hidden-innovation-common-form-field-textarea
+                    controlPath='description'
+                    label='Description'
+                  ></hidden-innovation-common-form-field-textarea>
+                </div>
+              </div>
+              <div class='row mb-3'>
+                <div class='col-12'>
+                  <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
+                    REMINDER</h5>
+                </div>
+              </div>
+              <div class='row mb-2'>
+                <div class='col-12'>
+                  <hidden-innovation-common-form-field-textarea
+                    controlPath='body'
+                    label='Body'
+                  ></hidden-innovation-common-form-field-textarea>
+                </div>
+              </div>
+              <div class='row mb-2'>
+                <div class='col-12'>
+                  <hidden-innovation-common-form-field
+                    controlPath='question'
+                    label='{{constantDataService.FIELD_NAME.QUESTIONS | titlecase}}'
+                  ></hidden-innovation-common-form-field>
+                </div>
+              </div>
+              <div class='row mb-2'>
+                <div class='col-12'>
+                  <hidden-innovation-common-form-field-number
+                    [errorMessage]=formValidationService.lockOutValidationMessage
+                    controlPath='reminder'
+                    label='Reminder(Days)'
+                  ></hidden-innovation-common-form-field-number>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class='col-lg-6 col-12'>
+        <mat-card>
+          <mat-card-title class='d-flex justify-content-between align-items-center'>
+            <h3 class='mat-h3 mb-0 font-sf-pro'>Goals</h3>
+            <button
+              (click)='addNewAnswer()'
+              class='ml-3'
+              color='primary' mat-flat-button type='button'>
+              Add
+            </button>
+          </mat-card-title>
+          <mat-divider></mat-divider>
+          <div>
+            <div class='row mb-3 pt-3'>
+              <div class='col-12'>
+                <mat-checkbox color='primary' formControlName='showIcon'>
+                  <h4 class='text-muted m-0 ml-2'>Icons</h4>
+                </mat-checkbox>
+              </div>
+            </div>
+            <div *ngFor='let ans of answersCtrl.controls; let i=index' class='row mb-2'>
+              <div class='col-12' [formGroup]='answerFormGroup(i)'>
+                <mat-card class='mat-elevation-z1'>
+                  <div class='answersGrid'>
+                    <hidden-innovation-common-form-field
+                      controlPath='answerString'
+                      label='Answer '
+                    ></hidden-innovation-common-form-field>
+                    <div>
+                      <button color='warn' mat-icon-button type='button' (click)='removeAnswer(i)' *ngIf='false'>
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                    <hidden-innovation-common-form-field
+                      label='Font Awesome Icon 6 Code'
+                      controlPath='iconName'
+                    ></hidden-innovation-common-form-field>
+                  </div>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</form>

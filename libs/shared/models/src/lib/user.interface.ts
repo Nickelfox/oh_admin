@@ -19,4 +19,21 @@ export interface UserDetails {
   weight: number;
   is_blocked: boolean;
   blocked_at: string;
+  goalAnswerId:number;
+  goalAnswer:GoalAnswer;
+}
+
+export  interface  GoalAnswer
+{
+  id:number;
+  answerString:string;
+  deleted_at:string;
+  created_at:string;
+  updated_at:string;
+  goalQuestionId:number;
+  icon:string;
+  iconName:string;
+  order:number;
+  points:number;
+  usedcount:number;
 }

@@ -126,7 +126,7 @@ export class TestGroupCreateComponent implements OnDestroy {
     this.uiStore.selectedTests$.subscribe(newTests => {
       this.selectedTests = newTests;
       testFormArray.clear();
-      newTests.forEach(t => {
+      newTests.forEach((t, i) => {
         testFormArray.push(new FormControl<number>(t.id, [RxwebValidators.required()]));
         testFormArray.updateValueAndValidity();
       });
@@ -150,7 +150,10 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   set selectedTests(tests: Test[]) {
-    this._selectedTests = tests ?? [];
+    if (tests === undefined || tests === null) {
+      return;
+    }
+    this._selectedTests = tests;
   }
 
   get testsIsValid(): boolean {

@@ -60,6 +60,23 @@ export interface PackEngLimitRequestResponseData {
   totalPacks: number
 }
 
+export interface GoalsListFilters{
+  countSort: SortingEnum | undefined;
+}
+
+export interface GoalsList{
+  id: number;
+  answerString: string;
+  usedcount: number;
+}
+
+export interface GoalsListResponse extends CustomApiResponse {
+  data: GoalsListRequestResponse;
+}
+export interface GoalsListRequestResponse{
+  goals:GoalsList[];
+}
+
 export interface AssessmentEngagement {
   // position:number;
   name: string;

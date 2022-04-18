@@ -58,7 +58,9 @@ export class ConstantDataService {
     SUB_HEADING: 'Subheading',
     BOTTOM_TEXT: 'Bottom Text',
     RAIL_NAME: 'Rail Name',
-    ABOUT: 'About'
+    ABOUT: 'About',
+    GOAL_HEADER:'Goal Header',
+    GOAL:'Goal',
   };
 
   BUTTON_NAME = {

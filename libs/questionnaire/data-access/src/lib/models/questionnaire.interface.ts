@@ -1,5 +1,6 @@
 import { CustomApiResponse, QuestionTypeEnum, SortingEnum } from '@hidden-innovation/shared/models';
 import { AnswerCore, ImageSelectAnswer, ImageSelectAnswerExtended, MultipleChoiceAnswer } from './answer.interface';
+import { Media } from '@hidden-innovation/media';
 
 export interface Question {
   name: string; // req
@@ -23,7 +24,9 @@ export interface Questionnaire {
   whatYouWillGetOutOfIt: string;
   overview: string;
   isScoring: boolean;
+  imageId: number | undefined;
   questions: Question[];
+
 }
 
 export interface QuestionnaireListingFilters {
@@ -63,6 +66,7 @@ export interface QuestionnaireResponse extends CustomApiResponse {
 
 export interface QuestionnaireExtended extends Questionnaire {
   questions: QuestionExtended[];
+  image: Media;
   isActive: boolean;
   id: number;
 }

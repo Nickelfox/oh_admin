@@ -21,7 +21,9 @@ import { NetworkStatusDialogComponent } from '@hidden-innovation/shared/ui/netwo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit, OnDestroy {
-
+  /**
+   *
+   */
   sideBarOpen = true;
   isLoading = false;
   isTablet = false;

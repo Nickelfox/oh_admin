@@ -47,6 +47,19 @@
               ></hidden-innovation-common-form-field-textarea>
             </div>
           </div>
+          <div class='row mb-3'>
+            <div class='col-12'>
+              <p class='text-muted mb-2'>Poster</p>
+              <hidden-innovation-common-form-field-image
+                (emitImageCtrlData)='imagePosterIDctrl?.setValue($event)'
+                (emitRemoveImage)='imagePosterIDctrl?.reset($event)'
+                [aspectRatio]='aspectRatio.CUBE'
+                [parentCtrl]='imagePosterIDctrl'
+                [setImageData]='(selectedPosterImageData | async)'
+                controlPath='posterId'
+              ></hidden-innovation-common-form-field-image>
+            </div>
+          </div>
           <div class='row'>
             <div class='col-12'>
               <mat-card>

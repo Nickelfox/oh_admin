@@ -13,6 +13,8 @@
     "featured-data-access": "libs/featured/data-access",
     "featured-featured-listing": "libs/featured/featured-listing",
     "forgot-password": "libs/forgot-password",
+    "goals-create-goals": "libs/goals/create-goals",
+    "goals-data-access": "libs/goals/data-access",
     "material": "libs/material",
     "media": "libs/media",
     "optimal-human": "apps/optimal-human",
