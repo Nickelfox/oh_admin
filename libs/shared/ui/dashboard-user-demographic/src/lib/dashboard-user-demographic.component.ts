@@ -65,7 +65,7 @@ export class DashboardUserDemographicComponent {
   doughnutChartLabel: ChartLabel[] = [
     'Male',
     'Female',
-    'Non-Binary'
+    'Transgender'
   ];
 
   doughnutPlugins = [this.doughnutChartLabel];
@@ -178,7 +178,7 @@ export class DashboardUserDemographicComponent {
           // @ts-ignore
           const value = data.datasets[0].data[tooltipItem.index];
           // @ts-ignore
-          return `Non Binary: ${value}`;
+          return `Transgender: ${value}`;
         }
       }
     },
