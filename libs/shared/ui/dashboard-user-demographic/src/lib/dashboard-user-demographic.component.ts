@@ -20,6 +20,7 @@ export class DashboardUserDemographicComponent {
   @Input() maleBarData: ChartDatasets | null = [];
   @Input() femaleBarData: ChartDatasets | null = [];
   @Input() nonBinaryBarData: ChartDatasets | null = [];
+  @Input() overallOptimalScore: ChartDatasets | null = [];
   @Input() ratioChartData: SingleOrMultiDataSet | null = [];
   @Input() isLoading: boolean | null = false;
   public malePercentage = 0;
@@ -61,6 +62,14 @@ export class DashboardUserDemographicComponent {
     '35-44',
     '45+'
   ];
+
+  optimalScoreLables: ChartLabel[]  = [
+    'Strength',
+    'Function',
+    'Mobility',
+    'Cardio',
+    'Lifestyle'
+  ]
 
   doughnutChartLabel: ChartLabel[] = [
     'Male',
@@ -167,7 +176,7 @@ export class DashboardUserDemographicComponent {
     title: {
       display: true,
       position: 'left',
-      text: 'Others',
+      text: 'Transgender',
       fontColor: '#394155',
       fontSize: 10,
       padding: 4,
@@ -179,6 +188,46 @@ export class DashboardUserDemographicComponent {
           const value = data.datasets[0].data[tooltipItem.index];
           // @ts-ignore
           return `Transgender: ${value}`;
+        }
+      }
+    },
+    scales:{
+      yAxes:[{
+        ticks:{
+          stepSize:15,
+          fontSize:10,
+
+        }
+      }]
+    }
+  };
+  chartOptionsOptimalScore: ChartOptions = {
+    layout: {
+      padding: 0
+    },
+    elements: {
+      point: {
+        radius: 4,
+        hoverRadius: 8
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: true,
+    title: {
+      display: true,
+      position: 'left',
+      text: 'Score',
+      fontColor: '#394155',
+      fontSize: 10,
+      padding: 4,
+    },
+    tooltips:{
+      callbacks:{
+        label: (tooltipItem, data):any => {
+          // @ts-ignore
+          const value = data.datasets[0].data[tooltipItem.index];
+          // @ts-ignore
+          return `Score: ${value}`;
         }
       }
     },
