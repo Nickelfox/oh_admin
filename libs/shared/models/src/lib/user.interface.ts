@@ -20,7 +20,9 @@ export interface UserDetails {
   is_blocked: boolean;
   blocked_at: string;
   goalAnswerId:number;
-  goalAnswer:GoalAnswer;
+  goalAnswer: GoalAnswer;
+  CPS: number | null;
+  OOS: number | null;
 }
 
 export  interface  GoalAnswer
