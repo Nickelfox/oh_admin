@@ -130,10 +130,15 @@
         <mat-card class='pl-1'>
           <div class='container-fluid p-0'>
             <div class='row'>
-              <div class='col-12'>
+              <div class='col-6'>
                 <div class='d-flex align-items-center mb-3 pl-2'>
                   <mat-icon color='primary' class='mr-1 card-icon'>analytics</mat-icon>
                   <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Overall Optimal Score </h4>
+                </div>
+              </div>
+              <div class='col-6'>
+                <div class='d-flex align-items-center justify-content-end mb-3 pl-2'>
+                  <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Average OOS Score - {{averageOOSScore}} % </h4>
                 </div>
               </div>
             </div>

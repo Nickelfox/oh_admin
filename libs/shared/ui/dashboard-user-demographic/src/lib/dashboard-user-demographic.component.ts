@@ -21,6 +21,7 @@ export class DashboardUserDemographicComponent {
   @Input() femaleBarData: ChartDatasets | null = [];
   @Input() nonBinaryBarData: ChartDatasets | null = [];
   @Input() overallOptimalScore: ChartDatasets | null = [];
+  @Input() averageOOSScore: number | null = 0;
   @Input() ratioChartData: SingleOrMultiDataSet | null = [];
   @Input() isLoading: boolean | null = false;
   public malePercentage = 0;

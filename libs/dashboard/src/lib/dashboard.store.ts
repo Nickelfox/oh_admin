@@ -47,6 +47,7 @@ export interface DashboardState extends Partial<DashboardData> {
   isActing?: boolean;
   loaded?: boolean;
   registeredStatus?: Partial<UserGraphData>;
+  totalScore:number;
 }
 
 const initialState: DashboardState = {
@@ -76,6 +77,7 @@ const initialState: DashboardState = {
   totalAssessmentEng: 0,
   isActing: false,
   loaded: false,
+  totalScore:0,
   registeredStatus:
     {
       monthly: {
@@ -180,6 +182,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isLineChartLoading$: Observable<boolean> = this.select(state => !!state.isLineChartLoading);
   readonly totalUsers$: Observable<number> = this.select(state => state.totalUser ?? 0);
+  readonly totalOOSScore$: Observable<number> = this.select(state => state.totalScore ?? 0);
   readonly femaleUsers$: Observable<ChartDatasets> = this.select(state => state.femaleUsers ?? [{
     data: [],
     label: ''
@@ -562,9 +565,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
             tap(
               (apiRes) => {
                 const tableData = apiRes[0].table;
+                const totalScore = apiRes[1].OOS.toFixed(2);
                 const tableSet = this.convertOOSChart(tableData);
                 this.patchState({
                   isLoading: false,
+                  totalScore: totalScore,
                   oosScore: tableSet
                 });
               },
