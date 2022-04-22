@@ -563,7 +563,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
               (apiRes) => {
                 const tableData = apiRes[0].table;
                 const tableSet = this.convertOOSChart(tableData);
-                console.log(tableSet);
                 this.patchState({
                   isLoading: false,
                   oosScore: tableSet
