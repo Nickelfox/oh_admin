@@ -159,7 +159,7 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.GOAL'
-              [value]='user.goalAnswer === null ? null : user.goalAnswer.answerString'
+              [value]='user.goalAnswer ? user.goalAnswer.answerString : null'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
