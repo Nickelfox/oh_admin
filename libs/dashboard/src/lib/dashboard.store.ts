@@ -15,9 +15,8 @@ import { DashboardRangeFilterEnum, TagCategoryEnum } from '@hidden-innovation/sh
 import { Featured } from '@hidden-innovation/featured/data-access';
 import { DateTime } from 'luxon';
 
-export  interface  ActiveData
-{
-  total:string;
+export interface ActiveData {
+  total: string;
   changePer: number;
 }
 
@@ -26,6 +25,7 @@ export interface DashboardState extends Partial<DashboardData> {
   femaleUsers?: ChartDatasets;
   maleUsers?: ChartDatasets;
   nonBinaryUsers?: ChartDatasets;
+  oosScore?: ChartDatasets;
   ageRatioData?: SingleOrMultiDataSet;
   completeTestEngagementLables?: Array<string>;
   completeTestEngagementData?: Array<number>;
@@ -37,13 +37,13 @@ export interface DashboardState extends Partial<DashboardData> {
   activeUsersData?: ChartDatasets;
   filterBy?: DashboardRangeFilterEnum;
   isLineChartLoading?: boolean;
-  test?:TestWatched[];
-  packs:PackEngagement[];
+  test?: TestWatched[];
+  packs: PackEngagement[];
   assessmentEng: AssessmentEngagement[];
   goalsList: GoalsList[];
   totalAssessmentEng: number;
   totalTests: number;
-  totalPacks:number,
+  totalPacks: number,
   isActing?: boolean;
   loaded?: boolean;
   registeredStatus?: Partial<UserGraphData>;
@@ -55,6 +55,7 @@ const initialState: DashboardState = {
   femaleUsers: [{ data: [], label: '' }],
   maleUsers: [{ data: [], label: '' }],
   nonBinaryUsers: [{ data: [], label: '' }],
+  oosScore: [{ data: [], label: '' }],
   ageRatioData: [[]],
   completeTestEngagementLables: [],
   completeTestEngagementData: [],
@@ -67,30 +68,30 @@ const initialState: DashboardState = {
   activeUsersData: [{ data: [], label: '' }],
   isLineChartLoading: false,
   test: [],
-  packs:[],
-  assessmentEng:[],
-  goalsList:[],
-  totalPacks:0,
+  packs: [],
+  assessmentEng: [],
+  goalsList: [],
+  totalPacks: 0,
   totalTests: 0,
-  totalAssessmentEng:0,
+  totalAssessmentEng: 0,
   isActing: false,
   loaded: false,
   registeredStatus:
     {
-      monthly:{
-        total:'',
+      monthly: {
+        total: '',
         changePer: 0,
-        data:[]
+        data: []
       },
-      weekly:{
-        total:'',
+      weekly: {
+        total: '',
         changePer: 0,
-        data:[]
+        data: []
       },
-      daily:{
-        total:'',
-        changePer:0,
-        data:[]
+      daily: {
+        total: '',
+        changePer: 0,
+        data: []
       }
     }
 };
@@ -137,7 +138,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         {
           count: 10,
           date: DateTime.now().toISODate()
-        },
+        }
       ]
     }
   };
@@ -145,36 +146,35 @@ export class DashboardStore extends ComponentStore<DashboardState> {
 
   registeredStatus$: Observable<any> = this.select(state => state.registeredStatus ??
     {
-      monthly:{
-        total:'',
+      monthly: {
+        total: '',
         changePer: 0,
-        data:[]
+        data: []
       },
-      weekly:{
-        total:'',
+      weekly: {
+        total: '',
         changePer: 0,
-        data:[]
+        data: []
       },
-      daily:{
-        total:'',
-        changePer:0,
-        data:[]
+      daily: {
+        total: '',
+        changePer: 0,
+        data: []
       }
     }
-  )
+  );
 
 
   testWatched$: Observable<TestWatched[]> = this.select(state => state.test || []);
-  packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packs || [])
-  assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || [])
-  goalsList$: Observable<GoalsList[]> = this.select(state => state.goalsList || [])
+  packEngagement$: Observable<PackEngagement[]> = this.select(state => state.packs || []);
+  assessmentEng$: Observable<AssessmentEngagement[]> = this.select(state => state.assessmentEng || []);
+  goalsList$: Observable<GoalsList[]> = this.select(state => state.goalsList || []);
   readonly testWatchedCount$: Observable<number> = this.select(state => state.totalTests || 0);
   readonly packEngCount$: Observable<number> = this.select(state => state.totalPacks || 0);
   readonly assessmentEngCount$: Observable<number> = this.select(state => state.totalAssessmentEng || 0);
   readonly isLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly loaded$: Observable<boolean> = this.select(state => !!state.loaded);
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
-
 
 
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
@@ -186,6 +186,10 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   }]);
   readonly maleUsers$: Observable<ChartDatasets> = this.select(state => state.maleUsers ?? [{ data: [], label: '' }]);
   readonly nonBinaryUsers$: Observable<ChartDatasets> = this.select(state => state.nonBinaryUsers ?? [{
+    data: [],
+    label: ''
+  }]);
+  readonly oosScore$: Observable<ChartDatasets> = this.select(state => state.oosScore ?? [{
     data: [],
     label: ''
   }]);
@@ -204,8 +208,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     label: ''
   }]));
   readonly activeUserLabel$: Observable<ChartLabel> = this.select((state => state.activeUsersLabel ?? []));
-
-
 
 
   readonly getStats = this.effect(params$ =>
@@ -237,6 +239,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
+
   readonly getGenderData = this.effect(params$ =>
     params$.pipe(
       tap(() => {
@@ -448,7 +451,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       switchMap((reqObj) =>
         this.dashboardService.getTopWatched(reqObj).pipe(
           tapResponse(
-            ({test, totalTests}) => {
+            ({ test, totalTests }) => {
               this.patchState({
                 isLoading: false,
                 test,
@@ -475,7 +478,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       switchMap((reqObj) =>
         this.dashboardService.getPackEng(reqObj).pipe(
           tapResponse(
-            ({packs,totalPacks}) => {
+            ({ packs, totalPacks }) => {
               this.patchState({
                 isLoading: false,
                 packs,
@@ -546,11 +549,41 @@ export class DashboardStore extends ComponentStore<DashboardState> {
       )
     )
   );
+  readonly getOOS = this.effect(params$ =>
+    params$.pipe(
+      tap(() => {
+        this.patchState({
+          isLoading: true
+        });
+      }),
+      switchMap(() =>
+        combineLatest([
+          this.dashboardService.getOOS().pipe(
+            tap(
+              (apiRes) => {
+                const tableData = apiRes[0].table;
+                const tableSet = this.convertOOSChart(tableData);
+                console.log(tableSet);
+                this.patchState({
+                  isLoading: false,
+                  oosScore: tableSet
+                });
+              },
+              err => {
+                this.patchState({
+                  isLoading: false
+                });
+              }
+            ),
+            catchError(() => EMPTY))
+
+        ])
+      )
+    )
+  );
 
 
-
-  public registeredDataSets(filter:DashboardRangeFilterEnum):{datasets:ChartDatasets, label:ChartLabel}
-  {
+  public registeredDataSets(filter: DashboardRangeFilterEnum): { datasets: ChartDatasets, label: ChartLabel } {
     let dataLabels: ChartLabel = [];
     let dataSet: number[] = [];
     // if (filter.monthly)
@@ -582,7 +615,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
         dataLabels = this._dummyRegisteresUserData.daily.data.map(res => res.date);
         break;
     }
-    return { datasets: [{ data: dataSet}], label: dataLabels };
+    return { datasets: [{ data: dataSet }], label: dataLabels };
   }
 
 
@@ -592,7 +625,6 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   ) {
     super(initialState);
   }
-
 
 
   public convertDataFormat(users: { id: number; name: string; created_at?: string; lastActive?: string }[], reqObj: { startDate: string; endDate: string, filterBy: DashboardRangeFilterEnum }, activeUser?: false): { dataSet: ChartDatasets; labels: ChartLabel } {
@@ -672,6 +704,25 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     return { dataSet: [{ data: dataSet, label: label }], labels: dataLabels };
   }
 
+  public convertOOSChart(table: { categoryName: string, cps: any }[]): ChartDatasets {
+    const label = 'OOS';
+    const data = [0, 0, 0, 0, 0];
+    for (const item of table) {
+      if (item.categoryName === 'STRENGHT') {
+        data[0] = item.cps.toFixed(2);
+      } else if (item.categoryName === 'CARDIO') {
+        data[1] = item.cps.toFixed(2);
+      } else if (item.categoryName === 'FUNCTION') {
+        data[2] = item.cps.toFixed(2);
+      } else if (item.categoryName === 'LIFESTYLE') {
+        data[3] = item.cps.toFixed(2);
+      } else if (item.categoryName === 'MOBILITY') {
+        data[4] = item.cps.toFixed(2);
+      }
+    }
+    return [{ data, label }];
+  }
+
   public convertToPercentage(female: [], male: [], other: [], totalUsers: number | undefined): SingleOrMultiDataSet {
     if (!totalUsers) {
       return [[0, 0, 0]];
@@ -719,6 +770,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     return [{ data, label }];
   }
 }
+
 
 function daysInMonth(date: string | undefined) {
   if (!date) {

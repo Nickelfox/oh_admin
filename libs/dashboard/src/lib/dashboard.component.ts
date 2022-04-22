@@ -223,7 +223,7 @@ export class DashboardComponent implements OnInit {
     this.refreshListAssessmentEng();
     // this.resetGoalsPagination();
     this.refreshGoalsList();
-
+    this.store.getOOS();
     this.store.goalsList$.subscribe(res => {
       this.goalsTable = new MatTableDataSource<GoalsList>(res);
       this.noData = this.goalsTable.connect().pipe(map(data => data.length === 0));

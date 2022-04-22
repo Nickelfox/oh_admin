@@ -227,7 +227,7 @@ export class DashboardUserDemographicComponent {
           // @ts-ignore
           const value = data.datasets[0].data[tooltipItem.index];
           // @ts-ignore
-          return `Score: ${value}`;
+          return `Score: ${value} %`;
         }
       }
     },
