@@ -158,11 +158,13 @@
           [isLoading]='(store.isChangeLoading$ | async)'
           [maleBarData]='store.maleUsers$ | async'
           [nonBinaryBarData]='store.nonBinaryUsers$ | async'
+          [overallOptimalScore]='store.oosScore$ | async'
+          [averageOOSScore]='store.totalOOSScore$ | async'
           [ratioChartData]='store.ageRatioData$ | async'></hidden-innovation-dashboard-user-demographic>
       </div>
     </div>
     <div class='row'>
-      <div class='col-lg-12 col-md-12  mt-4'>
+      <div class='col-lg-12 col-md-12  mt-2'>
         <mat-card class='p-0'>
           <div class='container-fluid p-0'>
             <div class='row m-0'>

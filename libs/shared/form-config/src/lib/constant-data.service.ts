@@ -50,6 +50,7 @@ export class ConstantDataService {
     RESULTS: 'results',
     OCS: 'ocs',
     OOS: 'oos',
+    CPS:'cps',
     AGE: 'age',
     GENDER: 'gender',
     VIDEO_FILE: 'video file',

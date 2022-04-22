@@ -159,7 +159,7 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.GOAL'
-              [value]='user.goalAnswer.answerString'
+              [value]='user.goalAnswer === null ? null : user.goalAnswer.answerString'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
@@ -167,99 +167,99 @@
 
       <mat-divider></mat-divider>
 
-<!--      <div class='container-fluid p-4'>-->
-<!--        <div class='row mb-2'>-->
-<!--          <div class='col-12'>-->
-<!--            <h4 class='mat-h4 font-sf-pro&#45;&#45;bold text-uppercase text-muted'>User Engagement</h4>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class='container-fluid p-4'>
+          <div class='row mb-2'>
+            <div class='col-12'>
+              <h4 class='mat-h4 font-sf-pro--bold text-uppercase text-muted'>User Engagement</h4>
+            </div>
+          </div>
 
-<!--        <div class='row'>-->
-<!--          <div class='col-12'>-->
-<!--            <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase'>User Test History</h5>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class='row mb-2'>-->
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.WATCHED'-->
-<!--              [value]='null'-->
-<!--            ></hidden-innovation-common-data-field>-->
-<!--          </div>-->
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.COMPLETED'-->
-<!--              [value]='null'-->
-<!--            ></hidden-innovation-common-data-field>-->
-<!--          </div>-->
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.INPUTS'-->
-<!--              [value]='null'-->
-<!--            ></hidden-innovation-common-data-field>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class='row'>-->
-<!--          <div class='col-12'>-->
-<!--            <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase text-color__primary'>User Assessment History</h5>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class='row mb-2'>-->
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.STARTED'-->
-<!--              [value]='null'-->
-<!--            ></hidden-innovation-common-data-field>-->
-<!--          </div>-->
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.COMPLETED'-->
-<!--              [value]='null'-->
-<!--            ></hidden-innovation-common-data-field>-->
+<!--          <div class='row'>-->
+<!--            <div class='col-12'>-->
+<!--              <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase'>User Test History</h5>-->
+<!--            </div>-->
 <!--          </div>-->
 
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.RESULTS'-->
-<!--              [value]='null'-->
-<!--            ></hidden-innovation-common-data-field>-->
+<!--          <div class='row mb-2'>-->
+<!--            <div class='col-4'>-->
+<!--              <hidden-innovation-common-data-field-->
+<!--                [isLoading]='store.isLoading$ | async'-->
+<!--                [label]='constantDataService.FIELD_NAME.WATCHED'-->
+<!--                [value]='null'-->
+<!--              ></hidden-innovation-common-data-field>-->
+<!--            </div>-->
+<!--            <div class='col-4'>-->
+<!--              <hidden-innovation-common-data-field-->
+<!--                [isLoading]='store.isLoading$ | async'-->
+<!--                [label]='constantDataService.FIELD_NAME.COMPLETED'-->
+<!--                [value]='null'-->
+<!--              ></hidden-innovation-common-data-field>-->
+<!--            </div>-->
+<!--            <div class='col-4'>-->
+<!--              <hidden-innovation-common-data-field-->
+<!--                [isLoading]='store.isLoading$ | async'-->
+<!--                [label]='constantDataService.FIELD_NAME.INPUTS'-->
+<!--                [value]='null'-->
+<!--              ></hidden-innovation-common-data-field>-->
+<!--            </div>-->
 <!--          </div>-->
-<!--        </div>-->
 
-<!--        <div class='row mb-2'>-->
-<!--          <div class='col-2'>-->
-<!--            <hidden-innovation-common-data-field-skeleton-->
-<!--              [label]='constantDataService.FIELD_NAME.OCS'>-->
-<!--              <hidden-innovation-spinner-text-->
-<!--                [value]='55'-->
-<!--                [size]='70'-->
-<!--                text='55%'-->
-<!--                spinnerMode='determinate'-->
-<!--              ></hidden-innovation-spinner-text>-->
-<!--            </hidden-innovation-common-data-field-skeleton>-->
+<!--          <div class='row'>-->
+<!--            <div class='col-12'>-->
+<!--              <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase text-color__primary'>User Assessment History</h5>-->
+<!--            </div>-->
 <!--          </div>-->
-<!--          <div class='col-2'>-->
-<!--            <hidden-innovation-common-data-field-skeleton-->
-<!--              [label]='constantDataService.FIELD_NAME.OOS'>-->
-<!--              <hidden-innovation-spinner-text-->
-<!--                [value]='80'-->
-<!--                [size]='70'-->
-<!--                text='80%'-->
-<!--                spinnerMode='determinate'-->
-<!--              ></hidden-innovation-spinner-text>-->
-<!--            </hidden-innovation-common-data-field-skeleton>-->
+
+<!--          <div class='row mb-2'>-->
+<!--            <div class='col-4'>-->
+<!--              <hidden-innovation-common-data-field-->
+<!--                [isLoading]='store.isLoading$ | async'-->
+<!--                [label]='constantDataService.FIELD_NAME.STARTED'-->
+<!--                [value]='null'-->
+<!--              ></hidden-innovation-common-data-field>-->
+<!--            </div>-->
+<!--            <div class='col-4'>-->
+<!--              <hidden-innovation-common-data-field-->
+<!--                [isLoading]='store.isLoading$ | async'-->
+<!--                [label]='constantDataService.FIELD_NAME.COMPLETED'-->
+<!--                [value]='null'-->
+<!--              ></hidden-innovation-common-data-field>-->
+<!--            </div>-->
+
+<!--            <div class='col-4'>-->
+<!--              <hidden-innovation-common-data-field-->
+<!--                [isLoading]='store.isLoading$ | async'-->
+<!--                [label]='constantDataService.FIELD_NAME.RESULTS'-->
+<!--                [value]='null'-->
+<!--              ></hidden-innovation-common-data-field>-->
+<!--            </div>-->
 <!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+
+          <div class='row mb-2'>
+            <div class='col-2'>
+              <hidden-innovation-common-data-field-skeleton
+                [label]='constantDataService.FIELD_NAME.CPS'>
+                <hidden-innovation-spinner-text
+                  [value]='user.CPS'
+                  [size]='100'
+                  [text]='user.CPS ? user.CPS.toFixed(1) : null '
+                  spinnerMode='determinate'
+                ></hidden-innovation-spinner-text>
+              </hidden-innovation-common-data-field-skeleton>
+            </div>
+            <div class='col-2'>
+              <hidden-innovation-common-data-field-skeleton
+                [label]='constantDataService.FIELD_NAME.OOS'>
+                <hidden-innovation-spinner-text
+                  [value]='user.OOS'
+                  [size]='100'
+                  [text]='user.OOS ? user.OOS.toFixed(1) : null '
+                  spinnerMode='determinate'
+                ></hidden-innovation-spinner-text>
+              </hidden-innovation-common-data-field-skeleton>
+            </div>
+          </div>
+        </div>
 
     </mat-card>
   </ng-template>
