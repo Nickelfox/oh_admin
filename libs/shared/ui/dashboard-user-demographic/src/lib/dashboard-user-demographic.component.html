@@ -30,7 +30,7 @@
 <ng-template #statsLoadingElse>
   <div class='container-fluid p-0'>
     <div class='row mb-4'>
-      <div class='col-lg-6 mb-4'>
+      <div class='col-lg-4 mb-4'>
         <mat-card class='pl-1'>
           <div class='container-fluid p-0'>
             <div class='row'>
@@ -62,7 +62,7 @@
           </div>
         </mat-card>
       </div>
-      <div class='col-lg-6 mb-4'>
+      <div class='col-lg-4 mb-4'>
         <mat-card class='pl-2'>
           <div class='container-fluid p-0'>
             <div class='row'>
@@ -94,14 +94,14 @@
           </div>
         </mat-card>
       </div>
-      <div class='col-lg-7 mb-2'>
+      <div class='col-lg-4 mb-2'>
         <mat-card class='pl-1'>
           <div class='container-fluid p-0'>
             <div class='row'>
               <div class='col-12'>
                 <div class='d-flex align-items-center mb-3 pl-2'>
-                  <mat-icon color='primary' class='mr-1 card-icon'>remove</mat-icon>
-                  <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Non Binary Age Group</h4>
+                  <mat-icon color='primary' class='mr-1 card-icon'>transgender</mat-icon>
+                  <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Transgender Age Group</h4>
                 </div>
               </div>
             </div>
@@ -119,6 +119,43 @@
                 <div class='row ' >
                   <div class='col-12 text-center'>
                     <h5 class='mat-h5 font-weight-bolder mb-0 text-color__primary font-calibri'>Age Group</h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+      <div class='col-lg-7 mb-2'>
+        <mat-card class='pl-1'>
+          <div class='container-fluid p-0'>
+            <div class='row'>
+              <div class='col-6'>
+                <div class='d-flex align-items-center mb-3 pl-2'>
+                  <mat-icon color='primary' class='mr-1 card-icon'>analytics</mat-icon>
+                  <h4 class='mat-h4 mb-0 text-color__primary font-calibri'>Overall Optimal Score </h4>
+                </div>
+              </div>
+              <div class='col-6'>
+                <div class='d-flex align-items-center justify-content-end mb-3 pl-2'>
+                  <h3 class='mat-h3 mb-0 text-color__primary font-calibri'>Average OOS Score - {{averageOOSScore}} % </h3>
+                </div>
+              </div>
+            </div>
+            <div class='row'>
+              <div class='col-12'>
+                <canvas baseChart
+                        chartType='bar'
+                        [colors]='otherAgeBarColor'
+                        [datasets]='$any(overallOptimalScore)'
+                        [labels]='optimalScoreLables'
+                        [legend]='chartLegend'
+                        [options]='chartOptionsOptimalScore'
+                >
+                </canvas>
+                <div class='row ' >
+                  <div class='col-12 text-center'>
+                    <h5 class='mat-h5 font-weight-bolder mb-0 text-color__primary font-calibri'>Category</h5>
                   </div>
                 </div>
               </div>
@@ -169,9 +206,9 @@
                     <div class='col-12'>
                       <button class='w-100' mat-stroked-button [ngStyle]='{"color": colors.other}'>
                         <div class='d-flex align-items-center pt-1 py-0'>
-                          <mat-icon>remove</mat-icon>
+                          <mat-icon>transgender</mat-icon>
                           <div class='d-flex flex-column align-items-center' [ngStyle]='{width: "calc(100% - 42px)"}'>
-                            <h4 class='mat-h4 m-0'>Non-Binary</h4>
+                            <h4 class='mat-h4 m-0'>Transgender</h4>
                             <h2 class='mat-h1 m-0' [ngStyle]='{"color": colors.other}'>{{nonBinaryPercentage}} %</h2>
                           </div>
                         </div>

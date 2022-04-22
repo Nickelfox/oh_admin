@@ -1,8 +1,8 @@
 <div class='d-flex align-items-center justify-content-center'
-     matTooltip='{{text}}'
+     matTooltip='{{!text ? 0 : text}}%'
      [ngStyle]='{"width": size + "px", "height": size + "px"}'>
   <div class='text__container'>
-    <span class='mat-subheading-1 mb-0'>{{!text ? '' : (text | maxStringLimit: 6)}}</span>
+    <span class='mat-subheading-1 mb-0'>{{!text ? 0+'%' : (text | maxStringLimit: 6)+'%'}}</span>
   </div>
-  <mat-spinner [mode]='spinnerMode' [value]='value' [diameter]='size' [color]='color'></mat-spinner>
+  <mat-spinner [mode]='spinnerMode' [value]='value' [diameter]='size' [strokeWidth]='15' [color]='color'></mat-spinner>
 </div>

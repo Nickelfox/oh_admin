@@ -13,8 +13,8 @@ export class SpinnerTextComponent {
 
   @Input() spinnerMode: ProgressSpinnerMode = 'indeterminate';
   @Input() color?: ThemePalette;
-  @Input() value = 15;
+  @Input() value:number | null = 0;
   @Input() size = 20;
-  @Input() text = '--';
+  @Input() text: string | null = '--';
 
 }
