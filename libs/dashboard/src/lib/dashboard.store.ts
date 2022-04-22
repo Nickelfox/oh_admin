@@ -707,7 +707,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
     const label = 'OOS';
     const data = [0, 0, 0, 0, 0];
     for (const item of table) {
-      if (item.categoryName === 'STRENGHT') {
+      if (item.categoryName === 'STRENGTH') {
         data[0] = item.cps.toFixed(2);
       } else if (item.categoryName === 'CARDIO') {
         data[1] = item.cps.toFixed(2);
