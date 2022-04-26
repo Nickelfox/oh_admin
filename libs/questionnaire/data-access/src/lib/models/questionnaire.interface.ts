@@ -23,6 +23,7 @@ export interface Questionnaire {
   name: string;
   whatYouWillGetOutOfIt: string;
   overview: string;
+  explanation: string;
   isScoring: boolean;
   imageId: number | undefined;
   questions: Question[];
