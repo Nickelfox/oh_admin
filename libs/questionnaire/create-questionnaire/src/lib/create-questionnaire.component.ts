@@ -55,7 +55,9 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    overview: new FormControl<string>(''),
+    overview: new FormControl<string>('',[
+      RxwebValidators.maxLength({ value: 500 })
+    ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
       Validators.required,
