@@ -14,3 +14,15 @@
   align-items: center;
   justify-content: center;
 }
+.twitter-like{
+  display: flex;
+  .mat-progress-spinner{
+    display: inline;
+    position: absolute;
+  }
+}
+
+:host ::ng-deep .background circle{
+  stroke: #394155;
+  stroke-opacity: 0.3;
+}
