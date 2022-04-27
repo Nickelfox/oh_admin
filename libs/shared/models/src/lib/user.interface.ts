@@ -23,6 +23,11 @@ export interface UserDetails {
   goalAnswer: GoalAnswer;
   CPS: number | null;
   OOS: number | null;
+  cardioCPS: number;
+  functionCPS: number;
+  lifestyleCPS: number;
+  mobilityCPS: number;
+  strengthCPS: number;
 }
 
 export  interface  GoalAnswer

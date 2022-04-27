@@ -47,6 +47,7 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
       ...this.formValidationService.requiredFieldValidation
     ]),
     whatYouWillGetOutOfIt: new FormControl<string>(''),
+    explanation: new FormControl<string>(''),
     imageId: new FormControl(undefined, [
       RxwebValidators.required(),
       RxwebValidators.numeric({
@@ -54,7 +55,9 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
-    overview: new FormControl<string>(''),
+    overview: new FormControl<string>('',[
+      RxwebValidators.maxLength({ value: 500 })
+    ]),
     isScoring: new FormControl<boolean>(false),
     questions: new FormArray<Question>([], [
       Validators.required,
@@ -145,11 +148,12 @@ export class CreateQuestionnaireComponent implements OnDestroy, ComponentCanDeac
   }
 
   populateQuestionnaire(obj: QuestionnaireExtended): void {
-    const { name, isScoring, questions, whatYouWillGetOutOfIt, overview, image } = obj;
+    const { name, isScoring, questions, whatYouWillGetOutOfIt, overview, image, explanation } = obj;
     this.questionnaire.patchValue({
       name,
       isScoring,
       whatYouWillGetOutOfIt,
+      explanation,
       overview,
       imageId: image?.id
     });

@@ -1,8 +1,17 @@
 <div class='d-flex align-items-center justify-content-center'
      matTooltip='{{!text ? 0 : text}}%'
      [ngStyle]='{"width": size + "px", "height": size + "px"}'>
-  <div class='text__container'>
-    <span class='mat-subheading-1 mb-0'>{{!text ? 0+'%' : (text | maxStringLimit: 6)+'%'}}</span>
+
+  <div class="twitter-like align-items-center justify-content-center">
+    <div class='text__container '>
+      <span class='mat-subheading-1 mb-0'>{{!text ? 0+'%' : (text | maxStringLimit: 6)+'%'}}</span>
+    </div>
+    <mat-spinner class="background"
+                 mode="determinate"
+                 value="100"  [strokeWidth]='10' >
+    </mat-spinner>
+    <mat-spinner [mode]='spinnerMode' [value]='value' [diameter]='size' [strokeWidth]='10' [color]='color'></mat-spinner>
   </div>
-  <mat-spinner [mode]='spinnerMode' [value]='value' [diameter]='size' [strokeWidth]='15' [color]='color'></mat-spinner>
+
+
 </div>

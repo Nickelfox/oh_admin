@@ -234,19 +234,46 @@
 <!--              ></hidden-innovation-common-data-field>-->
 <!--            </div>-->
 <!--          </div>-->
-
+        <div class='row mb-2'>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              label='Strength CPS'
+              [value]=' user.strengthCPS === undefined ? null : user.strengthCPS +"%"'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              label='Lifestyle CPS'
+              [value]='user.lifestyleCPS === undefined ? null : user.lifestyleCPS +"%"'
+            ></hidden-innovation-common-data-field>
+          </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              label='Mobility CPS'
+              [value]='user.mobilityCPS === undefined ? null : user.mobilityCPS +"%"'
+            ></hidden-innovation-common-data-field>
+          </div>
+        </div>
           <div class='row mb-2'>
-            <div class='col-2'>
-              <hidden-innovation-common-data-field-skeleton
-                [label]='constantDataService.FIELD_NAME.CPS'>
-                <hidden-innovation-spinner-text
-                  [value]='user.CPS'
-                  [size]='100'
-                  [text]='user.CPS ? user.CPS.toFixed(1) : null '
-                  spinnerMode='determinate'
-                ></hidden-innovation-spinner-text>
-              </hidden-innovation-common-data-field-skeleton>
+            <div class='col-4'>
+              <hidden-innovation-common-data-field
+                [isLoading]='store.isLoading$ | async'
+                label='Cardio CPS'
+                [value]='user.cardioCPS === undefined ? null : user.cardioCPS +"%"'
+              ></hidden-innovation-common-data-field>
             </div>
+            <div class='col-4'>
+              <hidden-innovation-common-data-field
+                [isLoading]='store.isLoading$ | async'
+                label='Function CPS'
+                [value]='user.functionCPS === undefined ? null : user.functionCPS +"%"'
+              ></hidden-innovation-common-data-field>
+            </div>
+          </div>
+          <div class='row mb-2 mt-4'>
             <div class='col-2'>
               <hidden-innovation-common-data-field-skeleton
                 [label]='constantDataService.FIELD_NAME.OOS'>
