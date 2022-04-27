@@ -239,21 +239,21 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Strength CPS'
-              [value]='user.strengthCPS +"%"'
+              [value]=' user.strengthCPS === undefined ? null : user.strengthCPS +"%"'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Lifestyle CPS'
-              [value]='user.lifestyleCPS +"%"'
+              [value]='user.lifestyleCPS === undefined ? null : user.lifestyleCPS +"%"'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Mobility CPS'
-              [value]='user.mobilityCPS +"%"'
+              [value]='user.mobilityCPS === undefined ? null : user.mobilityCPS +"%"'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
@@ -262,14 +262,14 @@
               <hidden-innovation-common-data-field
                 [isLoading]='store.isLoading$ | async'
                 label='Cardio CPS'
-                [value]='user.cardioCPS +"%"'
+                [value]='user.cardioCPS === undefined ? null : user.cardioCPS +"%"'
               ></hidden-innovation-common-data-field>
             </div>
             <div class='col-4'>
               <hidden-innovation-common-data-field
                 [isLoading]='store.isLoading$ | async'
                 label='Function CPS'
-                [value]='user.functionCPS +"%"'
+                [value]='user.functionCPS === undefined ? null : user.functionCPS +"%"'
               ></hidden-innovation-common-data-field>
             </div>
           </div>
