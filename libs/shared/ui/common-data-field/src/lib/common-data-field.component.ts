@@ -18,6 +18,6 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 })
 export class CommonDataFieldComponent {
   @Input() label?: string | null;
-  @Input() value?: string | number | null;
+  @Input() value?: string | number | null | undefined;
   @Input() isLoading?: boolean | null;
 }
