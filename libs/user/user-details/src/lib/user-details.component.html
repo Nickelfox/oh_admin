@@ -239,21 +239,21 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Strength CPS'
-              [value]='user.goalAnswer ? user.goalAnswer.answerString : null'
+              [value]='user.strengthCPS +"%"'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Lifestyle CPS'
-              [value]='user.goalAnswer ? user.goalAnswer.answerString : null'
+              [value]='user.lifestyleCPS +"%"'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Mobility CPS'
-              [value]='user.goalAnswer ? user.goalAnswer.answerString : null'
+              [value]='user.mobilityCPS +"%"'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
@@ -262,18 +262,18 @@
               <hidden-innovation-common-data-field
                 [isLoading]='store.isLoading$ | async'
                 label='Cardio CPS'
-                [value]='user.goalAnswer ? user.goalAnswer.answerString : null'
+                [value]='user.cardioCPS +"%"'
               ></hidden-innovation-common-data-field>
             </div>
             <div class='col-4'>
               <hidden-innovation-common-data-field
                 [isLoading]='store.isLoading$ | async'
                 label='Function CPS'
-                [value]='user.goalAnswer ? user.goalAnswer.answerString : null'
+                [value]='user.functionCPS +"%"'
               ></hidden-innovation-common-data-field>
             </div>
           </div>
-          <div class='row mb-2'>
+          <div class='row mb-2 mt-4'>
             <div class='col-2'>
               <hidden-innovation-common-data-field-skeleton
                 [label]='constantDataService.FIELD_NAME.OOS'>
