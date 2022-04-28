@@ -47,6 +47,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public breadcrumbService: BreadcrumbService,
     private cdr: ChangeDetectorRef
   ) {
+    this.authFacade.check();
     breakpointObserver.observe([
       Breakpoints.Tablet,
       Breakpoints.Handset
