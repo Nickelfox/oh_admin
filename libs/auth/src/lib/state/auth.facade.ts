@@ -44,8 +44,9 @@ export class AuthFacade {
   check() {
     this.source$ = fromEvent(window, 'storage');
     this.source$.subscribe(_ =>{
-      const action = localStorage.getItem('OH-AUTH-ADMIN');
-        if (!action) {
+      const userData = localStorage.getItem('OH-AUTH-ADMIN');
+      const token = localStorage.getItem('OH-AUTH-AUTH-TOKEN');
+        if (!userData || !token) {
           this.store.dispatch(AuthActions.logoutLocal());
         }
         else {
