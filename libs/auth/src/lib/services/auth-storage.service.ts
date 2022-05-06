@@ -72,6 +72,7 @@ export class AuthStorageService {
 
   clearAuthStorage() {
     localStorage.removeItem(this.adminStorageKey);
+    localStorage.removeItem(this.authStorageKey);
   }
 
 }
