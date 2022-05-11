@@ -1,0 +1,10 @@
+@media screen and (max-width: 1300px) and (min-width: 1279px) {
+  .inputDate{
+    width: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+.mat-form-field-wrapper{
+  margin-bottom: 0px !important;
+}

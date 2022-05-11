@@ -1,0 +1,21 @@
+.icon {
+  &--success {
+    color: #00C853;
+  }
+
+  &--error {
+    color: var(--warn-darker-color);
+  }
+}
+
+.question-card {
+  transition: background-color ease 0.3s;
+
+  &:hover {
+    background-color: #F2F9FE;
+  }
+
+  &.invalid {
+    border: 1px solid var(--warn-darker-color);
+  }
+}

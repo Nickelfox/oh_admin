@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/shared/ui/lesson-create",
+  "sourceRoot": "libs/shared/ui/lesson-create/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/shared/ui/lesson-create"],
+      "options": {
+        "project": "libs/shared/ui/lesson-create/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/ui/lesson-create/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/ui/lesson-create/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/shared/ui/lesson-create"],
+      "options": {
+        "jestConfig": "libs/shared/ui/lesson-create/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/shared/ui/lesson-create/src/**/*.ts",
+          "libs/shared/ui/lesson-create/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

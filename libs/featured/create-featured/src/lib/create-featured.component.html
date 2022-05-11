@@ -1,0 +1,255 @@
+<form (ngSubmit)='submit()' [formGroup]='featuredGroup' class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button
+          [routerLink]="['/featured']" class='ml-3'
+          mat-stroked-button
+          type='button'>
+          Cancel
+        </button>
+        <button
+          [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'
+          class='ml-3'
+          color='primary' mat-flat-button type='submit'>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class='container-fluid p-0'>
+    <div class='row'>
+      <div class='col-lg-6 col-12'>
+        <mat-card>
+          <mat-card-content>
+            <div class='container-fluid p-0 '>
+              <div class='row mb-3'>
+                <div class='col-12'>
+                  <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
+                    General</h5>
+                </div>
+              </div>
+              <div class='row mb-2'>
+                <div class='col-12'>
+                  <!--                  <hidden-innovation-common-form-field-->
+                  <!--                    [label]='constantDataService.FIELD_NAME.LOCATION | titlecase'-->
+                  <!--                    controlPath='location'-->
+                  <!--                  ></hidden-innovation-common-form-field>-->
+                  <mat-form-field class='w-100'>
+                    <mat-label>{{constantDataService.FIELD_NAME.LOCATION | titlecase}}</mat-label>
+                    <input [value]='selectedFeatured?.location | titlecase' disabled='true' matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class='row mb-2'>
+                <div class='col-12'>
+                  <!--                  <hidden-innovation-common-form-field-->
+                  <!--                    [label]='constantDataService.FIELD_NAME.RAIL_NAME | titlecase'-->
+                  <!--                    controlPath='name'-->
+                  <!--                  ></hidden-innovation-common-form-field>-->
+                  <mat-form-field class='w-100'>
+                    <mat-label>{{constantDataService.FIELD_NAME.RAIL_NAME | titlecase}}</mat-label>
+                    <input [value]='transformFeaturedName(selectedFeatured?.name) | replaceUnderscore' disabled='true'
+                           matInput>
+                  </mat-form-field>
+                </div>
+              </div>
+              <ng-template [ngIf]='selectedFeatured?.name === featuredType.SPOTLIGHT'>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field
+                      [label]='constantDataService.FIELD_NAME.HEADING | titlecase'
+                      controlPath='heading'
+                    ></hidden-innovation-common-form-field>
+                  </div>
+                </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field
+                      [label]='constantDataService.FIELD_NAME.SUB_HEADING | titlecase'
+                      controlPath='subHeading'
+                    ></hidden-innovation-common-form-field>
+                  </div>
+                </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field
+                      [label]='constantDataService.FIELD_NAME.BOTTOM_TEXT | titlecase'
+                      controlPath='bottomText'
+                    ></hidden-innovation-common-form-field>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+
+            <ng-template [ngIf]='selectedFeatured?.name === featuredType.SPOTLIGHT'>
+              <div class='container-fluid p-0 '>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                      Media</h5>
+                  </div>
+                </div>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <p class='text-muted mb-2'>Poster</p>
+                    <hidden-innovation-common-form-field-image
+                      (emitImageCtrlData)='posterIDctrl?.setValue($event)'
+                      (emitRemoveImage)='posterIDctrl?.reset($event)'
+                      [aspectRatio]='aspectRatio.CUBE'
+                      [parentCtrl]='posterIDctrl'
+                      [setImageData]='(selectedPosterData | async)'
+                      controlPath='imageId'
+                    ></hidden-innovation-common-form-field-image>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!--      Content Section-->
+      <div class='col-lg-6 col-12'>
+        <mat-card>
+          <mat-card-title class='d-flex justify-content-between align-items-center'>
+            <h3 class='mat-h3 mb-0 font-sf-pro'>Contents</h3>
+            <button
+              [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
+              [matMenuTriggerFor]='menuPack'
+              class='ml-3'
+              color='primary' mat-flat-button type='button'>
+              Add
+            </button>
+            <mat-menu #menuPack='matMenu'>
+              <button (click)='openTestSelector()'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT) || (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
+                      mat-menu-item type='button'>
+                <span>Test Single</span>
+              </button>
+              <button (click)='openTestGroupSelector()'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      mat-menu-item type='button'>
+                <span>Test Group</span>
+              </button>
+              <button (click)='openQuestionnaireSelector()'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      mat-menu-item type='button'>
+                <span>Questionnaire</span>
+              </button>
+              <button (click)='openPacksSelector()'
+                      *ngIf='(selectedFeatured?.name !== featuredType.FEATURED_TESTS)'
+                      mat-menu-item type='button'>
+                <span>Pack</span>
+              </button>
+            </mat-menu>
+          </mat-card-title>
+          <mat-divider></mat-divider>
+          <mat-card-content [ngSwitch]='selectedFeatured?.name' class='content-container'>
+            <div *ngSwitchCase='featuredType.SPOTLIGHT' [ngSwitch]='type'>
+              <div *ngSwitchCase='packContentTypeEnum.SINGLE'>
+                <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.testsExists$ | async'>
+                  <hidden-innovation-pack-content-card
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.SINGLE, content.id)'
+                    *ngFor='let content of (uiStore.selectedTests$ | async); index as i; first as isFirst; last as isLast'
+                    [category]='packContentTypeEnum.SINGLE'
+                    [name]='content.name'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    class='mb-2'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.GROUP'>
+                <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.testGroupsExists$ | async'>
+                  <hidden-innovation-pack-content-card
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.GROUP, content.id)'
+                    *ngFor='let content of (uiStore.selectedTestGroups$ | async); index as i; first as isFirst; last as isLast'
+                    [category]='packContentTypeEnum.GROUP'
+                    [name]='content.name'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    class='mb-2'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.QUESTIONNAIRE'>
+                <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.questionnairesExists$ | async'>
+                  <hidden-innovation-pack-content-card
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.QUESTIONNAIRE, content.id)'
+                    *ngFor='let content of (uiStore.selectedQuestionnaires$ | async); index as i; first as isFirst; last as isLast'
+                    [category]='packContentTypeEnum.QUESTIONNAIRE'
+                    [name]='content.name'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    class='mb-2'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+              <div *ngSwitchCase='packContentTypeEnum.PACK'>
+                <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.packsExists$ | async'>
+                  <hidden-innovation-pack-content-card
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.PACK, content.id)'
+                    *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
+                    [category]='packContentTypeEnum.PACK'
+                    [name]='content.name'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    class='mb-2'
+                  ></hidden-innovation-pack-content-card>
+                </ng-template>
+              </div>
+            </div>
+            <div (cdkDropListDropped)='testDragEvent($event)' *ngSwitchCase='featuredType.FEATURED_TESTS'
+                 cdkDropList>
+              <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.testsExists$ | async'>
+                <hidden-innovation-pack-content-card
+                  (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.SINGLE, content.id)'
+                  *ngFor='let content of (uiStore.selectedTests$ | async); index as i; first as isFirst; last as isLast'
+                  [category]='packContentTypeEnum.SINGLE'
+                  [name]='content.name'
+                  [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                  cdkDrag
+                  class='mb-2'
+                ></hidden-innovation-pack-content-card>
+              </ng-template>
+            </div>
+            <div (cdkDropListDropped)='packDragEvent($event)' *ngSwitchCase='featuredType.PACKS' cdkDropList>
+              <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.packsExists$ | async'>
+                <hidden-innovation-pack-content-card
+                  (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.PACK, content.id)'
+                  *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
+                  [category]='packContentTypeEnum.PACK'
+                  [name]='content.name'
+                  [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                  cdkDrag
+                  class='mb-2'
+                ></hidden-innovation-pack-content-card>
+              </ng-template>
+            </div>
+            <div (cdkDropListDropped)='packDragEvent($event)' *ngSwitchCase='featuredType.FEATURED_PACKS'
+                 cdkDropList>
+              <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.packsExists$ | async'>
+                <hidden-innovation-pack-content-card
+                  (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.PACK, content.id)'
+                  *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
+                  [category]='packContentTypeEnum.PACK'
+                  [name]='content.name'
+                  [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                  cdkDrag
+                  class='mb-2'
+                ></hidden-innovation-pack-content-card>
+              </ng-template>
+            </div>
+            <div *ngSwitchDefault>
+              <ng-container *ngTemplateOutlet='elseExists'></ng-container>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</form>
+
+<ng-template #elseExists>
+  <div class='d-flex align-items-center justify-content-center w-100 mt-3'>
+    <mat-hint><small>No Content Available</small></mat-hint>
+  </div>
+</ng-template>
+

@@ -35,7 +35,8 @@
           "libs/environment/src/**/*.ts",
           "libs/environment/src/**/*.html"
         ]
-      }
+      },
+      "outputs": ["{options.outputFile}"]
     }
   },
   "tags": []

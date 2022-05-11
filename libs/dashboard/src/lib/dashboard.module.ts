@@ -1,33 +1,52 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {StoreModule} from '@ngrx/store';
-import {EffectsModule} from '@ngrx/effects';
-import * as fromDashboard from './data-access/state/dashboard.reducer';
-import {DashboardEffects} from './data-access/state/dashboard.effects';
-import {DashboardFacade} from './data-access/state/dashboard.facade';
-import {RouterModule} from "@angular/router";
-import {DashboardComponent} from './dashboard.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { DashboardComponent } from './dashboard.component';
+import { MaterialModule } from '@hidden-innovation/material';
+import { DashboardStore } from './dashboard.store';
+import { DashboardService } from './services/dashboard.service';
+import { DashboardCountCardModule } from '@hidden-innovation/shared/ui/dashboard-count-card';
+import { CommonFormFieldDateRangeModule } from '@hidden-innovation/shared/ui/common-form-field-date-range';
+import { CommonFormFieldWeekModule } from '@hidden-innovation/shared/ui/common-form-field-week';
+import { CommonFormFieldDateModule } from '@hidden-innovation/shared/ui/common-form-field-date';
+import { CommonFormFieldMonthModule } from '@hidden-innovation/shared/ui/common-form-field-month';
+import { DashboardUserDemographicModule } from '@hidden-innovation/shared/ui/dashboard-user-demographic';
+import { LineChartModule } from '@hidden-innovation/shared/ui/line-chart';
+
+import { ChartsModule } from '@rinminase/ng-charts';
+import { ShimmerModule } from '@hidden-innovation/shared/ui/shimmer';
+import {UtilsModule} from "@hidden-innovation/shared/utils";
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 // import {AuthGuard} from "@hidden-innovation/auth";
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
+    MaterialModule,
+    DashboardCountCardModule,
+    LineChartModule,
+    DashboardUserDemographicModule,
+    CommonFormFieldDateRangeModule,
+    CommonFormFieldWeekModule,
+    CommonFormFieldDateModule,
+    CommonFormFieldMonthModule,
+    ChartsModule,
     RouterModule.forChild([
       {
         path: '',
         pathMatch: 'full',
         // canActivate: [AuthGuard],
-        component: DashboardComponent,
+        component: DashboardComponent
       }
     ]),
-    StoreModule.forFeature(
-      fromDashboard.DASHBOARD_FEATURE_KEY,
-      fromDashboard.reducer
-    ),
-    EffectsModule.forFeature([DashboardEffects]),
+    ShimmerModule,
+    UtilsModule,
+    MatButtonToggleModule
   ],
-  providers: [DashboardFacade, DashboardEffects],
+  providers: [
+    DashboardService,
+    DashboardStore]
 })
 export class DashboardModule {
 }

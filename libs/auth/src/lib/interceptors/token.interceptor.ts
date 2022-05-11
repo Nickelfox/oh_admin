@@ -14,6 +14,12 @@ export class TokenInterceptor implements HttpInterceptor {
     return this.authFacade.token$.pipe(
       take(1),
       switchMap((token) => {
+        if (!request.headers.has('Content-Type')) {
+          request = request.clone({
+            headers: request.headers.set('Content-Type', 'application/json')
+          });
+        }
+
         if (!token) {
           return next.handle(request);
         }

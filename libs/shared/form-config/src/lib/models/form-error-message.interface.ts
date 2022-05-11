@@ -1,6 +1,9 @@
 export interface GenericErrorMessage {
   required: string;
   invalid: string;
-  maxLength?: string;
-  mismatch?: string;
+  maxLength:  string;
+  minLength:  string;
+  mismatch: string;
+  highField: string;
+  lowField: string;
 }

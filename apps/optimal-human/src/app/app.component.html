@@ -1,49 +1,70 @@
 <mat-sidenav-container autosize>
-  <mat-sidenav *ngIf="authFacade.loggedIn$ | async" [mode]="isTablet ? 'over' : 'side'" (closed)="isSliding = false"
-               (opened)="isSliding = false"
-               [fixedInViewport]="true" [opened]="sideBarOpen">
-    <div class="d-flex flex-column  h-100">
-      <div class="text-center mt-5 mb-5 d-flex flex-column align-items-center">
-        <img src="assets/white_logo.svg" alt="" class="oh-logo img-fluid">
-        <h4 class="font-calibri--bold mat-h4 mb-0 mt-2 oh-logo__text">Optimal Humans</h4>
+  <mat-sidenav *ngIf='authFacade.loggedIn$ | async' [mode]="isTablet ? 'over' : 'side'" (closed)='isSliding = false'
+               (opened)='isSliding = false'
+               [fixedInViewport]='true' [opened]='sideBarOpen'>
+    <div class='d-flex flex-column  h-100'>
+      <div class='text-center mt-5 mb-5 d-flex flex-column align-items-center'>
+        <img src='assets/white_logo.svg' alt='' class='oh-logo img-fluid'>
+        <h4 class='font-calibri--bold mat-h4 mb-0 mt-2 oh-logo__text'>Optimal Humans</h4>
       </div>
-      <mat-nav-list role="navigation">
-        <a mat-list-item class="font-weight-normal text-dark">Manage User</a>
-        <a mat-list-item class="font-weight-normal text-dark">Manage Dummy</a>
-        <a mat-list-item class="font-weight-normal text-dark">Manage CMS</a>
-      </mat-nav-list>
+      <mat-list style='height: calc(100vh - 300px)'>
+        <ng-template ngFor [ngForOf]='uiStore.navItems$ | async' let-navData>
+          <ng-template [ngIf]='navData.navItems.length > 1'>
+            <mat-divider></mat-divider>
+            <div mat-subheader class='text-muted'>{{navData.name}}</div>
+          </ng-template>
+          <mat-list-item routerLinkActive='active' [routerLink]='item.path' matRipple [disableRipple]='false'
+                         [ngStyle]="{cursor: 'pointer'}"
+                         *ngFor='let item of navData.navItems'>
+            <mat-icon class='text-white' mat-list-icon>{{item.icon}}</mat-icon>
+            <div mat-line class='text-white'>{{item.label}}</div>
+          </mat-list-item>
+        </ng-template>
+      </mat-list>
     </div>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar *ngIf="authFacade.loggedIn$ | async">
-      <div class="d-flex align-items-center">
-        <button mat-icon-button class="primary-color" color="primary" (click)="sideBarToggle()">
+    <mat-toolbar *ngIf='authFacade.loggedIn$ | async'>
+      <div class='d-flex align-items-center'>
+        <button mat-icon-button class='primary-color' color='primary' (click)='sideBarToggle()'>
           <mat-icon>menu</mat-icon>
         </button>
-        <h2 class="mat-h2 m-0 mx-3 text-dark font-sf-pro">Dashboard</h2>
+        <ng-container *ngIf='(breadcrumbService.breadcrumbs$ | async) as br'>
+          <h2 class='mat-h2 m-0 mx-3 text-dark font-sf-pro'>{{getPageTitle(br)}}</h2>
+        </ng-container>
       </div>
-      <span class="spacer"></span>
-      <div class="d-flex align-items-center">
-        <button mat-button color="primary" class="mini mx-3">
-          <mat-icon class="mr-1">admin_panel_settings</mat-icon>
-          Dummy User
+      <span class='spacer'></span>
+      <div class='d-flex align-items-center'>
+        <!--        <button mat-button color="primary" class="mini mx-1">-->
+        <!--          <mat-icon class="mr-1">admin_panel_settings</mat-icon>-->
+        <!--          Dummy User-->
+        <!--        </button>-->
+        <!--        <button mat-flat-button color="accent" class="mini" (click)="logoutPrompt()">Logout</button>-->
+        <button mat-stroked-button class=' mx-1 mat-subheading-2 mb-0 font-weight-bolder' [matMenuTriggerFor]='userBarmenu'>
+          <div class='d-flex align-items-center  '>
+            <ng-template [ngIf]='(authFacade.authAdmin$ | async)' let-admin [ngIfElse]='authAdminElse'>
+              <span class="admin-name-width">{{admin.name || '--'}}</span>
+            </ng-template>
+            <ng-template #authAdminElse>
+              --
+            </ng-template>
+          </div>
         </button>
-        <button mat-flat-button color="accent" class="mini" (click)="authFacade.logout()">Logout</button>
+        <button mat-icon-button [matMenuTriggerFor]='userBarmenu'>
+          <mat-icon>expand_more</mat-icon>
+        </button>
+        <mat-menu #userBarmenu='matMenu'>
+          <button mat-menu-item [routerLink]="['/edit-profile']">Edit Profile</button>
+          <button mat-menu-item [routerLink]="['/change-password']">Change Password</button>
+          <button mat-menu-item (click)='logoutPrompt()'>Logout</button>
+        </mat-menu>
       </div>
     </mat-toolbar>
-    <main>
+    <main [ngClass]="{'internal_over-flow' : (authFacade.loggedIn$ | async)}">
+      <div class='global-progress-bar' *ngIf='(uiStore.isLoading$ | async)'>
+        <mat-progress-bar color='accent' mode='indeterminate'></mat-progress-bar>
+      </div>
       <router-outlet></router-outlet>
-      <button mat-flat-button color="primary" class="loginStatus">
-        <ng-template [ngIf]="authFacade.loggedIn$ | async" [ngIfElse]="authStatusElse">
-          <mat-icon color="accent">blur_on</mat-icon>
-          &nbsp;&nbsp;&nbsp;AUTH STATUS
-        </ng-template>
-        <ng-template #authStatusElse>
-          <mat-icon color="warn">blur_on</mat-icon>
-          &nbsp;&nbsp;&nbsp;AUTH STATUS
-        </ng-template>
-      </button>
-
     </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,0 +1,193 @@
+<div mat-dialog-title>
+  <div class='d-flex align-items-center justify-content-between'>
+    <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>ADD PACK</h4>
+    <div class='d-flex align-items-center'>
+      <div class='d-flex align-items-center text-muted mt-1 mr-3'>
+        <mat-icon class='text-success mr-2'>autorenew</mat-icon>
+        <h4 class='text-success mat-h4 mb-0'>Selection Auto-Saved</h4>
+      </div>
+      <button color='primary' mat-dialog-close mat-flat-button>
+        {{constantDataService.BUTTON_NAME.DONE | titlecase}}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class='container-fluid p-0'>
+  <div class='row'>
+    <div class='col-3'>
+      <mat-form-field class='w-100'>
+        <mat-label>Search</mat-label>
+        <input [formControl]='filters.controls.search' autocomplete='off' matInput>
+        <button (click)='filters.controls.search.setValue("")' *ngIf='filters.controls.search.value' mat-icon-button
+                matSuffix>
+          <mat-icon style='font-size: 14px'>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class='col d-flex align-items-center justify-content-end'>
+      <mat-spinner *ngIf='store.isLoading$ | async' [diameter]='20' class='mr-4'></mat-spinner>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-12'>
+      <div mat-dialog-content>
+        <mat-card class='p-0'>
+          <div class='container-fluid p-0'>
+            <div class='row'>
+              <div class='col-12'>
+                <table [dataSource]='packs' [trackBy]='trackById' class='w-100' mat-table>
+
+                  <ng-container matColumnDef='select'>
+                    <th *matHeaderCellDef [width]='75' mat-header-cell>
+                      <mat-checkbox
+                        *ngIf='!data?.limit'
+                        (change)='masterToggle()'
+                        [checked]='isAllSelected'
+                        [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
+                        [indeterminate]='someSelected'
+                        color='primary'>
+                      </mat-checkbox>
+                    </th>
+                    <td *matCellDef='let pack' mat-cell>
+                      <mat-checkbox
+                        (change)='$event ? addToList(pack) : null'
+                        (click)='$event.stopPropagation()'
+                        [checked]='isSelected(pack)'
+                        [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
+                        color='primary'>
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef='id'>
+                    <th *matHeaderCellDef [width]='70' mat-header-cell>ID</th>
+                    <td *matCellDef='let element' mat-cell> {{element.id ?? '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='name'>
+                    <th *matHeaderCellDef mat-header-cell>
+                      <hidden-innovation-sorting-header-name
+                        (emitSorting)='updateSorting("nameSort")'
+                        [ctrlEnabled]='filters.controls.nameSort?.enabled'
+                        [ctrlValue]='filters.controls.nameSort?.value'
+                        [isDisabled]='(store.isActing$ | async)'
+                        [title]='constantDataService.FIELD_NAME.NAME | titlecase'
+                      ></hidden-innovation-sorting-header-name>
+                    </th>
+                    <td *matCellDef='let element' [matTooltip]='element.name'
+                        mat-cell> {{(element.name | maxStringLimit) || '--'}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='updated_at'>
+                    <th *matHeaderCellDef mat-header-cell>
+                      <hidden-innovation-sorting-header-date
+                        (emitSorting)='updateSorting("dateSort")'
+                        [ctrlEnabled]='filters.controls.dateSort?.enabled'
+                        [ctrlValue]='filters.controls.dateSort?.value'
+                        [isDisabled]='(store.isActing$ | async)'
+                        [title]='constantDataService.FIELD_NAME.DATE_ADDED | titlecase'
+                      ></hidden-innovation-sorting-header-date>
+                    </th>
+                    <td *matCellDef='let element' mat-cell> {{(element.updated_at | date: 'shortDate') || '--'}}</td>
+                  </ng-container>
+                  <ng-container matColumnDef='lessons'>
+                    <th *matHeaderCellDef
+                        mat-header-cell>
+                      <div class='d-flex align-items-center justify-content-between'>
+                        <span>
+                         Lessons
+                        </span>
+                      </div>
+                    </th>
+                    <td *matCellDef='let element' mat-cell> {{((element.lessons?.length) || 0)}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='content'>
+                    <th *matHeaderCellDef
+                        mat-header-cell>
+                      <div class='d-flex align-items-center justify-content-between'>
+                        <span>
+                        Content
+                        </span>
+                      </div>
+                    </th>
+                    <td *matCellDef='let element' mat-cell> {{((element.content?.length) || 0)}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef='status'>
+                    <th *matHeaderCellDef
+                        mat-header-cell>
+                      <div class='d-flex align-items-center justify-content-between'>
+                        <span>
+                          {{constantDataService.FIELD_NAME.STATUS | titlecase}}
+                        </span>
+                        <div class='d-flex align-items-center'>
+                          <button [disabled]='(store.isActing$ | async)' [matMenuTriggerFor]='statusMenu'
+                                  class='mr-3'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'
+                                  color='{{filters.controls.published?.value ? "primary" : ""}}'
+                                  mat-icon-button>
+                            <mat-icon style='font-size: 20px'>filter_list</mat-icon>
+                          </button>
+                          <mat-menu #statusMenu='matMenu'>
+                            <mat-selection-list
+                              (selectionChange)='updateFilterChange($event, filters.controls.published)'
+                              [multiple]='false'
+                              class='pt-0' color='primary'>
+                              <mat-list-option [value]='"TRUE"'>
+                                {{publishStatusEnum.PUBLISHED | titlecase}}
+                              </mat-list-option>
+                              <mat-list-option [value]='"FALSE"'>
+                                {{publishStatusEnum.UNPUBLISHED | titlecase}}
+                              </mat-list-option>
+                              <mat-list-option [value]='undefined'>
+                                Clear
+                              </mat-list-option>
+                            </mat-selection-list>
+                          </mat-menu>
+                        </div>
+                      </div>
+                    </th>
+                    <td *matCellDef='let element' mat-cell>
+                      <hidden-innovation-common-data-field-status
+                        [chipType]='element.isPublished ? statusChipType.SUCCESS : statusChipType.WARNING'
+                        [text]='((element.isPublished ? publishStatusEnum.PUBLISHED : publishStatusEnum.UNPUBLISHED)  | titlecase)'
+                      ></hidden-innovation-common-data-field-status>
+                    </td>
+                  </ng-container>
+
+                  <tr *matHeaderRowDef='displayedColumns' mat-header-row></tr>
+                  <tr (click)='isLoading ? null : addToList(row)' *matRowDef='let row; columns: displayedColumns;'
+                      [ngClass]='{"active":isSelected(row)}'
+                      class='row-react'
+                      mat-row></tr>
+                </table>
+              </div>
+            </div>
+            <ng-template [ngIfElse]='noDataElse' [ngIf]='store.isLoading$ | async'></ng-template>
+            <ng-template #noDataElse>
+              <div class='row'>
+                <div class='col-12 d-flex align-items-center justify-content-center'>
+                  <h4 *ngIf='noData | async' class='mat-h4 mb-0 my-2 font-calibri'>No Results Found</h4>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-12'>
+      <mat-card class='p-3 d-flex align-items-center justify-content-between'>
+        <h4 class='text-color__primary mat-h4 mb-0'>{{Count}}</h4>
+        <mat-paginator
+          (page)='pageEvent = $event; onPaginateChange($event)'
+          [disabled]='store.isLoading$ | async'
+          [length]='store.count$ | async'
+          [pageIndex]='paginatorIndex'
+          [pageSizeOptions]='pageSizeOptions'
+          [pageSize]='pageSize'
+        ></mat-paginator>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

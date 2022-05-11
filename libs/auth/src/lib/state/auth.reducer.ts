@@ -1,9 +1,9 @@
-import {Action, createReducer, on} from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 
 import * as AuthActions from './auth.actions';
-import {Auth} from "../models/auth.interfaces";
+import { Auth } from '../models/auth.interfaces';
 
-export const AUTH_FEATURE_KEY = 'auth';
+export const AUTH_FEATURE_KEY = 'AUTH';
 
 export interface AuthState {
   readonly [AUTH_FEATURE_KEY]: Auth;
@@ -14,44 +14,55 @@ export const authInitialState: Auth = {
   loggedIn: false,
   token: '',
   isLoading: false,
+  admin: undefined
 };
 
 const reducer = createReducer(
     authInitialState,
-    on(AuthActions.login, (state, _) => ({...state, isLoading: true})),
-    on(AuthActions.loginSuccess, (state, {message, token}) => ({
+    on(AuthActions.login, (state, _) => ({
+      ...state,
+      loggedIn: false,
+      isLoading: true
+    })),
+    on(AuthActions.loginSuccess, (state, { token, admin }) => ({
       ...state,
       token,
-      isLoading: false,
       loggedIn: true,
-      message,
-    })),
-    on(AuthActions.loginFail, (state, {message}) => ({
-      ...state,
-      message,
       isLoading: false,
-      loggedIn: false,
+      admin
     })),
-    on(AuthActions.logout, (state, _) => ({
+    on(AuthActions.loginFail, (state) => ({
       ...state,
-      message: '',
-      isLoading: false,
       loggedIn: false,
-      token: ''
+      isLoading: false
+    })),
+    on(AuthActions.logoutLocal, (state, _) => ({
+      ...state,
+      loggedIn: false,
+      isLoading: false,
+      token: '',
+      admin: undefined
     })),
     on(AuthActions.checkLogin, (state, _) => ({
       ...state,
+      loggedIn: false,
+      isLoading: true
     })),
-    on(AuthActions.checkLoginSuccess, (state, {token, message}) => ({
+    on(AuthActions.checkLoginSuccess, (state, { token, admin }) => ({
       ...state,
-      loggedIn: true,
       token,
-      message
+      admin,
+      loggedIn: true,
+      isLoading: false
     })),
-    on(AuthActions.checkLoginFail, (state, {message}) => ({
+    on(AuthActions.checkLoginFail, (state) => ({
       ...state,
       loggedIn: false,
-      message,
+      isLoading: false
+    })),
+    on(AuthActions.adminUpdate, (state, admin) => ({
+      ...state,
+      admin
     }))
   )
 ;

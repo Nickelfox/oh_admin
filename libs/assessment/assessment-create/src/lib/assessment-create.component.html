@@ -1,0 +1,136 @@
+<form [formGroup]='assessmentGroup' class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button
+          [routerLink]="['/assessments']" class='ml-3'
+          mat-stroked-button
+          type='button'>
+          Cancel
+        </button>
+        <button
+          (click)='submit()'
+          [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'
+          class='ml-3'
+          color='primary' mat-flat-button type='submit'>
+          Save
+        </button>
+      </div>
+    </div>
+    <div class='container-fluid p-0'>
+      <div class='row '>
+        <div class='col-lg-6 col-12'>
+          <mat-card>
+            <mat-card-content>
+              <div class='container-fluid p-0 '>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
+                      Overview</h5>
+                  </div>
+                </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field-textarea
+                      [label]='constantDataService.FIELD_NAME.ABOUT | titlecase'
+                      controlPath='about'
+                    ></hidden-innovation-common-form-field-textarea>
+                  </div>
+                </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field-textarea
+                      [label]="'What you’ll get out of it'"
+                      [placeholder]="'eg. An understanding of your upper body strength'"
+                      controlPath='whatYouWillGetOutOfIt'
+                    ></hidden-innovation-common-form-field-textarea>
+                  </div>
+                </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field-textarea
+                      [label]="'What you’ll need'"
+                      [placeholder]="'eg. Bench with safety, bar and various free weights.'"
+                      controlPath='whatYouWillNeed'
+                    ></hidden-innovation-common-form-field-textarea>
+                  </div>
+                </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field-textarea
+                      [label]="'How it works'"
+                      controlPath='howItWorks'
+                    ></hidden-innovation-common-form-field-textarea>
+                  </div>
+                </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field-number
+                      controlPath='lockout'
+                      label='lockout(Days)'
+                      [errorMessage]=formValidationService.lockOutValidationMessage
+                    ></hidden-innovation-common-form-field-number>
+                  </div>
+                </div>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <p class='text-muted mb-2'>Poster</p>
+                    <hidden-innovation-common-form-field-image
+                      (emitImageCtrlData)='imageIDctrl?.setValue($event)'
+                      (emitRemoveImage)='imageIDctrl?.reset($event)'
+                      [aspectRatio]='aspectRatio.CUBE'
+                      [parentCtrl]='imageIDctrl'
+                      [setImageData]='(selectedImageData | async)'
+                      controlPath='posterId'
+                    ></hidden-innovation-common-form-field-image>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class='col-lg-6 col-12'>
+          <mat-card class='mb-2'>
+            <mat-card-title class='row m-0 mb-3 d-flex justify-content-between'>
+              <h3 class='mat-h3 mb-0 font-sf-pro mb-0 mt-2'>Tests</h3>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content class='content-container' (cdkDropListDropped)='assessmentDragEvent($event)' cdkDropList>
+              <hidden-innovation-pack-content-card
+                cdkDrag
+                (emitDeleteEvent)='uiStore.deleteSelectedContentPrompt(content)'
+                *ngFor='let content of (contentArrayCtrl.value$ | async); index as i; first as isFirst; last as isLast'
+                [category]='content.type'
+                [name]='content.name'
+                [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                class='my-3'
+              ></hidden-innovation-pack-content-card>
+              <div *ngIf='!contentArrayExists' class='d-flex align-items-center justify-content-center w-100 mt-3'>
+                <mat-hint><small>No Content Available</small></mat-hint>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <button [matMenuTriggerFor]='menuPack'
+                      [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
+                      class='w-100' color='accent' mat-flat-button type='button'>
+                <mat-icon class='mr-2 mb-1'>add</mat-icon>
+                Add
+              </button>
+              <mat-menu #menuPack='matMenu'>
+                <button (click)='openTestSelector()' mat-menu-item type='button'>
+                  <span>Test Single</span>
+                </button>
+                <button (click)='openTestGroupSelector()' mat-menu-item type='button'>
+                  <span>Test Group</span>
+                </button>
+                <button (click)='openQuestionnaireSelector()' mat-menu-item type='button'>
+                  <span>Questionnaire</span>
+                </button>
+              </mat-menu>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,15 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {catchError, exhaustMap, map, tap} from 'rxjs/operators';
-import {HotToastService} from "@ngneat/hot-toast";
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+import { HotToastService } from '@ngneat/hot-toast';
 
 import * as AuthActions from './auth.actions';
-import {of} from 'rxjs';
-import {Router} from "@angular/router";
-import {HttpErrorResponse} from "@angular/common/http";
-import {CustomApiResponse} from "@hidden-innovation/shared/models";
-import {AuthService} from "../services/auth.service";
-import {AuthStorageService} from "../services/auth-storage.service";
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { AuthStorageService } from '../services/auth-storage.service';
+import { authInitialState } from './auth.reducer';
 
 
 @Injectable()
@@ -18,77 +17,78 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.login),
+      tap(() => {
+        this.toast.loading('Loading...', {
+          role: 'status',
+          id: 'login-loading-state'
+        });
+      }),
       exhaustMap((authReq) => this.authService.login(authReq).pipe(
-          map(({message, data}) => AuthActions.loginSuccess({
-            loggedIn: true,
-            token: data,
-            message,
-            isLoading: false
-          })),
           tap((res) => {
             this.toast.close();
-            this.toast.show(res.message ?? 'Success!!', {
+            this.toast.success('LoggedIn Successfully!', {
               autoClose: true,
               role: 'alert',
               dismissible: true
             });
-            this.storage.setAuthToken(res.token);
-            this.router.navigate(['/']);
+            this.storage.setAuthAdmin(res.data.admin);
+            this.storage.setAuthToken(res.data.token);
+            this.router.navigate(['/dashboard']);
           }),
-          catchError((err: HttpErrorResponse) => {
-            this.toast.close();
-            const apiError: CustomApiResponse = err.error;
-            this.toast.show(apiError.message ?? 'Unknown Error!', {
-              autoClose: true,
-              role: 'alert',
-              dismissible: true
-            });
-            return of(AuthActions.loginFail({
-              isLoading: false,
-              loggedIn: false,
-              message: apiError.message,
-            }));
+          map(({ message, data }) => AuthActions.loginSuccess({
+            token: data.token,
+            admin: data.admin
+          })),
+          catchError((_) => {
+            this.toast.close('login-loading-state');
+            return of(AuthActions.loginFail(authInitialState));
           })
         )
       )
     )
   );
 
-  isLoggedIn$ = createEffect(() =>
+  checkLoggedIn$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.checkLogin),
-      exhaustMap((_) => this.storage.getAuthToken().pipe(
-          map((token) => AuthActions.checkLoginSuccess({
-            loggedIn: false,
-            token: token || '',
+      exhaustMap((_) => this.storage.getAuthAdmin().pipe(
+          map(({ token, admin }) => AuthActions.checkLoginSuccess({
+            token,
+            admin
           })),
           catchError((_) => {
             this.storage.clearAuthStorage();
-            return of(AuthActions.checkLoginFail({
-              loggedIn: false,
-              token: ''
-            }));
+            return of(AuthActions.checkLoginFail(authInitialState));
           })
-        ),
-      ),
+        )
+      )
     )
+  );
+
+  updateAuthAdmin$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(AuthActions.adminUpdate),
+        tap((res) => this.storage.setAuthAdmin(res))
+      ),
+    {
+      dispatch: false
+    }
   );
 
   logout$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(AuthActions.logout),
+      ofType(AuthActions.logoutLocal),
       tap((res) => {
-        this.toast.close();
-        this.toast.show('Success! You are logged out.', {
+        // this.toast.close();
+        this.toast.show('You are logged out.', {
           autoClose: true,
           role: 'alert',
           dismissible: true
         });
         this.storage.clearAuthStorage();
         this.router.navigate(['/login']);
-        console.log('asdf')
-      }),
-    ), {dispatch: false}
+      })
+    ), { dispatch: false }
   );
 
   constructor(

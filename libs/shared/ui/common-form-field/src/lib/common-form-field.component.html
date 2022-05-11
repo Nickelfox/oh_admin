@@ -1,0 +1,14 @@
+<mat-form-field class='w-100' [ngClass]='{"text-muted": disabled}'>
+  <mat-label>{{label}}</mat-label>
+  <input matInput autocomplete='no' [disabled]='disabled' [readonly]='readonly' type='text'
+         [placeholder]='placeholder || label'
+         [formControl]='control'>
+  <mat-error>
+    <ng-template [ngIf]='((control.touch$ | async) || (control.dirty$ | async)) && (control.errors$ | async)' let-error>
+      <hidden-innovation-form-field-errors
+        [label]='label'
+        [error]='error'
+      ></hidden-innovation-form-field-errors>
+    </ng-template>
+  </mat-error>
+</mat-form-field>

@@ -1,0 +1,1423 @@
+<form (ngSubmit)='submit()' [formGroup]='testGroup' class='p-4'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button
+          [routerLink]="['/tests']" class='ml-3'
+          mat-stroked-button
+          type='button'>
+          Cancel
+        </button>
+        <button
+          class='ml-3'
+          color='primary'
+          mat-flat-button type='submit'>
+          {{opType === opTypeEnum.CREATE ? (constantDataService.BUTTON_NAME.SAVE | titlecase) : (constantDataService.BUTTON_NAME.UPDATE | titlecase)}}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class='container-fluid p-0'>
+    <div class='row '>
+      <div class=' col-12'>
+        <mat-card>
+          <mat-card-content>
+            <div class='container-fluid p-0'>
+              <div class='row'>
+                <div class='col-lg-7 col-12'>
+                  <div class='container-fluid p-0'>
+                    <div class='row pt-1'>
+                      <div class='col-12'>
+                        <div class='container-fluid p-0 '>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
+                                General</h5>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field
+                                [label]='constantDataService.FIELD_NAME.TEST_NAME | titlecase'
+                                controlPath='name'
+                              ></hidden-innovation-common-form-field>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <mat-form-field appearance='fill' class='w-100'>
+                                <mat-label>Category</mat-label>
+                                <mat-select formControlName='category'>
+                                  <mat-option [value]='"NONE"'>None
+                                  </mat-option>
+                                  <mat-option *ngFor='let type of testCatTypeIte'
+                                              [value]=type>{{type  | replaceUnderscore | titlecase}}</mat-option>
+                                </mat-select>
+                                <mat-error>
+                                  <ng-template
+                                    [ngIf]='((testGroup.controls.category.touch$ | async) || (testGroup.controls.category.dirty$ | async)) && (testGroup.controls.category.errors$ | async)'
+                                    let-error>
+                                    <hidden-innovation-form-field-errors
+                                      [error]='error'
+                                      [label]='"Category"'
+                                    ></hidden-innovation-form-field-errors>
+                                  </ng-template>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class='container-fluid p-0 '>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                                Media</h5>
+                            </div>
+                          </div>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <p class='text-muted mb-2'>Video File</p>
+                              <div class='d-flex align-items-center'>
+                                <hidden-innovation-common-form-field-video
+                                  (emitRemoveVideo)='removeMediaCtrlAndValidate(testGroup.controls.videoId)'
+                                  (emitVideoCtrlData)='testGroup.controls.videoId?.setValue($event)'
+                                  [parentCtrl]='testGroup.controls.videoId'
+                                  [videoData]='selectedTest?.video'
+                                  controlPath='videoId'
+                                ></hidden-innovation-common-form-field-video>
+                                <div class='ml-2'>
+                                  <mat-hint>
+                                    <small>({{constantDataService.FIZE_SIZE_DATA.videoFormatMessage}})</small>
+                                  </mat-hint>
+                                  <br>
+                                  <mat-hint>
+                                    <small>({{constantDataService.FIZE_SIZE_DATA.videoRatioMessage}})</small>
+                                  </mat-hint>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <p class='text-muted mb-2'>Thumbnail</p>
+                              <hidden-innovation-common-form-field-image
+                                (emitImageCtrlData)='testGroup.controls.thumbnailId?.setValue($event)'
+                                (emitRemoveImage)='removeMediaCtrlAndValidate(testGroup.controls.thumbnailId)'
+                                [aspectRatio]='aspectRatio.STANDARD'
+                                [parentCtrl]='testGroup.controls.thumbnailId'
+                                [setImageData]='selectedTest?.thumbnail'
+                                controlPath='thumbnailId'
+                              ></hidden-innovation-common-form-field-image>
+                            </div>
+                          </div>
+                          <div class='row mb-4'>
+                            <div class='col-12'>
+                              <p class='text-muted mb-2'>Poster</p>
+                              <hidden-innovation-common-form-field-image
+                                (emitImageCtrlData)='testGroup.controls.posterId?.setValue($event)'
+                                (emitRemoveImage)='removeMediaCtrlAndValidate(testGroup.controls.posterId)'
+                                [aspectRatio]='aspectRatio.CUBE'
+                                [parentCtrl]='testGroup.controls.posterId'
+                                [setImageData]='selectedTest?.poster'
+                                controlPath='posterId'
+                              ></hidden-innovation-common-form-field-image>
+                            </div>
+                          </div>
+                        </div>
+                        <div class='container-fluid p-0 '>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                                Overview</h5>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.LABEL | titlecase'
+                                controlPath='label'
+                              ></hidden-innovation-common-form-field-textarea>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.DESC | titlecase'
+                                controlPath='description'
+                              ></hidden-innovation-common-form-field-textarea>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.OUTCOMES | titlecase'
+                                controlPath='outcomes'
+                              ></hidden-innovation-common-form-field-textarea>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.PROCEDURE | titlecase'
+                                controlPath='procedure'
+                              ></hidden-innovation-common-form-field-textarea>
+                            </div>
+                          </div>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <mat-checkbox color='primary' formControlName='needEquipment'>
+                                <h4 class='text-muted m-0 mt-1'>
+                                  Equipment
+                                </h4>
+                              </mat-checkbox>
+                            </div>
+                          </div>
+                          <div *ngIf='testGroup.controls.equipment.enabled$ | async' class='row mb-3'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-textarea
+                                [label]='constantDataService.FIELD_NAME.EQUIPMENT | titlecase'
+                                controlPath='equipment'
+                              ></hidden-innovation-common-form-field-textarea>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!--                  Tags Section-->
+                        <div class='container-fluid p-0'>
+                          <div class='row mb-3'>
+                            <div class='col-12'>
+                              <div class='row'>
+                                <div class='col-12'>
+                                  <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                                    Tags</h5>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-tag-autocomplete
+                                (removeTag)='removeTag($event)'
+                                (updateTags)='updateTestTags(tagTypeEnum.SUB_CATEGORY, $event)'
+                                [isDisabled]='this.testGroup.controls.category.invalid || this.testGroup.controls.category.value === "NONE"'
+                                [tagCategory]='testGroup.controls.category.value'
+                                [tagTypeEnum]='tagTypeEnum.SUB_CATEGORY'
+                                [testTags]='utilities.testTags'
+                                label='Subcategory(s)'
+                              ></hidden-innovation-common-form-field-tag-autocomplete>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-tag-autocomplete
+                                (removeTag)='removeTag($event)'
+                                (updateTags)='updateTestTags(tagTypeEnum.EXERCISE, $event)'
+                                [tagTypeEnum]='tagTypeEnum.EXERCISE'
+                                [testTags]='utilities.testTags'
+                                label='Exercise(s)'
+                              ></hidden-innovation-common-form-field-tag-autocomplete>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-tag-autocomplete
+                                (removeTag)='removeTag($event)'
+                                (updateTags)='updateTestTags(tagTypeEnum.TARGET_AREA, $event)'
+                                [tagTypeEnum]='tagTypeEnum.TARGET_AREA'
+                                [testTags]='utilities.testTags'
+                                label='Target Area(s)'
+                              ></hidden-innovation-common-form-field-tag-autocomplete>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <hidden-innovation-common-form-field-tag-autocomplete
+                                (removeTag)='removeTag($event)'
+                                (updateTags)='updateTestTags(tagTypeEnum.MOVEMENT_PATTERN, $event)'
+                                [tagTypeEnum]='tagTypeEnum.MOVEMENT_PATTERN'
+                                [testTags]='utilities.testTags'
+                                label='Movement Pattern(s)'
+                              ></hidden-innovation-common-form-field-tag-autocomplete>
+                            </div>
+                          </div>
+                          <div class='row mb-2'>
+                            <div class='col-12'>
+                              <mat-form-field appearance='fill' class='w-100'>
+                                <mat-label>Difficulty Level</mat-label>
+                                <mat-select formControlName='difficulty'>
+                                  <mat-option *ngFor='let type of diffTypeIte'
+                                              [value]=type>{{type  | replaceUnderscore | titlecase}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <section class='disabledState__container'>
+                          <!--                  Input Dropdown-->
+                          <div class='container-fluid p-0'>
+                            <div class='row mb-3'>
+                              <div class='col-12'>
+                                <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                                  Input</h5>
+                              </div>
+                            </div>
+                            <div class='row mb-3'>
+                              <div class='col-12'>
+                                <mat-form-field class='w-100'>
+                                  <mat-label>Input Type</mat-label>
+                                  <mat-select [disabled]='disableEditState' formControlName='inputType'>
+                                    <mat-option value='NONE'>None</mat-option>
+                                    <mat-option *ngFor='let type of testInputTypeIte'
+                                                [value]='type'>{{type === testInputTypeEnum.ONE_RM ? ('1RM') : (type | replaceUnderscore | titlecase)}}</mat-option>
+                                  </mat-select>
+                                  <mat-hint *ngIf='testGroup.value.inputType === testInputTypeEnum.RATIO'>Ratio
+                                    calculated by Value (x) / Value (y)
+                                  </mat-hint>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+
+                          <ng-container [ngSwitch]='testGroup.value.inputType'>
+                            <!--                  1 RM-->
+                            <div *ngSwitchCase='testInputTypeEnum.ONE_RM' class='container p-0'>
+                              <div class='row mb-4' formGroupName='reps'>
+                                <div class='col-12'>
+                                  <mat-checkbox [disabled]='disableEditState' class='mr-4' color='primary'
+                                                formControlName='oneRep'>1 rep
+                                  </mat-checkbox>
+                                  <mat-checkbox [disabled]='disableEditState' class='mr-4' color='primary'
+                                                formControlName='threeRep'>3 rep
+                                  </mat-checkbox>
+                                  <mat-checkbox [disabled]='disableEditState' class='mr-4' color='primary'
+                                                formControlName='fiveRep'>5 rep
+                                  </mat-checkbox>
+                                </div>
+                                <ng-template [ngIf]='repsCoreGroup.errors$ | async' let-error>
+                                  <div class='col-12' *ngIf='error?.minOneTrue'>
+                                    <mat-error><small>Minimum 1 selection is required</small></mat-error>
+                                  </div>
+                                </ng-template>
+                              </div>
+                              <div class='row mb-3'>
+                                <div class='col-12'>
+                                  <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                                    Score Sheet
+                                  </h5>
+                                </div>
+                              </div>
+                              <!--                            Point ScoreSheet-->
+                              <ng-template [ngForOf]='oneRMInputFieldFormArray.controls'
+                                           formArrayName='oneRMInputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(getOneRMInputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <mat-form-field (input)='
+                                    getOneRMInputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                    updateHPHighValue($event, getOneRMInputFieldGroup(i).controls.high) : null'
+                                                    class='w-100'>
+                                      <mat-label>{{getOneRMInputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</mat-label>
+                                      <input autocomplete='off' formControlName='low' matInput type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='getOneRMInputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template
+                                      [ngIf]='getOneRMInputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>High</mat-label>
+                                        <input autocomplete='off' formControlName='high' matInput type='number'>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("required")'>
+                                            High {{formValidationService.fieldValidationMessage.required}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("greaterThan")'>
+                                            {{formValidationService.pointsValidationMessage?.highField}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("numeric")'>
+                                            High must be a valid positive number
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='getOneRMInputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='oneRMInputFieldFormArray.errors$ | async' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(getOneRMInputFieldGroup(i).get("low").hasError("required") || getOneRMInputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Multiple Choice-->
+                            <div *ngSwitchCase='testInputTypeEnum.MULTIPLE_CHOICE' class='container p-0'>
+                              <div class='row mb-2'>
+                                <div class='col-12'>
+                                  <hidden-innovation-common-form-field
+                                    controlPath='multipleChoiceQuestion'
+                                    label='Question'
+                                  ></hidden-innovation-common-form-field>
+                                </div>
+                              </div>
+                              <ng-template [ngForOf]='mcRMInputFieldFormArray.controls'
+                                           formArrayName='multipleChoiceInputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(mcRMInputFieldFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-10'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Answer {{i + 1}}</mat-label>
+                                      <input autocomplete='no' formControlName='answer' matInput type='text'>
+                                      <mat-error>
+                                        <ng-template [ngIf]='((mcRMInputFieldFieldGroup(i).controls.answer.touch$ | async) || (mcRMInputFieldFieldGroup(i).controls.answer.dirty$ | async)) && (mcRMInputFieldFieldGroup(i).controls.answer.errors$ | async)' let-error>
+                                          <hidden-innovation-form-field-errors
+                                            label='answer'
+                                            [error]='error'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Reps-->
+                            <div *ngSwitchCase='testInputTypeEnum.REPS' class='container p-0'>
+                              <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(inputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <mat-form-field (input)='
+                                    inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                    updateHPHighValue($event, inputFieldGroup(i).controls.high) : null' class='w-100'>
+                                      <mat-label>{{inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</mat-label>
+                                      <input autocomplete='off' formControlName='low' matInput type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template [ngIf]='inputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>High</mat-label>
+                                        <input autocomplete='off' formControlName='high' matInput type='number'>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("required")'>
+                                            High {{formValidationService.fieldValidationMessage.required}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
+                                            {{formValidationService.pointsValidationMessage?.highField}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                            High must be a valid positive number
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Distance Length-->
+                            <div *ngSwitchCase='testInputTypeEnum.DISTANCE' class='container p-0'>
+                              <div class='row mb-2'>
+                                <div class='col-12'>
+                                  <mat-form-field class='w-100'>
+                                    <mat-label>Units</mat-label>
+                                    <mat-select [disabled]='disableEditState' formControlName='distanceUnit' placeholder='Select An Option'>
+                                      <mat-option disabled>Select An Option</mat-option>
+                                      <mat-option [value]='distanceTypeEnum.MILLIMETRE'>
+                                        {{distanceTypeEnum.MILLIMETRE | titlecase}} (mm)
+                                      </mat-option>
+                                      <mat-option [value]='distanceTypeEnum.CENTIMETRE'>
+                                        {{distanceTypeEnum.CENTIMETRE | titlecase}} (cm)
+                                      </mat-option>
+                                      <mat-option [value]='distanceTypeEnum.METRE'>
+                                        {{distanceTypeEnum.METRE | titlecase}} (m)
+                                      </mat-option>
+                                      <mat-option [value]='distanceTypeEnum.KILOMETRE'>
+                                        {{distanceTypeEnum.KILOMETRE | titlecase}} (km)
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(inputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <mat-form-field (input)='
+                                    inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                    updateHPHighValue($event, inputFieldGroup(i).controls.high) : null' class='w-100'>
+                                      <mat-label>{{inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</mat-label>
+                                      <input autocomplete='off' formControlName='low' matInput type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template [ngIf]='inputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>High</mat-label>
+                                        <input autocomplete='off' formControlName='high' matInput type='number'>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("required")'>
+                                            High {{formValidationService.fieldValidationMessage.required}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
+                                            {{formValidationService.pointsValidationMessage?.highField}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                            High must be a valid positive number
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Time -->
+                            <div *ngSwitchCase='testInputTypeEnum.TIME' class='container p-0'>
+                              <ng-container *ngTemplateOutlet='inverseScoresheetTemplate'></ng-container>
+                              <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(inputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <div
+                                      [ngClass]='{"error": inputFieldGroup(i).controls.low.hasError("highThan") && ((inputFieldGroup(i).controls.low.dirty$ | async) || (inputFieldGroup(i).controls.low.touch$ | async))}'
+                                      class='timePicker__container'>
+                                      <mat-label><small
+                                        class='text-muted'>{{inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</small>
+                                      </mat-label>
+                                      <ngx-mat-timepicker
+                                        (input)='
+                                        inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                        updateHPHighValue($event, inputFieldGroup(i).controls.high) : null'
+                                        [defaultTime]='[]'
+                                        [enableMeridian]='false'
+                                        [showSeconds]='true'
+                                        [showSpinners]='false'
+                                        color='primary'
+                                        formControlName='low'></ngx-mat-timepicker>
+                                    </div>
+                                    <mat-error
+                                      *ngIf='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                      <small>Low must be less/equal to high value</small>
+                                    </mat-error>
+                                    <mat-error
+                                      *ngIf='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                      <small>Low must be more/equal to high value</small>
+                                    </mat-error>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template [ngIf]='inputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <div
+                                        [ngClass]='{"error": inputFieldGroup(i).controls.high.hasError("lessThan") && ((inputFieldGroup(i).controls.high.dirty$ | async) || (inputFieldGroup(i).controls.high.touch$ | async))}'
+                                        class='timePicker__container'>
+                                        <mat-label><small class='text-muted'>High</small></mat-label>
+                                        <ngx-mat-timepicker
+                                          [defaultTime]='[]'
+                                          [enableMeridian]='false'
+                                          [showSeconds]='true'
+                                          [showSpinners]='false'
+                                          color='primary'
+                                          formControlName='high'></ngx-mat-timepicker>
+                                      </div>
+                                      <mat-error
+                                        *ngIf='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                        <small>Low must be less/equal to high value</small>
+                                      </mat-error>
+                                      <mat-error
+                                        *ngIf='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                        <small>Low must be more/equal to high value</small>
+                                      </mat-error>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='(inputFieldFormArray.errors$ | async)' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "highThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a lower value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Weight-->
+                            <div *ngSwitchCase='testInputTypeEnum.WEIGHT' class='container p-0'>
+                              <div class='row mb-2'>
+                                <div class='col-12'>
+                                  <mat-form-field class='w-100'>
+                                    <mat-label>Units</mat-label>
+                                    <mat-select [disabled]='disableEditState' formControlName='weightUnit'>
+                                      <mat-option disabled>Select An Option</mat-option>
+                                      <mat-option
+                                        [value]='weightTypeEnum.MILLIGRAM'>{{weightTypeEnum.MILLIGRAM | titlecase}} (mg)
+                                      </mat-option>
+                                      <mat-option [value]='weightTypeEnum.GRAM'>{{weightTypeEnum.GRAM |titlecase}}(g)
+                                      </mat-option>
+                                      <mat-option
+                                        [value]='weightTypeEnum.KILOGRAM'>{{weightTypeEnum.KILOGRAM |titlecase}}
+                                        (kg)
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </div>
+                              <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(inputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <mat-form-field (input)='
+                                    inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                    updateHPHighValue($event, inputFieldGroup(i).controls.high) : null' class='w-100'>
+                                      <mat-label>{{inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</mat-label>
+                                      <input autocomplete='off' formControlName='low' matInput type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template [ngIf]='inputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>High</mat-label>
+                                        <input autocomplete='off' formControlName='high' matInput type='number'>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("required")'>
+                                            High {{formValidationService.fieldValidationMessage.required}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
+                                            {{formValidationService.pointsValidationMessage?.highField}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                            High must be a valid positive number
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Custom Numeric-->
+                            <div *ngSwitchCase='testInputTypeEnum.CUSTOM_NUMERIC' class='container p-0'>
+                              <div class='row mb-23'>
+                                <div class='col-12'>
+                                  <hidden-innovation-common-form-field
+                                    controlPath='customNumericLabel'
+                                    label='Label'
+                                  ></hidden-innovation-common-form-field>
+                                </div>
+                              </div>
+                              <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(inputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <mat-form-field (input)='
+                                    inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                    updateHPHighValue($event, inputFieldGroup(i).controls.high) : null' class='w-100'>
+                                      <mat-label>{{inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</mat-label>
+                                      <input autocomplete='off' formControlName='low' matInput type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template [ngIf]='inputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>High</mat-label>
+                                        <input autocomplete='off' formControlName='high' matInput type='number'>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("required")'>
+                                            High {{formValidationService.fieldValidationMessage.required}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
+                                            {{formValidationService.pointsValidationMessage?.highField}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                            High must be a valid positive number
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Ratio-->
+                            <div *ngSwitchCase='testInputTypeEnum.RATIO' class='container p-0'>
+                              <ng-container formGroupName='ratioVariable'>
+                                <div class='row mb-3'>
+                                  <div class='col-12'>
+                                    <h5 class='mat-h5 text-color__primary--light  mb-0 mr-4 font-calibri'>
+                                      Variable (x)</h5>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Variable(x) Type</mat-label>
+                                      <mat-select [disabled]='disableEditState' formControlName='xType'>
+                                        <mat-option disabled>Select An Option</mat-option>
+                                        <mat-option *ngFor='let ratioType of ratioTestTypeIte' [value]='ratioType'>
+                                          {{ratioType === ratioTestTypeEnum.DISTANCE_LENGTH ? "Distance/Length" : (ratioType | titlecase)}}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='((ratioVariableFormGroup?.controls?.xType?.touch$ | async) || (ratioVariableFormGroup?.controls?.xType?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.xType?.errors$ | async)'
+                                          let-error>
+                                          <hidden-innovation-form-field-errors
+                                            [error]='error'
+                                            [label]='"Variable(x) Type"'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <ng-template
+                                      [ngIf]='ratioVariableFormGroup?.controls?.xType?.value === ratioTestTypeEnum.WEIGHT'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Variable (x) - Unit</mat-label>
+                                        <mat-select [disabled]='disableEditState' formControlName='xWeightUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
+                                          <mat-option *ngFor='let wType of weightTypeIte'
+                                                      [value]='wType'>{{utilities.getUnitAbbreviation(wType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((ratioVariableFormGroup?.controls?.xWeightUnit?.touch$ | async) || (ratioVariableFormGroup?.controls?.xWeightUnit?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.xWeightUnit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Variable (x) - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                    <ng-template
+                                      [ngIf]='ratioVariableFormGroup?.controls?.xType?.value === ratioTestTypeEnum.DISTANCE_LENGTH'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Variable (x) - Unit</mat-label>
+                                        <mat-select [disabled]='disableEditState' formControlName='xDistanceUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
+                                          <mat-option *ngFor='let dType of distTypeIte'
+                                                      [value]='dType'>{{utilities.getUnitAbbreviation(dType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((ratioVariableFormGroup?.controls?.xDistanceUnit?.touch$ | async) || (ratioVariableFormGroup?.controls?.xDistanceUnit?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.xDistanceUnit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Variable (x) - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Variable (x) - Label</mat-label>
+                                      <input autocomplete='no' formControlName='xLabel' matInput type='text'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='((ratioVariableFormGroup?.controls?.xLabel?.touch$ | async) || (ratioVariableFormGroup?.controls?.xLabel?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.xLabel?.errors$ | async)'
+                                          let-error>
+                                          <hidden-innovation-form-field-errors
+                                            [error]='error'
+                                            [label]='"Variable (x) - Label"'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+
+                                <div class='row mb-3'>
+                                  <div class='col-12'>
+                                    <h5 class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>
+                                      Variable (y)</h5>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Variable(y) Type</mat-label>
+                                      <mat-select [disabled]='disableEditState' formControlName='yType'>
+                                        <mat-option disabled>Select An Option</mat-option>
+                                        <mat-option *ngFor='let ratioType of ratioTestTypeIte'
+                                                    [value]='ratioType'>{{ratioType === ratioTestTypeEnum.DISTANCE_LENGTH ? "Distance/Length" : (ratioType | titlecase)}}</mat-option>
+                                      </mat-select>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='((ratioVariableFormGroup?.controls?.yType?.touch$ | async) || (ratioVariableFormGroup?.controls?.yType?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.yType?.errors$ | async)'
+                                          let-error>
+                                          <hidden-innovation-form-field-errors
+                                            [error]='error'
+                                            [label]='"Variable(y) Type"'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <ng-template
+                                      [ngIf]='ratioVariableFormGroup?.controls?.yType?.value === ratioTestTypeEnum.WEIGHT'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Variable (y) - Unit</mat-label>
+                                        <mat-select [disabled]='disableEditState' formControlName='yWeightUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
+                                          <mat-option *ngFor='let wType of weightTypeIte'
+                                                      [value]='wType'>{{utilities.getUnitAbbreviation(wType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((ratioVariableFormGroup?.controls?.yWeightUnit?.touch$ | async) || (ratioVariableFormGroup?.controls?.yWeightUnit?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.yWeightUnit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Variable (y) - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                    <ng-template
+                                      [ngIf]='ratioVariableFormGroup?.controls?.yType?.value === ratioTestTypeEnum.DISTANCE_LENGTH'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Variable (y) - Unit</mat-label>
+                                        <mat-select [disabled]='disableEditState' formControlName='yDistanceUnit'>
+                                          <mat-option disabled>Select An Option</mat-option>
+                                          <mat-option *ngFor='let dType of distTypeIte'
+                                                      [value]='dType'>{{utilities.getUnitAbbreviation(dType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((ratioVariableFormGroup?.controls?.yDistanceUnit?.touch$ | async) || (ratioVariableFormGroup?.controls?.yDistanceUnit?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.yDistanceUnit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Variable (y) - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Variable (y) - Label</mat-label>
+                                      <input autocomplete='no'
+                                             formControlName='yLabel' matInput type='text'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='((ratioVariableFormGroup?.controls?.yLabel?.touch$ | async) || (ratioVariableFormGroup?.controls?.yLabel?.dirty$ | async)) && (ratioVariableFormGroup?.controls?.yLabel?.errors$ | async)'
+                                          let-error>
+                                          <hidden-innovation-form-field-errors
+                                            [error]='error'
+                                            [label]='"Variable (y) - Label"'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </ng-container>
+                              <ng-container *ngTemplateOutlet='inverseScoresheetTemplate'></ng-container>
+                              <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(inputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <mat-form-field (input)='
+                                    inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                    updateHPHighValue($event, inputFieldGroup(i).controls.high) : null' class='w-100'>
+                                      <mat-label>{{inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</mat-label>
+                                      <input autocomplete='off' formControlName='low' matInput type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template [ngIf]='inputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>High</mat-label>
+                                        <input autocomplete='off' formControlName='high' matInput type='number'>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("required")'>
+                                            High {{formValidationService.fieldValidationMessage.required}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
+                                            {{formValidationService.pointsValidationMessage?.highField}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                            High must be a valid positive number
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "highThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a lower value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <!--                  Relative Profile-->
+                            <div *ngSwitchCase='testInputTypeEnum.RELATIVE_PROFILE' class='container p-0'>
+                              <ng-container formGroupName='relativeProfile'>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                                      Profile Input(x)</h5>
+                                  </div>
+                                </div>
+                                <div class='row mb-3'>
+                                  <div class='col-12'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Profile Input</mat-label>
+                                      <mat-select formControlName='profileInput'>
+                                        <mat-option disabled>Select An Option</mat-option>
+                                        <mat-option *ngFor='let inp of profileInputIte'
+                                                    [value]='inp'>{{inp | replaceUnderscore | titlecase}}</mat-option>
+                                      </mat-select>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='((profileInputFormGroup?.controls?.profileInput?.touch$ | async) || (profileInputFormGroup?.controls?.profileInput?.dirty$ | async)) && (profileInputFormGroup?.controls?.profileInput?.errors$ | async)'
+                                          let-error>
+                                          <hidden-innovation-form-field-errors
+                                            [error]='error'
+                                            [label]='"Profile Input"'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <h5 class='mat-h5 text-color__primary--light text-uppercase mb-0 mr-4 font-calibri'>
+                                      User Input(y)</h5>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Value y - Type</mat-label>
+                                      <mat-select (valueChange)='resetProfileInputUnit()' formControlName='inputType'>
+                                        <mat-option disabled>Select An Option</mat-option>
+                                        <mat-option *ngFor='let inp of profileInputTypeIte'
+                                                    [value]='inp'>
+                                          {{inp === profileInputTypeEnum.LENGTH ? ('Distance/Length') : (inp | titlecase)}}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='((profileInputFormGroup?.controls?.inputType?.touch$ | async) || (profileInputFormGroup?.controls?.inputType?.dirty$ | async)) && (profileInputFormGroup?.controls?.inputType?.errors$ | async)'
+                                          let-error>
+                                          <hidden-innovation-form-field-errors
+                                            [error]='error'
+                                            [label]='"Value y - Type"'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class='row mb-2'>
+                                  <div class='col-12'>
+                                    <ng-template
+                                      [ngIf]='profileInputFormGroup?.controls?.inputType?.value === profileInputTypeEnum.WEIGHT'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Value y - Unit</mat-label>
+                                        <mat-select formControlName='unit'>
+                                          <mat-option disabled>Select An Option</mat-option>
+                                          <mat-option *ngFor='let wType of weightTypeIte'
+                                                      [value]='wType'>{{utilities.getUnitAbbreviation(wType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((profileInputFormGroup?.controls?.unit?.touch$ | async) || (profileInputFormGroup?.controls?.unit?.dirty$ | async)) && (profileInputFormGroup?.controls?.unit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Value y - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                    <ng-template
+                                      [ngIf]='profileInputFormGroup?.controls?.inputType?.value === profileInputTypeEnum.LENGTH'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>Value y - Unit</mat-label>
+                                        <mat-select formControlName='unit'>
+                                          <mat-option disabled>Select An Option</mat-option>
+                                          <mat-option *ngFor='let dType of distTypeIte'
+                                                      [value]='dType'>{{utilities.getUnitAbbreviation(dType)}}</mat-option>
+                                        </mat-select>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='((profileInputFormGroup?.controls?.unit?.touch$ | async) || (profileInputFormGroup?.controls?.unit?.dirty$ | async)) && (profileInputFormGroup?.controls?.unit?.errors$ | async)'
+                                            let-error>
+                                            <hidden-innovation-form-field-errors
+                                              [error]='error'
+                                              [label]='"Value y - Unit"'
+                                            ></hidden-innovation-form-field-errors>
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                </div>
+                                <div class='row mb-3'>
+                                  <div class='col-12'>
+                                    <mat-form-field class='w-100'>
+                                      <mat-label>Value y - Label</mat-label>
+                                      <input autocomplete='no' formControlName='label' matInput type='text'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='((profileInputFormGroup?.controls?.label?.touch$ | async) || (profileInputFormGroup?.controls?.label?.dirty$ | async)) && (profileInputFormGroup?.controls?.label?.errors$ | async)'
+                                          let-error>
+                                          <hidden-innovation-form-field-errors
+                                            [error]='error'
+                                            [label]='"Value y - Label"'
+                                          ></hidden-innovation-form-field-errors>
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </ng-container>
+
+                              <ng-container *ngTemplateOutlet='inverseScoresheetTemplate'></ng-container>
+                              <ng-template [ngForOf]='inputFieldFormArray.controls' formArrayName='inputFields'
+                                           let-i='index' ngFor>
+                                <div class='row mb-2' formGroupName='{{i}}'>
+                                  <div class='col-2'>
+                                    <h4 class='mat-h4 mb-0 mt-4 font-calibri--bold'>
+                                      {{utilities.getPointLabel(inputFieldGroup(i).controls.point.value)}}
+                                    </h4>
+                                  </div>
+                                  <div class='col-5'>
+                                    <mat-form-field (input)='
+                                    inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ?
+                                    updateHPHighValue($event, inputFieldGroup(i).controls.high) : null' class='w-100'>
+                                      <mat-label>{{inputFieldGroup(i).controls.pointType.value === pointTypeEnum.HP ? "Threshold" : "Low"}}</mat-label>
+                                      <input autocomplete='off' formControlName='low' matInput type='number'>
+                                      <mat-error>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("required")'>
+                                          Low {{formValidationService.fieldValidationMessage.required}}
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("numeric")'>
+                                          Low must be a valid positive number
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("highThan")'>
+                                          Low must be less/equal to high value
+                                        </ng-template>
+                                        <ng-template
+                                          [ngIf]='inputFieldGroup(i).controls.low.hasError("lessThan")'>
+                                          Low must be more/equal to high value
+                                        </ng-template>
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class='col-5'>
+                                    <ng-template [ngIf]='inputFieldGroup(i).value.pointType !== pointTypeEnum.HP'>
+                                      <mat-form-field class='w-100'>
+                                        <mat-label>High</mat-label>
+                                        <input autocomplete='off' formControlName='high' matInput type='number'>
+                                        <mat-error>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("required")'>
+                                            High {{formValidationService.fieldValidationMessage.required}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("greaterThan")'>
+                                            {{formValidationService.pointsValidationMessage?.highField}}
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("numeric")'>
+                                            High must be a valid positive number
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("lessThan")'>
+                                            High must be high/equal to low value
+                                          </ng-template>
+                                          <ng-template
+                                            [ngIf]='inputFieldGroup(i).controls.high.hasError("highThan")'>
+                                            High must be less/equal to low value
+                                          </ng-template>
+                                        </mat-error>
+                                      </mat-form-field>
+                                    </ng-template>
+                                  </div>
+                                  <ng-template [ngIf]='i > 0'>
+                                    <ng-template [ngIf]='inputFieldFormArray.errors$ | async' let-err>
+                                      <div class='col-2'></div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "lessThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a higher value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                      <div
+                                        *ngIf='err[(i - 1) + "highThan" + (i)] && !(inputFieldGroup(i).get("low").hasError("required") || inputFieldGroup(i).get("low").hasError("notEmpty"))'
+                                        class='col-10 mb-2'>
+                                        <mat-error>
+                                          <small>Choose a lower value from previous high point</small>
+                                        </mat-error>
+                                      </div>
+                                    </ng-template>
+                                  </ng-template>
+                                </div>
+                              </ng-template>
+                            </div>
+
+                            <div *ngIf='testGroup.controls.inputType.valid && testGroup.value.inputType !== "NONE"'
+                                 class='container-fluid p-0 mt-4'>
+                              <div class='row'>
+                                <div class='col-12'>
+                                  <hidden-innovation-common-form-field-textarea
+                                    [label]='constantDataService.FIELD_NAME.RESULT_EXPLANATION | titlecase'
+                                    controlPath='resultExplanation'
+                                  ></hidden-innovation-common-form-field-textarea>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<ng-template #inverseScoresheetTemplate>
+  <div class='row mb-3'>
+    <div class='col-12'>
+      <mat-slide-toggle [disabled]='disableEditState' [formControl]='testGroup.controls.inverseScoresheet'>Inverse
+        Scoresheet
+      </mat-slide-toggle>
+    </div>
+  </div>
+</ng-template>

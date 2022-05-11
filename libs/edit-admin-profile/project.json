@@ -1,0 +1,43 @@
+{
+  "projectType": "library",
+  "root": "libs/edit-admin-profile",
+  "sourceRoot": "libs/edit-admin-profile/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/edit-admin-profile"],
+      "options": {
+        "project": "libs/edit-admin-profile/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/edit-admin-profile/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/edit-admin-profile/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/edit-admin-profile"],
+      "options": {
+        "jestConfig": "libs/edit-admin-profile/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/edit-admin-profile/src/**/*.ts",
+          "libs/edit-admin-profile/src/**/*.html"
+        ]
+      },
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": []
+}

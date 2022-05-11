@@ -1,0 +1,171 @@
+<form class='p-4' [formGroup]='questionnaire' (ngSubmit)='submit()'>
+  <div class='container-fluid p-0'>
+    <div class='row mb-4'>
+      <div class='col-12 d-flex align-items-center justify-content-end'>
+        <button
+          [disabled]='(store.isActing$ | async)  || (store.isLoading$ | async)'
+          mat-stroked-button type='button'
+          [routerLink]="['/questionnaire']"
+          class='ml-3'>
+          Cancel
+        </button>
+        <button
+          [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
+          mat-flat-button
+          class='ml-3'
+          color='primary' type='submit'>
+          {{opType === operationTypeEnum.CREATE ? "Save" : "Update"}}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class='container-fluid p-0'>
+    <div class='row justify-content-between'>
+      <div class='col-lg-5'>
+        <div class='container-fluid p-0 m-0 h-100'>
+          <div class='row'>
+            <div class='col-12'>
+              <hidden-innovation-common-form-field
+                label='Questionnaire Name'
+                controlPath='name'
+              ></hidden-innovation-common-form-field>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-12'>
+              <hidden-innovation-common-form-field-textarea
+                label='{{"overview" | titlecase}}'
+                controlPath='overview'
+              ></hidden-innovation-common-form-field-textarea>
+            </div>
+          </div>
+          <div class='row mb-2'>
+            <div class='col-12'>
+              <hidden-innovation-common-form-field-textarea
+                label='{{"What you will get out of it" | titlecase}}'
+                controlPath='whatYouWillGetOutOfIt'
+              ></hidden-innovation-common-form-field-textarea>
+            </div>
+          </div>
+          <div class='row mb-2'>
+            <div class='col-12'>
+              <hidden-innovation-common-form-field-textarea
+                label='{{"Explanation" | titlecase}}'
+                controlPath='explanation'
+              ></hidden-innovation-common-form-field-textarea>
+            </div>
+          </div>
+          <div class='row mb-3'>
+            <div class='col-12'>
+              <p class='text-muted mb-2'>Poster</p>
+              <hidden-innovation-common-form-field-image
+                (emitImageCtrlData)='imagePosterIDctrl?.setValue($event)'
+                (emitRemoveImage)='imagePosterIDctrl?.reset($event)'
+                [aspectRatio]='aspectRatio.CUBE'
+                [parentCtrl]='imagePosterIDctrl'
+                [setImageData]='(selectedPosterImageData | async)'
+                controlPath='posterId'
+              ></hidden-innovation-common-form-field-image>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-12'>
+              <mat-card>
+                <mat-card-title>
+                  <div class='d-flex justify-content-between align-items-center mb-3'>
+                    <h3 class='mat-h3 mb-0 font-sf-pro'>Questions</h3>
+                    <mat-slide-toggle color='primary' formControlName='isScoring' labelPosition='before'>
+                      <h3 class='mat-h3 text-muted mb-0 mr-4 font-calibri font-weight-normal'>Scoring</h3>
+                    </mat-slide-toggle>
+                  </div>
+                </mat-card-title>
+                <mat-divider></mat-divider>
+                <mat-card-content cdkDropList (cdkDropListDropped)='moveItemInFormArray(questionsFormArray, $event.previousIndex, $event.currentIndex)'>
+                  <ng-template ngFor [ngForOf]='questionsFormArray.controls' let-i='index'>
+                    <div class='pt-3' cdkDrag>
+                      <mat-card class='question-card mat-elevation-z3 pt-1 pr-1' [ngClass]='{"invalid": questionFormGroup(i).invalid}'>
+                        <div class='d-flex align-items-center justify-content-between'>
+                          <h4 class='mat-h4 mb-0 font-weight-bold'>Question {{i + 1}}</h4>
+                          <div>
+                            <button type='button' mat-icon-button [matMenuTriggerFor]='menu'>
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu='matMenu'>
+                              <button type='button' (click)='activeQuestion = i' mat-menu-item>
+                                <mat-icon>create</mat-icon>
+                                <span>Edit</span>
+                              </button>
+                              <button type='button' (click)='removeQuestion(i)' mat-menu-item>
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete</span>
+                              </button>
+                            </mat-menu>
+                          </div>
+                        </div>
+                        <h5
+                          class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>{{questionFormGroup(i).controls.questionType.value || '--'}}</h5>
+                        <mat-card-content>
+                          <p class='font-calibri'>
+                            {{questionFormGroup(i).controls.name.value || '--'}}
+                          </p>
+                        </mat-card-content>
+                      </mat-card>
+                    </div>
+                  </ng-template>
+                </mat-card-content>
+                <mat-card-actions>
+                  <button
+                    color='accent'
+                    [matMenuTriggerFor]='add' class='w-100' mat-flat-button
+                    type='button'>
+                    <mat-icon class='mr-2 mb-1'>add</mat-icon>
+                    Add
+                  </button>
+                  <mat-menu #add='matMenu' class='mt-2'>
+                    <button type='button' (click)='triggerQuestionType(type)' *ngFor='let type of choiceTypeIte'
+                            mat-menu-item>
+                      <span>{{type | replaceUnderscore | titlecase}}</span>
+                    </button>
+                  </mat-menu>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='col-lg-7'>
+        <div class='container-fluid p-0'>
+          <div class='row mb-3' *ngIf='questionnaire.controls.isScoring.value'>
+            <div class='col-12 mt-1 mb-3 d-flex align-items-center justify-content-end'>
+              <h5 class='mat-h5 text-color__primary--light mb-0 mr-4 font-calibri'>TOTAL POINTS</h5>
+              <div class='d-flex align-items-center ml-5 mr-3'>
+                <div class='d-flex align-items-center'>
+                  <mat-icon color='primary' class='mr-3 text-color__success'>sentiment_satisfied_alt</mat-icon>
+                  <h2 class='m-0 text-color__success'>{{questionnaireUtilitiesService.minMaxPoints(questionsFormArray)?.max}}</h2>
+                </div>
+                <div class='d-flex align-items-center ml-5'>
+                  <mat-icon color='primary' class='mr-3 text-color__error'>sentiment_very_dissatisfied</mat-icon>
+                  <h2 class='m-0 text-color__error'>{{questionnaireUtilitiesService.minMaxPoints(questionsFormArray)?.min}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template ngFor [ngForOf]='questionsFormArray.controls' let-existingQuestion let-i='index'>
+            <div class='row pt-1' *ngIf='i === activeQuestion'>
+              <div class='col-12'>
+                <hidden-innovation-questionnaire-question-form
+                  _groupName='{{activeQuestion}}'
+                  [isScoring]='questionnaire.controls.isScoring.value'
+                  [type]='questionFormGroup(activeQuestion).controls.questionType.value'
+                  (addAnswer)='addAnswer($event)'>
+                </hidden-innovation-questionnaire-question-form>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+

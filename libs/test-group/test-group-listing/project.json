@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/test-group/test-group-listing",
+  "sourceRoot": "libs/test-group/test-group-listing/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/test-group/test-group-listing"],
+      "options": {
+        "project": "libs/test-group/test-group-listing/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/test-group/test-group-listing/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/test-group/test-group-listing/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/test-group/test-group-listing"],
+      "options": {
+        "jestConfig": "libs/test-group/test-group-listing/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/test-group/test-group-listing/src/**/*.ts",
+          "libs/test-group/test-group-listing/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

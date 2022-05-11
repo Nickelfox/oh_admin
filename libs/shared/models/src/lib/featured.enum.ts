@@ -1,0 +1,8 @@
+export enum FeaturedNameEnum
+{
+  SPOTLIGHT = 'SPOTLIGHT',
+  PACKS = 'PACKS',
+  FEATURED_PACKS = 'LEARN',
+  FEATURED_TESTS = 'FEATURED'
+}
+

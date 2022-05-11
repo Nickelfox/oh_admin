@@ -1,6 +1,7 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '~@angular/material' as mat;
+@use '~@ng-matero/extensions' as mtx;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -227,7 +228,7 @@ $mat-warn: (
   darker: #e45c43,
   200: #ec795f, // For slide toggle,
   contrast : (
-    main: $dark-primary-text,
+    main: $light-primary-text,
     lighter: $dark-primary-text,
     darker: $dark-primary-text,
   )
@@ -259,6 +260,9 @@ $altTheme: (
 @include mat.chips-typography($sf-typography-config);
 @include mat.button-toggle-typography($sf-typography-config);
 
+@include mtx.all-component-themes($theme);
+@include mtx.all-experimental-component-themes($theme);
+
 .theme-alternate {
   @include mat.all-component-themes($altTheme);
 }
@@ -274,6 +278,15 @@ body {
   font-family: 'Calibri', sans-serif;
 }
 
+table.mat-table {
+  th.mat-header-cell {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: 0.1px;
+    color: #9E9E9E;
+  }
+}
 
 @mixin matOhButtonScheme {
   border-radius: 8px !important;
@@ -334,6 +347,24 @@ body {
   box-sizing: border-box;
 }
 
+.text-color {
+  &__primary {
+    color: var(--primary-color);
+
+    &--light {
+      color: var(--primary-lighter-color);
+    }
+  }
+
+  &__error {
+    color: #ec795f !important;
+  }
+
+  &__success {
+    color: #00C853 !important;
+  }
+}
+
 .oh-logo {
   animation: fadeFromBottom 0.3s ease-in forwards;
 
@@ -351,6 +382,75 @@ body {
     max-width: 60%;
     margin: 80px + 20px auto;
   }
+}
 
+.mat-chip {
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 21px;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: 0.25px;
 
+  &--success {
+    background: #ECF9F3 !important;
+    color: #00C853 !important;
+  }
+
+  &--error {
+    background: #FCE7E7 !important;
+    color: #ec795f !important;
+  }
+
+  &--primary {
+    color: var(--primary-darker-color) !important;
+    background-color: var(--accent-color) !important;
+  }
+}
+
+.cursor {
+  &__pointer {
+    cursor: pointer;
+  }
+}
+
+.mat-select-arrow {
+  margin-top: 6px !important;
+}
+
+.row-react {
+  transition: all .4s cubic-bezier(.17,.67,.83,.67);
+
+  &:hover, &.active
+  {
+    background-color: #e0e0e0;
+  }
+}
+
+.content-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 0 0.4rem;
+  margin: 0.55rem 0 0;
+}
+
+.mat-form-field-wrapper{
+  margin-bottom: 15px;
+}
+.mat-error{
+  margin-top: 5px;
+}
+
+.mat-tooltip {
+  margin-top: -5px !important;
+}
+
+.paginationButton > .mat-paginator-outer-container > .mat-paginator-container > .mat-paginator-range-actions > button {
+  display: none !important;
+}
+
+.no-network-dialog {
+  .mat-dialog-container {
+    padding: 0.5rem !important;
+  }
 }
