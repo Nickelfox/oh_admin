@@ -2,6 +2,7 @@ import { CustomApiResponse, DashboardRangeFilterEnum, SortingEnum } from '@hidde
 
 export interface DashboardData {
   totalUser: number;
+  percentageIncrease:number;
 }
 
 export interface TestWatched {
