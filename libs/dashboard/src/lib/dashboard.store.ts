@@ -48,6 +48,7 @@ export interface DashboardState extends Partial<DashboardData> {
   loaded?: boolean;
   registeredStatus?: Partial<UserGraphData>;
   totalScore:number;
+  percentageIncrease:number;
 }
 
 const initialState: DashboardState = {
@@ -78,6 +79,7 @@ const initialState: DashboardState = {
   isActing: false,
   loaded: false,
   totalScore:0,
+  percentageIncrease:0,
   registeredStatus:
     {
       monthly: {
@@ -182,6 +184,7 @@ export class DashboardStore extends ComponentStore<DashboardState> {
   readonly isChangeLoading$: Observable<boolean> = this.select(state => !!state.isLoading);
   readonly isLineChartLoading$: Observable<boolean> = this.select(state => !!state.isLineChartLoading);
   readonly totalUsers$: Observable<number> = this.select(state => state.totalUser ?? 0);
+  readonly percentageIncrease$: Observable<number> = this.select(state => state.percentageIncrease ?? 0);
   readonly totalOOSScore$: Observable<number> = this.select(state => state.totalScore ?? 0);
   readonly femaleUsers$: Observable<ChartDatasets> = this.select(state => state.femaleUsers ?? [{
     data: [],
@@ -225,9 +228,11 @@ export class DashboardStore extends ComponentStore<DashboardState> {
           this.dashboardService.getStatistics().pipe(
             tap(
               (apiRes) => {
+                const percent = parseInt(apiRes.percentageIncrease.toFixed(2));
                 this.patchState({
                   isLoading: false,
-                  totalUser: apiRes.totalUser
+                  totalUser: apiRes.totalUser,
+                  percentageIncrease: percent,
                 });
               },
               err => {
