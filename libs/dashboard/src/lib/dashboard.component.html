@@ -5,7 +5,7 @@
         <div class='container-fluid p-0'>
           <form [formGroup]='rangeFilterGroup' class='row mb-4'>
             <div class='col-md-12 col-lg-3 '>
-              <hidden-innovation-dashboard-count-card [change]='-89'
+              <hidden-innovation-dashboard-count-card [change]='store.percentageIncrease$ | async'
                                                       [count]='store.totalUsers$ | async'
                                                       [isLoading]='store.isChangeLoading$ | async'
                                                       cardTitle='Total Users'
@@ -15,7 +15,7 @@
             <div class='col-md-12 col-lg-3 mt-lg-0 mt-3'>
               <hidden-innovation-dashboard-count-card [isLoading]='store.isChangeLoading$ | async'
                                                       [count]='store.totalUsers$ | async'
-                                                      [change]='-89'
+                                                      [change]='store.percentageIncrease$ | async'
                                                       cardTitle='Total App Downloads'
                                                       icon='file_download'></hidden-innovation-dashboard-count-card>
             </div>
