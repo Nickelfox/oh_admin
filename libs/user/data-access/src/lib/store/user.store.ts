@@ -115,6 +115,7 @@ export class UserStore extends ComponentStore<UserState> {
                 selectedUser: updatedUser,
                 users: [...tempUsers.map(user => user.id === blockObj.id ? updatedUser : user)]
               });
+
               this.toastRef?.updateMessage(updatedUser.is_blocked ? 'Success! User blocked' : 'Success! User unblocked');
               this.toastRef?.updateToast({
                 dismissible: true,
@@ -144,6 +145,7 @@ export class UserStore extends ComponentStore<UserState> {
     super(initialState);
   }
 
+
   toggleBlock(id: number, currentState: boolean): void {
     const updatedState = !currentState;
     const dialogData: GenericDialogPrompt = {
@@ -171,3 +173,5 @@ export class UserStore extends ComponentStore<UserState> {
     });
   }
 }
+
+

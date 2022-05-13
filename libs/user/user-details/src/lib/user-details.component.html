@@ -239,21 +239,21 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Strength CPS'
-              [value]=' user.strengthCPS === undefined ? null : user.strengthCPS +"%"'
+              [value]=' user.strengthCPS === undefined ? null : user.strengthCPS.toFixed(2) +"%"'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Lifestyle CPS'
-              [value]='user.lifestyleCPS === undefined ? null : user.lifestyleCPS +"%"'
+              [value]='user.lifestyleCPS === undefined ? null : user.lifestyleCPS.toFixed(2) +"%"'
             ></hidden-innovation-common-data-field>
           </div>
           <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               label='Mobility CPS'
-              [value]='user.mobilityCPS === undefined ? null : user.mobilityCPS +"%"'
+              [value]='user.mobilityCPS === undefined ? null : user.mobilityCPS.toFixed(2) +"%"'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
@@ -262,14 +262,14 @@
               <hidden-innovation-common-data-field
                 [isLoading]='store.isLoading$ | async'
                 label='Cardio CPS'
-                [value]='user.cardioCPS === undefined ? null : user.cardioCPS +"%"'
+                [value]='user.cardioCPS === undefined ? null : user.cardioCPS.toFixed(2) +"%"'
               ></hidden-innovation-common-data-field>
             </div>
             <div class='col-4'>
               <hidden-innovation-common-data-field
                 [isLoading]='store.isLoading$ | async'
                 label='Function CPS'
-                [value]='user.functionCPS === undefined ? null : user.functionCPS +"%"'
+                [value]='user.functionCPS === undefined ? null : user.functionCPS.toFixed(2) +"%"'
               ></hidden-innovation-common-data-field>
             </div>
           </div>
