@@ -228,7 +228,8 @@ export class DashboardStore extends ComponentStore<DashboardState> {
           this.dashboardService.getStatistics().pipe(
             tap(
               (apiRes) => {
-                const percent = parseInt(apiRes.percentageIncrease.toFixed(2));
+                const percent = Math.ceil(apiRes.percentageIncrease);
+
                 this.patchState({
                   isLoading: false,
                   totalUser: apiRes.totalUser,
