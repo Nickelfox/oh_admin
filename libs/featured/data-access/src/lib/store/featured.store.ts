@@ -6,6 +6,7 @@ import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { FeaturedService } from '../services/featured.service';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
+import { delay } from 'lodash-es';
 
 export interface FeaturedState {
   featuredList: Featured[];
@@ -112,6 +113,7 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Updating Featured...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -129,6 +131,7 @@ export class FeaturedStore extends ComponentStore<FeaturedState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/featured']);
             },
             error => {
