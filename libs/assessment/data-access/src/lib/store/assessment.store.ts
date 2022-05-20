@@ -7,6 +7,7 @@ import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { Router } from '@angular/router';
 import { AssessmentService } from '../services/assessment.service';
 import { TagCategoryEnum } from '@hidden-innovation/shared/models';
+import { delay } from 'lodash-es';
 
 export interface AssessmentState {
   assessmentList: AssessmentListState[];
@@ -128,6 +129,7 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Updating Assessment...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -145,6 +147,7 @@ export class AssessmentStore extends ComponentStore<AssessmentState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/assessments']);
             },
             _ => {

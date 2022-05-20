@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { delay } from 'lodash-es';
 
 export interface TestGroupState {
   testGroups: TestGroup[];
@@ -85,6 +86,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Creating new Test...', {
           dismissible: false,
+          autoClose: false,
           role: 'status'
         });
       }),
@@ -102,6 +104,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/tests-group']);
             },
             _ => {
@@ -159,6 +162,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Updating Test Group...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -177,6 +181,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/tests-group']);
             },
             error => {
@@ -200,6 +205,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading(state.newState ? 'Publishing Test Group...' : 'Un-publishing Test Group...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -227,6 +233,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
                 dismissible: true,
                 type: 'success'
               });
+              delay(_ => this.toastRef?.close(), 3000);
             },
             _ => {
               this.toastRef?.close();
@@ -248,6 +255,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Deleting Test...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -266,6 +274,7 @@ export class TestGroupStore extends ComponentStore<TestGroupState> {
                 dismissible: true,
                 type: 'success'
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.getTestGroups$({
                 page: pageIndex,
                 limit: pageSize,

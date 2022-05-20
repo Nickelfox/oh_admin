@@ -17,6 +17,7 @@ import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { delay } from 'lodash-es';
 
 export interface PackState {
   packs: Pack[];
@@ -118,6 +119,7 @@ export class PackStore extends ComponentStore<PackState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Updating Pack...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -136,6 +138,7 @@ export class PackStore extends ComponentStore<PackState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/packs']);
             },
             error => {
@@ -159,6 +162,7 @@ export class PackStore extends ComponentStore<PackState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Creating new Pack...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -176,6 +180,7 @@ export class PackStore extends ComponentStore<PackState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/packs']);
             },
             _ => {
@@ -230,7 +235,7 @@ export class PackStore extends ComponentStore<PackState> {
           isActing: true
         });
         this.toastRef?.close();
-        this.toastRef = this.hotToastService.loading(state.newState ? 'Publishing Test...' : 'Un-publishing Test...', {
+        this.toastRef = this.hotToastService.loading(state.newState ? 'Publishing packs...' : 'Un-publishing packs...', {
           dismissible: false,
           role: 'status'
         });
