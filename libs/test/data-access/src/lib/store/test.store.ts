@@ -16,6 +16,7 @@ import { TestService } from '../services/test.service';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { delay } from 'lodash-es';
 
 export interface TestState {
   tests: Test[];
@@ -83,6 +84,7 @@ export class TestStore extends ComponentStore<TestState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Creating new Test...', {
           dismissible: false,
+          autoClose: false,
           role: 'status'
         });
       }),
@@ -100,6 +102,7 @@ export class TestStore extends ComponentStore<TestState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/tests', 'listing', this.constantDataService.PaginatorData.pageSizeOptions[3], this.constantDataService.PaginatorData.pageIndex]);
             },
             _ => {
@@ -123,7 +126,8 @@ export class TestStore extends ComponentStore<TestState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Updating Test...', {
           dismissible: false,
-          role: 'status'
+          role: 'status',
+          autoClose: false,
         });
       }),
       exhaustMap(({ test, id }) =>
@@ -135,12 +139,13 @@ export class TestStore extends ComponentStore<TestState> {
                 loaded: true,
                 selectedTest: response
               });
-              this.toastRef?.updateMessage('Questionnaire Updated!');
+              this.toastRef?.updateMessage('Test Updated!');
               this.toastRef?.updateToast({
                 dismissible: true,
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/tests', 'listing', this.constantDataService.PaginatorData.pageSizeOptions[3], this.constantDataService.PaginatorData.pageIndex]);
             },
             error => {

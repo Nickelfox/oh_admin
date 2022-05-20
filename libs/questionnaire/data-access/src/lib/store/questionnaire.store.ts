@@ -16,6 +16,7 @@ import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { delay } from 'lodash-es';
 
 export interface QuestionnaireState {
   questionnaires: QuestionnaireExtended[];
@@ -114,6 +115,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Creating new Questionnaire...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -131,6 +133,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/questionnaire', 'listing', this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex]);
             },
             error => {
@@ -154,6 +157,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading('Updating Questionnaire...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -172,6 +176,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 type: 'success',
                 duration: 300
               });
+              delay(_ => this.toastRef?.close(), 3000);
               this.router.navigate(['/questionnaire', 'listing', this.constantDataService.PaginatorData.pageSize, this.constantDataService.PaginatorData.pageIndex]);
             },
             error => {
@@ -195,6 +200,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
         this.toastRef?.close();
         this.toastRef = this.hotToastService.loading(state.newState ? 'Activating Questionnaire...' : 'Deactivating Questionnaire...', {
           dismissible: false,
+          autoClose:false,
           role: 'status'
         });
       }),
@@ -222,6 +228,7 @@ export class QuestionnaireStore extends ComponentStore<QuestionnaireState> {
                 dismissible: true,
                 type: 'success'
               });
+              delay(_ => this.toastRef?.close(), 3000);
             },
             (_) => {
               this.toastRef?.close();
