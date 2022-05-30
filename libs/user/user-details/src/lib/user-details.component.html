@@ -3,6 +3,11 @@
     <div class='container-fluid p-0'>
       <div class='row mb-4 '>
         <div class='col-12 d-flex align-items-center justify-content-end'>
+          <div [ngSwitch]='user.status' >
+            <button mat-flat-button *ngSwitchCase='userPosition.PENDING'   color="accent">Pending</button>
+            <button mat-flat-button *ngSwitchCase='userPosition.ACTIVE'   color="primary">Active</button>
+            <button mat-flat-button *ngSwitchCase='userPosition.VERIFY_USER'   color="warn">Verify User</button>
+          </div>
           <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
                   mat-flat-button color='{{user.is_blocked ? "accent" : "warn"}}' class='ml-3'
                   (click)='store.toggleBlock(userID, user.is_blocked)' type='button'>
