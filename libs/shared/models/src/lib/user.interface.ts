@@ -14,7 +14,7 @@ export interface UserDetails {
   gender: string;
   height: number;
   skinColor: string;
-  status: boolean;
+  status: number;
   video: boolean;
   weight: number;
   is_blocked: boolean;

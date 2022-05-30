@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { GenericDialogPrompt, UserDetails } from '@hidden-innovation/shared/models';
 import { EMPTY, Observable } from 'rxjs';
-import { UserBlockRequest, UserListingRequest } from '../models/user.interface';
+import { UserBlockRequest, UserListingRequest, UserStatusRequest } from '../models/user.interface';
 import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
 import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import { numeric } from '@rxweb/reactive-form-validators';
 
 export interface UserState {
   users?: UserDetails[];
@@ -138,11 +139,72 @@ export class UserStore extends ComponentStore<UserState> {
     )
   );
 
+
+  private toggleVerifyUser$ = this.effect<UserStatusRequest>(params$ =>
+    params$.pipe(
+      tap(({ data }) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading(data.status ? 'Updating User...' : 'Updating User...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap((blockObj) =>
+        this.userService.VerifyUser(blockObj).pipe(
+          tapResponse(
+            (updatedUser) => {
+              const tempUsers: UserDetails[] = this.get().users || [];
+              this.patchState({
+                isActing: false,
+                selectedUser: updatedUser,
+                users: [...tempUsers.map(user => user.id === blockObj.id ? updatedUser : user)]
+              });
+
+              this.toastRef?.updateMessage(updatedUser.status ? 'Success! User Updated' : 'Success! User Updated');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success'
+              });
+              // this.hotToastService.success(user.is_blocked ? 'Success! User blocked' : 'Success! User unblocked', {
+              //   dismissible: true,
+              //   role: 'status'
+              // });
+            },
+            (_) => {
+              this.toastRef?.close();
+              this.patchState({
+                isActing: false
+              });
+            }
+          )
+        )
+      )
+    )
+  );
+
   constructor(
     private matDialog: MatDialog,
     private hotToastService: HotToastService,
     private userService: UserService) {
     super(initialState);
+  }
+
+
+  toggleStatus(id:number, currentStatus:number):void{
+    let updatedStatus = 0;
+    if(currentStatus === 2)
+    {
+      updatedStatus = 1;
+    }
+    this.toggleVerifyUser$({
+      id,
+      data:{
+        status:updatedStatus
+      }
+    })
   }
 
 
@@ -173,5 +235,8 @@ export class UserStore extends ComponentStore<UserState> {
     });
   }
 }
+
+
+
 
 
