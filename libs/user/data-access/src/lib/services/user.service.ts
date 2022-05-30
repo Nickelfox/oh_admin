@@ -9,7 +9,7 @@ import {
   UserDetailsResponse,
   UserListingRequest,
   UserListingResponse,
-  UserListingResponseData
+  UserListingResponseData, UserStatusRequest, UserStatusResponse
 } from '../models/user.interface';
 import { UserDetails } from '@hidden-innovation/shared/models';
 
@@ -46,4 +46,10 @@ export class UserService {
     );
   }
 
+  VerifyUser(blockObj: UserStatusRequest): Observable<UserDetails> {
+    return this.http.post<UserStatusResponse>(`${this.env.baseURL}/v1/admin/editUser/${blockObj.id}`, blockObj.data).pipe(
+      map(res => res.data.user),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
 }
