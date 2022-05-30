@@ -32,6 +32,13 @@ export interface UserBlockRequest {
   id: number;
 }
 
+export interface UserStatusRequest {
+  data: {
+    status: number;
+  };
+  id: number;
+}
+
 export interface UserDetailsResponse extends CustomApiResponse {
   data: UserDetails;
 }
@@ -44,6 +51,11 @@ export interface UserBlockRequest {
 }
 
 export interface UserBlockResponse extends CustomApiResponse {
+  data: {
+    user: UserDetails;
+  };
+}
+export interface UserStatusResponse extends CustomApiResponse {
   data: {
     user: UserDetails;
   };
