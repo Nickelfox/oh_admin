@@ -160,11 +160,11 @@
               [value]='user.skinColor'
             ></hidden-innovation-common-data-field>
           </div>
-          <div class='col-4'>
+          <div class='col-4' >
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.GOAL'
-              [value]='user.goalAnswer ? user.goalAnswer.answerString : null'
+              [value]='UserAnswers'
             ></hidden-innovation-common-data-field>
           </div>
         </div>

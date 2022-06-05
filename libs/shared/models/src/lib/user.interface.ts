@@ -28,6 +28,15 @@ export interface UserDetails {
   lifestyleCPS: number;
   mobilityCPS: number;
   strengthCPS: number;
+  userGoal: NewGoal[];
+}
+
+
+export interface NewGoal{
+  goalAnswer:GoalAnswer;
+  goalAnswerId:number;
+  id:number;
+  userId:number;
 }
 
 export  interface  GoalAnswer
