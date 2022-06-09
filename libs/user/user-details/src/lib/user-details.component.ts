@@ -45,7 +45,7 @@ export class UserDetailsComponent implements OnInit {
 
   userStatusEnum = UserStatusEnum;
   userPosition = UserPosition;
-  UserAnswers?: string[] = [];
+  UserAnswers?: GoalAnswer[] = [];
 
 
   constructor(
@@ -58,6 +58,7 @@ export class UserDetailsComponent implements OnInit {
       id: this.userID
     });
     this.imageSize = 150;
+
   }
 
 
@@ -66,7 +67,7 @@ export class UserDetailsComponent implements OnInit {
       return;
     }
     for (const answers of input) {
-      this.UserAnswers?.push(answers.goalAnswer.answerString);
+      this.UserAnswers?.push(answers.goalAnswer);
     }
   }
 
