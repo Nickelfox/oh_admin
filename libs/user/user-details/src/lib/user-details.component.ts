@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { StatusChipType, UserPosition, UserStatusEnum } from '@hidden-innovation/shared/models';
+import { GoalAnswer, NewGoal, StatusChipType, UserPosition, UserStatusEnum } from '@hidden-innovation/shared/models';
 import { UserStore } from '@hidden-innovation/user/data-access';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
@@ -13,7 +13,7 @@ import { UntilDestroy } from '@ngneat/until-destroy';
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserDetailsComponent {
+export class UserDetailsComponent implements OnInit {
 
   imageSize: number;
 
@@ -45,6 +45,8 @@ export class UserDetailsComponent {
 
   userStatusEnum = UserStatusEnum;
   userPosition = UserPosition;
+  UserAnswers?: GoalAnswer[] = [];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +58,23 @@ export class UserDetailsComponent {
       id: this.userID
     });
     this.imageSize = 150;
+
+  }
+
+
+  getFields(input: NewGoal[] | undefined) {
+    if (!input) {
+      return;
+    }
+    for (const answers of input) {
+      this.UserAnswers?.push(answers.goalAnswer);
+    }
+  }
+
+  ngOnInit(): void {
+    this.user$.subscribe(res => {
+      this.getFields(res?.userGoal);
+    });
   }
 
 }
