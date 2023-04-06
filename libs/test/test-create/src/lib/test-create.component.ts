@@ -136,7 +136,13 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
       oneRep: new FormControl<boolean>(true, [
         RxwebValidators.required()
       ]),
+      twoRep: new FormControl<boolean>(false, [
+        RxwebValidators.required()
+      ]),
       threeRep: new FormControl<boolean>(false, [
+        RxwebValidators.required()
+      ]),
+      fourRep: new FormControl<boolean>(false, [
         RxwebValidators.required()
       ]),
       fiveRep: new FormControl<boolean>(false, [
@@ -345,11 +351,13 @@ export class TestCreateComponent implements OnDestroy, ComponentCanDeactivate {
         case TestInputTypeEnum.ONE_RM:
           if (this.opType === OperationTypeEnum.EDIT && this.selectedTest?.inputType === TestInputTypeEnum.ONE_RM) {
             this.utilities.buildOneRemForm(this.selectedTest.oneRMInputFields).map(fg => oneRMFArray.push(fg));
-            const { oneRep, threeRep, fiveRep } = this.selectedTest.reps;
+            const { oneRep,twoRep, threeRep, fourRep, fiveRep } = this.selectedTest.reps;
             reps.setValue({
               oneRep,
+              twoRep,
+              threeRep,
+              fourRep,
               fiveRep,
-              threeRep
             });
             resultExplanation.setValue(this.selectedTest.resultExplanation);
           } else {
