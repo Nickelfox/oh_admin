@@ -3,6 +3,7 @@ import { Media } from '@hidden-innovation/media';
 import { Test } from '@hidden-innovation/test/data-access';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
 import { ContentCore } from '@hidden-innovation/pack/data-access';
+import {FormControl} from "@ngneat/reactive-forms";
 
 export interface AssessmentListState {
   category: TagCategoryEnum;
@@ -18,6 +19,7 @@ export interface AssessmentCore {
   whatYouWillGetOutOfIt: string | undefined;
   whatYouWillNeed: string | undefined;
   howItWorks: string | undefined;
+  isPublished: false,
   lockout: number | undefined;
   imageId: number | undefined;
   count: number | undefined;
