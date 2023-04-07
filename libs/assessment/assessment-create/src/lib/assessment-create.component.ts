@@ -53,6 +53,12 @@ export class AssessmentCreateComponent implements OnDestroy {
         value: 500
       })
     ]),
+    videoId: new FormControl(undefined, [
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     whatYouWillNeed: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
     howItWorks: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
@@ -170,6 +176,7 @@ export class AssessmentCreateComponent implements OnDestroy {
     const {
       name,
       about,
+      video,
       whatYouWillGetOutOfIt,
       whatYouWillNeed,
       lockout,
@@ -185,6 +192,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       whatYouWillNeed,
       lockout,
       category,
+      videoId: video?.id,
       imageId: image?.id,
       name
     });
