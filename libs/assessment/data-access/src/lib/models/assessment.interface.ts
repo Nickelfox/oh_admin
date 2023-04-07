@@ -27,6 +27,7 @@ export interface AssessmentCore {
   // testGroupIds: number[];
   questionnaireIds: number[];
   content: ContentCore[];
+  category_overview_text: string;
 }
 
 export interface Assessment extends AssessmentCore {

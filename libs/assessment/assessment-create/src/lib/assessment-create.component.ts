@@ -82,7 +82,10 @@ export class AssessmentCreateComponent implements OnDestroy {
     ]),
     singleTestIds: new FormControl([]),
     questionnaireIds: new FormControl([]),
-    content: new FormControl<ContentCore[]>([])
+    content: new FormControl<ContentCore[]>([]),
+    category_overview_text: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+    ]),
   });
 
   aspectRatio = AspectRatio;
@@ -192,6 +195,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       lockout,
       howItWorks,
       category,
+      category_overview_text,
       image
     } = assessment;
     this.selectedAssessment = assessment;
@@ -202,6 +206,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       whatYouWillNeed,
       lockout,
       category,
+      category_overview_text,
       videoId: video?.id,
       imageId: image?.id,
       name
@@ -289,6 +294,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       return;
     }
     this.store.updateAssessment$(this.assessmentGroup.value);
+    console.log(this.assessmentGroup.value)
   }
 
   assessmentDragEvent($event: CdkDragDrop<ContentCore>): void {
