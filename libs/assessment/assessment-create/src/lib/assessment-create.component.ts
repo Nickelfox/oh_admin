@@ -45,6 +45,7 @@ export class AssessmentCreateComponent implements OnDestroy {
         value: this.formValidationService.FIELD_VALIDATION_VALUES.PACK_NAME_LENGTH
       })
     ]),
+    isPublished: new FormControl(false),
     count: new FormControl<number>(undefined),
     category: new FormControl<TagCategoryEnum>(undefined),
     about: new FormControl('', [
@@ -170,6 +171,15 @@ export class AssessmentCreateComponent implements OnDestroy {
     this.store.patchState({
       selectedAssessment: undefined
     });
+  }
+
+  removeMediaCtrlAndValidate(ctrl: FormControl | undefined): void {
+    if(ctrl) {
+      ctrl.reset();
+      this.assessmentGroup.patchValue({
+        isPublished: false
+      })
+    }
   }
 
   populateAssessment(assessment: Assessment): void {

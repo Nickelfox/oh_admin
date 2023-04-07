@@ -90,6 +90,7 @@
                     <p class='text-muted mb-2'>Video</p>
                     <div class='d-flex align-items-center'>
                       <hidden-innovation-common-form-field-video
+                        (emitRemoveVideo)='removeMediaCtrlAndValidate(assessmentGroup.controls.videoId)'
                         (emitVideoCtrlData)='assessmentGroup.controls.videoId?.setValue($event)'
                         [parentCtrl]='assessmentGroup.controls.videoId'
                         [videoData]='selectedAssessment?.video'
