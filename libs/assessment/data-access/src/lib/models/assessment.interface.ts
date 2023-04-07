@@ -13,6 +13,7 @@ export interface AssessmentListState {
 export interface AssessmentCore {
   about: string | undefined;
   name: string | undefined;
+  videoId: number | undefined;
   category: TagCategoryEnum | undefined
   whatYouWillGetOutOfIt: string | undefined;
   whatYouWillNeed: string | undefined;
@@ -30,6 +31,7 @@ export interface Assessment extends AssessmentCore {
   id: number;
   // tests: number;
   image: Media;
+  video: Media;
   tests: Test[];
   questionnaires: QuestionnaireExtended[];
   bestCase: number;

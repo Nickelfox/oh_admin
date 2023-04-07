@@ -85,6 +85,28 @@
                     ></hidden-innovation-common-form-field-image>
                   </div>
                 </div>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <p class='text-muted mb-2'>Video</p>
+                    <div class='d-flex align-items-center'>
+                      <hidden-innovation-common-form-field-video
+                        (emitVideoCtrlData)='assessmentGroup.controls.videoId?.setValue($event)'
+                        [parentCtrl]='assessmentGroup.controls.videoId'
+                        [videoData]='selectedAssessment?.video'
+                        controlPath='videoId'
+                      ></hidden-innovation-common-form-field-video>
+                      <div class='ml-2'>
+                        <mat-hint>
+                          <small>({{constantDataService.FIZE_SIZE_DATA.videoFormatMessage}})</small>
+                        </mat-hint>
+                        <br>
+                        <mat-hint>
+                          <small>({{constantDataService.FIZE_SIZE_DATA.videoRatioMessage}})</small>
+                        </mat-hint>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </mat-card-content>
           </mat-card>
