@@ -1,6 +1,8 @@
 export interface RepsCore {
   oneRep: boolean;
+  twoRep: boolean;
   threeRep: boolean;
+  fourRep: boolean;
   fiveRep: boolean;
 }
 
