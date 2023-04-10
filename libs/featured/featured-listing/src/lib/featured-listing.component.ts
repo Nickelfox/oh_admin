@@ -39,6 +39,12 @@ export class FeaturedListingComponent implements OnInit {
       updated_at: ''
     },
     {
+      name: FeaturedNameEnum.FEATURED_GROUP,
+      location: 'HOME',
+      items: 0,
+      updated_at: ''
+    },
+    {
       name: FeaturedNameEnum.PACKS,
       location: TagCategoryEnum.CARDIO,
       items: 0,
@@ -105,6 +111,8 @@ export class FeaturedListingComponent implements OnInit {
       case FeaturedNameEnum.PACKS:
         return feature.packs?.length ?? 0;
       case FeaturedNameEnum.FEATURED_TESTS:
+        return feature.tests?.length ?? 0;
+      case FeaturedNameEnum.FEATURED_GROUP:
         return feature.tests?.length ?? 0;
       case FeaturedNameEnum.FEATURED_PACKS:
         return feature.packs?.length ?? 0;
