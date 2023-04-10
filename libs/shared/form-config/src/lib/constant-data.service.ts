@@ -62,6 +62,7 @@ export class ConstantDataService {
     ABOUT: 'About',
     GOAL_HEADER:'Goal Header',
     GOAL:'Goal',
+    CATEGORY_OVERVIEW_TEXT:'Category Overview Text'
   };
 
   BUTTON_NAME = {

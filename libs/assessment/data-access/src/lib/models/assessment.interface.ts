@@ -3,6 +3,7 @@ import { Media } from '@hidden-innovation/media';
 import { Test } from '@hidden-innovation/test/data-access';
 import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
 import { ContentCore } from '@hidden-innovation/pack/data-access';
+import {FormControl} from "@ngneat/reactive-forms";
 
 export interface AssessmentListState {
   category: TagCategoryEnum;
@@ -13,10 +14,12 @@ export interface AssessmentListState {
 export interface AssessmentCore {
   about: string | undefined;
   name: string | undefined;
+  videoId: number | undefined;
   category: TagCategoryEnum | undefined
   whatYouWillGetOutOfIt: string | undefined;
   whatYouWillNeed: string | undefined;
   howItWorks: string | undefined;
+  isPublished: false,
   lockout: number | undefined;
   imageId: number | undefined;
   count: number | undefined;
@@ -24,12 +27,14 @@ export interface AssessmentCore {
   // testGroupIds: number[];
   questionnaireIds: number[];
   content: ContentCore[];
+  category_overview_text: string;
 }
 
 export interface Assessment extends AssessmentCore {
   id: number;
   // tests: number;
   image: Media;
+  video: Media;
   tests: Test[];
   questionnaires: QuestionnaireExtended[];
   bestCase: number;

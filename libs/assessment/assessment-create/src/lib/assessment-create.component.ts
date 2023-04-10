@@ -45,12 +45,19 @@ export class AssessmentCreateComponent implements OnDestroy {
         value: this.formValidationService.FIELD_VALIDATION_VALUES.PACK_NAME_LENGTH
       })
     ]),
+    isPublished: new FormControl(false),
     count: new FormControl<number>(undefined),
     category: new FormControl<TagCategoryEnum>(undefined),
     about: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation,
       RxwebValidators.maxLength({
         value: 500
+      })
+    ]),
+    videoId: new FormControl(undefined, [
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
       })
     ]),
     whatYouWillGetOutOfIt: new FormControl('', [...this.formValidationService.requiredFieldValidation]),
@@ -75,7 +82,10 @@ export class AssessmentCreateComponent implements OnDestroy {
     ]),
     singleTestIds: new FormControl([]),
     questionnaireIds: new FormControl([]),
-    content: new FormControl<ContentCore[]>([])
+    content: new FormControl<ContentCore[]>([]),
+    category_overview_text: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+    ]),
   });
 
   aspectRatio = AspectRatio;
@@ -166,15 +176,26 @@ export class AssessmentCreateComponent implements OnDestroy {
     });
   }
 
+  removeMediaCtrlAndValidate(ctrl: FormControl | undefined): void {
+    if(ctrl) {
+      ctrl.reset();
+      this.assessmentGroup.patchValue({
+        isPublished: false
+      })
+    }
+  }
+
   populateAssessment(assessment: Assessment): void {
     const {
       name,
       about,
+      video,
       whatYouWillGetOutOfIt,
       whatYouWillNeed,
       lockout,
       howItWorks,
       category,
+      category_overview_text,
       image
     } = assessment;
     this.selectedAssessment = assessment;
@@ -185,6 +206,8 @@ export class AssessmentCreateComponent implements OnDestroy {
       whatYouWillNeed,
       lockout,
       category,
+      category_overview_text,
+      videoId: video?.id,
       imageId: image?.id,
       name
     });
@@ -271,6 +294,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       return;
     }
     this.store.updateAssessment$(this.assessmentGroup.value);
+    console.log(this.assessmentGroup.value)
   }
 
   assessmentDragEvent($event: CdkDragDrop<ContentCore>): void {
