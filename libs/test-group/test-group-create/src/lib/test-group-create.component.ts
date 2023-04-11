@@ -24,6 +24,7 @@ import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog'
 import {isEqual} from 'lodash-es';
 import {Validators} from '@angular/forms';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {ContentUrl} from "@hidden-innovation/pack/data-access";
 
 @UntilDestroy({checkProperties: true})
 @Component({
@@ -83,6 +84,7 @@ export class TestGroupCreateComponent implements OnDestroy {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
+    urls: new FormArray<ContentUrl>([]),
     imagesAndPdfsIds: new FormArray<number>([]),
     isVisible: new FormControl(false),
     tests: new FormArray<number>([], Validators.compose([
@@ -208,6 +210,34 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
 
+  get urlFormArrayTestGroup(): FormArray<ContentUrl> {
+    return this.testGroup.controls.urls as FormArray<ContentUrl>;
+  }
+
+  urlFormControl(i: number): FormGroup<ContentUrl> {
+    return this.urlFormArrayTestGroup.controls[i] as FormGroup<ContentUrl>;
+  }
+
+  removeUrlCtrl(i: number): void {
+    this.urlFormArrayTestGroup.removeAt(i);
+  }
+  addUrlCtrlTestGroup(urlObj?: ContentUrl): void {
+    this.urlFormArrayTestGroup.push(new FormGroup<ContentUrl>({
+      url: new FormControl<string>(urlObj?.url ?? '', [
+        ...this.formValidationService.requiredFieldValidation,
+        RxwebValidators.url()
+      ]),
+      description: new FormControl<string>(urlObj?.description ?? '', [
+        ...this.formValidationService.requiredFieldValidation,
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        })
+      ])
+    }));
+  }
+
+
+
   categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
     const oldCat = _[0];
     const dialogData: GenericDialogPrompt = {
@@ -243,6 +273,7 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   submit(): void {
+    console.log(this.testGroup.value)
     this.testGroup.markAllAsTouched();
     this.testGroup.markAllAsDirty();
     if (this.testGroup.invalid) {
@@ -343,11 +374,13 @@ export class TestGroupCreateComponent implements OnDestroy {
     this.selectedTestGroup = testGroup;
     const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];1
     const resources: Media[] = this.selectedTestGroup.imagesAndPdfs as Media[] ?? [];
+    const urls: ContentUrl[] = this.selectedTestGroup.ContentUrl as ContentUrl[] ?? [];
     this.testGroup.controls.category.setValue(category);
     this.uiStore.patchState({
       selectedTests
     });
     try {
+      urls.forEach(u => this.addUrlCtrlTestGroup(u));
       resources.forEach(r => this.addResourceCtrl(r.id));
     } catch {
       this.hotToastService.error('URL/Resource population error');

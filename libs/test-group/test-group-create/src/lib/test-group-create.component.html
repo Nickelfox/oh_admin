@@ -154,6 +154,67 @@
                   </div>
                 </div>
               </div>
+              <div class='row mb-4'>
+                <div class='col-12' formArrayName='urls'>
+                  <p class='text-muted mb-2'>URLs</p>
+                  <div class='container-fluid p-0'>
+                    <div class='row mb-2' *ngFor='let url of urlFormArrayTestGroup.controls; let i=index'>
+                      <div class='col-12'>
+                        <div class='container-fluid p-0' formGroupName='{{i}}'>
+                          <div class='row mb-1'>
+                            <div class='col-10'>
+                              <mat-form-field class='w-100'>
+                                <mat-label>Enter URL</mat-label>
+                                <input matInput autocomplete='no' formControlName='url' type='text'>
+                                <mat-error>
+                                  <ng-template
+                                    [ngIf]='((urlFormControl(i).controls.url.touch$ | async) || (urlFormControl(i).controls.url.dirty$ | async)) && (urlFormControl(i).controls.url.errors$ | async)'
+                                    let-error>
+                                    <hidden-innovation-form-field-errors
+                                      label='URL'
+                                      [error]='error'
+                                    ></hidden-innovation-form-field-errors>
+                                  </ng-template>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class='col-2 d-flex justify-content-end'>
+                              <button type='button' [disabled]='(store.isActing$ | async)' mat-icon-button color='warn' (click)='removeUrlCtrl(i)'>
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                          <div class='row'>
+                            <div class='col-12'>
+                              <mat-form-field class='w-100'>
+                                <mat-label>{{constantDataService.FIELD_NAME.DESC | titlecase}}</mat-label>
+                                <input matInput autocomplete='no' formControlName='description' type='text'>
+                                <mat-error>
+                                  <ng-template
+                                    [ngIf]='((urlFormControl(i).controls.description.touch$ | async) || (urlFormControl(i).controls.description.dirty$ | async)) && (urlFormControl(i).controls.description.errors$ | async)'
+                                    let-error>
+                                    <hidden-innovation-form-field-errors
+                                      [label]='constantDataService.FIELD_NAME.DESC | titlecase'
+                                      [error]='error'
+                                    ></hidden-innovation-form-field-errors>
+                                  </ng-template>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    [disabled]='(store.isActing$ | async)'
+                    (click)='addUrlCtrlTestGroup()'
+                    mat-stroked-button
+                    color='primary' type='button'>
+                    Add
+                  </button>
+                </div>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>

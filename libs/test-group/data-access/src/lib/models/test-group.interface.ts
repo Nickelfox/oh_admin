@@ -12,6 +12,7 @@ export interface TestGroupCore {
   description: string;
   isVisible: boolean;
   posterId: number;
+  urls: ContentUrl[];
   imagesAndPdfsIds: number[];
   tests: Test[] | OrderedContent[] | number[];
 }
@@ -23,8 +24,14 @@ export interface TestGroup extends TestGroupCore {
   updated_at: string;
   imagesAndPdfs: Media[];
   category: TagCategoryEnum;
+  ContentUrl: ContentUrl[];
   thumbnail: Media;
   image: Media;
+}
+
+export interface ContentUrl {
+  url: string;
+  description: string;
 }
 
 export interface TestGroupListingFilters {
