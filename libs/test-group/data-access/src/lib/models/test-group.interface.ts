@@ -11,6 +11,8 @@ export interface TestGroupCore {
   imageId: number | undefined;
   description: string;
   isVisible: boolean;
+  posterId: number;
+  imagesAndPdfsIds: number[];
   tests: Test[] | OrderedContent[] | number[];
 }
 
@@ -19,6 +21,7 @@ export interface TestGroup extends TestGroupCore {
   deleted_at: string;
   created_at: string;
   updated_at: string;
+  imagesAndPdfs: Media[];
   category: TagCategoryEnum;
   thumbnail: Media;
   image: Media;

@@ -116,6 +116,45 @@
                 </div>
               </div>
             </div>
+            <div class='container-fluid p-0 '>
+              <div class='row mb-3'>
+                <div class='col-12'>
+                  <h5 class='mat-h5 text-uppercase text-color__primary--light mb-0 mr-4 font-calibri'>
+                    Resources</h5>
+                </div>
+              </div>
+              <div class='row mb-3'>
+                <div class='col-12'>
+                  <p class='text-muted mb-2'>PDFs and Images</p>
+                  <div class='container-fluid p-0'>
+                    <div class='row mb-2' *ngFor='let res of imagesAndPdfsArrayCtrl.controls; let i=index;'>
+                      <div class='col-12 d-flex '>
+                        <hidden-innovation-common-form-field-file
+                          controlPath='posterId'
+                          [fileData]='selectedResource(i)'
+                          [parentCtrl]='imagesAndPdfsArrayCtrl.controls[i]'
+                          (emitFileCtrlData)='imagesAndPdfsArrayCtrl.controls[i].setValue($event)'
+                          (emitRemoveFile)='imagesAndPdfsArrayCtrl.controls[i].reset($event)'
+                        ></hidden-innovation-common-form-field-file>
+                        <button type='button' [disabled]='(store.isActing$ | async)' mat-icon-button color='warn'
+                                class='ml-2' (click)='deleteResourceCtrl(i)'>
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div class='row'>
+                      <div class='col-12'>
+                        <button mat-stroked-button [disabled]='(store.isActing$ | async)' type='button'
+                                (click)='addResourceCtrl()'>
+                          <mat-icon>add</mat-icon>
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </mat-card-content>
         </mat-card>
       </div>
@@ -126,10 +165,11 @@
           </mat-card-title>
           <mat-divider></mat-divider>
           <mat-card-content (cdkDropListDropped)='testGroupDragEvent($event)' cdkDropList>
-            <mat-card *ngFor='let test of (uiStore.selectedTests$ | async); first as isFirst; last as isLast; trackBy: trackByFn'
-                      [ngClass]='{"mt-4" : isFirst, "mb-0": isLast }'
-                      cdkDrag
-                      class='mat-elevation-z3 p-3 mb-3'>
+            <mat-card
+              *ngFor='let test of (uiStore.selectedTests$ | async); first as isFirst; last as isLast; trackBy: trackByFn'
+              [ngClass]='{"mt-4" : isFirst, "mb-0": isLast }'
+              cdkDrag
+              class='mat-elevation-z3 p-3 mb-3'>
               <div class='container-fluid p-0'>
                 <div class='row'>
                   <div class='col-10'>
