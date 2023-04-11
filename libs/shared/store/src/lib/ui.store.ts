@@ -72,12 +72,7 @@ const initialState: UiState = {
         { label: 'Tags', path: '/tags', icon: 'style' }
       ]
     },
-    {
-      name: 'Goals',
-      navItems: [
-        { label: 'Goals', path: '/goals', icon: 'beenhere' }
-      ]
-    },
+
     {
       name: 'Admin',
       navItems: [
@@ -89,9 +84,17 @@ const initialState: UiState = {
         // { label: 'Reports', path: '/reports', icon: 'show_chart' },
         // { label: 'App Releases', path: '/app-release', icon: 'file_download' }
       ]
-    }
+    },
+    {
+      name: 'User Insights',
+      navItems: [
+        { label: 'Goals', path: '/goals', icon: 'beenhere' },
+        { label: 'Interest', path: '#', icon: 'interests' },
+        { label: 'Sport/Activities', path: '#', icon: 'sports_score' }
+      ]
+    },
   ]
-};  
+};
 
 @Injectable({ providedIn: 'root' })
 export class UiStore extends ComponentStore<UiState> {
