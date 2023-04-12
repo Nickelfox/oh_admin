@@ -99,7 +99,8 @@
                 </mat-checkbox>
               </div>
             </div>
-            <div *ngFor='let ans of answersCtrl.controls; let i=index' class='row mb-2'>
+            <div (cdkDropListDropped)='goalsDrag($event)' cdkDropList>
+            <div *ngFor='let ans of answersCtrl.controls; let i=index' class='row mb-2' cdkDrag >
               <div class='col-12' [formGroup]='answerFormGroup(i)'>
                 <mat-card class='mat-elevation-z1'>
                   <div class='answersGrid'>
@@ -119,6 +120,7 @@
                   </div>
                 </mat-card>
               </div>
+            </div>
             </div>
           </div>
         </mat-card>
