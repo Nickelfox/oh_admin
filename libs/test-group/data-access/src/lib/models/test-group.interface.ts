@@ -1,16 +1,22 @@
-import { CustomApiResponse, OrderedContent, SortingEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
-import { Media } from '@hidden-innovation/media';
-import { Test } from '@hidden-innovation/test/data-access';
-import { Tag } from '@hidden-innovation/tags/data-access';
+import {CustomApiResponse, OrderedContent, SortingEnum, TagCategoryEnum} from '@hidden-innovation/shared/models';
+import {Media} from '@hidden-innovation/media';
+import {Test} from '@hidden-innovation/test/data-access';
+import {Tag} from '@hidden-innovation/tags/data-access';
 
 export interface TestGroupCore {
   name: string;
+  textGroupOverview: string;
   category: TagCategoryEnum | 'NONE';
   subCategory: string | Tag;
   thumbnailId: number | undefined;
   imageId: number | undefined;
+  videoId: number | undefined;
   description: string;
   isVisible: boolean;
+  isPublished: false,
+  posterId: number;
+  urls: ContentUrl[];
+  imagesAndPdfsIds: number[];
   tests: Test[] | OrderedContent[] | number[];
 }
 
@@ -19,9 +25,17 @@ export interface TestGroup extends TestGroupCore {
   deleted_at: string;
   created_at: string;
   updated_at: string;
+  imagesAndPdfs: Media[];
+  video: Media;
   category: TagCategoryEnum;
+  ContentUrl: ContentUrl[];
   thumbnail: Media;
   image: Media;
+}
+
+export interface ContentUrl {
+  url: string;
+  description: string;
 }
 
 export interface TestGroupListingFilters {
