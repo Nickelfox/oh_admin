@@ -4,6 +4,5 @@ export enum FeaturedNameEnum
   PACKS = 'PACKS',
   FEATURED_PACKS = 'LEARN',
   FEATURED_TESTS = 'FEATURED',
-  FEATURED_GROUP = 'TEST GROUP'
 }
 
