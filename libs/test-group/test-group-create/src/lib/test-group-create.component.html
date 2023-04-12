@@ -82,6 +82,14 @@
                 </div>
               </div>
             </div>
+            <div class='row mb-2'>
+              <div class='col-12'>
+                <hidden-innovation-common-form-field
+                  controlPath='textGroupOverview'
+                  label='Test Group Overview Text'
+                ></hidden-innovation-common-form-field>
+              </div>
+            </div>
             <div class='container-fluid p-0 '>
               <div class='row mb-3'>
                 <div class='col-12'>
@@ -113,6 +121,29 @@
                     [setImageData]='selectedTestGroup?.image'
                     controlPath='imageId'
                   ></hidden-innovation-common-form-field-image>
+                </div>
+              </div>
+              <div class='row mb-3'>
+                <div class='col-12'>
+                  <p class='text-muted mb-2'>Video</p>
+                  <div class='d-flex align-items-center'>
+                    <hidden-innovation-common-form-field-video
+                      (emitRemoveVideo)='removeMediaCtrlAndValidate(testGroup.controls.videoId)'
+                      (emitVideoCtrlData)='testGroup.controls.videoId?.setValue($event)'
+                      [parentCtrl]='testGroup.controls.videoId'
+                      [videoData]='selectedTestGroup?.video'
+                      controlPath='videoId'
+                    ></hidden-innovation-common-form-field-video>
+                    <div class='ml-2'>
+                      <mat-hint>
+                        <small>({{constantDataService.FIZE_SIZE_DATA.videoFormatMessage}})</small>
+                      </mat-hint>
+                      <br>
+                      <mat-hint>
+                        <small>({{constantDataService.FIZE_SIZE_DATA.videoRatioMessage}})</small>
+                      </mat-hint>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -179,7 +210,8 @@
                               </mat-form-field>
                             </div>
                             <div class='col-2 d-flex justify-content-end'>
-                              <button type='button' [disabled]='(store.isActing$ | async)' mat-icon-button color='warn' (click)='removeUrlCtrl(i)'>
+                              <button type='button' [disabled]='(store.isActing$ | async)' mat-icon-button color='warn'
+                                      (click)='removeUrlCtrl(i)'>
                                 <mat-icon>delete</mat-icon>
                               </button>
                             </div>

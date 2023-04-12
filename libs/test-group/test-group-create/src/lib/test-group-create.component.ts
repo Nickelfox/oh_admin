@@ -56,6 +56,13 @@ export class TestGroupCreateComponent implements OnDestroy {
         value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
       })
     ]),
+    textGroupOverview: new FormControl('', [
+      ...this.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+      })
+    ]),
+    isPublished: new FormControl(false),
     description: new FormControl('', [
       ...this.requiredFieldValidation
     ]),
@@ -72,6 +79,12 @@ export class TestGroupCreateComponent implements OnDestroy {
     ]),
     imageId: new FormControl(undefined, [
       RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]),
+    videoId: new FormControl(undefined, [
       RxwebValidators.numeric({
         allowDecimal: false,
         acceptValue: NumericValueType.PositiveNumber
@@ -191,6 +204,7 @@ export class TestGroupCreateComponent implements OnDestroy {
     return category.valid;
     // && category.value !== 'NONE'
   }
+
   buildResourceFormCtrl(id?: number): FormControl<number> {
     return new FormControl<number>(id ?? undefined, [
       RxwebValidators.required(),
@@ -221,6 +235,7 @@ export class TestGroupCreateComponent implements OnDestroy {
   removeUrlCtrl(i: number): void {
     this.urlFormArrayTestGroup.removeAt(i);
   }
+
   addUrlCtrlTestGroup(urlObj?: ContentUrl): void {
     this.urlFormArrayTestGroup.push(new FormGroup<ContentUrl>({
       url: new FormControl<string>(urlObj?.url ?? '', [
@@ -236,6 +251,14 @@ export class TestGroupCreateComponent implements OnDestroy {
     }));
   }
 
+  removeMediaCtrlAndValidate(ctrl: FormControl | undefined): void {
+    if (ctrl) {
+      ctrl.reset();
+      this.testGroup.patchValue({
+        isPublished: false
+      })
+    }
+  }
 
 
   categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
@@ -273,7 +296,6 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   submit(): void {
-    console.log(this.testGroup.value)
     this.testGroup.markAllAsTouched();
     this.testGroup.markAllAsDirty();
     if (this.testGroup.invalid) {
@@ -370,9 +392,21 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   private populateTest(testGroup: TestGroup): void {
-    const {isVisible, category, imageId, thumbnailId, subCategory, name, description, posterId} = testGroup;
+    const {
+      isVisible,
+      category,
+      imageId,
+      thumbnailId,
+      subCategory,
+      name,
+      description,
+      posterId,
+      textGroupOverview,
+      video
+    } = testGroup;
     this.selectedTestGroup = testGroup;
-    const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];1
+    const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];
+    1
     const resources: Media[] = this.selectedTestGroup.imagesAndPdfs as Media[] ?? [];
     const urls: ContentUrl[] = this.selectedTestGroup.ContentUrl as ContentUrl[] ?? [];
     this.testGroup.controls.category.setValue(category);
@@ -389,6 +423,8 @@ export class TestGroupCreateComponent implements OnDestroy {
       isVisible,
       imageId,
       posterId,
+      videoId: video?.id,
+      textGroupOverview,
       thumbnailId,
       subCategory,
       name,
