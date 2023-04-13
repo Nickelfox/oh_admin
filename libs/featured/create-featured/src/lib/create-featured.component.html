@@ -9,7 +9,7 @@
           Cancel
         </button>
         <button
-          [disabled]='(store.isLoading$ | async ) || (store.isActing$ | async)'
+          [disabled]=''
           class='ml-3'
           color='primary' mat-flat-button type='submit'>
           Save
@@ -128,7 +128,7 @@
                 <span>Test Single</span>
               </button>
               <button (click)='openTestGroupSelector()'
-                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)|| (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
                       mat-menu-item type='button'>
                 <span>Test Group</span>
               </button>
@@ -206,6 +206,16 @@
                   [name]='content.name'
                   [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                   cdkDrag
+                  class='mb-2'
+                ></hidden-innovation-pack-content-card>
+              </ng-template>
+              <ng-template [ngIfElse]='elseExists' [ngIf]='uiStore.testGroupsExists$ | async'>
+                <hidden-innovation-pack-content-card
+                  (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.GROUP, content.id)'
+                  *ngFor='let content of (uiStore.selectedTestGroups$ | async); index as i; first as isFirst; last as isLast'
+                  [category]='packContentTypeEnum.GROUP'
+                  [name]='content.name'
+                  [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                   class='mb-2'
                 ></hidden-innovation-pack-content-card>
               </ng-template>
