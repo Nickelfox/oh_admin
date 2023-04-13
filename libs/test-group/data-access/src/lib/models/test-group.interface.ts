@@ -14,7 +14,6 @@ export interface TestGroupCore {
   description: string;
   isVisible: boolean;
   isPublished: false,
-  posterId: number;
   urls: ContentUrl[];
   imagesAndPdfsIds: number[];
   tests: Test[] | OrderedContent[] | number[];
