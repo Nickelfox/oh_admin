@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {TestSelectorComponent, TestSelectorData} from '@hidden-innovation/shared/ui/test-selector';
-import {TestGroup, TestGroupCore, TestGroupStore} from '@hidden-innovation/test-group/data-access';
+import {ContentUrl, TestGroup, TestGroupCore, TestGroupStore} from '@hidden-innovation/test-group/data-access';
 import {FormArray, FormControl, FormGroup, ValidatorFn} from '@ngneat/reactive-forms';
 import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators';
 import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
@@ -24,7 +24,6 @@ import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog'
 import {isEqual} from 'lodash-es';
 import {Validators} from '@angular/forms';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
-import {ContentUrl} from "@hidden-innovation/pack/data-access";
 
 @UntilDestroy({checkProperties: true})
 @Component({
@@ -85,13 +84,6 @@ export class TestGroupCreateComponent implements OnDestroy {
       })
     ]),
     videoId: new FormControl(undefined, [
-      RxwebValidators.numeric({
-        allowDecimal: false,
-        acceptValue: NumericValueType.PositiveNumber
-      })
-    ]),
-    posterId: new FormControl<number>(undefined, [
-      RxwebValidators.required(),
       RxwebValidators.numeric({
         allowDecimal: false,
         acceptValue: NumericValueType.PositiveNumber
@@ -400,7 +392,6 @@ export class TestGroupCreateComponent implements OnDestroy {
       subCategory,
       name,
       description,
-      posterId,
       textGroupOverview,
       video
     } = testGroup;
@@ -422,7 +413,6 @@ export class TestGroupCreateComponent implements OnDestroy {
     this.testGroup.patchValue({
       isVisible,
       imageId,
-      posterId,
       videoId: video?.id,
       textGroupOverview,
       thumbnailId,

@@ -161,7 +161,7 @@
                     <div class='row mb-2' *ngFor='let res of imagesAndPdfsArrayCtrl.controls; let i=index;'>
                       <div class='col-12 d-flex '>
                         <hidden-innovation-common-form-field-file
-                          controlPath='posterId'
+                          controlPath='imagesAndPdfsIds'
                           [fileData]='selectedResource(i)'
                           [parentCtrl]='imagesAndPdfsArrayCtrl.controls[i]'
                           (emitFileCtrlData)='imagesAndPdfsArrayCtrl.controls[i].setValue($event)'
