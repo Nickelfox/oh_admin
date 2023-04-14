@@ -62,6 +62,10 @@ export class UserDetailsComponent implements OnInit {
   }
 
 
+  getGoalsCount():string{
+    return this.UserAnswers?.length.toString() ?? "-"
+  }
+
   getFields(input: NewGoal[] | undefined) {
     if (!input) {
       return;

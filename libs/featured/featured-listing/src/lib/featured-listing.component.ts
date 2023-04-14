@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Featured, FeaturedLocalState, FeaturedStore } from '@hidden-innovation/featured/data-access';
-import { MatTableDataSource } from '@angular/material/table';
-import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { FeaturedNameEnum, TagCategoryEnum } from '@hidden-innovation/shared/models';
-import { Router } from '@angular/router';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Featured, FeaturedLocalState, FeaturedStore} from '@hidden-innovation/featured/data-access';
+import {MatTableDataSource} from '@angular/material/table';
+import {ConstantDataService} from '@hidden-innovation/shared/form-config';
+import {FeaturedNameEnum, TagCategoryEnum} from '@hidden-innovation/shared/models';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -95,6 +95,7 @@ export class FeaturedListingComponent implements OnInit {
 
   getItemsCount(feature: Featured): number {
     let count = 0;
+    let featureCount = 0;
     switch (feature.name) {
       case FeaturedNameEnum.SPOTLIGHT:
         count += feature.testGroups?.length ?? 0;
@@ -105,7 +106,9 @@ export class FeaturedListingComponent implements OnInit {
       case FeaturedNameEnum.PACKS:
         return feature.packs?.length ?? 0;
       case FeaturedNameEnum.FEATURED_TESTS:
-        return feature.tests?.length ?? 0;
+        featureCount += feature.tests?.length ?? 0
+        featureCount += feature.testGroups?.length ?? 0
+        return featureCount ?? 0;
       case FeaturedNameEnum.FEATURED_PACKS:
         return feature.packs?.length ?? 0;
       default:
