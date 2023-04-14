@@ -51,7 +51,9 @@ export class CreateGoalsComponent implements OnInit {
       })
     ]),
     showIcon: new FormControl(false),
-    goalAnswer: new FormArray([]),
+    goalAnswer: new FormArray([],[
+      RxwebValidators.minLength({value:1,message:"Minimum 1 goal answers required"})
+    ]),
     id: new FormControl(undefined)
   });
 
@@ -210,7 +212,6 @@ export class CreateGoalsComponent implements OnInit {
   }
 
   submit(): void {
-
     this.goalsGroup.markAllAsDirty();
     this.goalsGroup.markAllAsTouched();
     if (this.goalsGroup.invalid) {
