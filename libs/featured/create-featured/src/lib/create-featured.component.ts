@@ -187,6 +187,7 @@ export class CreateFeaturedComponent implements OnDestroy {
         }
       } else if (this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS) {
         resetContentCtrls();
+        setTestGroupCtrl(state.selectedTestGroups ?? []);
         setTestCtrl(state.selectedTests as Test[] ?? []);
       } else {
         resetContentCtrls();
@@ -374,6 +375,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       location: this.featuredGroup.getRawValue().location,
       ...this.featuredGroup.value
     };
+    console.log(featured)
     this.store.updateFeatured$({
       id: this.featuredID,
       featured
