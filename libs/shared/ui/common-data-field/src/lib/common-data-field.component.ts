@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { GoalAnswer } from '@hidden-innovation/shared/models';
+import {ChangeDetectionStrategy, Component, Input, ViewEncapsulation} from '@angular/core';
+import {GoalAnswer} from '@hidden-innovation/shared/models';
 
 @Component({
   selector: 'hidden-innovation-common-data-field',
@@ -11,12 +11,12 @@ import { GoalAnswer } from '@hidden-innovation/shared/models';
         height='28px'
       ></hidden-innovation-shimmer>
       <h4 *ngIf='!goals' class='mat-body-2 font-weight-light'>{{value || '--'}}</h4>
-      <span *ngFor='let goal of goals'>
-            <h4  class='mat-body-2 font-weight-light'>{{goal.answerString || '--'}}</h4>
-      </span>
+      <div *ngFor="let goal of goals" >
+              <span class='mat-body-2 font-weight-light goalText'>{{goal.answerString || "--"}}</span>
+      </div>
     </hidden-innovation-common-data-field-skeleton>
   `,
-  styles: [],
+  styles: [`span::after{content: ',';}`],
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -25,4 +25,7 @@ export class CommonDataFieldComponent {
   @Input() goals?: GoalAnswer[];
   @Input() value?: string | number | null | undefined;
   @Input() isLoading?: boolean | null;
+
+
+
 }
