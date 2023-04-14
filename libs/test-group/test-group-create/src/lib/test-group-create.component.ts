@@ -58,7 +58,7 @@ export class TestGroupCreateComponent implements OnDestroy {
     textGroupOverview: new FormControl('', [
       ...this.requiredFieldValidation,
       RxwebValidators.maxLength({
-        value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.OVERVIEW_TEST_LENGTH
       })
     ]),
     isPublished: new FormControl(false),
@@ -84,6 +84,7 @@ export class TestGroupCreateComponent implements OnDestroy {
       })
     ]),
     videoId: new FormControl(undefined, [
+      RxwebValidators.required(),
       RxwebValidators.numeric({
         allowDecimal: false,
         acceptValue: NumericValueType.PositiveNumber
