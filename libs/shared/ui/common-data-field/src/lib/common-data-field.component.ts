@@ -16,7 +16,7 @@ import {GoalAnswer} from '@hidden-innovation/shared/models';
       </ol>
     </hidden-innovation-common-data-field-skeleton>
   `,
-  styles: [],
+  styles: [`ol>li::marker{ font-weight:bold;font-size: 14px}`],
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
