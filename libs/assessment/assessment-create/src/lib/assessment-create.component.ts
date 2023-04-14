@@ -55,6 +55,7 @@ export class AssessmentCreateComponent implements OnDestroy {
       })
     ]),
     videoId: new FormControl(undefined, [
+      RxwebValidators.required(),
       RxwebValidators.numeric({
         allowDecimal: false,
         acceptValue: NumericValueType.PositiveNumber
@@ -85,6 +86,9 @@ export class AssessmentCreateComponent implements OnDestroy {
     content: new FormControl<ContentCore[]>([]),
     category_overview_text: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.OVERVIEW_TEST_LENGTH
+      })
     ]),
   });
 
