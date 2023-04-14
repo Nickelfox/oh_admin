@@ -11,12 +11,12 @@ import {GoalAnswer} from '@hidden-innovation/shared/models';
         height='28px'
       ></hidden-innovation-shimmer>
       <h4 *ngIf='!goals' class='mat-body-2 font-weight-light'>{{value || '--'}}</h4>
-      <div *ngFor="let goal of goals" >
-              <span class='mat-body-2 font-weight-light goalText'>{{goal.answerString || "--"}}</span>
-      </div>
+      <ol type="number"  class="p-0 pl-3">
+        <li *ngFor="let goal of goals"  class='mat-body-2 font-weight-light goalText p-0'><h4 class='mat-body-2 font-weight-light'>{{goal.answerString || "--"}}</h4></li>
+      </ol>
     </hidden-innovation-common-data-field-skeleton>
   `,
-  styles: [`span::after{content: ',';}`],
+  styles: [],
   encapsulation: ViewEncapsulation.Emulated,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
