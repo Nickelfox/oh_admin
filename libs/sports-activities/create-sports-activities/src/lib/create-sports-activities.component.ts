@@ -7,6 +7,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import { SportActivitiesCore } from '@hidden-innovation/sports-activities/data-access';
 
 @Component({
   selector: 'hidden-innovation-create-sports-activities',
@@ -16,6 +17,40 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateSportsActivitiesComponent implements OnInit {
+  sportsActivitiesGroup: FormGroup<SportActivitiesCore> = new FormGroup<SportActivitiesCore>({
+    question: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({value: 100})
+    ]),
+    body: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({value: 300})
+    ]),
+    description: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({value: 300})
+    ]),
+    header: new FormControl('', [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.maxLength({value: 120})
+    ]),
+    reminder: new FormControl(undefined, [
+      ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.numeric({
+        allowDecimal: false
+      }),
+      RxwebValidators.notEmpty(),
+      RxwebValidators.required(),
+      RxwebValidators.minNumber({
+        value: 0
+      })
+    ]),
+    showIcon: new FormControl(false),
+    goalAnswer: new FormArray([],[
+      RxwebValidators.minLength({value:1,message:"Minimum 1 goal answers required"})
+    ]),
+    id: new FormControl(undefined)
+  });
 
   constructor(
     public router: Router,
@@ -33,7 +68,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
   }
 
   submit(): void {
-    console.log("Form")
+    console.log(this.sportsActivitiesGroup.value)
   }
 
 

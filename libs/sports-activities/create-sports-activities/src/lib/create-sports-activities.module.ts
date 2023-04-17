@@ -8,6 +8,7 @@ import { CommonFormFieldImageModule } from '@hidden-innovation/shared/ui/common-
 import { RouterModule } from '@angular/router';
 import { CommonFormFieldTextareaModule } from '@hidden-innovation/shared/ui/common-form-field-textarea';
 import { CommonFormFieldNumberModule } from '@hidden-innovation/shared/ui/common-form-field-number';
+import { SportActivitiesDataAccessModule } from '@hidden-innovation/sports-activities/data-access';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { CommonFormFieldNumberModule } from '@hidden-innovation/shared/ui/common
     CommonFormFieldModule,
     UtilsModule,
     CommonFormFieldImageModule,
+    SportActivitiesDataAccessModule,
     RouterModule.forChild([
       {
         path: '',
