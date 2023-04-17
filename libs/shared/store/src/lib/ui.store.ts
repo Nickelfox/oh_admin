@@ -90,7 +90,7 @@ const initialState: UiState = {
       navItems: [
         { label: 'Goals', path: '/goals', icon: 'beenhere' },
         { label: 'Interest', path: '#', icon: 'interests' },
-        { label: 'Sport/Activities', path: '#', icon: 'sports_score' }
+        { label: 'Sport/Activities', path: '/sports-activities', icon: 'sports_score' }
       ]
     },
   ]
