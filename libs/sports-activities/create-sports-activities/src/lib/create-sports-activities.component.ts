@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { GoalsCore, GoalStore } from '@hidden-innovation/goals/data-access';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TitleCasePipe } from '@angular/common';
 import { UiStore } from '@hidden-innovation/shared/store';
@@ -17,47 +16,12 @@ import { RxwebValidators } from '@rxweb/reactive-form-validators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateSportsActivitiesComponent implements OnInit {
-  sportsActivitiesGroup: FormGroup<GoalsCore> = new FormGroup<GoalsCore>({
-    question: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({value: 100})
-    ]),
-    body: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({value: 300})
-    ]),
-    description: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({value: 300})
-    ]),
-    header: new FormControl('', [
-      ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({value: 120})
-    ]),
-    reminder: new FormControl(undefined, [
-      ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.numeric({
-        allowDecimal: false
-      }),
-      RxwebValidators.notEmpty(),
-      RxwebValidators.required(),
-      RxwebValidators.minNumber({
-        value: 0
-      })
-    ]),
-    showIcon: new FormControl(false),
-    goalAnswer: new FormArray([],[
-      RxwebValidators.minLength({value:1,message:"Minimum 1 goal answers required"})
-    ]),
-    id: new FormControl(undefined)
-  });
 
   constructor(
     public router: Router,
     private titleCasePipe: TitleCasePipe,
     public uiStore: UiStore,
     public route: ActivatedRoute,
-    public store: GoalStore,
     public constantDataService: ConstantDataService,
     private hotToastService: HotToastService,
     public formValidationService: FormValidationService,
