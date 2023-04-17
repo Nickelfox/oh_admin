@@ -67,7 +67,6 @@
     "shared-ui-test-tab-group": "libs/shared/ui/test-tab-group",
     "shared-utils": "libs/shared/utils",
     "sports-activities-create-sports-activities": "libs/sports-activities/create-sports-activities",
-    "sports-activities-data-access": "libs/sports-activities/data-access",
     "tags-data-access": "libs/tags/data-access",
     "tags-tags": "libs/tags/tags",
     "test-data-access": "libs/test/data-access",
