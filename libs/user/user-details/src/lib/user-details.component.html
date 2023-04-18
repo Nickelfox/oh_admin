@@ -3,10 +3,17 @@
     <div class='container-fluid p-0'>
       <div class='row mb-4 '>
         <div class='col-12 d-flex align-items-center justify-content-end'>
-          <div [ngSwitch]='user.status' >
-            <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)' mat-flat-button *ngSwitchCase='userPosition.PENDING'   color="warn">Pending</button>
-            <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)' mat-flat-button *ngSwitchCase='userPosition.ACTIVE' color='accent' >User Verified</button>
-            <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)' mat-flat-button *ngSwitchCase='userPosition.VERIFY_USER' (click)='store.toggleStatus(userID,user.status)'   color="primary">Verify User</button>
+          <div [ngSwitch]='user.status'>
+            <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)' mat-flat-button
+                    *ngSwitchCase='userPosition.PENDING' color="warn">Pending
+            </button>
+            <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)' mat-flat-button
+                    *ngSwitchCase='userPosition.ACTIVE' color='accent'>User Verified
+            </button>
+            <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)' mat-flat-button
+                    *ngSwitchCase='userPosition.VERIFY_USER' (click)='store.toggleStatus(userID,user.status)'
+                    color="primary">Verify User
+            </button>
           </div>
           <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
                   mat-flat-button color='{{user.is_blocked ? "accent" : "warn"}}' class='ml-3'
@@ -72,13 +79,13 @@
               [value]='(user.created_at | date: "shortDate")'
             ></hidden-innovation-common-data-field>
           </div>
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.USER_NAME'-->
-<!--              [value]='user.username'-->
-<!--            ></hidden-innovation-common-data-field>-->
-<!--          </div>-->
+          <!--          <div class='col-4'>-->
+          <!--            <hidden-innovation-common-data-field-->
+          <!--              [isLoading]='store.isLoading$ | async'-->
+          <!--              [label]='constantDataService.FIELD_NAME.USER_NAME'-->
+          <!--              [value]='user.username'-->
+          <!--            ></hidden-innovation-common-data-field>-->
+          <!--          </div>-->
         </div>
 
         <div class='row mb-2'>
@@ -99,17 +106,17 @@
 
         </div>
 
-<!--        <div class='row'>-->
+        <!--        <div class='row'>-->
 
 
-<!--          <div class='col-4'>-->
-<!--            <hidden-innovation-common-data-field-->
-<!--              [isLoading]='store.isLoading$ | async'-->
-<!--              [label]='constantDataService.FIELD_NAME.COUNTRY + "/" + constantDataService.FIELD_NAME.LOCATION'-->
-<!--              [value]='null'-->
-<!--            ></hidden-innovation-common-data-field>-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--          <div class='col-4'>-->
+        <!--            <hidden-innovation-common-data-field-->
+        <!--              [isLoading]='store.isLoading$ | async'-->
+        <!--              [label]='constantDataService.FIELD_NAME.COUNTRY + "/" + constantDataService.FIELD_NAME.LOCATION'-->
+        <!--              [value]='null'-->
+        <!--            ></hidden-innovation-common-data-field>-->
+        <!--          </div>-->
+        <!--        </div>-->
       </div>
 
       <mat-divider></mat-divider>
@@ -160,7 +167,17 @@
               [value]='user.skinColor'
             ></hidden-innovation-common-data-field>
           </div>
-          <div class='col-4' >
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              [label]='"Goals Count"'
+              [value]='getGoalsCount()'
+            ></hidden-innovation-common-data-field>
+          </div>
+
+        </div>
+        <div class='row mb-2'>
+          <div class='col-4'>
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.GOAL'
@@ -172,73 +189,73 @@
 
       <mat-divider></mat-divider>
 
-        <div class='container-fluid p-4'>
-          <div class='row mb-2'>
-            <div class='col-12'>
-              <h4 class='mat-h4 font-sf-pro--bold text-uppercase text-muted'>User Engagement</h4>
-            </div>
+      <div class='container-fluid p-4'>
+        <div class='row mb-2'>
+          <div class='col-12'>
+            <h4 class='mat-h4 font-sf-pro--bold text-uppercase text-muted'>User Engagement</h4>
           </div>
+        </div>
 
-<!--          <div class='row'>-->
-<!--            <div class='col-12'>-->
-<!--              <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase'>User Test History</h5>-->
-<!--            </div>-->
-<!--          </div>-->
+        <!--          <div class='row'>-->
+        <!--            <div class='col-12'>-->
+        <!--              <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase'>User Test History</h5>-->
+        <!--            </div>-->
+        <!--          </div>-->
 
-<!--          <div class='row mb-2'>-->
-<!--            <div class='col-4'>-->
-<!--              <hidden-innovation-common-data-field-->
-<!--                [isLoading]='store.isLoading$ | async'-->
-<!--                [label]='constantDataService.FIELD_NAME.WATCHED'-->
-<!--                [value]='null'-->
-<!--              ></hidden-innovation-common-data-field>-->
-<!--            </div>-->
-<!--            <div class='col-4'>-->
-<!--              <hidden-innovation-common-data-field-->
-<!--                [isLoading]='store.isLoading$ | async'-->
-<!--                [label]='constantDataService.FIELD_NAME.COMPLETED'-->
-<!--                [value]='null'-->
-<!--              ></hidden-innovation-common-data-field>-->
-<!--            </div>-->
-<!--            <div class='col-4'>-->
-<!--              <hidden-innovation-common-data-field-->
-<!--                [isLoading]='store.isLoading$ | async'-->
-<!--                [label]='constantDataService.FIELD_NAME.INPUTS'-->
-<!--                [value]='null'-->
-<!--              ></hidden-innovation-common-data-field>-->
-<!--            </div>-->
-<!--          </div>-->
+        <!--          <div class='row mb-2'>-->
+        <!--            <div class='col-4'>-->
+        <!--              <hidden-innovation-common-data-field-->
+        <!--                [isLoading]='store.isLoading$ | async'-->
+        <!--                [label]='constantDataService.FIELD_NAME.WATCHED'-->
+        <!--                [value]='null'-->
+        <!--              ></hidden-innovation-common-data-field>-->
+        <!--            </div>-->
+        <!--            <div class='col-4'>-->
+        <!--              <hidden-innovation-common-data-field-->
+        <!--                [isLoading]='store.isLoading$ | async'-->
+        <!--                [label]='constantDataService.FIELD_NAME.COMPLETED'-->
+        <!--                [value]='null'-->
+        <!--              ></hidden-innovation-common-data-field>-->
+        <!--            </div>-->
+        <!--            <div class='col-4'>-->
+        <!--              <hidden-innovation-common-data-field-->
+        <!--                [isLoading]='store.isLoading$ | async'-->
+        <!--                [label]='constantDataService.FIELD_NAME.INPUTS'-->
+        <!--                [value]='null'-->
+        <!--              ></hidden-innovation-common-data-field>-->
+        <!--            </div>-->
+        <!--          </div>-->
 
-<!--          <div class='row'>-->
-<!--            <div class='col-12'>-->
-<!--              <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase text-color__primary'>User Assessment History</h5>-->
-<!--            </div>-->
-<!--          </div>-->
+        <!--          <div class='row'>-->
+        <!--            <div class='col-12'>-->
+        <!--              <h5 class='mat-h5 font-sf-pro&#45;&#45;bold text-uppercase text-color__primary'>User Assessment History</h5>-->
+        <!--            </div>-->
+        <!--          </div>-->
 
-<!--          <div class='row mb-2'>-->
-<!--            <div class='col-4'>-->
-<!--              <hidden-innovation-common-data-field-->
-<!--                [isLoading]='store.isLoading$ | async'-->
-<!--                [label]='constantDataService.FIELD_NAME.STARTED'-->
-<!--                [value]='null'-->
-<!--              ></hidden-innovation-common-data-field>-->
-<!--            </div>-->
-<!--            <div class='col-4'>-->
-<!--              <hidden-innovation-common-data-field-->
-<!--                [isLoading]='store.isLoading$ | async'-->
-<!--                [label]='constantDataService.FIELD_NAME.COMPLETED'-->
-<!--                [value]='null'-->
-<!--              ></hidden-innovation-common-data-field>-->
-<!--            </div>-->
+        <!--          <div class='row mb-2'>-->
+        <!--            <div class='col-4'>-->
+        <!--              <hidden-innovation-common-data-field-->
+        <!--                [isLoading]='store.isLoading$ | async'-->
+        <!--                [label]='constantDataService.FIELD_NAME.STARTED'-->
+        <!--                [value]='null'-->
+        <!--              ></hidden-innovation-common-data-field>-->
+        <!--            </div>-->
+        <!--            <div class='col-4'>-->
+        <!--              <hidden-innovation-common-data-field-->
+        <!--                [isLoading]='store.isLoading$ | async'-->
+        <!--                [label]='constantDataService.FIELD_NAME.COMPLETED'-->
+        <!--                [value]='null'-->
+        <!--              ></hidden-innovation-common-data-field>-->
+        <!--            </div>-->
 
-<!--            <div class='col-4'>-->
-<!--              <hidden-innovation-common-data-field-->
-<!--                [isLoading]='store.isLoading$ | async'-->
-<!--                [label]='constantDataService.FIELD_NAME.RESULTS'-->
-<!--                [value]='null'-->
-<!--              ></hidden-innovation-common-data-field>-->
-<!--            </div>-->
-<!--          </div>-->
+        <!--            <div class='col-4'>-->
+        <!--              <hidden-innovation-common-data-field-->
+        <!--                [isLoading]='store.isLoading$ | async'-->
+        <!--                [label]='constantDataService.FIELD_NAME.RESULTS'-->
+        <!--                [value]='null'-->
+        <!--              ></hidden-innovation-common-data-field>-->
+        <!--            </div>-->
+        <!--          </div>-->
         <div class='row mb-2'>
           <div class='col-4'>
             <hidden-innovation-common-data-field
@@ -262,36 +279,36 @@
             ></hidden-innovation-common-data-field>
           </div>
         </div>
-          <div class='row mb-2'>
-            <div class='col-4'>
-              <hidden-innovation-common-data-field
-                [isLoading]='store.isLoading$ | async'
-                label='Cardio CPS'
-                [value]='user.cardioCPS === undefined ? null : user.cardioCPS.toFixed(2) +"%"'
-              ></hidden-innovation-common-data-field>
-            </div>
-            <div class='col-4'>
-              <hidden-innovation-common-data-field
-                [isLoading]='store.isLoading$ | async'
-                label='Function CPS'
-                [value]='user.functionCPS === undefined ? null : user.functionCPS.toFixed(2) +"%"'
-              ></hidden-innovation-common-data-field>
-            </div>
+        <div class='row mb-2'>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              label='Cardio CPS'
+              [value]='user.cardioCPS === undefined ? null : user.cardioCPS.toFixed(2) +"%"'
+            ></hidden-innovation-common-data-field>
           </div>
-          <div class='row mb-2 mt-4'>
-            <div class='col-2'>
-              <hidden-innovation-common-data-field-skeleton
-                [label]='constantDataService.FIELD_NAME.OOS'>
-                <hidden-innovation-spinner-text
-                  [value]='user.OOS'
-                  [size]='100'
-                  [text]='user.OOS ? user.OOS.toFixed(1) : null '
-                  spinnerMode='determinate'
-                ></hidden-innovation-spinner-text>
-              </hidden-innovation-common-data-field-skeleton>
-            </div>
+          <div class='col-4'>
+            <hidden-innovation-common-data-field
+              [isLoading]='store.isLoading$ | async'
+              label='Function CPS'
+              [value]='user.functionCPS === undefined ? null : user.functionCPS.toFixed(2) +"%"'
+            ></hidden-innovation-common-data-field>
           </div>
         </div>
+        <div class='row mb-2 mt-4'>
+          <div class='col-2'>
+            <hidden-innovation-common-data-field-skeleton
+              [label]='constantDataService.FIELD_NAME.OOS'>
+              <hidden-innovation-spinner-text
+                [value]='user.OOS'
+                [size]='100'
+                [text]='user.OOS ? user.OOS.toFixed(1) : null '
+                spinnerMode='determinate'
+              ></hidden-innovation-spinner-text>
+            </hidden-innovation-common-data-field-skeleton>
+          </div>
+        </div>
+      </div>
 
     </mat-card>
   </ng-template>

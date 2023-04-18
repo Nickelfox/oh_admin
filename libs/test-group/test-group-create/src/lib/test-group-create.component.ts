@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
-import { TestGroup, TestGroupCore, TestGroupStore } from '@hidden-innovation/test-group/data-access';
-import { FormArray, FormControl, FormGroup, ValidatorFn } from '@ngneat/reactive-forms';
-import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {TestSelectorComponent, TestSelectorData} from '@hidden-innovation/shared/ui/test-selector';
+import {ContentUrl, TestGroup, TestGroupCore, TestGroupStore} from '@hidden-innovation/test-group/data-access';
+import {FormArray, FormControl, FormGroup, ValidatorFn} from '@ngneat/reactive-forms';
+import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators';
+import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
 import {
   ContentSelectorOpType,
   GenericDialogPrompt,
@@ -12,20 +12,20 @@ import {
   TagCategoryEnum,
   TagTypeEnum
 } from '@hidden-innovation/shared/models';
-import { AspectRatio } from '@hidden-innovation/media';
-import { Tag, TagsStore } from '@hidden-innovation/tags/data-access';
-import { HotToastService } from '@ngneat/hot-toast';
-import { distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
-import { UntilDestroy } from '@ngneat/until-destroy';
-import { Test } from '@hidden-innovation/test/data-access';
-import { UiStore } from '@hidden-innovation/shared/store';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { isEqual } from 'lodash-es';
-import { Validators } from '@angular/forms';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import {AspectRatio, Media} from '@hidden-innovation/media';
+import {Tag, TagsStore} from '@hidden-innovation/tags/data-access';
+import {HotToastService} from '@ngneat/hot-toast';
+import {distinctUntilChanged, filter, switchMap, tap} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
+import {UntilDestroy} from '@ngneat/until-destroy';
+import {Test} from '@hidden-innovation/test/data-access';
+import {UiStore} from '@hidden-innovation/shared/store';
+import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog';
+import {isEqual} from 'lodash-es';
+import {Validators} from '@angular/forms';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
-@UntilDestroy({ checkProperties: true })
+@UntilDestroy({checkProperties: true})
 @Component({
   selector: 'hidden-innovation-test-group-create',
   templateUrl: './test-group-create.component.html',
@@ -55,6 +55,13 @@ export class TestGroupCreateComponent implements OnDestroy {
         value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
       })
     ]),
+    textGroupOverview: new FormControl('', [
+      ...this.requiredFieldValidation,
+      RxwebValidators.maxLength({
+        value: this.formValidationService.FIELD_VALIDATION_VALUES.OVERVIEW_TEST_LENGTH
+      })
+    ]),
+    isPublished: new FormControl(false),
     description: new FormControl('', [
       ...this.requiredFieldValidation
     ]),
@@ -76,6 +83,15 @@ export class TestGroupCreateComponent implements OnDestroy {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
+    videoId: new FormControl(undefined, [
+      RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]),
+    urls: new FormArray<ContentUrl>([]),
+    imagesAndPdfsIds: new FormArray<number>([]),
     isVisible: new FormControl(false),
     tests: new FormArray<number>([], Validators.compose([
       Validators.required,
@@ -121,7 +137,7 @@ export class TestGroupCreateComponent implements OnDestroy {
         });
       }
     });
-    const { category, tests, subCategory } = this.testGroup.controls;
+    const {category, tests, subCategory} = this.testGroup.controls;
     const testFormArray: FormArray<number> = tests as FormArray<number>;
     this.uiStore.selectedTests$.subscribe(newTests => {
       this.selectedTests = newTests;
@@ -164,6 +180,10 @@ export class TestGroupCreateComponent implements OnDestroy {
     return this.testGroup.controls.tests.value?.length > 0;
   }
 
+  get imagesAndPdfsArrayCtrl(): FormArray<number> {
+    return this.testGroup.controls.imagesAndPdfsIds as FormArray<number>;
+  }
+
   get getSubCategoryValue(): string {
     const subCatCtrl = this.testGroup.controls.subCategory as FormControl<Tag | string>;
     if (subCatCtrl.disabled || !subCatCtrl.value) {
@@ -173,10 +193,66 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   get isCategoryValid(): boolean {
-    const { category } = this.testGroup.controls;
+    const {category} = this.testGroup.controls;
     return category.valid;
     // && category.value !== 'NONE'
   }
+
+  buildResourceFormCtrl(id?: number): FormControl<number> {
+    return new FormControl<number>(id ?? undefined, [
+      RxwebValidators.required(),
+      RxwebValidators.numeric({
+        allowDecimal: false,
+        acceptValue: NumericValueType.PositiveNumber
+      })
+    ]);
+  }
+
+  addResourceCtrl(id?: number): void {
+    this.imagesAndPdfsArrayCtrl.push(this.buildResourceFormCtrl(id));
+  }
+
+  deleteResourceCtrl(index: number): void {
+    this.imagesAndPdfsArrayCtrl.removeAt(index);
+  }
+
+
+  get urlFormArrayTestGroup(): FormArray<ContentUrl> {
+    return this.testGroup.controls.urls as FormArray<ContentUrl>;
+  }
+
+  urlFormControl(i: number): FormGroup<ContentUrl> {
+    return this.urlFormArrayTestGroup.controls[i] as FormGroup<ContentUrl>;
+  }
+
+  removeUrlCtrl(i: number): void {
+    this.urlFormArrayTestGroup.removeAt(i);
+  }
+
+  addUrlCtrlTestGroup(urlObj?: ContentUrl): void {
+    this.urlFormArrayTestGroup.push(new FormGroup<ContentUrl>({
+      url: new FormControl<string>(urlObj?.url ?? '', [
+        ...this.formValidationService.requiredFieldValidation,
+        RxwebValidators.url()
+      ]),
+      description: new FormControl<string>(urlObj?.description ?? '', [
+        ...this.formValidationService.requiredFieldValidation,
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
+        })
+      ])
+    }));
+  }
+
+  removeMediaCtrlAndValidate(ctrl: FormControl | undefined): void {
+    if (ctrl) {
+      ctrl.reset();
+      this.testGroup.patchValue({
+        isPublished: false
+      })
+    }
+  }
+
 
   categoryChangeReaction(_: (TagCategoryEnum | 'NONE')[]): void {
     const oldCat = _[0];
@@ -194,7 +270,7 @@ export class TestGroupCreateComponent implements OnDestroy {
       minWidth: '25rem'
     });
     dialogRef.afterClosed().subscribe((res) => {
-      const { category, subCategory } = this.testGroup.controls;
+      const {category, subCategory} = this.testGroup.controls;
       if (res) {
         subCategory.reset();
         this.uiStore.patchState({
@@ -300,17 +376,46 @@ export class TestGroupCreateComponent implements OnDestroy {
     });
   }
 
+  selectedResource(i: number): Media | undefined {
+    try {
+      return this.selectedTestGroup?.imagesAndPdfs[i];
+    } catch {
+      return;
+    }
+  }
+
   private populateTest(testGroup: TestGroup): void {
-    const { isVisible, category, imageId, thumbnailId, subCategory, name, description } = testGroup;
+    const {
+      isVisible,
+      category,
+      imageId,
+      thumbnailId,
+      subCategory,
+      name,
+      description,
+      textGroupOverview,
+      video
+    } = testGroup;
     this.selectedTestGroup = testGroup;
     const selectedTests: Test[] = (testGroup.tests as Test[]) ?? [];
+    1
+    const resources: Media[] = this.selectedTestGroup.imagesAndPdfs as Media[] ?? [];
+    const urls: ContentUrl[] = this.selectedTestGroup.ContentUrl as ContentUrl[] ?? [];
     this.testGroup.controls.category.setValue(category);
     this.uiStore.patchState({
       selectedTests
     });
+    try {
+      urls.forEach(u => this.addUrlCtrlTestGroup(u));
+      resources.forEach(r => this.addResourceCtrl(r.id));
+    } catch {
+      this.hotToastService.error('URL/Resource population error');
+    }
     this.testGroup.patchValue({
       isVisible,
       imageId,
+      videoId: video?.id,
+      textGroupOverview,
       thumbnailId,
       subCategory,
       name,

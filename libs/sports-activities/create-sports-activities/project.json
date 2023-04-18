@@ -1,0 +1,42 @@
+{
+  "projectType": "library",
+  "root": "libs/sports-activities/create-sports-activities",
+  "sourceRoot": "libs/sports-activities/create-sports-activities/src",
+  "prefix": "hidden-innovation",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["dist/libs/sports-activities/create-sports-activities"],
+      "options": {
+        "project": "libs/sports-activities/create-sports-activities/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/sports-activities/create-sports-activities/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/sports-activities/create-sports-activities/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/sports-activities/create-sports-activities"],
+      "options": {
+        "jestConfig": "libs/sports-activities/create-sports-activities/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/sports-activities/create-sports-activities/src/**/*.ts",
+          "libs/sports-activities/create-sports-activities/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

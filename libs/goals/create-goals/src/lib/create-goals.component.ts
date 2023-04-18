@@ -1,15 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TitleCasePipe } from '@angular/common';
-import { UiStore } from '@hidden-innovation/shared/store';
-import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { HotToastService } from '@ngneat/hot-toast';
-import { MatDialog } from '@angular/material/dialog';
-import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { GoalAnswer, Goals, GoalsCore, GoalStore } from '@hidden-innovation/goals/data-access';
-import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { GenericDialogPrompt } from '@hidden-innovation/shared/models';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TitleCasePipe} from '@angular/common';
+import {UiStore} from '@hidden-innovation/shared/store';
+import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
+import {HotToastService} from '@ngneat/hot-toast';
+import {MatDialog} from '@angular/material/dialog';
+import {FormArray, FormControl, FormGroup} from '@ngneat/reactive-forms';
+import {GoalAnswer, Goals, GoalsCore, GoalStore} from '@hidden-innovation/goals/data-access';
+import {RxwebValidators} from '@rxweb/reactive-form-validators';
+import {GenericDialogPrompt} from '@hidden-innovation/shared/models';
+import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog';
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {ContentCore} from "@hidden-innovation/pack/data-access";
 
 @Component({
   selector: 'hidden-innovation-create-goals',
@@ -23,19 +25,19 @@ export class CreateGoalsComponent implements OnInit {
   goalsGroup: FormGroup<GoalsCore> = new FormGroup<GoalsCore>({
     question: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({ value: 100 })
+      RxwebValidators.maxLength({value: 100})
     ]),
     body: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({ value: 300 })
+      RxwebValidators.maxLength({value: 300})
     ]),
     description: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({ value: 300 })
+      RxwebValidators.maxLength({value: 300})
     ]),
     header: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation,
-      RxwebValidators.maxLength({ value: 120 })
+      RxwebValidators.maxLength({value: 120})
     ]),
     reminder: new FormControl(undefined, [
       ...this.formValidationService.requiredFieldValidation,
@@ -49,11 +51,14 @@ export class CreateGoalsComponent implements OnInit {
       })
     ]),
     showIcon: new FormControl(false),
-    goalAnswer: new FormArray([]),
+    goalAnswer: new FormArray([],[
+      RxwebValidators.minLength({value:1,message:"Minimum 1 goal answers required"})
+    ]),
     id: new FormControl(undefined)
   });
 
   selectedGoals: GoalAnswer[] = [];
+
 
   constructor(
     public router: Router,
@@ -69,6 +74,9 @@ export class CreateGoalsComponent implements OnInit {
   ) {
   }
 
+  get selectedContents(): GoalAnswer[] {
+    return this.selectedGoals ?? [];
+  }
   get answersCtrl(): FormArray<GoalAnswer> {
     return this.goalsGroup.controls.goalAnswer as FormArray<GoalAnswer>;
   }
@@ -162,6 +170,14 @@ export class CreateGoalsComponent implements OnInit {
     });
   }
 
+  goalsDrag($event: CdkDragDrop<GoalAnswer>){
+    const selectedGoalAns = this.selectedContents ? [...this.selectedContents] : [];
+    moveItemInArray(selectedGoalAns, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedGoalAns
+    });
+  }
+
 
   ngOnInit(): void {
     this.store.selectedGoal$.subscribe((goal: Goals | undefined) => {
@@ -170,11 +186,11 @@ export class CreateGoalsComponent implements OnInit {
       }
     });
     this.uiStore.selectedGoalAns$.subscribe((ans) => {
-      this.selectedGoals = ans.map(({ id, iconName, answerString, answerId }, i) => {
+      this.selectedGoals = ans.map(({id,order, iconName, answerString, answerId}, i) => {
         return {
           iconName,
           answerString,
-          order: undefined,
+          order: order,
           answerId: id,
           id
         };
