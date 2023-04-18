@@ -7,7 +7,7 @@ export  interface SportActivitiesCore {
   body: string;
   reminder: number | undefined;
   id: number | undefined;
-  goalAnswer: SportActivitiesAnswer[];
+  sportsActivitiesAnswer: SportActivitiesAnswer[];
   showIcon: boolean;
 }
 

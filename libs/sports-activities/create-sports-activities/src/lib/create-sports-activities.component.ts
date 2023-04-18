@@ -7,7 +7,10 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import { SportActivitiesCore } from '@hidden-innovation/sports-activities/data-access';
+import {SportActivitiesAnswer, SportActivitiesCore} from '@hidden-innovation/sports-activities/data-access';
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
+import {GenericDialogPrompt} from "@hidden-innovation/shared/models";
+import {PromptDialogComponent} from "@hidden-innovation/shared/ui/prompt-dialog";
 
 @Component({
   selector: 'hidden-innovation-create-sports-activities',
@@ -46,7 +49,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
       })
     ]),
     showIcon: new FormControl(false),
-    goalAnswer: new FormArray([],[
+    sportsActivitiesAnswer: new FormArray([],[
       RxwebValidators.minLength({value:1,message:"Minimum 1 goal answers required"})
     ]),
     id: new FormControl(undefined)
@@ -64,11 +67,62 @@ export class CreateSportsActivitiesComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) { }
 
+
+  get answersCtrl(): FormArray<SportActivitiesAnswer> {
+    return this.sportsActivitiesGroup.controls.sportsActivitiesAnswer as FormArray<SportActivitiesAnswer>;
+  }
+
+  answerFormGroup(i: number): FormGroup<SportActivitiesAnswer> {
+    return this.answersCtrl.controls[i] as FormGroup<SportActivitiesAnswer>;
+  }
+
+  addNewAnswer(){
+    console.log("Adding Goals")
+  }
+
+  sportsDrag($event: CdkDragDrop<SportActivitiesAnswer>){
+    console.log($event,"Drag Goals")
+  }
+
+  removeAnswer(index: number): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Delete Sports and Activities?',
+      desc: `Are you sure you want to delete this answer?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        // const goal: FormGroup<GoalAnswer> = this.answerFormGroup(index);
+        const answerArray: FormArray<SportActivitiesAnswer> = this.sportsActivitiesGroup.controls.sportsActivitiesAnswer as FormArray<SportActivitiesAnswer>;
+        answerArray.removeAt(index);
+        this.cdr.markForCheck();
+        this.cdr.detectChanges();
+        this.cdr.checkNoChanges();
+      }
+    });
+  }
+
+
   ngOnInit(): void {
   }
 
   submit(): void {
     console.log(this.sportsActivitiesGroup.value)
+
+    this.sportsActivitiesGroup.markAllAsDirty();
+    this.sportsActivitiesGroup.markAllAsTouched();
+    if (this.sportsActivitiesGroup.invalid) {
+      this.hotToastService.error(this.formValidationService.formSubmitError);
+      return;
+    }
   }
 
 
