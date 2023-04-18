@@ -55,7 +55,7 @@ export class TestGroupCreateComponent implements OnDestroy {
         value: this.formValidationService.FIELD_VALIDATION_VALUES.NAME_LENGTH
       })
     ]),
-    textGroupOverview: new FormControl('', [
+    overviewText: new FormControl('', [
       ...this.requiredFieldValidation,
       RxwebValidators.maxLength({
         value: this.formValidationService.FIELD_VALIDATION_VALUES.OVERVIEW_TEST_LENGTH
@@ -90,6 +90,7 @@ export class TestGroupCreateComponent implements OnDestroy {
         acceptValue: NumericValueType.PositiveNumber
       })
     ]),
+
     urls: new FormArray<ContentUrl>([]),
     imagesAndPdfsIds: new FormArray<number>([]),
     isVisible: new FormControl(false),
@@ -393,7 +394,7 @@ export class TestGroupCreateComponent implements OnDestroy {
       subCategory,
       name,
       description,
-      textGroupOverview,
+      overviewText,
       video
     } = testGroup;
     this.selectedTestGroup = testGroup;
@@ -415,7 +416,7 @@ export class TestGroupCreateComponent implements OnDestroy {
       isVisible,
       imageId,
       videoId: video?.id,
-      textGroupOverview,
+      overviewText,
       thumbnailId,
       subCategory,
       name,

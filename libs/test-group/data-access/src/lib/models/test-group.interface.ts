@@ -5,7 +5,7 @@ import {Tag} from '@hidden-innovation/tags/data-access';
 
 export interface TestGroupCore {
   name: string;
-  textGroupOverview: string;
+  overviewText: string;
   category: TagCategoryEnum | 'NONE';
   subCategory: string | Tag;
   thumbnailId: number | undefined;
