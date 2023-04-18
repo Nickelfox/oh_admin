@@ -7,8 +7,13 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { RxwebValidators } from '@rxweb/reactive-form-validators';
-import {SportActivitiesAnswer, SportActivitiesCore} from '@hidden-innovation/sports-activities/data-access';
-import {CdkDragDrop} from "@angular/cdk/drag-drop";
+import {
+  SportActivities,
+  SportActivitiesAnswer,
+  SportActivitiesCore,
+  SportActivitiesStore
+} from '@hidden-innovation/sports-activities/data-access';
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 import {GenericDialogPrompt} from "@hidden-innovation/shared/models";
 import {PromptDialogComponent} from "@hidden-innovation/shared/ui/prompt-dialog";
 
@@ -55,11 +60,14 @@ export class CreateSportsActivitiesComponent implements OnInit {
     id: new FormControl(undefined)
   });
 
+  selectedSportActivitiesAnswer: SportActivitiesAnswer[] = [];
+
   constructor(
     public router: Router,
     private titleCasePipe: TitleCasePipe,
     public uiStore: UiStore,
     public route: ActivatedRoute,
+    public store: SportActivitiesStore,
     public constantDataService: ConstantDataService,
     private hotToastService: HotToastService,
     public formValidationService: FormValidationService,
@@ -67,6 +75,9 @@ export class CreateSportsActivitiesComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) { }
 
+  get selectedContents(): SportActivitiesAnswer[] {
+    return this.selectedSportActivitiesAnswer ?? [];
+  }
 
   get answersCtrl(): FormArray<SportActivitiesAnswer> {
     return this.sportsActivitiesGroup.controls.sportsActivitiesAnswer as FormArray<SportActivitiesAnswer>;
@@ -77,11 +88,70 @@ export class CreateSportsActivitiesComponent implements OnInit {
   }
 
   addNewAnswer(){
-    console.log("Adding Goals")
+    this.answersCtrl.push(this.buildGoalAnswer());
+    this.sportsActivitiesGroup.updateValueAndValidity();
+    this.cdr.markForCheck();
+  }
+
+  buildGoalAnswer(ans?: SportActivitiesAnswer): FormGroup<SportActivitiesAnswer> {
+    return new FormGroup<SportActivitiesAnswer>({
+      answerId: new FormControl(ans?.answerId ?? undefined),
+      answerString: new FormControl(ans?.answerString ?? '', [
+        RxwebValidators.required(),
+        RxwebValidators.notEmpty(),
+        RxwebValidators.unique(),
+        RxwebValidators.maxLength({
+          value: this.formValidationService.FIELD_VALIDATION_VALUES.ANSWER_LENGTH
+        })
+      ]),
+      order: new FormControl(ans?.order ?? undefined),
+      iconName: new FormControl({
+        value: ans?.iconName ?? '',
+        disabled: !this.sportsActivitiesGroup.controls.showIcon.value
+      }, [
+        RxwebValidators.required(),
+        RxwebValidators.notEmpty()
+      ]),
+      id: new FormControl({
+        value: undefined,
+        disabled: true
+      })
+    });
   }
 
   sportsDrag($event: CdkDragDrop<SportActivitiesAnswer>){
-    console.log($event,"Drag Goals")
+    const selectedSportActivitiesAns = this.selectedContents ? [...this.selectedContents] : [];
+    moveItemInArray(selectedSportActivitiesAns, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedSportActivitiesAns
+    });
+  }
+
+  populateSportActivities(sportActivities: SportActivities) {
+    const {
+      question,
+      body,
+      description,
+      header,
+      reminder,
+      showIcon,
+      id,
+      sportsActivitiesAnswer
+    } = sportActivities;
+    this.sportsActivitiesGroup.patchValue({
+      question,
+      body,
+      description,
+      header,
+      reminder,
+      showIcon,
+      id
+    });
+    this.uiStore.patchState({
+      selectedSportActivitiesAns: sportsActivitiesAnswer ?? []
+    });
+    this.sportsActivitiesGroup.updateValueAndValidity();
+    this.cdr.markForCheck();
   }
 
   removeAnswer(index: number): void {
@@ -112,10 +182,14 @@ export class CreateSportsActivitiesComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.store.selectedSportActivities$.subscribe((goal: SportActivities | undefined) => {
+      if (goal) {
+        this.populateSportActivities(goal);
+      }
+    });
   }
 
   submit(): void {
-    console.log(this.sportsActivitiesGroup.value)
 
     this.sportsActivitiesGroup.markAllAsDirty();
     this.sportsActivitiesGroup.markAllAsTouched();
@@ -123,6 +197,16 @@ export class CreateSportsActivitiesComponent implements OnInit {
       this.hotToastService.error(this.formValidationService.formSubmitError);
       return;
     }
+    const updatedSportsObj: SportActivitiesCore = {
+      ...this.sportsActivitiesGroup.value,
+      sportsActivitiesAnswer: this.sportsActivitiesGroup.value.sportsActivitiesAnswer.map((a, i) => {
+        return {
+          ...a,
+          order: i + 1
+        };
+      })
+    };
+    console.log(updatedSportsObj)
   }
 
 
