@@ -30,8 +30,10 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
+          build_timeout_in_minutes: 30
           output_location: "dist/apps/optimal-human" # Built app content directory - optional
           app_build_command: 'npm i --legacy-peer-deps; npm run build:stag'
+          
 
 
   close_pull_request_job:
