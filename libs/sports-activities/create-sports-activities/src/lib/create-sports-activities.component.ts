@@ -55,7 +55,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
     ]),
     showIcon: new FormControl(false),
     sportsActivitiesAnswer: new FormArray([],[
-      RxwebValidators.minLength({value:1,message:"Minimum 1 goal answers required"})
+      RxwebValidators.minLength({value:1,message:"Minimum 1  answers required"})
     ]),
     id: new FormControl(undefined)
   });
