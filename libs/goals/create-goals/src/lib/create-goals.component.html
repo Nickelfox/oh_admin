@@ -124,9 +124,9 @@
 
                 </div>
               </div>
-              <ng-container *ngIf='(answersCtrl.errors?.maxLength) '>
+              <ng-container *ngIf='(answersCtrl.errors?.minLength) '>
                 <mat-error>
-                  {{answersCtrl.errors?.maxLength?.message}}
+                  {{answersCtrl.errors?.minLength?.message}}
                 </mat-error>
               </ng-container>
             </div>
