@@ -32,8 +32,7 @@ jobs:
           output_location: "dist/apps/optimal-human" # Built app content directory - optional
           app_build_command: 'npm install --legacy-peer-deps; npm run build:stag'
           ###### End of Repository/Build Configurations ######
-        env:
-          NPM_CONFIG_LEGACY_PEER_DEPS: true
+
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
