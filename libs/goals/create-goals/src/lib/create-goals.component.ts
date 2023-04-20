@@ -52,7 +52,7 @@ export class CreateGoalsComponent implements OnInit {
     ]),
     showIcon: new FormControl(false),
     goalAnswer: new FormArray([],[
-      RxwebValidators.minLength({value:1,message:"Minimum 1 goal answers required"})
+      RxwebValidators.minLength({value:3,message:"Minimum 3 goal answers required"})
     ]),
     id: new FormControl(undefined)
   });
