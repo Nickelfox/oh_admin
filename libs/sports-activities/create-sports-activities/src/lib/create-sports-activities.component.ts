@@ -190,7 +190,6 @@ export class CreateSportsActivitiesComponent implements OnInit {
   }
 
   submit(): void {
-
     this.sportsActivitiesGroup.markAllAsDirty();
     this.sportsActivitiesGroup.markAllAsTouched();
     if (this.sportsActivitiesGroup.invalid) {
@@ -206,7 +205,6 @@ export class CreateSportsActivitiesComponent implements OnInit {
         };
       })
     };
-    console.log(updatedSportsObj)
   }
 
 

@@ -124,9 +124,9 @@
 
                 </div>
               </div>
-              <ng-container *ngIf='(answersCtrl.errors?.minLength) '>
+              <ng-container *ngIf='(answersCtrl.value.length < 3) '>
                 <mat-error>
-                  {{answersCtrl.errors?.minLength?.message}}
+                  {{'Minimum 3  answers required'}}
                 </mat-error>
               </ng-container>
             </div>
