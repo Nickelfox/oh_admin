@@ -162,7 +162,8 @@ export class CreateGoalsComponent implements OnInit {
       if (proceed) {
         // const goal: FormGroup<GoalAnswer> = this.answerFormGroup(index);
         const answerArray: FormArray<GoalAnswer> = this.goalsGroup.controls.goalAnswer as FormArray<GoalAnswer>;
-        answerArray.removeAt(index);
+        this.store.deleteGoalsAnswer(answerArray?.value[index]?.answerId)
+        // answerArray.removeAt(index);
         this.cdr.markForCheck();
         this.cdr.detectChanges();
         this.cdr.checkNoChanges();
