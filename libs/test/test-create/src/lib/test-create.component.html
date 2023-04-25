@@ -313,7 +313,7 @@
                                 </div>
                               </div>
 
-                              
+
                               <!--                            Point ScoreSheet-->
                               <ng-template [ngForOf]='oneRMInputFieldFormArray.controls'
                                            formArrayName='oneRMInputFields'
@@ -384,6 +384,7 @@
                                   </div>
                                   <ng-template [ngIf]='i > 0'>
                                     <ng-template [ngIf]='oneRMInputFieldFormArray.errors$ | async' let-err>
+
                                       <div class='col-2'></div>
                                       <div
                                         *ngIf='err[(i - 1) + "lessThan" + (i)] && !(getOneRMInputFieldGroup(i).get("low").hasError("required") || getOneRMInputFieldGroup(i).get("low").hasError("notEmpty"))'
