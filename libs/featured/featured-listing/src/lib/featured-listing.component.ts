@@ -108,6 +108,8 @@ export class FeaturedListingComponent implements OnInit {
       case FeaturedNameEnum.FEATURED_TESTS:
         featureCount += feature.tests?.length ?? 0
         featureCount += feature.testGroups?.length ?? 0
+        featureCount += feature.questionnaires?.length ?? 0;
+        featureCount += feature.packs?.length ?? 0;
         return featureCount ?? 0;
       case FeaturedNameEnum.FEATURED_PACKS:
         return feature.packs?.length ?? 0;

@@ -9,7 +9,7 @@
           Cancel
         </button>
         <button
-          [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
+          [disabled]=''
           class='ml-3'
           color='primary' mat-flat-button type='submit'>
           Save
@@ -133,12 +133,12 @@
                 <span>Test Group</span>
               </button>
               <button (click)='openQuestionnaireSelector()'
-                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)'
+                      *ngIf='(selectedFeatured?.name === featuredType.SPOTLIGHT)|| (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
                       mat-menu-item type='button'>
                 <span>Questionnaire</span>
               </button>
               <button (click)='openPacksSelector()'
-                      *ngIf='(selectedFeatured?.name !== featuredType.FEATURED_TESTS)'
+                      *ngIf='(selectedFeatured?.name !== featuredType.FEATURED_TESTS)|| (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
                       mat-menu-item type='button'>
                 <span>Pack</span>
               </button>
@@ -199,7 +199,7 @@
             <div (cdkDropListDropped)='testDragEvent($event)' *ngSwitchCase='featuredType.FEATURED_TESTS'
                  cdkDropList>
               <ng-template [ngIfElse]='elseExists'
-                           [ngIf]='(uiStore.testsExists$ | async) || (uiStore.testGroupsExists$ | async)'>
+                           [ngIf]='(uiStore.testsExists$ | async) || (uiStore.testGroupsExists$ | async) || (uiStore.questionnairesExists$ | async)|| (uiStore.packsExists$ | async)'>
                 <div>
                   <hidden-innovation-pack-content-card
                     (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.SINGLE, content.id)'
@@ -216,6 +216,26 @@
                     (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.GROUP, content.id)'
                     *ngFor='let content of (uiStore.selectedTestGroups$ | async); index as i; first as isFirst; last as isLast'
                     [category]='packContentTypeEnum.GROUP'
+                    [name]='content.name'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    class='mb-2'
+                  ></hidden-innovation-pack-content-card>
+                </div>
+                <div>
+                  <hidden-innovation-pack-content-card
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.QUESTIONNAIRE, content.id)'
+                    *ngFor='let content of (uiStore.selectedQuestionnaires$ | async); index as i; first as isFirst; last as isLast'
+                    [category]='packContentTypeEnum.QUESTIONNAIRE'
+                    [name]='content.name'
+                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
+                    class='mb-2'
+                  ></hidden-innovation-pack-content-card>
+                </div>
+                <div>
+                  <hidden-innovation-pack-content-card
+                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.PACK, content.id)'
+                    *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
+                    [category]='packContentTypeEnum.PACK'
                     [name]='content.name'
                     [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                     class='mb-2'
