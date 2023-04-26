@@ -9,6 +9,7 @@
           Cancel
         </button>
         <button
+          [disabled]='answersCtrl.value.length < 3'
           class='ml-3'
           color='primary' mat-flat-button type='submit' (click)='submit()'>
           Save
