@@ -9,7 +9,7 @@
           Cancel
         </button>
         <button
-          [disabled]=''
+          [disabled]='(store.isActing$ | async) || (store.isLoading$ | async)'
           class='ml-3'
           color='primary' mat-flat-button type='submit'>
           Save
