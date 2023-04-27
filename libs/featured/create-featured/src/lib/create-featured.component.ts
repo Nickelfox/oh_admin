@@ -155,17 +155,19 @@ export class CreateFeaturedComponent implements OnDestroy {
       };
       const setPacksCtrl = (selectedPacks: Pack[]) => {
         packCtrl.setValue(selectedPacks.map(({ id }, i) => {
+          countIndex++;
           return {
             id,
-            order: i + 1
+            order: countIndex
           };
         }));
       };
       const setQuestionnaireCtrl = (selectedQuestionnaires: QuestionnaireExtended[]) => {
         questionnaireCtrl.setValue(selectedQuestionnaires.map(({ id }, i) => {
+          countIndex++;
           return {
             id,
-            order: i + 1
+            order: countIndex
           };
         }));
       };
@@ -192,6 +194,8 @@ export class CreateFeaturedComponent implements OnDestroy {
         resetContentCtrls();
         setTestGroupCtrl(state.selectedTestGroups ?? []);
         setTestCtrl(state.selectedTests as Test[] ?? []);
+        setQuestionnaireCtrl(state.selectedQuestionnaires ?? []);
+        setPacksCtrl(state.selectedPacks ?? []);
       } else {
         resetContentCtrls();
         setPacksCtrl(state.selectedPacks as Pack[] ?? []);
@@ -363,6 +367,7 @@ export class CreateFeaturedComponent implements OnDestroy {
   }
 
   submit() {
+    console.log(this.featuredGroup)
     this.featuredGroup.markAllAsTouched();
     this.featuredGroup.markAllAsDirty();
     if (this.featuredGroup.invalid) {
