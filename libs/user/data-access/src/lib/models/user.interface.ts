@@ -50,6 +50,11 @@ export interface UserBlockRequest {
   id: number;
 }
 
+export interface DeleteUser {
+  id: number;
+}
+
+
 export interface UserBlockResponse extends CustomApiResponse {
   data: {
     user: UserDetails;

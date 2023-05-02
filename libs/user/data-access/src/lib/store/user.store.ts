@@ -9,6 +9,7 @@ import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
 import { MatDialog } from '@angular/material/dialog';
 import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
 import { numeric } from '@rxweb/reactive-form-validators';
+import {Router} from "@angular/router";
 
 export interface UserState {
   users?: UserDetails[];
@@ -185,9 +186,53 @@ export class UserStore extends ComponentStore<UserState> {
     )
   );
 
+
+  private DeleteUser$ = this.effect<number | undefined>(params$ =>
+    params$.pipe(
+      tap((_) => {
+        this.patchState({
+          isActing: true
+        });
+        this.toastRef?.close();
+        this.toastRef = this.hotToastService.loading('Deleting User...', {
+          dismissible: false,
+          role: 'status'
+        });
+      }),
+      exhaustMap((id) =>
+        this.userService.DeleteUser(id).pipe(
+          tapResponse(
+            () => {
+              this.patchState({
+                isActing: false,
+              });
+              this.toastRef?.updateMessage('Success! User deleted');
+              this.toastRef?.updateToast({
+                dismissible: true,
+                type: 'success'
+              });
+              this.router.navigate(['/users/listing/10/1'])
+              // this.hotToastService.success(user.is_blocked ? 'Success! User blocked' : 'Success! User unblocked', {
+              //   dismissible: true,
+              //   role: 'status'
+              // });
+            },
+            (_) => {
+              this.toastRef?.close();
+              this.patchState({
+                isActing: false
+              });
+            }
+          )
+        )
+      )
+    )
+  );
+
   constructor(
     private matDialog: MatDialog,
     private hotToastService: HotToastService,
+    private router: Router,
     private userService: UserService) {
     super(initialState);
   }
