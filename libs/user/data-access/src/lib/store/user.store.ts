@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { GenericDialogPrompt, UserDetails } from '@hidden-innovation/shared/models';
-import { EMPTY, Observable } from 'rxjs';
-import { UserBlockRequest, UserListingRequest, UserStatusRequest } from '../models/user.interface';
-import { catchError, exhaustMap, switchMap, tap } from 'rxjs/operators';
-import { UserService } from '../services/user.service';
-import { CreateHotToastRef, HotToastService } from '@ngneat/hot-toast';
-import { MatDialog } from '@angular/material/dialog';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { numeric } from '@rxweb/reactive-form-validators';
+import {Injectable} from '@angular/core';
+import {ComponentStore, tapResponse} from '@ngrx/component-store';
+import {GenericDialogPrompt, UserDetails} from '@hidden-innovation/shared/models';
+import {EMPTY, Observable} from 'rxjs';
+import {UserBlockRequest, UserListingRequest, UserStatusRequest} from '../models/user.interface';
+import {catchError, exhaustMap, switchMap, tap} from 'rxjs/operators';
+import {UserService} from '../services/user.service';
+import {CreateHotToastRef, HotToastService} from '@ngneat/hot-toast';
+import {MatDialog} from '@angular/material/dialog';
+import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog';
+import {numeric} from '@rxweb/reactive-form-validators';
 import {Router} from "@angular/router";
 
 export interface UserState {
@@ -33,10 +33,10 @@ export class UserStore extends ComponentStore<UserState> {
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly selectedUser$: Observable<UserDetails | undefined> = this.select(state => state.selectedUser);
-  readonly updateUsers$ = this.updater<UserState>(({ isLoading }, {
+  readonly updateUsers$ = this.updater<UserState>(({isLoading}, {
     users,
     total
-  }) => ({ isLoading, users, total }));
+  }) => ({isLoading, users, total}));
   getUsers$ = this.effect<UserListingRequest>(params$ =>
     params$.pipe(
       tap((_) => {
@@ -44,10 +44,10 @@ export class UserStore extends ComponentStore<UserState> {
           isLoading: true
         });
       }),
-      switchMap(({ page, limit, name }) =>
-        this.userService.getUsers({ limit, page, name }).pipe(
+      switchMap(({page, limit, name}) =>
+        this.userService.getUsers({limit, page, name}).pipe(
           tapResponse(
-            ({ users, total }) => {
+            ({users, total}) => {
               this.patchState({
                 isLoading: false
               });
@@ -74,7 +74,7 @@ export class UserStore extends ComponentStore<UserState> {
           isLoading: true
         });
       }),
-      switchMap(({ id }) =>
+      switchMap(({id}) =>
         this.userService.getUserDetails(id).pipe(
           tapResponse(
             (user) => {
@@ -97,7 +97,7 @@ export class UserStore extends ComponentStore<UserState> {
   private toastRef: CreateHotToastRef<unknown> | undefined;
   private toggleBlockUser$ = this.effect<UserBlockRequest>(params$ =>
     params$.pipe(
-      tap(({ data }) => {
+      tap(({data}) => {
         this.patchState({
           isActing: true
         });
@@ -143,7 +143,7 @@ export class UserStore extends ComponentStore<UserState> {
 
   private toggleVerifyUser$ = this.effect<UserStatusRequest>(params$ =>
     params$.pipe(
-      tap(({ data }) => {
+      tap(({data}) => {
         this.patchState({
           isActing: true
         });
@@ -187,7 +187,7 @@ export class UserStore extends ComponentStore<UserState> {
   );
 
 
-  private DeleteUser$ = this.effect<number | undefined>(params$ =>
+  private DeleteUser$ = this.effect<number>(params$ =>
     params$.pipe(
       tap((_) => {
         this.patchState({
@@ -229,6 +229,7 @@ export class UserStore extends ComponentStore<UserState> {
     )
   );
 
+
   constructor(
     private matDialog: MatDialog,
     private hotToastService: HotToastService,
@@ -238,16 +239,15 @@ export class UserStore extends ComponentStore<UserState> {
   }
 
 
-  toggleStatus(id:number, currentStatus:number):void{
+  toggleStatus(id: number, currentStatus: number): void {
     let updatedStatus = 0;
-    if(currentStatus === 2)
-    {
+    if (currentStatus === 2) {
       updatedStatus = 1;
     }
     this.toggleVerifyUser$({
       id,
-      data:{
-        status:updatedStatus
+      data: {
+        status: updatedStatus
       }
     })
   }
@@ -279,7 +279,34 @@ export class UserStore extends ComponentStore<UserState> {
       }
     });
   }
+
+  deleteUser(id: number): void {
+    const dialogData: GenericDialogPrompt = {
+      title: 'Delete',
+      desc: `Are you sure you want to delete this user ?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.DeleteUser$(
+          id,
+        );
+      }
+    });
+  }
+
 }
+
+
+
 
 
 

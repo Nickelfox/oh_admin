@@ -54,9 +54,8 @@ export class UserService {
     );
   }
 
-  DeleteUser(userID: number | undefined): Observable<CustomApiResponse> {
-    return this.http.delete<CustomApiResponse>(`${this.env.baseURL}/v1/admin/softDeleteUser/${userID}`).pipe(
-      map(res => res.data),
+  DeleteUser(userID: number): Observable<CustomApiResponse> {
+    return this.http.patch<CustomApiResponse>(`${this.env.baseURL}/v1/admin/softDeleteUser/${userID}`,{}).pipe(
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }

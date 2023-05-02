@@ -14,6 +14,10 @@
                     *ngSwitchCase='userPosition.VERIFY_USER' (click)='store.toggleStatus(userID,user.status)'
                     color="primary">Verify User
             </button>
+            <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)' mat-flat-button
+                    class='ml-3'
+                    *ngSwitchCase='userPosition.ACTIVE' (click)='store.deleteUser(userID)' color='primary'>Delete User
+            </button>
           </div>
           <button [disabled]='(store.isLoading$ | async) || (store.isActing$ | async)'
                   mat-flat-button color='{{user.is_blocked ? "accent" : "warn"}}' class='ml-3'
