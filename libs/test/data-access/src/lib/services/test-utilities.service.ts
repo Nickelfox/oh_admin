@@ -181,8 +181,8 @@ export class TestUtilitiesService {
       }),
       new FormGroup<InputField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        low: new FormControl(inputData?.five?.low ?? undefined),
-        high: new FormControl(inputData?.five?.high ?? undefined)
+        low: new FormControl(inputData?.five?.low ?? undefined,coreValidation),
+        high: new FormControl(inputData?.five?.high ?? undefined, coreValidation)
       }, {
         validators: typeValidation
       }),
@@ -248,7 +248,7 @@ export class TestUtilitiesService {
       }),
       new FormGroup<MultipleChoiceField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        answer: new FormControl<string>(editObj?.five?.answer ?? '')
+        answer: new FormControl<string>(editObj?.five?.answer ?? '',answerValidation)
       }),
       new FormGroup<MultipleChoiceField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.HP),
@@ -368,8 +368,8 @@ export class TestUtilitiesService {
       }),
       new FormGroup<OneRMField>({
         ...this.buildCorePointFormCtrl(PointTypeEnum.FIVE),
-        low: new FormControl(editObj?.five?.low ?? undefined),
-        high: new FormControl(editObj?.five?.high ?? undefined)
+        low: new FormControl(editObj?.five?.low ?? undefined, coreValidations),
+        high: new FormControl(editObj?.five?.high ?? undefined, coreValidations)
       }, {
         validators: this.formValidationService.greaterLowHigh(inverse)
       }),
