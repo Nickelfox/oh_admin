@@ -22,8 +22,8 @@ import { FormValidationService, GenericErrorMessage } from '@hidden-innovation/s
     <ng-container *ngIf='error?.maxLength'>
       Must not exceed {{error?.maxLength?.refValues[1]}} character limit <br>
     </ng-container>
-    <ng-container *ngIf='error?.minlength'>
-      Must be greater than {{error?.minlength?.requiredLength}} characters <br>
+    <ng-container *ngIf='error?.minLength'>
+      Must be greater than {{error?.minLength?.refValues[1]}} characters <br>
     </ng-container>
     <ng-container *ngIf='error?.min'>
       Invalid! Must be greater than {{error?.min?.min}} <br>

@@ -86,6 +86,9 @@ export class AssessmentCreateComponent implements OnDestroy {
     content: new FormControl<ContentCore[]>([]),
     category_overview_text: new FormControl('', [
       ...this.formValidationService.requiredFieldValidation,
+      RxwebValidators.minLength({
+        value: 5
+      }),
       RxwebValidators.maxLength({
         value: this.formValidationService.FIELD_VALIDATION_VALUES.OVERVIEW_TEST_LENGTH
       })
