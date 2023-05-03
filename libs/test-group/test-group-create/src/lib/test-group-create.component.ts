@@ -57,6 +57,9 @@ export class TestGroupCreateComponent implements OnDestroy {
     ]),
     overviewText: new FormControl('', [
       ...this.requiredFieldValidation,
+      RxwebValidators.minLength({
+        value: 5
+      }),
       RxwebValidators.maxLength({
         value: this.formValidationService.FIELD_VALIDATION_VALUES.OVERVIEW_TEST_LENGTH
       })
@@ -290,6 +293,7 @@ export class TestGroupCreateComponent implements OnDestroy {
   }
 
   submit(): void {
+    console.log(this.testGroup.controls.overviewText)
     this.testGroup.markAllAsTouched();
     this.testGroup.markAllAsDirty();
     if (this.testGroup.invalid) {

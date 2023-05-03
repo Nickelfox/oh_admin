@@ -23,12 +23,14 @@ export class FormValidationService {
     SPOTLIGHT_BUTTON_LENGTH: 30,
     ASSESSMENT_ABOUT_LENGTH: 200,
     OVERVIEW_TEST_LENGTH:20,
+    MINIMUM_LENGTH:5,
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {
     required: 'field is required',
     invalid: 'Must not contain any special character or number',
-    maxLength: `Must not exceed 150 character limit`
+    maxLength: `Must not exceed 150 character limit`,
+    minLength : 'Must not exceed 5 charater mimit',
   };
 
   lockOutValidationMessage: Partial<GenericErrorMessage> = {
