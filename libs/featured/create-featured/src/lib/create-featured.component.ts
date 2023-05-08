@@ -315,7 +315,7 @@ export class CreateFeaturedComponent implements OnDestroy {
     }
 
     const data: TestSelectorData = {
-      type: this.isFeaturedTest? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE ,
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
       limit: this.isSpotlight
     };
 
@@ -334,7 +334,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       this.type = PackContentTypeEnum.GROUP;
     }
     const data: TestGroupSelectorData = {
-      type: this.isFeaturedTest? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
       limit: this.isSpotlight
     };
     this.matDialog.open(TestGroupSelectorComponent, {
@@ -352,7 +352,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       this.type = PackContentTypeEnum.QUESTIONNAIRE;
     }
     const data: QuestionnaireSelectorData = {
-      type: this.isFeaturedTest? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
       limit: this.isSpotlight
     };
     this.matDialog.open(QuestionnaireSelectorComponent, {
@@ -390,7 +390,7 @@ export class CreateFeaturedComponent implements OnDestroy {
   }
 
   submit() {
-    console.log(this.featuredGroup)
+
     this.featuredGroup.markAllAsTouched();
     this.featuredGroup.markAllAsDirty();
     if (this.featuredGroup.invalid) {
@@ -411,6 +411,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       featured
     });
   }
+
 
   packDragEvent($event: CdkDragDrop<Pack>): void {
     const selectedPacks = this.selectedPacks ? [...this.selectedPacks] : [];
