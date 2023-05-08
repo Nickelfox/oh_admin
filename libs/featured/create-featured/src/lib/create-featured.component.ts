@@ -5,7 +5,7 @@ import {TestSelectorComponent, TestSelectorData} from '@hidden-innovation/shared
 import {Test} from '@hidden-innovation/test/data-access';
 import {
   ContentSelectorOpType,
-  FeaturedNameEnum,
+  FeaturedNameEnum, GenericDialogPrompt,
   OrderedContent,
   PackContentTypeEnum
 } from '@hidden-innovation/shared/models';
@@ -29,6 +29,7 @@ import {
 import {PackSelectorComponent, PackSelectorData} from '@hidden-innovation/shared/ui/pack-selector';
 import {TitleCasePipe} from '@angular/common';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {PromptDialogComponent} from "@hidden-innovation/shared/ui/prompt-dialog";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -370,7 +371,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       this.type = PackContentTypeEnum.PACK;
     }
     const data: PackSelectorData = {
-      limit: this.isSpotlight
+      limit: this.isSpotlight ? true : false
     };
     this.matDialog.open(PackSelectorComponent, {
       data,
@@ -418,6 +419,28 @@ export class CreateFeaturedComponent implements OnDestroy {
     moveItemInArray(selectedPacks, $event.previousIndex, $event.currentIndex);
     this.uiStore.patchState({
       selectedPacks
+    });
+  }
+
+  deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
+    const contentType: string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type;
+    const dialogData: GenericDialogPrompt = {
+      title: `Remove ${contentType}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Here?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.uiStore.removeContent$(content);
+      }
     });
   }
 

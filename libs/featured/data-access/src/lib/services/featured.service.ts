@@ -11,7 +11,7 @@ import {
   FeaturedResponseData,
   FeaturedUpdateResponse
 } from '../models/featured.interface';
-import {PackContentTypeEnum} from "@hidden-innovation/shared/models";
+import {OrderedContent, PackContentTypeEnum} from "@hidden-innovation/shared/models";
 
 @Injectable()
 export class FeaturedService {
@@ -37,16 +37,17 @@ export class FeaturedService {
 
   updateFeatured(id: number, featured: FeaturedCore): Observable<Featured> {
 
-    return this.http.patch<FeaturedUpdateResponse>(`${this.env.baseURL}/v1/admin/update-featured/${id}`, this.getNewPayload(featured)).pipe(
+    return this.http.patch<FeaturedUpdateResponse>(`${this.env.baseURL}/v1/admin/update-featured/${id}`, featured.name === "FEATURED" && featured.location === "HOME" ? this.getNewPayload(featured) : featured).pipe(
       map(res => res.data),
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }
 
   getNewPayload(features: FeaturedCore) {
-    const testIds: any[] = []
-    const testGroupIds: any[] = []
-    const questionnaireIds: any[] = []
+    const testIds: OrderedContent[] = []
+    const testGroupIds: OrderedContent[] = []
+    const questionnaireIds: OrderedContent[] = []
+    const packIds: OrderedContent[] = []
     const payload = {
       location: features.location,
       name: features.name,
@@ -55,13 +56,16 @@ export class FeaturedService {
     features.content.map((items) => {
       switch (items.type) {
         case PackContentTypeEnum.SINGLE:
-          testIds.push({id: items.contentId, order: items.order})
+          testIds.push({id: items.contentId ?? 0, order: items.order ?? 0})
           break
         case PackContentTypeEnum.GROUP:
-          testGroupIds.push({id: items.contentId, order: items.order})
+          testGroupIds.push({id: items.contentId ?? 0, order: items.order ?? 0})
           break
         case PackContentTypeEnum.QUESTIONNAIRE:
-          questionnaireIds.push({id: items.contentId, order: items.order})
+          questionnaireIds.push({id: items.contentId ?? 0, order: items.order ?? 0})
+          break
+        case PackContentTypeEnum.PACK:
+          questionnaireIds.push({id: items.contentId ?? 0, order: items.order ?? 0})
           break
         default:
           break
@@ -72,7 +76,7 @@ export class FeaturedService {
       singleTestIds: testIds,
       testGroupIds: testGroupIds,
       questionnaireIds: questionnaireIds,
-      packIds: []
+      packIds: packIds
     })
   }
 }

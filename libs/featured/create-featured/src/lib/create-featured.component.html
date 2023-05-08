@@ -138,7 +138,6 @@
                 <span>Questionnaire</span>
               </button>
               <button (click)='openPacksSelector()'
-                      *ngIf='(selectedFeatured?.name !== featuredType.FEATURED_TESTS)|| (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
                       mat-menu-item type='button'>
                 <span>Pack</span>
               </button>
@@ -202,7 +201,7 @@
                            [ngIf]='(uiStore.selectedContent$ | async)'>
                 <div>
                   <hidden-innovation-pack-content-card
-                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.SINGLE, content?.contentId ?? 0)'
+                    (emitDeleteEvent)='deleteSelectedContentPrompt(content)'
                     *ngFor='let content of (uiStore.selectedContent$ | async); index as i; first as isFirst; last as isLast'
                     [category]='content.type'
                     [name]='content.name'
