@@ -1,5 +1,5 @@
   import { CustomApiResponse, FeaturedNameEnum, OrderedContent, TagCategoryEnum } from '@hidden-innovation/shared/models';
-import { Pack } from '@hidden-innovation/pack/data-access';
+import {ContentCore, Pack} from '@hidden-innovation/pack/data-access';
 import { Test } from '@hidden-innovation/test/data-access';
 import { TestGroup } from '@hidden-innovation/test-group/data-access';
 import { Media } from '@hidden-innovation/media';
@@ -29,6 +29,7 @@ export interface FeaturedCore {
   subHeading: string | undefined;
   bottomText: string | undefined;
   posterId: number | undefined;
+  content: ContentCore[]
   singleTestIds: OrderedContent[];
   testGroupIds: OrderedContent[];
   packIds: OrderedContent[];
