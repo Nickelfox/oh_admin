@@ -138,7 +138,6 @@
                 <span>Questionnaire</span>
               </button>
               <button (click)='openPacksSelector()'
-                      *ngIf='(selectedFeatured?.name !== featuredType.FEATURED_TESTS)|| (selectedFeatured?.name === featuredType.FEATURED_TESTS)'
                       mat-menu-item type='button'>
                 <span>Pack</span>
               </button>
@@ -196,51 +195,22 @@
                 </ng-template>
               </div>
             </div>
-            <div (cdkDropListDropped)='testDragEvent($event)' *ngSwitchCase='featuredType.FEATURED_TESTS'
+            <div (cdkDropListDropped)='contentDragEvent($event)' *ngSwitchCase='featuredType.FEATURED_TESTS'
                  cdkDropList>
               <ng-template [ngIfElse]='elseExists'
-                           [ngIf]='(uiStore.testsExists$ | async) || (uiStore.testGroupsExists$ | async) || (uiStore.questionnairesExists$ | async)|| (uiStore.packsExists$ | async)'>
+                           [ngIf]='(uiStore.selectedContent$ | async)'>
                 <div>
                   <hidden-innovation-pack-content-card
-                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.SINGLE, content.id)'
-                    *ngFor='let content of (uiStore.selectedTests$ | async); index as i; first as isFirst; last as isLast'
-                    [category]='packContentTypeEnum.SINGLE'
+                    (emitDeleteEvent)='deleteSelectedContentPrompt(content)'
+                    *ngFor='let content of (uiStore.selectedContent$ | async); index as i; first as isFirst; last as isLast'
+                    [category]='content.type'
                     [name]='content.name'
                     [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
                     cdkDrag
                     class='mb-2'
                   ></hidden-innovation-pack-content-card>
                 </div>
-                <div>
-                  <hidden-innovation-pack-content-card
-                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.GROUP, content.id)'
-                    *ngFor='let content of (uiStore.selectedTestGroups$ | async); index as i; first as isFirst; last as isLast'
-                    [category]='packContentTypeEnum.GROUP'
-                    [name]='content.name'
-                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
-                    class='mb-2'
-                  ></hidden-innovation-pack-content-card>
-                </div>
-                <div>
-                  <hidden-innovation-pack-content-card
-                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.QUESTIONNAIRE, content.id)'
-                    *ngFor='let content of (uiStore.selectedQuestionnaires$ | async); index as i; first as isFirst; last as isLast'
-                    [category]='packContentTypeEnum.QUESTIONNAIRE'
-                    [name]='content.name'
-                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
-                    class='mb-2'
-                  ></hidden-innovation-pack-content-card>
-                </div>
-                <div>
-                  <hidden-innovation-pack-content-card
-                    (emitDeleteEvent)='uiStore.deleteContentPrompt(packContentTypeEnum.PACK, content.id)'
-                    *ngFor='let content of (uiStore.selectedPacks$ | async); index as i; first as isFirst; last as isLast'
-                    [category]='packContentTypeEnum.PACK'
-                    [name]='content.name'
-                    [ngClass]='{"mt-3" : isFirst, "mb-0": isLast }'
-                    class='mb-2'
-                  ></hidden-innovation-pack-content-card>
-                </div>
+
               </ng-template>
 
             </div>

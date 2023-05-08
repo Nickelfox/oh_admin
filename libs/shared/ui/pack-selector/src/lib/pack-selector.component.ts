@@ -11,7 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { PublishStatusEnum, SortingEnum, StatusChipType } from '@hidden-innovation/shared/models';
 import { ConstantDataService } from '@hidden-innovation/shared/form-config';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { Pack, PackListingFilters, PackStore } from '@hidden-innovation/pack/data-access';
+import {ContentCore, LessonCore, Pack, PackListingFilters, PackStore} from '@hidden-innovation/pack/data-access';
 import { Observable } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { UiStore } from '@hidden-innovation/shared/store';
@@ -57,7 +57,7 @@ export class PackSelectorComponent implements OnInit {
 
   selectedPacks: Pack[] = [];
   dummyPacks: Pack[] = [];
-
+  selectedContent: (ContentCore | LessonCore)[] = []
   initialised = false;
   isLoading = false;
 
@@ -81,10 +81,15 @@ export class PackSelectorComponent implements OnInit {
       this.selectedPacks = res;
       this.dummyPacks = res;
     });
+    this.uiStore.state$.subscribe((res) => {
+      this.selectedContent = res?.selectedContent ?? []
+    })
     if (!this.initialised) {
       this.uiStore.patchState({
-        selectedPacks: this.selectedPacks
+        selectedContent: this.selectedContent,
+        selectedPacks: this.selectedPacks,
       });
+
       this.initialised = true;
       this.cdr.markForCheck();
     }
