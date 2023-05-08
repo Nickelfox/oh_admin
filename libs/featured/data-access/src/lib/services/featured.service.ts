@@ -65,7 +65,7 @@ export class FeaturedService {
           questionnaireIds.push({id: items.contentId ?? 0, order: items.order ?? 0})
           break
         case PackContentTypeEnum.PACK:
-          questionnaireIds.push({id: items.contentId ?? 0, order: items.order ?? 0})
+          packIds.push({id: items.contentId ?? 0, order: items.order ?? 0})
           break
         default:
           break
