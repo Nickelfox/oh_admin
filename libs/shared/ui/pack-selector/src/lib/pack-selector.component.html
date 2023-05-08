@@ -1,6 +1,16 @@
 <div mat-dialog-title>
   <div class='d-flex align-items-center justify-content-between'>
-    <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>ADD PACK</h4>
+    <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>
+      <ng-template [ngIfElse]='elseTitle' [ngIf]='this.data.type === contentSelectorOpType.SINGLE'>
+        <ng-template [ngIfElse]='elseTitle' [ngIf]='!this.data?.limit'>
+          ADD PACK <span>{{data ? " OF TYPE -  " : "--"}}</span>
+        </ng-template>
+      </ng-template>
+      <ng-template #elseTitle>
+        ADD PACK
+      </ng-template>
+    </h4>
+<!--    <h4 class='mat-h4 text-uppercase text-color__primary mb-0 mr-4 font-calibri font-weight-normal'>ADD PACK</h4>-->
     <div class='d-flex align-items-center'>
       <div class='d-flex align-items-center text-muted mt-1 mr-3'>
         <mat-icon class='text-success mr-2'>autorenew</mat-icon>

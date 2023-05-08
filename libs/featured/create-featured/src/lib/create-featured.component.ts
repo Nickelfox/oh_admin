@@ -371,6 +371,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       this.type = PackContentTypeEnum.PACK;
     }
     const data: PackSelectorData = {
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
       limit: this.isSpotlight ? true : false
     };
     this.matDialog.open(PackSelectorComponent, {
