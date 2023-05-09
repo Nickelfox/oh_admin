@@ -201,7 +201,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
       });
       this.answersCtrl.clear();
       this.selectedSportActivitiesAnswer.forEach((a) => {
-        this.answersCtrl.insert(0,this.buildGoalAnswer(a));
+        this.answersCtrl.push(this.buildGoalAnswer(a));
         this.sportsActivitiesGroup.updateValueAndValidity();
         this.cdr.markForCheck();
       });
