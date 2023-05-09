@@ -1,34 +1,35 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { Featured, FeaturedCore, FeaturedStore } from '@hidden-innovation/featured/data-access';
-import { MatDialog } from '@angular/material/dialog';
-import { TestSelectorComponent, TestSelectorData } from '@hidden-innovation/shared/ui/test-selector';
-import { Test } from '@hidden-innovation/test/data-access';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation} from '@angular/core';
+import {Featured, FeaturedCore, FeaturedStore} from '@hidden-innovation/featured/data-access';
+import {MatDialog} from '@angular/material/dialog';
+import {TestSelectorComponent, TestSelectorData} from '@hidden-innovation/shared/ui/test-selector';
+import {Test} from '@hidden-innovation/test/data-access';
 import {
   ContentSelectorOpType,
-  FeaturedNameEnum,
+  FeaturedNameEnum, GenericDialogPrompt,
   OrderedContent,
   PackContentTypeEnum
 } from '@hidden-innovation/shared/models';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { map, switchMap } from 'rxjs/operators';
-import { HotToastService } from '@ngneat/hot-toast';
-import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { AspectRatio, Media } from '@hidden-innovation/media';
-import { UiStore } from '@hidden-innovation/shared/store';
-import { Pack } from '@hidden-innovation/pack/data-access';
-import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
-import { TestGroup } from '@hidden-innovation/test-group/data-access';
-import { Observable } from 'rxjs';
-import { TestGroupSelectorComponent, TestGroupSelectorData } from '@hidden-innovation/shared/ui/test-group-selector';
+import {ActivatedRoute, Router} from '@angular/router';
+import {FormArray, FormControl, FormGroup} from '@ngneat/reactive-forms';
+import {map, switchMap} from 'rxjs/operators';
+import {HotToastService} from '@ngneat/hot-toast';
+import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators';
+import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
+import {AspectRatio, Media} from '@hidden-innovation/media';
+import {UiStore} from '@hidden-innovation/shared/store';
+import {ContentCore, LessonCore, Pack} from '@hidden-innovation/pack/data-access';
+import {QuestionnaireExtended} from '@hidden-innovation/questionnaire/data-access';
+import {TestGroup} from '@hidden-innovation/test-group/data-access';
+import {Observable} from 'rxjs';
+import {TestGroupSelectorComponent, TestGroupSelectorData} from '@hidden-innovation/shared/ui/test-group-selector';
 import {
   QuestionnaireSelectorComponent,
   QuestionnaireSelectorData
 } from '@hidden-innovation/shared/ui/questionnaire-selector';
-import { PackSelectorComponent, PackSelectorData } from '@hidden-innovation/shared/ui/pack-selector';
-import { TitleCasePipe } from '@angular/common';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import {PackSelectorComponent, PackSelectorData} from '@hidden-innovation/shared/ui/pack-selector';
+import {TitleCasePipe} from '@angular/common';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {PromptDialogComponent} from "@hidden-innovation/shared/ui/prompt-dialog";
 
 @Component({
   selector: 'hidden-innovation-create-featured',
@@ -75,7 +76,9 @@ export class CreateFeaturedComponent implements OnDestroy {
     packIds: new FormControl<OrderedContent[]>([]),
     questionnaireIds: new FormControl<OrderedContent[]>([]),
     singleTestIds: new FormControl<OrderedContent[]>([]),
-    testGroupIds: new FormControl<OrderedContent[]>([])
+    testGroupIds: new FormControl<OrderedContent[]>([]),
+    content: new FormControl<ContentCore[]>([]),
+
   });
 
   aspectRatio = AspectRatio;
@@ -84,10 +87,11 @@ export class CreateFeaturedComponent implements OnDestroy {
 
   featuredID?: number;
   selectedFeatured: Featured | undefined;
-  type: PackContentTypeEnum | undefined;
+  type: PackContentTypeEnum | ContentSelectorOpType | undefined;
 
   private selectedTests: Test[] = [];
   private selectedPacks: Pack[] = [];
+  private selectedContent: ContentCore[] = [];
 
   constructor(
     private hotToastService: HotToastService,
@@ -118,25 +122,28 @@ export class CreateFeaturedComponent implements OnDestroy {
         id: this.featuredID
       });
     });
-    const { packIds, testGroupIds, singleTestIds, questionnaireIds } = this.featuredGroup.controls;
+    const {packIds, testGroupIds, singleTestIds, questionnaireIds, content} = this.featuredGroup.controls;
     const packCtrl: FormArray<OrderedContent> = packIds as FormArray<OrderedContent>;
     const testGroupCtrl: FormArray<OrderedContent> = testGroupIds as FormArray<OrderedContent>;
     const testCtrl: FormArray<OrderedContent> = singleTestIds as FormArray<OrderedContent>;
     const questionnaireCtrl: FormArray<OrderedContent> = questionnaireIds as FormArray<OrderedContent>;
+    const contentCtrl: FormArray<ContentCore | LessonCore> = content as FormArray<ContentCore | LessonCore>;
     this.uiStore.state$.subscribe((state) => {
       this.selectedTests = state.selectedTests ?? [];
       this.selectedPacks = state.selectedPacks ?? [];
+      this.selectedContent = state.selectedContent ?? [];
       const resetContentCtrls = () => {
         this.featuredGroup.patchValue({
           packIds: [],
           testGroupIds: [],
           singleTestIds: [],
-          questionnaireIds: []
+          questionnaireIds: [],
+          content: []
         });
       };
       let countIndex = 0;
       const setTestCtrl = (selectedTests: Test[]) => {
-        testCtrl.setValue(selectedTests.map(({ id }, i) => {
+        testCtrl.setValue(selectedTests.map(({id}, i) => {
           countIndex++;
           return {
             id,
@@ -145,7 +152,7 @@ export class CreateFeaturedComponent implements OnDestroy {
         }));
       };
       const setTestGroupCtrl = (selectedTestGroups: TestGroup[]) => {
-        testGroupCtrl.setValue(selectedTestGroups.map(({ id }, i) => {
+        testGroupCtrl.setValue(selectedTestGroups.map(({id}, i) => {
           countIndex++;
           return {
             id,
@@ -154,7 +161,7 @@ export class CreateFeaturedComponent implements OnDestroy {
         }));
       };
       const setPacksCtrl = (selectedPacks: Pack[]) => {
-        packCtrl.setValue(selectedPacks.map(({ id }, i) => {
+        packCtrl.setValue(selectedPacks.map(({id}, i) => {
           countIndex++;
           return {
             id,
@@ -162,8 +169,19 @@ export class CreateFeaturedComponent implements OnDestroy {
           };
         }));
       };
+      const setContentCtrl = (selectedContent: (ContentCore)[]) => {
+        contentCtrl.setValue(selectedContent.map(({contentId, name, type}, i) => {
+          countIndex++;
+          return {
+            contentId: contentId,
+            name,
+            type,
+            order: countIndex
+          };
+        }));
+      };
       const setQuestionnaireCtrl = (selectedQuestionnaires: QuestionnaireExtended[]) => {
-        questionnaireCtrl.setValue(selectedQuestionnaires.map(({ id }, i) => {
+        questionnaireCtrl.setValue(selectedQuestionnaires.map(({id}, i) => {
           countIndex++;
           return {
             id,
@@ -192,10 +210,11 @@ export class CreateFeaturedComponent implements OnDestroy {
         }
       } else if (this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS) {
         resetContentCtrls();
-        setTestGroupCtrl(state.selectedTestGroups ?? []);
-        setTestCtrl(state.selectedTests as Test[] ?? []);
-        setQuestionnaireCtrl(state.selectedQuestionnaires ?? []);
-        setPacksCtrl(state.selectedPacks ?? []);
+        setContentCtrl(state.selectedContent ?? []);
+        // setTestGroupCtrl(state.selectedTestGroups ?? []);
+        // setTestCtrl(state.selectedTests as Test[] ?? []);
+        // setQuestionnaireCtrl(state.selectedQuestionnaires ?? []);
+        // setPacksCtrl(state.selectedPacks ?? []);
       } else {
         resetContentCtrls();
         setPacksCtrl(state.selectedPacks as Pack[] ?? []);
@@ -210,6 +229,7 @@ export class CreateFeaturedComponent implements OnDestroy {
   get isSpotlight(): boolean {
     return this.selectedFeatured?.name === FeaturedNameEnum.SPOTLIGHT;
   }
+
 
   get isFeaturedTest(): boolean {
     return this.selectedFeatured?.name === FeaturedNameEnum.FEATURED_TESTS;
@@ -237,7 +257,8 @@ export class CreateFeaturedComponent implements OnDestroy {
       packs,
       tests,
       testGroups,
-      questionnaires
+      questionnaires,
+      content
     } = feature;
     this.selectedFeatured = feature;
     this.featuredGroup.patchValue({
@@ -266,12 +287,13 @@ export class CreateFeaturedComponent implements OnDestroy {
       selectedTests: tests,
       selectedPacks: packs,
       selectedQuestionnaires: questionnaires,
-      selectedTestGroups: testGroups
+      selectedTestGroups: testGroups,
+      selectedContent: content
     });
   }
 
   disableNonSpotlightFields(): void {
-    const { bottomText, heading, subHeading, posterId } = this.featuredGroup.controls;
+    const {bottomText, heading, subHeading, posterId} = this.featuredGroup.controls;
     bottomText.disable();
     heading.disable();
     subHeading.disable();
@@ -284,7 +306,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       selectedQuestionnaires: [],
       selectedTests: [],
       selectedTestGroups: [],
-      selectedLessons: []
+      selectedLessons: [],
     });
   }
 
@@ -292,10 +314,12 @@ export class CreateFeaturedComponent implements OnDestroy {
     if (this.isSpotlight) {
       this.type = PackContentTypeEnum.SINGLE;
     }
+
     const data: TestSelectorData = {
-      type: ContentSelectorOpType.SINGLE,
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
       limit: this.isSpotlight
     };
+
     this.matDialog.open(TestSelectorComponent, {
       data,
       height: '100%',
@@ -311,7 +335,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       this.type = PackContentTypeEnum.GROUP;
     }
     const data: TestGroupSelectorData = {
-      type: ContentSelectorOpType.SINGLE,
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
       limit: this.isSpotlight
     };
     this.matDialog.open(TestGroupSelectorComponent, {
@@ -329,7 +353,7 @@ export class CreateFeaturedComponent implements OnDestroy {
       this.type = PackContentTypeEnum.QUESTIONNAIRE;
     }
     const data: QuestionnaireSelectorData = {
-      type: ContentSelectorOpType.SINGLE,
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
       limit: this.isSpotlight
     };
     this.matDialog.open(QuestionnaireSelectorComponent, {
@@ -347,7 +371,8 @@ export class CreateFeaturedComponent implements OnDestroy {
       this.type = PackContentTypeEnum.PACK;
     }
     const data: PackSelectorData = {
-      limit: this.isSpotlight
+      type: this.isFeaturedTest ? ContentSelectorOpType.OTHER : ContentSelectorOpType.SINGLE,
+      limit: this.isSpotlight ? true : false
     };
     this.matDialog.open(PackSelectorComponent, {
       data,
@@ -367,7 +392,7 @@ export class CreateFeaturedComponent implements OnDestroy {
   }
 
   submit() {
-    console.log(this.featuredGroup)
+
     this.featuredGroup.markAllAsTouched();
     this.featuredGroup.markAllAsDirty();
     if (this.featuredGroup.invalid) {
@@ -389,6 +414,7 @@ export class CreateFeaturedComponent implements OnDestroy {
     });
   }
 
+
   packDragEvent($event: CdkDragDrop<Pack>): void {
     const selectedPacks = this.selectedPacks ? [...this.selectedPacks] : [];
     moveItemInArray(selectedPacks, $event.previousIndex, $event.currentIndex);
@@ -397,11 +423,41 @@ export class CreateFeaturedComponent implements OnDestroy {
     });
   }
 
+  deleteSelectedContentPrompt(content: ContentCore | LessonCore): void {
+    const contentType: string = content.type === PackContentTypeEnum.SINGLE ? 'TEST SINGLE' : content.type;
+    const dialogData: GenericDialogPrompt = {
+      title: `Remove ${contentType}?`,
+      desc: `Are you sure you want to remove this ${this.titleCasePipe.transform(contentType)} from Here?`,
+      action: {
+        posTitle: 'Yes',
+        negTitle: 'No',
+        type: 'mat-primary'
+      }
+    };
+    const dialogRef = this.matDialog.open(PromptDialogComponent, {
+      data: dialogData,
+      minWidth: '25rem'
+    });
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.uiStore.removeContent$(content);
+      }
+    });
+  }
+
   testDragEvent($event: CdkDragDrop<Test>): void {
     const selectedTests = this.selectedTests ? [...this.selectedTests] : [];
     moveItemInArray(selectedTests, $event.previousIndex, $event.currentIndex);
     this.uiStore.patchState({
       selectedTests
+    });
+  }
+
+  contentDragEvent($event: CdkDragDrop<ContentCore>): void {
+    const selectedContent = this.selectedContent ? [...this.selectedContent] : [];
+    moveItemInArray(selectedContent, $event.previousIndex, $event.currentIndex);
+    this.uiStore.patchState({
+      selectedContent
     });
   }
 }
