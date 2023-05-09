@@ -86,7 +86,7 @@ export class CreateGoalsComponent implements OnInit {
   }
 
   addNewAnswer(): void {
-    this.answersCtrl.push(this.buildGoalAnswer());
+    this.answersCtrl.insert(0,this.buildGoalAnswer());
     this.goalsGroup.updateValueAndValidity();
     this.cdr.markForCheck();
   }
@@ -162,11 +162,13 @@ export class CreateGoalsComponent implements OnInit {
       if (proceed) {
         // const goal: FormGroup<GoalAnswer> = this.answerFormGroup(index);
         const answerArray: FormArray<GoalAnswer> = this.goalsGroup.controls.goalAnswer as FormArray<GoalAnswer>;
-        this.store.deleteGoalsAnswer(answerArray?.value[index]?.answerId)
+        // this.store.deleteGoalsAnswer(answerArray?.value[index]?.answerId)
         // answerArray.removeAt(index);
         this.cdr.markForCheck();
         this.cdr.detectChanges();
         this.cdr.checkNoChanges();
+        if(!answerArray?.value[index]?.answerId)return
+        this.store.deleteGoalsAnswer(answerArray?.value[index]?.answerId)
       }
     });
   }
@@ -229,6 +231,7 @@ export class CreateGoalsComponent implements OnInit {
       })
     };
     this.store.updateGoals$(updatedGoalObj);
+    
   }
 
 }
