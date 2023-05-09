@@ -185,7 +185,7 @@
             <hidden-innovation-common-data-field
               [isLoading]='store.isLoading$ | async'
               [label]='constantDataService.FIELD_NAME.GOAL'
-              [goals]='UserAnswers'
+              [goals]='store.goals$ | async'
             ></hidden-innovation-common-data-field>
           </div>
         </div>
