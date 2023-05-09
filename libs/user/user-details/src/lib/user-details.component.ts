@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ConstantDataService } from '@hidden-innovation/shared/form-config';
-import { GoalAnswer, NewGoal, StatusChipType, UserPosition, UserStatusEnum } from '@hidden-innovation/shared/models';
-import { UserStore } from '@hidden-innovation/user/data-access';
-import { UntilDestroy } from '@ngneat/until-destroy';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {ConstantDataService} from '@hidden-innovation/shared/form-config';
+import {GoalAnswer, NewGoal, StatusChipType, UserPosition, UserStatusEnum} from '@hidden-innovation/shared/models';
+import {UserStore} from '@hidden-innovation/user/data-access';
+import {UntilDestroy} from '@ngneat/until-destroy';
 
-@UntilDestroy({ checkProperties: true })
+@UntilDestroy({checkProperties: true})
 @Component({
   selector: 'hidden-innovation-user-details',
   templateUrl: './user-details.component.html',
@@ -58,11 +58,12 @@ export class UserDetailsComponent implements OnInit {
       id: this.userID
     });
     this.imageSize = 150;
+    this.UserAnswers = []
 
   }
 
 
-  getGoalsCount():string{
+  getGoalsCount(): string {
     return this.UserAnswers?.length.toString() ?? "-"
   }
 
@@ -70,15 +71,19 @@ export class UserDetailsComponent implements OnInit {
     if (!input) {
       return;
     }
+
     for (const answers of input) {
-      this.UserAnswers?.push(answers.goalAnswer);
+      this.UserAnswers?.push(answers.goalAnswer)
     }
   }
 
+  // ngOnDestroy() {
+  //   console.log(this.UserAnswers)
+  //   this.UserAnswers = []
+  // }
+
   ngOnInit(): void {
-    this.user$.subscribe(res => {
-      this.getFields(res?.userGoal);
-    });
+    console.log()
   }
 
 }

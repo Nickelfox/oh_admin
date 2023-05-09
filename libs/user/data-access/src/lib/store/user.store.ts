@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ComponentStore, tapResponse} from '@ngrx/component-store';
-import {GenericDialogPrompt, UserDetails} from '@hidden-innovation/shared/models';
+import {GenericDialogPrompt, NewGoal, UserDetails} from '@hidden-innovation/shared/models';
 import {EMPTY, Observable} from 'rxjs';
 import {UserBlockRequest, UserListingRequest, UserStatusRequest} from '../models/user.interface';
 import {catchError, exhaustMap, switchMap, tap} from 'rxjs/operators';
@@ -15,12 +15,14 @@ export interface UserState {
   users?: UserDetails[];
   total?: number;
   selectedUser?: UserDetails;
+  goals?:NewGoal[];
   isLoading?: boolean;
   isActing?: boolean;
 }
 
 const initialState: UserState = {
   users: [],
+  goals:[],
   total: 0,
   isLoading: false,
   isActing: false
@@ -33,6 +35,7 @@ export class UserStore extends ComponentStore<UserState> {
   readonly isActing$: Observable<boolean> = this.select(state => !!state.isActing);
   readonly count$: Observable<number> = this.select(state => state.total || 0);
   readonly selectedUser$: Observable<UserDetails | undefined> = this.select(state => state.selectedUser);
+  readonly goals$: Observable<NewGoal[] | undefined> = this.select(state => state.goals);
   readonly updateUsers$ = this.updater<UserState>(({isLoading}, {
     users,
     total
@@ -80,7 +83,8 @@ export class UserStore extends ComponentStore<UserState> {
             (user) => {
               this.patchState({
                 isLoading: false,
-                selectedUser: user
+                selectedUser: user,
+                goals:user.userGoal
               });
             },
             (_) => {
