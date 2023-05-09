@@ -54,7 +54,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
       })
     ]),
     showIcon: new FormControl(false),
-    sportsActivitiesAnswer: new FormArray([],[
+    activityAnswer: new FormArray([],[
       RxwebValidators.minLength({value:3,message:"Minimum 3  answers required"})
     ]),
     id: new FormControl(undefined)
@@ -80,7 +80,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
   }
 
   get answersCtrl(): FormArray<SportActivitiesAnswer> {
-    return this.sportsActivitiesGroup.controls.sportsActivitiesAnswer as FormArray<SportActivitiesAnswer>;
+    return this.sportsActivitiesGroup.controls.activityAnswer as FormArray<SportActivitiesAnswer>;
   }
 
   answerFormGroup(i: number): FormGroup<SportActivitiesAnswer> {
@@ -88,7 +88,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
   }
 
   addNewAnswer(){
-    this.answersCtrl.push(this.buildGoalAnswer());
+    this.answersCtrl.insert(0,this.buildGoalAnswer());
     this.sportsActivitiesGroup.updateValueAndValidity();
     this.cdr.markForCheck();
   }
@@ -136,7 +136,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
       reminder,
       showIcon,
       id,
-      sportsActivitiesAnswer
+      activityAnswer
     } = sportActivities;
     this.sportsActivitiesGroup.patchValue({
       question,
@@ -148,7 +148,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
       id
     });
     this.uiStore.patchState({
-      selectedSportActivitiesAns: sportsActivitiesAnswer ?? []
+      selectedSportActivitiesAns: activityAnswer ?? []
     });
     this.sportsActivitiesGroup.updateValueAndValidity();
     this.cdr.markForCheck();
@@ -171,22 +171,49 @@ export class CreateSportsActivitiesComponent implements OnInit {
     dialogRef.afterClosed().subscribe((proceed: boolean) => {
       if (proceed) {
         // const goal: FormGroup<GoalAnswer> = this.answerFormGroup(index);
-        const answerArray: FormArray<SportActivitiesAnswer> = this.sportsActivitiesGroup.controls.sportsActivitiesAnswer as FormArray<SportActivitiesAnswer>;
-        answerArray.removeAt(index);
+        const answerArray: FormArray<SportActivitiesAnswer> = this.sportsActivitiesGroup.controls.activityAnswer as FormArray<SportActivitiesAnswer>;
+        // answerArray.removeAt(index);
         this.cdr.markForCheck();
         this.cdr.detectChanges();
         this.cdr.checkNoChanges();
+        this.store.deleteSportActivityAnswer(answerArray?.value[index]?.answerId)
       }
     });
   }
 
 
   ngOnInit(): void {
-    this.store.selectedSportActivities$.subscribe((goal: SportActivities | undefined) => {
-      if (goal) {
-        this.populateSportActivities(goal);
+    this.store.selectedSportActivities$.subscribe((sport: SportActivities | undefined) => {
+      if (sport) {
+        this.populateSportActivities(sport);
       }
     });
+
+    this.uiStore.sportActivitiesAnswer$.subscribe((ans) => {
+      this.selectedSportActivitiesAnswer = ans.map(({id,order, iconName, answerString, answerId}, i) => {
+        return {
+          iconName,
+          answerString,
+          order: order,
+          answerId: id,
+          id
+        };
+      });
+      this.answersCtrl.clear();
+      this.selectedSportActivitiesAnswer.forEach((a) => {
+        this.answersCtrl.insert(0,this.buildGoalAnswer(a));
+        this.sportsActivitiesGroup.updateValueAndValidity();
+        this.cdr.markForCheck();
+      });
+    });
+    this.sportsActivitiesGroup.controls.showIcon.valueChanges.subscribe((isChecked) => {
+      this.answersCtrl.controls.forEach((ctrls) => {
+        const ansGroup: FormGroup<SportActivitiesAnswer> = ctrls as FormGroup<SportActivitiesAnswer>;
+        !isChecked ? ansGroup.controls.iconName.disable() : ansGroup.controls.iconName.enable();
+      });
+    });
+    this.store.getSportsActivities$();
+
   }
 
   submit(): void {
@@ -198,13 +225,14 @@ export class CreateSportsActivitiesComponent implements OnInit {
     }
     const updatedSportsObj: SportActivitiesCore = {
       ...this.sportsActivitiesGroup.value,
-      sportsActivitiesAnswer: this.sportsActivitiesGroup.value.sportsActivitiesAnswer.map((a, i) => {
+      activityAnswer: this.sportsActivitiesGroup.value.activityAnswer.map((a, i) => {
         return {
           ...a,
           order: i + 1
         };
       })
     };
+    this.store.updateSportsActivities$(updatedSportsObj);
   }
 
 
