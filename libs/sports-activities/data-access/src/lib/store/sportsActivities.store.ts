@@ -94,6 +94,11 @@ export class SportActivitiesStore extends ComponentStore<SportActivitiesState> {
                 dismissible: true,
                 type: 'success',
               });
+              this.sportsActivitiesService.getSportsActivities().subscribe((response) => {
+                this.patchState({
+                  selectedSportActivities: response
+                })
+              })
             },
             _ => {
               this.toastRef?.close();
@@ -115,7 +120,7 @@ export class SportActivitiesStore extends ComponentStore<SportActivitiesState> {
           isActing: true
         });
         this.toastRef?.close();
-        this.toastRef = this.hotToastService.loading('Deleting Goal Answer...', {
+        this.toastRef = this.hotToastService.loading('Deleting Sport and Activities Answer...', {
           dismissible: false,
           role: 'status'
         });
@@ -163,7 +168,6 @@ export class SportActivitiesStore extends ComponentStore<SportActivitiesState> {
   }
 
   deleteSportActivityAnswer(id: number | undefined): void {
-    console.log("hello")
     this.deleteSportsActivities$(id)
   }
 
