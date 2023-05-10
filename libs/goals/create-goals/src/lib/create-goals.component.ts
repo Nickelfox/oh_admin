@@ -51,8 +51,8 @@ export class CreateGoalsComponent implements OnInit {
       })
     ]),
     showIcon: new FormControl(false),
-    goalAnswer: new FormArray([],[
-      RxwebValidators.minLength({value:3,message:"Minimum 3 goal answers required"})
+    goalAnswer: new FormArray([], [
+      RxwebValidators.minLength({value: 3, message: "Minimum 3 goal answers required"})
     ]),
     id: new FormControl(undefined)
   });
@@ -77,6 +77,7 @@ export class CreateGoalsComponent implements OnInit {
   get selectedContents(): GoalAnswer[] {
     return this.selectedGoals ?? [];
   }
+
   get answersCtrl(): FormArray<GoalAnswer> {
     return this.goalsGroup.controls.goalAnswer as FormArray<GoalAnswer>;
   }
@@ -86,7 +87,7 @@ export class CreateGoalsComponent implements OnInit {
   }
 
   addNewAnswer(): void {
-    this.answersCtrl.insert(0,this.buildGoalAnswer());
+    this.answersCtrl.insert(0, this.buildGoalAnswer());
     this.goalsGroup.updateValueAndValidity();
     this.cdr.markForCheck();
   }
@@ -164,16 +165,20 @@ export class CreateGoalsComponent implements OnInit {
         const answerArray: FormArray<GoalAnswer> = this.goalsGroup.controls.goalAnswer as FormArray<GoalAnswer>;
         // this.store.deleteGoalsAnswer(answerArray?.value[index]?.answerId)
         // answerArray.removeAt(index);
+        if (answerArray?.value[index]?.answerId) {
+          this.store.deleteGoalsAnswer(answerArray?.value[index]?.answerId)
+        } else {
+          answerArray?.removeAt(index);
+        }
         this.cdr.markForCheck();
         this.cdr.detectChanges();
         this.cdr.checkNoChanges();
-        if(!answerArray?.value[index]?.answerId)return
-        this.store.deleteGoalsAnswer(answerArray?.value[index]?.answerId)
+        if (!answerArray?.value[index]?.answerId) return
       }
     });
   }
 
-  goalsDrag($event: CdkDragDrop<GoalAnswer>){
+  goalsDrag($event: CdkDragDrop<GoalAnswer>) {
     const selectedGoalAns = this.selectedContents ? [...this.selectedContents] : [];
     moveItemInArray(selectedGoalAns, $event.previousIndex, $event.currentIndex);
     this.uiStore.patchState({
@@ -189,7 +194,7 @@ export class CreateGoalsComponent implements OnInit {
       }
     });
     this.uiStore.selectedGoalAns$.subscribe((ans) => {
-      this.selectedGoals = ans.map(({id,order, iconName, answerString, answerId}, i) => {
+      this.selectedGoals = ans.map(({id, order, iconName, answerString, answerId}, i) => {
         return {
           iconName,
           answerString,
@@ -231,7 +236,7 @@ export class CreateGoalsComponent implements OnInit {
       })
     };
     this.store.updateGoals$(updatedGoalObj);
-    
+
   }
 
 }
