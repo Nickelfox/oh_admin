@@ -1,12 +1,12 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TitleCasePipe } from '@angular/common';
-import { UiStore } from '@hidden-innovation/shared/store';
-import { ConstantDataService, FormValidationService } from '@hidden-innovation/shared/form-config';
-import { HotToastService } from '@ngneat/hot-toast';
-import { MatDialog } from '@angular/material/dialog';
-import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { RxwebValidators } from '@rxweb/reactive-form-validators';
+import {Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TitleCasePipe} from '@angular/common';
+import {UiStore} from '@hidden-innovation/shared/store';
+import {ConstantDataService, FormValidationService} from '@hidden-innovation/shared/form-config';
+import {HotToastService} from '@ngneat/hot-toast';
+import {MatDialog} from '@angular/material/dialog';
+import {FormArray, FormControl, FormGroup} from '@ngneat/reactive-forms';
+import {RxwebValidators} from '@rxweb/reactive-form-validators';
 import {
   SportActivities,
   SportActivitiesAnswer,
@@ -54,8 +54,8 @@ export class CreateSportsActivitiesComponent implements OnInit {
       })
     ]),
     showIcon: new FormControl(false),
-    activityAnswer: new FormArray([],[
-      RxwebValidators.minLength({value:3,message:"Minimum 3  answers required"})
+    activityAnswer: new FormArray([], [
+      RxwebValidators.minLength({value: 3, message: "Minimum 3  answers required"})
     ]),
     id: new FormControl(undefined)
   });
@@ -73,7 +73,8 @@ export class CreateSportsActivitiesComponent implements OnInit {
     public formValidationService: FormValidationService,
     private matDialog: MatDialog,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
   get selectedContents(): SportActivitiesAnswer[] {
     return this.selectedSportActivitiesAnswer ?? [];
@@ -87,8 +88,8 @@ export class CreateSportsActivitiesComponent implements OnInit {
     return this.answersCtrl.controls[i] as FormGroup<SportActivitiesAnswer>;
   }
 
-  addNewAnswer(){
-    this.answersCtrl.insert(0,this.buildGoalAnswer());
+  addNewAnswer() {
+    this.answersCtrl.insert(0, this.buildGoalAnswer());
     this.sportsActivitiesGroup.updateValueAndValidity();
     this.cdr.markForCheck();
   }
@@ -119,7 +120,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
     });
   }
 
-  sportsDrag($event: CdkDragDrop<SportActivitiesAnswer>){
+  sportsDrag($event: CdkDragDrop<SportActivitiesAnswer>) {
     const selectedSportActivitiesAns = this.selectedContents ? [...this.selectedContents] : [];
     moveItemInArray(selectedSportActivitiesAns, $event.previousIndex, $event.currentIndex);
     this.uiStore.patchState({
@@ -173,10 +174,15 @@ export class CreateSportsActivitiesComponent implements OnInit {
         // const goal: FormGroup<GoalAnswer> = this.answerFormGroup(index);
         const answerArray: FormArray<SportActivitiesAnswer> = this.sportsActivitiesGroup.controls.activityAnswer as FormArray<SportActivitiesAnswer>;
         // answerArray.removeAt(index);
+        if (answerArray?.value[index]?.answerId) {
+          this.store.deleteSportActivityAnswer(answerArray?.value[index]?.answerId)
+        } else {
+          answerArray?.removeAt(index);
+        }
         this.cdr.markForCheck();
         this.cdr.detectChanges();
         this.cdr.checkNoChanges();
-        this.store.deleteSportActivityAnswer(answerArray?.value[index]?.answerId)
+
       }
     });
   }
@@ -190,7 +196,7 @@ export class CreateSportsActivitiesComponent implements OnInit {
     });
 
     this.uiStore.sportActivitiesAnswer$.subscribe((ans) => {
-      this.selectedSportActivitiesAnswer = ans.map(({id,order, iconName, answerString, answerId}, i) => {
+      this.selectedSportActivitiesAnswer = ans.map(({id, order, iconName, answerString, answerId}, i) => {
         return {
           iconName,
           answerString,
@@ -234,7 +240,6 @@ export class CreateSportsActivitiesComponent implements OnInit {
     };
     this.store.updateSportsActivities$(updatedSportsObj);
   }
-
 
 
 }

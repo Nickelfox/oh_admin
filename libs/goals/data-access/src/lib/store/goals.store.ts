@@ -96,6 +96,11 @@ export class GoalStore extends ComponentStore<GoalState> {
                 dismissible: true,
                 type: 'success',
               });
+              this.goalsService.getGoal().subscribe((response) => {
+                this.patchState({
+                  selectedGoal: response
+                })
+              })
             },
             _ => {
               this.toastRef?.close();
