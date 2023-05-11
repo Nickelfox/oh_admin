@@ -4,6 +4,7 @@ import { Environment, ENVIRONMENT } from '@hidden-innovation/environment';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import {
+  DeleteUser,
   UserBlockRequest,
   UserBlockResponse,
   UserDetailsResponse,
@@ -11,7 +12,7 @@ import {
   UserListingResponse,
   UserListingResponseData, UserStatusRequest, UserStatusResponse
 } from '../models/user.interface';
-import { UserDetails } from '@hidden-innovation/shared/models';
+import {CustomApiResponse, UserDetails} from '@hidden-innovation/shared/models';
 
 @Injectable()
 export class UserService {
@@ -49,6 +50,12 @@ export class UserService {
   VerifyUser(blockObj: UserStatusRequest): Observable<UserDetails> {
     return this.http.post<UserStatusResponse>(`${this.env.baseURL}/v1/admin/editUser/${blockObj.id}`, blockObj.data).pipe(
       map(res => res.data.user),
+      catchError((err: HttpErrorResponse) => throwError(err))
+    );
+  }
+
+  DeleteUser(userID: number): Observable<CustomApiResponse> {
+    return this.http.patch<CustomApiResponse>(`${this.env.baseURL}/v1/admin/softDeleteUser/${userID}`,{}).pipe(
       catchError((err: HttpErrorResponse) => throwError(err))
     );
   }

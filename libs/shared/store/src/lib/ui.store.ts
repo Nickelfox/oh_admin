@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
-import { ComponentStore } from '@ngrx/component-store';
-import { GenericDialogPrompt, NavItem, PackContentTypeEnum } from '@hidden-innovation/shared/models';
-import { filter, tap } from 'rxjs/operators';
-import { Test } from '@hidden-innovation/test/data-access';
-import { Observable } from 'rxjs';
-import { TestGroup } from '@hidden-innovation/test-group/data-access';
-import { QuestionnaireExtended } from '@hidden-innovation/questionnaire/data-access';
-import { ContentCore, Lesson, LessonCore, Pack } from '@hidden-innovation/pack/data-access';
-import { PromptDialogComponent } from '@hidden-innovation/shared/ui/prompt-dialog';
-import { TitleCasePipe } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
-import { GoalAnswer } from '@hidden-innovation/goals/data-access';
+import {Injectable} from '@angular/core';
+import {ComponentStore} from '@ngrx/component-store';
+import {GenericDialogPrompt, NavItem, PackContentTypeEnum} from '@hidden-innovation/shared/models';
+import {filter, tap} from 'rxjs/operators';
+import {Test} from '@hidden-innovation/test/data-access';
+import {Observable} from 'rxjs';
+import {TestGroup} from '@hidden-innovation/test-group/data-access';
+import {QuestionnaireExtended} from '@hidden-innovation/questionnaire/data-access';
+import {ContentCore, Lesson, LessonCore, Pack} from '@hidden-innovation/pack/data-access';
+import {PromptDialogComponent} from '@hidden-innovation/shared/ui/prompt-dialog';
+import {TitleCasePipe} from '@angular/common';
+import {MatDialog} from '@angular/material/dialog';
+import {GoalAnswer} from '@hidden-innovation/goals/data-access';
+import {SportActivitiesAnswer} from "@hidden-innovation/sports-activities/data-access";
 
 export interface UiState {
   navData: {
@@ -24,6 +25,7 @@ export interface UiState {
   selectedPacks?: Pack[];
   selectedLessons?: Lesson[];
   selectedContent?: (ContentCore | LessonCore)[];
+  selectedSportActivitiesAns?: SportActivitiesAnswer[];
   selectedGoalAns?: GoalAnswer[];
 }
 
@@ -33,51 +35,46 @@ const initialState: UiState = {
     {
       name: 'DashBoard',
       navItems: [
-        { label: 'Dashboard', path: '/dashboard', icon: 'dashboard' }
+        {label: 'Dashboard', path: '/dashboard', icon: 'dashboard'}
       ]
     },
     {
       name: 'Tests',
       navItems: [
-        { label: 'Tests', path: '/tests', icon: 'timer' }
+        {label: 'Tests', path: '/tests', icon: 'timer'}
       ]
     },
     {
       name: 'Assessments',
       navItems: [
-        { label: 'Assessments', path: '/assessments', icon: 'timeline' }
+        {label: 'Assessments', path: '/assessments', icon: 'timeline'}
       ]
     },
     {
       name: 'Questionnaires',
       navItems: [
-        { label: 'Questionnaires', path: '/questionnaire', icon: 'comment' }
+        {label: 'Questionnaires', path: '/questionnaire', icon: 'comment'}
       ]
     },
     {
       name: 'Packs',
       navItems: [
-        { label: 'Packs', path: '/packs', icon: 'collections' }
+        {label: 'Packs', path: '/packs', icon: 'collections'}
       ]
     },
     {
       name: 'Featured',
       navItems: [
-        { label: 'Featured', path: '/featured', icon: 'star' }
+        {label: 'Featured', path: '/featured', icon: 'star'}
       ]
     },
     {
       name: 'Tags',
       navItems: [
-        { label: 'Tags', path: '/tags', icon: 'style' }
+        {label: 'Tags', path: '/tags', icon: 'style'}
       ]
     },
-    {
-      name: 'Goals',
-      navItems: [
-        { label: 'Goals', path: '/goals', icon: 'beenhere' }
-      ]
-    },
+
     {
       name: 'Admin',
       navItems: [
@@ -89,14 +86,22 @@ const initialState: UiState = {
         // { label: 'Reports', path: '/reports', icon: 'show_chart' },
         // { label: 'App Releases', path: '/app-release', icon: 'file_download' }
       ]
-    }
+    },
+    {
+      name: 'User Insights',
+      navItems: [
+        {label: 'Goals', path: '/goals', icon: 'beenhere'},
+        {label: 'Interest', path: '#', icon: 'interests'},
+        {label: 'Sport/Activities', path: '/sports-activities', icon: 'sports_score'}
+      ]
+    },
   ]
-};  
+};
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class UiStore extends ComponentStore<UiState> {
-  readonly navItems$ = this.select(({ navData }) => navData);
-  readonly isLoading$ = this.select(({ isLoading }) => isLoading);
+  readonly navItems$ = this.select(({navData}) => navData);
+  readonly isLoading$ = this.select(({isLoading}) => isLoading);
   readonly selectedTests$: Observable<Test[]> = this.select(state => state.selectedTests || []);
   readonly selectedPacks$: Observable<Pack[]> = this.select(state => state.selectedPacks || []);
   readonly testsExists$: Observable<boolean> = this.select(state => !!state.selectedTests?.length);
@@ -110,6 +115,7 @@ export class UiStore extends ComponentStore<UiState> {
   readonly selectedContent$: Observable<(ContentCore | LessonCore)[]> = this.select(state => state.selectedContent || []);
   readonly contentsExists$: Observable<boolean> = this.select(state => !!state.selectedContent?.length);
   readonly selectedGoalAns$: Observable<GoalAnswer[]> = this.select(state => state.selectedGoalAns || []);
+  readonly sportActivitiesAnswer$: Observable<SportActivitiesAnswer[]> = this.select(state => state.selectedSportActivitiesAns || []);
 
   removeContent$ = this.effect<ContentCore | LessonCore>(origin$ =>
     origin$.pipe(

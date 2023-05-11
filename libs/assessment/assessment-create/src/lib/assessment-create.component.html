@@ -72,6 +72,14 @@
                     ></hidden-innovation-common-form-field-number>
                   </div>
                 </div>
+                <div class='row mb-2'>
+                  <div class='col-12'>
+                    <hidden-innovation-common-form-field
+                      [label]='constantDataService.FIELD_NAME.CATEGORY_OVERVIEW_TEXT | titlecase'
+                      controlPath='category_overview_text'
+                    ></hidden-innovation-common-form-field>
+                  </div>
+                </div>
                 <div class='row mb-3'>
                   <div class='col-12'>
                     <p class='text-muted mb-2'>Poster</p>
@@ -83,6 +91,29 @@
                       [setImageData]='(selectedImageData | async)'
                       controlPath='posterId'
                     ></hidden-innovation-common-form-field-image>
+                  </div>
+                </div>
+                <div class='row mb-3'>
+                  <div class='col-12'>
+                    <p class='text-muted mb-2'>Video</p>
+                    <div class='d-flex align-items-center'>
+                      <hidden-innovation-common-form-field-video
+                        (emitRemoveVideo)='removeMediaCtrlAndValidate(assessmentGroup.controls.videoId)'
+                        (emitVideoCtrlData)='assessmentGroup.controls.videoId?.setValue($event)'
+                        [parentCtrl]='assessmentGroup.controls.videoId'
+                        [videoData]='selectedAssessment?.video'
+                        controlPath='videoId'
+                      ></hidden-innovation-common-form-field-video>
+                      <div class='ml-2'>
+                        <mat-hint>
+                          <small>({{constantDataService.FIZE_SIZE_DATA.videoFormatMessage}})</small>
+                        </mat-hint>
+                        <br>
+                        <mat-hint>
+                          <small>({{constantDataService.FIZE_SIZE_DATA.videoRatioMessage}})</small>
+                        </mat-hint>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

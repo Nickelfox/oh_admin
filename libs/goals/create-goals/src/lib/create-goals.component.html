@@ -9,6 +9,7 @@
           Cancel
         </button>
         <button
+          [disabled]='answersCtrl.value.length < 3'
           class='ml-3'
           color='primary' mat-flat-button type='submit' (click)='submit()'>
           Save
@@ -99,26 +100,36 @@
                 </mat-checkbox>
               </div>
             </div>
-            <div *ngFor='let ans of answersCtrl.controls; let i=index' class='row mb-2'>
-              <div class='col-12' [formGroup]='answerFormGroup(i)'>
-                <mat-card class='mat-elevation-z1'>
-                  <div class='answersGrid'>
-                    <hidden-innovation-common-form-field
-                      controlPath='answerString'
-                      label='Answer '
-                    ></hidden-innovation-common-form-field>
-                    <div>
-                      <button color='warn' mat-icon-button type='button' (click)='removeAnswer(i)' *ngIf='false'>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                    <hidden-innovation-common-form-field
-                      label='Font Awesome Icon 6 Code'
-                      controlPath='iconName'
-                    ></hidden-innovation-common-form-field>
+            <div cdk-scrollable style="height:70vh; overflow-y:scroll; overflow-x: hidden">
+              <div (cdkDropListDropped)='goalsDrag($event)' cdkDropList>
+                <div *ngFor='let ans of answersCtrl.controls; let i=index' class='row mb-2' cdkDrag>
+                  <div class='col-12' [formGroup]='answerFormGroup(i)'>
+                    <mat-card class='mat-elevation-z1'>
+                      <div class='answersGrid'>
+                        <hidden-innovation-common-form-field
+                          controlPath='answerString'
+                          label='Answer '
+                        ></hidden-innovation-common-form-field>
+                        <div>
+                          <button color='warn' mat-icon-button type='button' (click)='removeAnswer(i)'>
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                        <hidden-innovation-common-form-field
+                          label='Font Awesome Icon 6 Code'
+                          controlPath='iconName'
+                        ></hidden-innovation-common-form-field>
+                      </div>
+                    </mat-card>
                   </div>
-                </mat-card>
+
+                </div>
               </div>
+              <ng-container *ngIf='(answersCtrl.value.length < 3) '>
+                <mat-error>
+                  {{'Minimum 3  answers required'}}
+                </mat-error>
+              </ng-container>
             </div>
           </div>
         </mat-card>

@@ -16,6 +16,7 @@ import { TestDataAccessModule } from '@hidden-innovation/test/data-access';
 import { QuestionnaireDataAccessModule } from '@hidden-innovation/questionnaire/data-access';
 import { CommonFormFieldNumberModule } from '@hidden-innovation/shared/ui/common-form-field-number';
 import { TestGroupDataAccessModule } from '@hidden-innovation/test-group/data-access';
+import {CommonFormFieldVideoModule} from "@hidden-innovation/shared/ui/common-form-field-video";
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { TestGroupDataAccessModule } from '@hidden-innovation/test-group/data-ac
     CommonFormFieldTextareaModule,
     CommonFormFieldImageModule,
     CommonFormFieldFileModule,
+    CommonFormFieldVideoModule,
     MediaModule,
     TestDataAccessModule,
     TestGroupDataAccessModule,

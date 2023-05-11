@@ -192,6 +192,12 @@
         "libs/shared/ui/test-tab-group/src/index.ts"
       ],
       "@hidden-innovation/shared/utils": ["libs/shared/utils/src/index.ts"],
+      "@hidden-innovation/sports-activities/create-sports-activities": [
+        "libs/sports-activities/create-sports-activities/src/index.ts"
+      ],
+      "@hidden-innovation/sports-activities/data-access": [
+        "libs/sports-activities/data-access/src/index.ts"
+      ],
       "@hidden-innovation/tags/data-access": [
         "libs/tags/data-access/src/index.ts"
       ],

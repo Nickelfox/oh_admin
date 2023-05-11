@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { GenericErrorMessage } from './models/form-error-message.interface';
-import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
-import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { ValidationErrors } from '@ngneat/reactive-forms/lib/types';
-import { NumericValueType, RxwebValidators } from '@rxweb/reactive-form-validators';
-import { DateTime } from 'luxon';
-import { PointTypeEnum, RepsCore } from '@hidden-innovation/shared/models';
+import {Injectable} from '@angular/core';
+import {GenericErrorMessage} from './models/form-error-message.interface';
+import {AbstractControl, ValidatorFn, Validators} from '@angular/forms';
+import {FormControl, FormGroup} from '@ngneat/reactive-forms';
+import {ValidationErrors} from '@ngneat/reactive-forms/lib/types';
+import {NumericValueType, RxwebValidators} from '@rxweb/reactive-form-validators';
+import {DateTime} from 'luxon';
+import {PointTypeEnum, RepsCore} from '@hidden-innovation/shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +21,16 @@ export class FormValidationService {
     QUESTION_DESC_LENGTH: 200,
     ANSWER_LENGTH: 50,
     SPOTLIGHT_BUTTON_LENGTH: 30,
-    ASSESSMENT_ABOUT_LENGTH: 200
+    ASSESSMENT_ABOUT_LENGTH: 200,
+    OVERVIEW_TEST_LENGTH:20,
+    MINIMUM_LENGTH:5,
   };
 
   fieldValidationMessage: Partial<GenericErrorMessage> = {
     required: 'field is required',
     invalid: 'Must not contain any special character or number',
-    maxLength: `Must not exceed 150 character limit`
+    maxLength: `Must not exceed 150 character limit`,
+    minLength : 'Must not exceed 5 charater mimit',
   };
 
   lockOutValidationMessage: Partial<GenericErrorMessage> = {
@@ -119,14 +122,14 @@ export class FormValidationService {
       }
       const regex = new RegExp(this.passwordRegex);
       const valid = regex.test(control.value);
-      return valid ? null : { invalid: true };
+      return valid ? null : {invalid: true};
     };
   }
 
   noWhiteSpace(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if ((control.value as string).indexOf('  ') >= 0) {
-        return { noWhiteSpace: true };
+        return {noWhiteSpace: true};
       }
       return null;
     };
@@ -141,7 +144,7 @@ export class FormValidationService {
       const pass: string = group.get(pasName)?.value;
       const confirmPass: string = group.get(conPasName)?.value;
       if (pass !== confirmPass) {
-        group.get(conPasName)?.setErrors({ notSame: true });
+        group.get(conPasName)?.setErrors({notSame: true});
         return null;
       }
       group.get(conPasName)?.setErrors(null);
@@ -164,7 +167,7 @@ export class FormValidationService {
       }
 
       if (passwordControl.value !== confirmPasswordControl.value) {
-        confirmPasswordControl.setErrors({ passwordMismatch: true });
+        confirmPasswordControl.setErrors({passwordMismatch: true});
       } else {
         confirmPasswordControl.setErrors(null);
       }
@@ -230,8 +233,8 @@ export class FormValidationService {
       switch (pointType.value) {
         case PointTypeEnum.HP:
           if (low !== null && low !== undefined && high !== null && high !== undefined && low.value !== high.value) {
-            low?.setErrors({ notEqual: true });
-            high?.setErrors({ notEqual: true });
+            low?.setErrors({notEqual: true});
+            high?.setErrors({notEqual: true});
             return null;
           }
           low?.removeError('notEqual');
@@ -239,8 +242,8 @@ export class FormValidationService {
           return null;
         default:
           if (low !== null && low !== undefined && high !== null && high !== undefined && (!inverse ? (low.value > high.value) : (low.value < high.value))) {
-            low?.setErrors(!inverse ? { highThan: true } : { lessThan: true });
-            high?.setErrors(!inverse ? { lessThan: true } : { highThan: true });
+            low?.setErrors(!inverse ? {highThan: true} : {lessThan: true});
+            high?.setErrors(!inverse ? {lessThan: true} : {highThan: true});
             return null;
           }
           low?.removeError('highThan');
@@ -266,8 +269,8 @@ export class FormValidationService {
             const lowVal = DateTime.fromJSDate(low.value).toSeconds();
             const highVal = DateTime.fromJSDate(high.value).toSeconds();
             if (Math.round(lowVal) === Math.round(highVal)) {
-              low?.setErrors({ notEqual: true });
-              high?.setErrors({ notEqual: true });
+              low?.setErrors({notEqual: true});
+              high?.setErrors({notEqual: true});
               return null;
             }
             low?.removeError('notEqual');
@@ -282,8 +285,8 @@ export class FormValidationService {
             const lowVal = DateTime.fromJSDate(low.value).toSeconds();
             const highVal = DateTime.fromJSDate(high.value).toSeconds();
             if (!inverse ? (Math.round(lowVal) > Math.round(highVal)) : (Math.round(lowVal) < Math.round(highVal))) {
-              low?.setErrors({ highThan: true });
-              high?.setErrors({ lessThan: true });
+              low?.setErrors({highThan: true});
+              high?.setErrors({lessThan: true});
               return null;
             }
             low?.removeError('highThan');
@@ -307,7 +310,9 @@ export class FormValidationService {
         const repsGroup: FormGroup<RepsCore> = group as FormGroup<RepsCore>;
         let toggleCount = 0;
         toggleCount += repsGroup?.value?.oneRep ? 1 : 0;
+        toggleCount += repsGroup?.value?.twoRep ? 1 : 0;
         toggleCount += repsGroup?.value?.threeRep ? 1 : 0;
+        toggleCount += repsGroup?.value?.fourRep ? 1 : 0;
         toggleCount += repsGroup?.value?.fiveRep ? 1 : 0;
         if (toggleCount < 1) {
           errors['minOneTrue'] = true;

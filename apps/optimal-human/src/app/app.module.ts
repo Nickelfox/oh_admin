@@ -26,6 +26,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { TitleCasePipe } from '@angular/common';
 import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-status-dialog';
+import { CreateSportsActivitiesModule } from '@hidden-innovation/sports-activities/create-sports-activities';
 
 @NgModule({
   imports: [
@@ -379,6 +380,16 @@ import { NetworkStatusDialogModule } from '@hidden-innovation/shared/ui/network-
             (m) => m.CreateGoalsModule
           ),
         data: { breadcrumb: 'Goals'}
+      },
+      {
+        path: 'sports-activities',
+        canActivate: [AuthGuard],
+        pathMatch: 'full',
+        loadChildren: () =>
+          import('@hidden-innovation/sports-activities/create-sports-activities').then(
+            (m) => m.CreateSportsActivitiesModule
+          ),
+        data: { breadcrumb: 'Sports-Activities'}
       },
 
 

@@ -287,7 +287,13 @@
                                                 formControlName='oneRep'>1 rep
                                   </mat-checkbox>
                                   <mat-checkbox [disabled]='disableEditState' class='mr-4' color='primary'
+                                                formControlName='twoRep'>2 rep
+                                  </mat-checkbox>
+                                  <mat-checkbox [disabled]='disableEditState' class='mr-4' color='primary'
                                                 formControlName='threeRep'>3 rep
+                                  </mat-checkbox>
+                                  <mat-checkbox [disabled]='disableEditState' class='mr-4' color='primary'
+                                                formControlName='fourRep'>4 rep
                                   </mat-checkbox>
                                   <mat-checkbox [disabled]='disableEditState' class='mr-4' color='primary'
                                                 formControlName='fiveRep'>5 rep
@@ -306,6 +312,8 @@
                                   </h5>
                                 </div>
                               </div>
+
+
                               <!--                            Point ScoreSheet-->
                               <ng-template [ngForOf]='oneRMInputFieldFormArray.controls'
                                            formArrayName='oneRMInputFields'
@@ -376,6 +384,7 @@
                                   </div>
                                   <ng-template [ngIf]='i > 0'>
                                     <ng-template [ngIf]='oneRMInputFieldFormArray.errors$ | async' let-err>
+
                                       <div class='col-2'></div>
                                       <div
                                         *ngIf='err[(i - 1) + "lessThan" + (i)] && !(getOneRMInputFieldGroup(i).get("low").hasError("required") || getOneRMInputFieldGroup(i).get("low").hasError("notEmpty"))'
